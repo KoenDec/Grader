@@ -1,10 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <project version="4">
   <component name="ChangeListManager">
-    <list default="true" id="07cbc1be-2782-4ff7-8019-25adfd556149" name="Default" comment="">
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/.idea/rapportensysteem.iml" afterPath="$PROJECT_DIR$/.idea/rapportensysteem.iml" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/showFunctions.php" afterPath="$PROJECT_DIR$/showFunctions.php" />
-    </list>
+    <list default="true" id="07cbc1be-2782-4ff7-8019-25adfd556149" name="Default" comment="" />
     <option name="EXCLUDED_CONVERTED_TO_IGNORED" value="true" />
     <option name="TRACKING_ENABLED" value="true" />
     <option name="SHOW_DIALOG" value="false" />
@@ -61,7 +58,7 @@
       <file leaf-file-name="showFunctions.php" pinned="false" current-in-tab="true">
         <entry file="file://$PROJECT_DIR$/showFunctions.php">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="-143">
+            <state relative-caret-position="-755">
               <caret line="277" column="76" lean-forward="false" selection-start-line="277" selection-start-column="76" selection-end-line="277" selection-end-column="76" />
               <folding>
                 <element signature="e#6#85#0#PHP" expanded="true" />
@@ -304,15 +301,15 @@
       <workItem from="1507704162550" duration="12548000" />
       <workItem from="1507726131233" duration="110000" />
       <workItem from="1507728340796" duration="5127000" />
-      <workItem from="1507742257658" duration="662000" />
+      <workItem from="1507742257658" duration="778000" />
     </task>
     <servers />
   </component>
   <component name="TimeTrackingManager">
-    <option name="totallyTimeSpent" value="67490000" />
+    <option name="totallyTimeSpent" value="67606000" />
   </component>
   <component name="ToolWindowManager">
-    <frame x="-8" y="-8" width="1936" height="1056" extended-state="6" />
+    <frame x="-8" y="-8" width="1936" height="1056" extended-state="7" />
     <editor active="true" />
     <layout>
       <window_info id="Project" active="false" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="true" show_stripe_button="true" weight="0.2595949" sideWeight="0.5" order="0" side_tool="false" content_ui="combo" />
@@ -671,7 +668,7 @@
     </entry>
     <entry file="file://$PROJECT_DIR$/showFunctions.php">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="-143">
+        <state relative-caret-position="-755">
           <caret line="277" column="76" lean-forward="false" selection-start-line="277" selection-start-column="76" selection-end-line="277" selection-end-column="76" />
           <folding>
             <element signature="e#6#85#0#PHP" expanded="true" />
