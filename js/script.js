@@ -32,6 +32,8 @@ $(document).ready(function () {
 
     $('.message-submit, .message-exit').on('click', closePopupMessage);
 
+    $('select').material_select();
+
 });
 
 var popupMessage = function(){

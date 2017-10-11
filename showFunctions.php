@@ -324,14 +324,14 @@ function showMessagesPage(){
                     <label for="message">Melding</label>
                 </div>
             </div>
-            <div class="row">
+            <div class="row ">
               <label>Zichtbaar voor:</label>
-              <select class="browser-default">
+              <select multiple>
                 <option value="0" selected>Iedereen</option>
 <?php
                 for($richtingen = 10; $richtingen > 0; $richtingen--){
 ?>
-                <option value="1">Richting<?php echo $richtingen?></option>
+                    <option value="<?php echo $richtingen?>">Richting<?php echo $richtingen?></option>
 <?php
                 }
 ?>
