@@ -34,7 +34,8 @@ function showLogin(){
 }
 
 function showNavigation($name){
-    ?>
+// todo Only show what is needed/allowed for the user
+?>
     <header>
 
     <nav>
@@ -75,11 +76,12 @@ function showNavigation($name){
     <li><a class="waves-effect" href="#!">Afdrukken</a></li>
 </ul>
 
-<main class="container">
+<main class="container"> <!-- don't mind this error, I do close the 'main' tag in the footer -->
 <?php
 }
 
 function showStart(){
+    // todo Add actual startpage text
 ?>
     <h1>Welkom bij ons Rapportsysteem</h1>
     <p>
@@ -94,6 +96,7 @@ function showStart(){
 }
 
 function showAccount(){
+    // todo get actual user data from db
 ?>
     <h2>Mijn account</h2>
     <table class="striped">
@@ -106,6 +109,7 @@ function showAccount(){
 }
 
 function showReportsPage(){
+    // todo get actual data from db ... a lot of data + don't show edit report button for students, that'd be weird  ;) (aslo don't show ONLY his report)
 ?>
     <div class="row">
         <h2>Rapporten</h2>
@@ -175,6 +179,7 @@ function showReportsPage(){
 }
 
 function showStudentsPage(){
+    // todo get actual data from db
 ?>
     <div class="row">
         <h2>Studenten</h2>
@@ -231,7 +236,8 @@ function showStudentsPage(){
 }
 
 function showSubjectPage(){
-    ?>
+    // todo get actual data from db
+?>
     <div class="row">
         <h2>Richtingen</h2>
     </div>
@@ -269,6 +275,8 @@ function showSubjectPage(){
 }
 
 function showMessagesPage(){
+        // todo get actual data from db + don't show add button for students
+
 ?>
         <div class="row">
             <h2>Meldingen</h2>
