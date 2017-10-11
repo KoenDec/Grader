@@ -73,7 +73,7 @@ function showNavigation($name){
     <li><a class="waves-effect" href="index.php?page=studenten">Studenten</a></li>
     <li><a class="waves-effect" href="index.php?page=richtingen">Richtingen</a></li>
     <li><a class="waves-effect" href="index.php?page=meldingen">Meldingen</a></li>
-    <li><a class="waves-effect" href="#!">Afdrukken</a></li>
+    <li><a class="waves-effect" href="index.php?page=afdrukken">Afdrukken</a></li>
 </ul>
 
 <main class="container"> <!-- don't mind this error, I do close the 'main' tag in the footer -->
@@ -304,13 +304,19 @@ function showMessagesPage(){
             echo $meldingen
 ?>
              </div>
-            <div class="collapsible-body"><span>        Nulla lobortis aliquam placerat. Quisque at justo maximus, commodo diam sit amet, feugiat arcu. Mauris non suscipit ex, vitae tincidunt magna.
-        Etiam neque sem, euismod ac odio vel, rhoncus interdum mauris. Morbi aliquet sollicitudin nisl, sit amet tempus lorem interdum sit amet.
-        Nam sagittis tempus mattis. Etiam mattis eros eget eros vulputate, quis vestibulum lorem convallis. Suspendisse quis sollicitudin enim.
-        Nulla metus dolor, venenatis ut lacus ut, dictum interdum ante. Sed suscipit mi at ante vulputate, quis maximus elit tempor.
-        Nullam elementum venenatis commodo. Etiam vel tristique massa. Etiam libero mauris, posuere sed massa nec, tristique vehicula lacus.
-        Donec lacinia, lorem et mattis tincidunt, lectus metus imperdiet mi, in tempor turpis lectus id lacus..</span></div>
-        </li>
+            <div class="collapsible-body">
+            <span>
+            Nulla lobortis aliquam placerat. Quisque at justo maximus, commodo diam sit amet, feugiat arcu. Mauris non suscipit ex, vitae tincidunt magna.
+            Etiam neque sem, euismod ac odio vel, rhoncus interdum mauris. Morbi aliquet sollicitudin nisl, sit amet tempus lorem interdum sit amet.
+            Nam sagittis tempus mattis. Etiam mattis eros eget eros vulputate, quis vestibulum lorem convallis. Suspendisse quis sollicitudin enim.
+            Nulla metus dolor, venenatis ut lacus ut, dictum interdum ante. Sed suscipit mi at ante vulputate, quis maximus elit tempor.
+            Nullam elementum venenatis commodo. Etiam vel tristique massa. Etiam libero mauris, posuere sed massa nec, tristique vehicula lacus.
+            Donec lacinia, lorem et mattis tincidunt, lectus metus imperdiet mi, in tempor turpis lectus id lacus..</span>
+            <div class="row">
+                <a class="waves-effect waves-light btn tooltipped red right" data-delay="50" data-tooltip="Delete melding"><i class="material-icons">delete</i></a>
+            </div>
+            </div>
+            </li>
 <?php
     }
 ?>
@@ -355,6 +361,57 @@ function showMessagesPage(){
             </form>
         </div>
 
+<?php
+}
+
+function showPrintPage(){
+?>
+    <div class="row">
+        <h2>Rapporten afdrukken</h2>
+    </div>
+    <div class="row">
+            <label>Selecteer richtingen</label>
+            <select multiple>
+            <option selected value="0">Alle richtingen</option>
+            <?php
+            for($richtingen = 10; $richtingen > 0; $richtingen--){
+                ?>
+                <option value="<?php echo $richtingen?>">Richting<?php echo $richtingen?></option>
+                <?php
+            }
+            ?>
+            </select>
+    </div>
+    <div class="row">
+        <form class="col s10" action="#">
+            <p>
+                <input type="checkbox" id="all-checkboxes" checked="checked" />
+                <label for="all-checkboxes">Alles selecteren</label>
+            </p>
+            <table class="striped bordered">
+                <tr><th>Studenten</th></tr>
+            <?php
+            for($studenten = 10; $studenten > 0; $studenten--){
+                ?>
+                <tr>
+                    <td>
+                        <p class="richting-checkbox " style="display:inline-block">
+                            <input type="checkbox" id="student-checkbox<?php echo $studenten?>" checked="checked" />
+                            <label for="student-checkbox<?php echo $studenten?>">Student<?php echo $studenten?></label>
+                        </p>
+                        <a class="waves-effect waves-light btn tooltipped right"  data-delay="50" data-tooltip="Rapport bekijken"><i class="material-icons right">import_contacts</i>Rapport</a>
+                    </td>
+                </tr>
+                <?php
+            }
+            ?>
+            </table>
+        </form>
+        <div class="right-align col s2 reports-btns">
+            <a class="waves-effect waves-light btn tooltipped" style="margin-bottom: 5px" data-delay="50" data-tooltip="Rapporten downloaden"><i class="material-icons">file_download</i></a>
+            <a class="waves-effect waves-light btn tooltipped" style="margin-bottom: 5px" data-delay="50" data-tooltip="Rapporten afdrukken"><i class="material-icons">print</i></a>
+        </div>
+    </div>
 <?php
 }
 ?>

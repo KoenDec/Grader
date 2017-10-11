@@ -43,6 +43,10 @@ function checkGET()
             case "meldingen":
                 showMessagesPage();
                 break;
+
+            case "afdrukken":
+                showPrintPage();
+                break;
         }
 
     } else {
