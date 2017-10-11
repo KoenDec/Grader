@@ -22,7 +22,9 @@ function showLogin(){
               <label for="password">Wachtwoord</label>
             </div>
           </div>
-          <div class="g-recaptcha" data-sitekey="6LepDTQUAAAAAJQCkfOXuM_mxjH7wsgXfKYbPNKy"></div>
+            <div class="row">
+                <div class="g-recaptcha" id="captcha" data-sitekey="6LepDTQUAAAAAJQCkfOXuM_mxjH7wsgXfKYbPNKy"></div>
+            </div>
           <button class="btn waves-effect waves-light" type="submit" name="action">Log in
             <i class="material-icons right">send</i>
           </button>

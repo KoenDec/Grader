@@ -57,9 +57,14 @@ h4, .button-collapse{
     cursor: pointer;
 }
 
-#captcha-placeholder{
-    width: 90%;
-    height:auto;
+#captcha{
+    width: 80%;
+    margin: auto;
+    display: block;
+}
+
+#captcha div{
+    margin:auto;
 }
 
 .row .reports-btns, .row .student-btn, .row .subject-btn{
