@@ -1,4 +1,6 @@
 <?php
+session_start();
+
 $post_data = http_build_query(
     array(
         'secret' => '6LepDTQUAAAAAAncUKYkxtmYv3e5DqatCu2SWTQ7',
@@ -22,5 +24,5 @@ if (!$captchaResult->success) {
 }else{
     $_SESSION['username'] = $_POST['username'];
     echo 'welcome '.$_SESSION['username']; // this works
-    //header('Location: index.php'); // this doesn't
+    header("Refresh:0; url=index.php");// this doesn't
 }
