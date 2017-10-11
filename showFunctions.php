@@ -9,7 +9,7 @@
 function showLogin(){
 ?>
     <div class="login centered z-depth-5">
-        <form action="index.php" method="POST">
+        <form action="verify.php" method="POST">
           <div class="row">
             <div class="input-field">
               <input id="username" name="username" type="text" class="validate">
