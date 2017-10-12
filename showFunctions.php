@@ -98,7 +98,7 @@ function showAccount(){
         <tr><td>Email: <span>John.Doe@clw.be</span></td></tr>
         <tr><td>Lid sinds: <span>09/10/2017 17:33:15</span></td></tr>
     </table>
-    <a href="#">Wachtoord wijzigen</a>
+    <a class="waves-effect waves-light btn tooltipped" data-delay="50" data-tooltip="Account wijzigen"><i class="material-icons">edit</i></a>
 <?php
 }
 
