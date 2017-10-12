@@ -42,7 +42,7 @@ function showNavigation($name){
         <div class="nav-wrapper nav-color">
             <ul class="right hide-on-med-and-down">
                 <li><a class="dropdown-button" href="#!" data-activates="userDropdown"><?php echo $name ?><i class="material-icons right">arrow_drop_down</i></a></li>
-                <li><a class="dropdown-button" href="#!" data-activates="stateDropdown">Admin<i class="material-icons right">arrow_drop_down</i></a></li>
+                <li><a href="#!" style="margin-right: 20px">Admin</a></li>
             </ul>
             <div class="left hide-on-med-and-down">
                 <div class="button-collapse show-on-large pointer" data-activates="slide-out"><i class="material-icons">menu</i></div>
@@ -57,13 +57,6 @@ function showNavigation($name){
         <li><a href="index.php?page=afmelden">Afmelden</a></li>
     </ul>
 
-    <ul id="stateDropdown" class="dropdown-content">
-        <li><a href="#!">Admin</a></li>
-        <li class="divider"></li>
-        <li><a href="#!">Leerkracht</a></li>
-        <li class="divider"></li>
-        <li><a href="#!">Student</a></li>
-    </ul>
 </header>
 
 <ul id="slide-out" class="side-nav">
@@ -190,8 +183,18 @@ function showStudentsPage(){
             <label for="student-search">Zoek student</label>
             <a class="waves-effect waves-light btn"><i class="material-icons">search</i></a>
         </div>
-        <div class="right-align col s6 student-btn">
-            <a class="btn-floating btn-large waves-effect waves-light tooltipped" data-delay="50" data-tooltip="Student Toevoegen"><i class="material-icons">add</i></a>
+        <div class="row">
+            <div style="position: relative; height: 90px;">
+            <div class="fixed-action-btn horizontal" style="position: absolute; display: inline-block; right: 24px;">
+                <a class="btn-floating btn-large tooltipped" data-position="top" data-delay="50" data-tooltip="Student Toevoegen">
+                    <i class="large material-icons">add</i>
+                </a>
+                <ul>
+                    <li><a class="btn-floating red tooltipped" data-position="top" data-delay="50" data-tooltip="Enkele student toevoegen"><i class="material-icons">person_add</i></a></li>
+                    <li><a class="btn-floating yellow darken-1 tooltipped" data-delay="50" data-tooltip=".csv uploaden"><i class="material-icons">file_upload</i></a></li>
+                </ul>
+            </div>
+            </div>
         </div>
     </div>
     <div class="row">
@@ -303,7 +306,7 @@ function showMessagesPage(){
 <?php
             echo $meldingen
 ?>
-             </div>
+            </div>
             <div class="collapsible-body">
             <span>
             Nulla lobortis aliquam placerat. Quisque at justo maximus, commodo diam sit amet, feugiat arcu. Mauris non suscipit ex, vitae tincidunt magna.
