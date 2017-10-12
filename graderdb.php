@@ -21,5 +21,28 @@ class graderdb {
 }
 
 class UserDAO {
-  
+
+  public static function getUserAndPassword($username) {
+    try {
+      $conn = $graderdb::getConnection();
+
+      $sql = 'SELECT username, password FROM users WHERE username = :username';
+      $stmt = $con->prepare($sql);
+      $stmt->bindParam(':username', $username);
+      $stmt->execute();
+
+      $usersTable = $stmt->fetchAll(PDO::FETCH_CLASS);
+    } catch (PDOException $e) {
+      die($e->getMessage());
+    }
+
+    if(isset(usersTable[0])) {
+      $user = $usersTable[0];
+    } else {
+      die('No user with username = ' . $username);
+    }
+
+    return $user;
+
+  }
 }

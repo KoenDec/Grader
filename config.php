@@ -1,8 +1,6 @@
 <?php
 class Config{
 
-  public static $siteURL = '';
-
   public static $dbServer = '';
   public static $dbPort = '';
   public static $dbName = '';

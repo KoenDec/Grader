@@ -18,6 +18,7 @@ $opts = array('http' =>
 $context  = stream_context_create($opts);
 $response = file_get_contents('https://www.google.com/recaptcha/api/siteverify', false, $context);
 $captchaResult = json_decode($response);
+// TODO verify pw & username
 if (!$captchaResult->success) {
     // TODO return a beautiful captcha is wrong err
     echo 'Incorrect captcha';
