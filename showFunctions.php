@@ -293,7 +293,7 @@ function showSubjectPage(){
                 <tr>
                     <td>Opleiding<?php echo $opleiding?></td>
                     <td>
-                        <a class="waves-effect waves-light btn tooltipped" data-delay="50" data-tooltip="Modules aanpassen"><i class="material-icons">edit</i></a>
+                        <a class="waves-effect waves-light btn tooltipped" data-delay="50" data-tooltip="Opleiding bewerken"><i class="material-icons">edit</i></a>
                         <a class="waves-effect waves-light btn tooltipped red right" data-delay="50" data-tooltip="Delete Opleiding"><i class="material-icons">delete</i></a>
                     </td>
                 </tr>
