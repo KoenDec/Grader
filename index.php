@@ -47,6 +47,14 @@ function checkGET()
             case "afdrukken":
                 showPrintPage();
                 break;
+
+            case "editStudent":
+                showStudentEditPage();
+                break;
+
+            case "editOpleiding":
+                showOpleidingEditPage();
+                break;
         }
 
     } else {

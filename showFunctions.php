@@ -191,7 +191,7 @@ function showStudentsPage(){
                     <i class="large material-icons">add</i>
                 </a>
                 <ul>
-                    <li><a class="btn-floating red tooltipped" data-position="top" data-delay="50" data-tooltip="Enkele student toevoegen"><i class="material-icons">person_add</i></a></li>
+                    <li><a href="index.php?page=editStudent" class="btn-floating red tooltipped" data-position="top" data-delay="50" data-tooltip="Enkele student toevoegen"><i class="material-icons">person_add</i></a></li>
                     <li><a class="btn-floating yellow darken-1 tooltipped csv-upload" data-delay="50" data-tooltip=".csv uploaden"><i class="material-icons">file_upload</i></a></li>
                 </ul>
             </div>
@@ -278,7 +278,7 @@ function showSubjectPage(){
             <a class="waves-effect waves-light btn"><i class="material-icons">search</i></a>
         </div>
         <div class="right-align col s6 subject-btn">
-            <a class="btn-floating btn-large waves-effect waves-light tooltipped" data-delay="50" data-tooltip="Opleiding Toevoegen"><i class="material-icons">add</i></a>
+            <a class="btn-floating btn-large waves-effect waves-light tooltipped" href="index.php?page=editOpleiding" data-delay="50" data-tooltip="Opleiding Toevoegen"><i class="material-icons">add</i></a>
         </div>
     </div>
     <div class="row">
@@ -441,6 +441,21 @@ function showPrintPage(){
             <a class="waves-effect waves-light btn tooltipped" style="margin-bottom: 5px" data-delay="50" data-tooltip="Rapporten downloaden"><i class="material-icons">file_download</i></a>
             <a class="waves-effect waves-light btn tooltipped" style="margin-bottom: 5px" data-delay="50" data-tooltip="Rapporten afdrukken"><i class="material-icons">print</i></a>
         </div>
+    </div>
+<?php
+}
+function showStudentEditPage(){
+?>
+    <div class="row">
+        <h2>Student aanpassen</h2>
+    </div>
+<?php
+}
+
+function showOpleidingEditPage(){
+?>
+    <div class="row">
+        <h2>Opleiding aanpassen</h2>
     </div>
 <?php
 }
