@@ -36,7 +36,7 @@ function checkGET()
                 showStudentsPage();
                 break;
 
-            case "richtingen":
+            case "opleidingen":
                 showSubjectPage();
                 break;
 

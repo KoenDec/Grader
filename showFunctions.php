@@ -208,9 +208,9 @@ function showStudentsPage(){
 <?php
         for($opleidingen = 10; $opleidingen > 0; $opleidingen--){
 ?>
-            <p class="richting-checkbox">
-                <input type="checkbox" id="richting<?php echo $opleidingen?>" checked="checked" />
-                <label for="richting<?php echo $opleidingen?>">richting<?php echo $opleidingen?></label>
+            <p class="opleiding-checkbox">
+                <input type="checkbox" id="opleiding<?php echo $opleidingen?>" checked="checked" />
+                <label for="opleiding<?php echo $opleidingen?>">opleiding<?php echo $opleidingen?></label>
             </p>
 <?php
         }
@@ -274,27 +274,27 @@ function showSubjectPage(){
     <div class="row">
         <div class="subject-search input-field col s6">
             <input type="text" id="subject-search" class="col s8" name="subject-search">
-            <label for="subject-search">Zoek Richting</label>
+            <label for="subject-search">Zoek Opleiding</label>
             <a class="waves-effect waves-light btn"><i class="material-icons">search</i></a>
         </div>
         <div class="right-align col s6 subject-btn">
-            <a class="btn-floating btn-large waves-effect waves-light tooltipped" data-delay="50" data-tooltip="Richting Toevoegen"><i class="material-icons">add</i></a>
+            <a class="btn-floating btn-large waves-effect waves-light tooltipped" data-delay="50" data-tooltip="Opleiding Toevoegen"><i class="material-icons">add</i></a>
         </div>
     </div>
     <div class="row">
         <table class="striped bordered">
             <tr>
-                <th>Richting</th>
+                <th>Opleiding</th>
                 <th width="200px">Acties</th>
             </tr>
             <?php
-            for($richting = 10; $richting > 0;$richting--){
+            for($opleiding = 10; $opleiding > 0;$opleiding--){
                 ?>
                 <tr>
-                    <td>Richting<?php echo $richting?></td>
+                    <td>Opleiding<?php echo $opleiding?></td>
                     <td>
                         <a class="waves-effect waves-light btn tooltipped" data-delay="50" data-tooltip="Modules aanpassen"><i class="material-icons">edit</i></a>
-                        <a class="waves-effect waves-light btn tooltipped red right" data-delay="50" data-tooltip="Delete Richting"><i class="material-icons">delete</i></a>
+                        <a class="waves-effect waves-light btn tooltipped red right" data-delay="50" data-tooltip="Delete Opleiding"><i class="material-icons">delete</i></a>
                     </td>
                 </tr>
                 <?php
@@ -377,7 +377,7 @@ function showMessagesPage(){
 <?php
                 for($opleidingen = 10; $opleidingen > 0; $opleidingen--){
 ?>
-                    <option value="<?php echo $opleidingen?>">Richting<?php echo $opleidingen?></option>
+                    <option value="<?php echo $opleidingen?>">Opleiding<?php echo $opleidingen?></option>
 <?php
                 }
 ?>
@@ -406,7 +406,7 @@ function showPrintPage(){
             <?php
             for($opleidingen = 10; $opleidingen > 0; $opleidingen--){
                 ?>
-                <option value="<?php echo $opleidingen?>">Richting<?php echo $opleidingen?></option>
+                <option value="<?php echo $opleidingen?>">Opleiding<?php echo $opleidingen?></option>
                 <?php
             }
             ?>
@@ -425,7 +425,7 @@ function showPrintPage(){
                 ?>
                 <tr>
                     <td>
-                        <p class="richting-checkbox " style="display:inline-block">
+                        <p class="opleiding-checkbox " style="display:inline-block">
                             <input type="checkbox" id="student-checkbox<?php echo $studenten?>" checked="checked" />
                             <label for="student-checkbox<?php echo $studenten?>">Student<?php echo $studenten?></label>
                         </p>
