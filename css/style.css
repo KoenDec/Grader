@@ -11,6 +11,10 @@ body{
     filter: blur(5px);
 }
 
+.side-nav{
+    z-index: 7;
+}
+
 h4, .button-collapse{
     display: inline-block;
     line-height: 64px;
