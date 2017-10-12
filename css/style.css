@@ -2,6 +2,15 @@ body{
 
 }
 
+.blur-overlay{
+    z-index: 8;
+    width: 100vw;
+    height: 100vh;
+    position: fixed;
+    background-color: rgba(0,0,0,0.5);
+    filter: blur(5px);
+}
+
 h4, .button-collapse{
     display: inline-block;
     line-height: 64px;
@@ -39,7 +48,7 @@ h4, .button-collapse{
     transform: translate(-50%, -50%);
 }
 
-.login, .addMessage-popup {
+.login, .addMessage-popup, .csv-upload-popup {
     text-align: center;
     border: solid #4db6ac 3px;
     width: 500px;
@@ -47,13 +56,13 @@ h4, .button-collapse{
     padding: 30px;
 }
 
-.addMessage-popup{
+.addMessage-popup, .csv-upload-popup{
     width: 800px;
     background-color: white;
     z-index: 10;
 }
 
-.message-exit{
+.popup-exit{
     cursor: pointer;
 }
 

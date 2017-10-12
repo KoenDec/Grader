@@ -28,9 +28,12 @@ $(document).ready(function () {
         checkboxes.prop('checked', $(this).is(':checked'));
     });
 
-    $('.addMessage').on('click', popupMessage);
+    $('.csv-upload').on('click', popup_csv);
+    $('.csv-submit, .popup-exit').on('click', closePopup_csv);
 
-    $('.message-submit, .message-exit').on('click', closePopupMessage);
+
+    $('.addMessage').on('click', popupMessage);
+    $('.message-submit, .popup-exit').on('click', closePopupMessage);
 
     $('select').material_select();
 
@@ -39,9 +42,25 @@ $(document).ready(function () {
 var popupMessage = function(){
     $('.addMessage-popup').removeClass('hidden');
     $('.addMessage').addClass('hidden');
+    $('.blur-overlay').removeClass('hidden');
 };
 
 var closePopupMessage = function(){
     $('.addMessage-popup').addClass('hidden');
     $('.addMessage').removeClass('hidden');
+    $('.blur-overlay').addClass('hidden');
+
+};
+
+var popup_csv = function(){
+    $('.csv-upload-popup').removeClass('hidden');
+    $('.addstudent').addClass('hidden');
+    $('.blur-overlay').removeClass('hidden');
+};
+
+var closePopup_csv = function(){
+    $('.csv-upload-popup').addClass('hidden');
+    $('.addstudent').removeClass('hidden');
+    $('.blur-overlay').addClass('hidden');
+
 };

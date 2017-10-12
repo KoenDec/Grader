@@ -64,7 +64,7 @@ function showNavigation($name){
     <li><div class="divider"></div></li>
     <li><a class="waves-effect" href="index.php?page=rapporten">Rapporten</a></li>
     <li><a class="waves-effect" href="index.php?page=studenten">Studenten</a></li>
-    <li><a class="waves-effect" href="index.php?page=richtingen">Richtingen</a></li>
+    <li><a class="waves-effect" href="index.php?page=opleidingen">Opleidingen</a></li>
     <li><a class="waves-effect" href="index.php?page=meldingen">Meldingen</a></li>
     <li><a class="waves-effect" href="index.php?page=afdrukken">Afdrukken</a></li>
 </ul>
@@ -98,6 +98,7 @@ function showAccount(){
         <tr><td>Email: <span>John.Doe@clw.be</span></td></tr>
         <tr><td>Lid sinds: <span>09/10/2017 17:33:15</span></td></tr>
     </table>
+    <a href="#">Wachtoord wijzigen</a>
 <?php
 }
 
@@ -184,14 +185,14 @@ function showStudentsPage(){
             <a class="waves-effect waves-light btn"><i class="material-icons">search</i></a>
         </div>
         <div class="row">
-            <div style="position: relative; height: 90px;">
+            <div class="addstudent" style="position: relative; height: 90px;">
             <div class="fixed-action-btn horizontal" style="position: absolute; display: inline-block; right: 24px;">
                 <a class="btn-floating btn-large tooltipped" data-position="top" data-delay="50" data-tooltip="Student Toevoegen">
                     <i class="large material-icons">add</i>
                 </a>
                 <ul>
                     <li><a class="btn-floating red tooltipped" data-position="top" data-delay="50" data-tooltip="Enkele student toevoegen"><i class="material-icons">person_add</i></a></li>
-                    <li><a class="btn-floating yellow darken-1 tooltipped" data-delay="50" data-tooltip=".csv uploaden"><i class="material-icons">file_upload</i></a></li>
+                    <li><a class="btn-floating yellow darken-1 tooltipped csv-upload" data-delay="50" data-tooltip=".csv uploaden"><i class="material-icons">file_upload</i></a></li>
                 </ul>
             </div>
             </div>
@@ -205,11 +206,11 @@ function showStudentsPage(){
         </p>
 
 <?php
-        for($richtingen = 10; $richtingen > 0; $richtingen--){
+        for($opleidingen = 10; $opleidingen > 0; $opleidingen--){
 ?>
             <p class="richting-checkbox">
-                <input type="checkbox" id="richting<?php echo $richtingen?>" checked="checked" />
-                <label for="richting<?php echo $richtingen?>">richting<?php echo $richtingen?></label>
+                <input type="checkbox" id="richting<?php echo $opleidingen?>" checked="checked" />
+                <label for="richting<?php echo $opleidingen?>">richting<?php echo $opleidingen?></label>
             </p>
 <?php
         }
@@ -235,6 +236,32 @@ function showStudentsPage(){
             }
 ?>
     </div>
+    <div class="csv-upload-popup centered hidden">
+        <i class="popup-exit small material-icons right">cancel</i>
+        <div class="row">
+            <h4>Studenten toevoegen</h4>
+            <form action="index.php?page=studenten" method="POST">
+            <div class="row">
+                <div class="file-field input-field">
+                  <div class="btn">
+                    <span>File</span>
+                    <input type="file" accept=".csv">
+                  </div>
+                  <div class="file-path-wrapper">
+                    <input class="file-path validate" type="text">
+                  </div>
+                </div>
+            </div>
+
+            <div class="row">
+              <button class="btn waves-effect waves-light csv-submit" type="submit" name="action">Studenten toevoegen
+                <i class="material-icons right">send</i>
+              </button>
+            </div>
+
+            </form>
+        </div>
+    </div>
 <?php
 }
 
@@ -242,7 +269,7 @@ function showSubjectPage(){
     // todo get actual data from db
 ?>
     <div class="row">
-        <h2>Richtingen</h2>
+        <h2>Opleidingen</h2>
     </div>
     <div class="row">
         <div class="subject-search input-field col s6">
@@ -326,7 +353,7 @@ function showMessagesPage(){
         </ul>
         </div>
         <div class="addMessage-popup centered hidden">
-            <i class="message-exit small material-icons right">cancel</i>
+            <i class="popup-exit small material-icons right">cancel</i>
             <div class="row">
                 <h4>Melding toevoegen</h4>
             </div>
@@ -348,9 +375,9 @@ function showMessagesPage(){
               <select multiple>
                 <option value="0" selected>Iedereen</option>
 <?php
-                for($richtingen = 10; $richtingen > 0; $richtingen--){
+                for($opleidingen = 10; $opleidingen > 0; $opleidingen--){
 ?>
-                    <option value="<?php echo $richtingen?>">Richting<?php echo $richtingen?></option>
+                    <option value="<?php echo $opleidingen?>">Richting<?php echo $opleidingen?></option>
 <?php
                 }
 ?>
@@ -373,13 +400,13 @@ function showPrintPage(){
         <h2>Rapporten afdrukken</h2>
     </div>
     <div class="row">
-            <label>Selecteer richtingen</label>
+            <label>Selecteer opleidingen</label>
             <select multiple>
-            <option selected value="0">Alle richtingen</option>
+            <option selected value="0">Alle opleidingen</option>
             <?php
-            for($richtingen = 10; $richtingen > 0; $richtingen--){
+            for($opleidingen = 10; $opleidingen > 0; $opleidingen--){
                 ?>
-                <option value="<?php echo $richtingen?>">Richting<?php echo $richtingen?></option>
+                <option value="<?php echo $opleidingen?>">Richting<?php echo $opleidingen?></option>
                 <?php
             }
             ?>
