@@ -1,3 +1,9 @@
+DROP DATABASE `graderDB`;
+
+CREATE DATABASE `graderDB`;
+
+USE `graderDB`;
+
 CREATE TABLE `users` (
   `id` int NOT NULL AUTO_INCREMENT PRIMARY KEY,
   `email` varchar(100) NOT NULL UNIQUE,
@@ -9,8 +15,7 @@ CREATE TABLE `users` (
   `status` enum('WAIT_ACTIVATION','ACTIVE','DISABLED') CHARACTER SET utf8 COLLATE utf8_unicode_ci NOT NULL DEFAULT 'WAIT_ACTIVATION',
   `accountCreatedTimestamp` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP,
   `resetcode` char(36) DEFAULT NULL,
-  `creatorId` int,
-  FOREIGN KEY(creatorId) REFERENCES admins(adminId)
+  `creatorId` int
 );
 
 CREATE TABLE `admins` (
@@ -18,6 +23,9 @@ CREATE TABLE `admins` (
   `stillAdmin` tinyint(1) NOT NULL DEFAULT '1',
   FOREIGN KEY(adminId) REFERENCES users(id)
 );
+
+ALTER TABLE `users` ADD CONSTRAINT FK_users_creator FOREIGN KEY(creatorId) REFERENCES admins(adminId);
+
 
 CREATE TABLE `teachers` (
   `teacherId` int NOT NULL,
@@ -42,7 +50,7 @@ CREATE TABLE `opleidingen` (
 );
 
 CREATE TABLE `werkfiches` (
-  `id` int NOT NULL AUTO_INCREMENT,
+  `id` int NOT NULL AUTO_INCREMENT PRIMARY KEY,
   `opleidingId` int NOT NULL,
   `code` varchar(5) NOT NULL,
   `name` varchar(50) NOT NULL,
@@ -52,7 +60,7 @@ CREATE TABLE `werkfiches` (
 );
 
 CREATE TABLE `modules` (
-  `id` int NOT NULL AUTO_INCREMENT,
+  `id` int NOT NULL AUTO_INCREMENT PRIMARY KEY,
   `code` varchar(5) NOT NULL,
   `name` varchar(50) NOT NULL,
   `description` text NOT NULL,
@@ -77,7 +85,7 @@ create table `studenten_modules` (
 );
 
 CREATE TABLE `evaluatiecriteria` (
-  `id` int NOT NULL AUTO_INCREMENT,
+  `id` int NOT NULL AUTO_INCREMENT PRIMARY KEY,
   `moduleId` int NOT NULL,
   `weergaveTitel` varchar(200) NOT NULL,
   `inGebruik` tinyint(1) NOT NULL,
@@ -86,7 +94,7 @@ CREATE TABLE `evaluatiecriteria` (
 );
 
 CREATE TABLE `rapporten` (
-  `id` int NOT NULL AUTO_INCREMENT,
+  `id` int NOT NULL AUTO_INCREMENT PRIMARY KEY,
   `studentId` int NOT NULL,
   `feedback` text,
   FOREIGN KEY(studentId) REFERENCES studenten(studentId)
@@ -111,6 +119,6 @@ CREATE TABLE `meldingen_opleidingen` (
   `meldingId` int NOT NULL,
   `opleidingId` int NOT NULL,
   CONSTRAINT PK_meldingen_opleidingen PRIMARY KEY (meldingId, opleidingId),
-  FOREIGN KEY(meldingId) REFERENCES meldingen(meldingId),
+  FOREIGN KEY(meldingId) REFERENCES meldingen(id),
   FOREIGN KEY(opleidingId) REFERENCES opleidingen(id)
 );
