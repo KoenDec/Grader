@@ -156,7 +156,17 @@ function showReportsPage(){
             for($criteria = 4; $criteria > 0;$criteria--){
 ?>
                 <td class="valign-wrapper"><i class="material-icons">navigate_next</i>Criteria<?php echo $criteria?></td>
-                <td contenteditable="false">Resultaat</td>
+                <td contenteditable="false">
+                  <div class="input-field">
+                    <select disabled>
+                      <option value="" disabled selected>Niets geselecteerd</option>
+                      <option value="1">Option 1</option>
+                      <option value="2">Option 2</option>
+                      <option value="3">Option 3</option>
+                    </select>
+                    <label>Resultaat</label>
+                  </div>
+                </td>
                 <td contenteditable="false">00/00/0000</td>
                 <td contenteditable="false">Opmerking</td>
                 </tr><tr>
