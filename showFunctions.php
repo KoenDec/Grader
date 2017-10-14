@@ -65,7 +65,7 @@ function showNavigation($name){
     <li><a class="waves-effect" href="index.php?page=rapporten">Rapporten</a></li>
     <li><a class="waves-effect" href="index.php?page=studenten">Studenten</a></li>
     <li><a class="waves-effect" href="index.php?page=opleidingen">Opleidingen</a></li>
-    <li><a class="waves-effect" href="index.php?page=meldingen">Meldingen</a></li>
+    <li><a class="waves-effect" href="index.php?page=meldingen">Meldingen<span class="new badge">1</span></div></a></li>
     <li><a class="waves-effect" href="index.php?page=afdrukken">Afdrukken</a></li>
 </ul>
 
@@ -103,7 +103,7 @@ function showAccount(){
 }
 
 function showReportsPage(){
-    // todo get actual data from db ... a lot of data + don't show edit report button for students, that'd be weird  ;) (aslo don't show ONLY his report)
+    // todo get actual data from db ... a lot of data + don't show edit report button for students, that'd be weird  ;) (aslo show ONLY his report)
 ?>
     <div class="row">
         <h2>Rapporten</h2>
@@ -459,6 +459,80 @@ function showStudentEditPage(){
     <div class="row">
         <h2>Student aanpassen</h2>
     </div>
+    <form action="index.php?page=studenten" method="POST">
+        <div class="row">
+            <div class="input-field">
+                <input id="student-name" name="student-name" type="text">
+                <label for="student-name">Naam</label>
+            </div>
+        </div>
+        <div class="row">
+            <div class="input-field">
+                <input id="student-firstname" name="student-firstname" type="text">
+                <label for="student-firstname">Voornaam</label>
+            </div>
+        </div>
+        <div class="row">
+            <div class="input-field">
+                <input id="student-email" name="student-email" type="text">
+                <label for="student-email">Email</label>
+            </div>
+        </div>
+        <div class="row ">
+            <label>Selecteer een richting</label>
+            <select>
+                <option value="0" disabled selected>Geen selectie</option>
+<?php
+                for($opleidingen = 10; $opleidingen > 0; $opleidingen--){
+?>
+                    <option value="<?php echo $opleidingen?>">Opleiding<?php echo $opleidingen?></option>
+<?php
+                }
+?>
+            </select>
+        </div>
+        <div class="row">
+            <ul class="collapsible" data-collapsible="expandable">
+<?php
+                for($fiches = 3; $fiches > 0; $fiches--) {
+?>
+                    <li>
+                        <div class="collapsible-header collapsible-fiche active"><i class="material-icons">indeterminate_check_box</i>Fiche<?php echo $fiches ?></div>
+                        <div class="collapsible-body">
+                            <span>
+                                <table class="striped bordered">
+                                    <tr>
+<?php
+                                    for($modules = 3; $modules > 0; $modules--) {
+?>
+                                            <th>Module<?php echo $modules ?></th>
+<?php
+                                            for($criteria = 3; $criteria > 0; $criteria--) {
+?>
+                                                </tr><tr><td class="valign-wrapper"><i class="material-icons">navigate_next</i>Criteria<?php echo $criteria?></td>
+<?php
+                                            }
+?>
+                                            </tr><tr>
+<?php
+                                    }
+?>
+                                        </tr>
+                                </table>
+                            </span>
+                        </div>
+                    </li>
+<?php
+                }
+?>
+            </ul>
+        </div>
+        <div class="row">
+            <button class="btn waves-effect waves-light message-submit" type="submit" name="action">Student opslaan
+                <i class="material-icons right">send</i>
+            </button>
+        </div>
+    </form>
 <?php
 }
 

@@ -37,6 +37,10 @@ $(document).ready(function () {
 
     $('select').material_select();
 
+    $('.collapsible-fiche').on('click', function(){
+        changeCollapseIcon(this);
+    });
+
 });
 
 var popupMessage = function(){
@@ -63,4 +67,13 @@ var closePopup_csv = function(){
     $('.addstudent').removeClass('hidden');
     $('.blur-overlay').addClass('hidden');
 
+};
+
+var changeCollapseIcon = function(el){
+    if($(el).hasClass('active')){
+        $(el).find('i').html('add_box');
+    }
+    else{
+        $(el).find('i').html('indeterminate_check_box');
+    }
 };
