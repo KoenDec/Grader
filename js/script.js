@@ -104,12 +104,12 @@ var addFiche = function(){
     ficheNr++;
     $('.courseCreator').append(
         "<li class='fiche"+ ficheNr +"'>" +
-            "<div class='collapsible-header collapsible-fiche'><i class='material-icons'>add_box</i><span class='editable' contenteditable='true'>Fiche Naam</span></div>" +
+            "<div class='collapsible-header collapsible-fiche'><i class='material-icons'>add_box</i><input placeholder='Fiche naam' type='text' /></div>" +
             "<div class='collapsible-body'>" +
                 "<span>"+
                 "</span>"+
             "</div>"+
         "</li>"
     );
-    $('.fiche'+ ficheNr + ' span').focus();
+    $('.fiche'+ ficheNr + ' input').focus();
 };
