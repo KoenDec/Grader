@@ -61,10 +61,11 @@ CREATE TABLE `werkfiches` (
 
 CREATE TABLE `modules` (
   `id` int NOT NULL AUTO_INCREMENT PRIMARY KEY,
-  `code` varchar(5) NOT NULL,
   `name` varchar(50) NOT NULL,
   `description` text NOT NULL,
+  `teacherId` int NOT NULL,
   `creatorId` int,
+  FOREIGN KEY(teacherId) REFERENCES teachers(teacherId),
   FOREIGN KEY(creatorId) REFERENCES admins(adminId)
 );
 
@@ -79,7 +80,8 @@ CREATE TABLE `werkfiches_modules` (
 create table `studenten_modules` (
   `moduleId` int NOT NULL,
   `studentId` int NOT NULL,
-  `status` enum('Volgt','Beëindigd') NOT NULL,
+  `status` enum('Volgt','Beëindigd') NOT NULL DEFAULT 'Volgt',
+  CONSTRAINT PK_studenten_modules PRIMARY KEY (moduleId, studentId),
   FOREIGN KEY(moduleId) REFERENCES modules(id),
   FOREIGN KEY(studentId) REFERENCES studenten(studentId)
 );
@@ -88,7 +90,7 @@ CREATE TABLE `evaluatiecriteria` (
   `id` int NOT NULL AUTO_INCREMENT PRIMARY KEY,
   `moduleId` int NOT NULL,
   `weergaveTitel` varchar(200) NOT NULL,
-  `inGebruik` tinyint(1) NOT NULL,
+  `inGebruik` tinyint(1) NOT NULL DEFAULT 1,
   `creatorId` int,
   FOREIGN KEY(creatorId) REFERENCES admins(adminId)
 );
@@ -112,6 +114,7 @@ CREATE TABLE `rapporten_scores` (
 CREATE TABLE `meldingen` (
   `id` int NOT NULL AUTO_INCREMENT PRIMARY KEY,
   `teacherId` int NOT NULL,
+  `tekst` text NOT NULL,
   FOREIGN KEY(teacherId) REFERENCES teachers(teacherId)
 );
 
