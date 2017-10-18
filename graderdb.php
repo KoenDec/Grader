@@ -71,6 +71,15 @@ class UserDAO {
 
   public static function createUser($firstname, $lastname, $email, $password) {
     try {
+      $conn = graderdb::getConnection();
+
+      $sql = 'INSERT INTO users VALUES(:firstname, :lastname, :email, :password)';
+      $stmt = $conn->prepare($sql);
+      $stmt->bindParam(':firstname',$firstname);
+      $stmt->bindParam(':lastname',$lastname);
+      $stmt->bindParam(':email',$email);
+      $stmt->bindParam(':password',$password);
+      $stmt->execute();
 
     } catch (PDOException $e) {
       die($e->getMessage());
