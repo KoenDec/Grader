@@ -33,6 +33,15 @@ INSERT INTO modules(name,description, teacherId, creatorId) VALUES
    	('Elementaire technieken', 'elementaire technieken', 4, 3),
    	('Vaat volgens procedures uitvoeren', 'vaat volgens procedures uitvoeren', 5, 3);
 
+INSERT INTO opleidingen_modules(opleidingId, moduleId) VALUES
+	(1,1),
+    (1,2),
+    (1,3),
+    (1,4),
+    (1,5),
+    (1,6),
+    (1,7);
+
 INSERT INTO werkfiches_modules(werkficheId,moduleId) VALUES
 	(1,1),
 	(1,2),
@@ -52,9 +61,6 @@ INSERT INTO studenten_modules(studentId,moduleId) VALUES
     (7,4),
     (7,6),
 	(7,7),
-    (8,1),
-    (8,2),
-    (8,3),
 	(9,5),
     (9,6),
     (9,7),

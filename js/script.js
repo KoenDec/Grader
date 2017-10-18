@@ -41,11 +41,29 @@ $(document).ready(function () {
         changeCollapseIcon(this);
     });
 
+<<<<<<< HEAD
     $('.addFiche').on('click', function(e){
         e.preventDefault();
         addFiche();
     });
 
+=======
+    $("#report-search").on('keyup', function(){
+      console.log('new input');
+      $.ajax({
+        type: "POST",
+        url: "studentSearch.php",
+        data:'keyword='+$(this).val(),
+        success: function(data){
+          console.log(data);
+          $.each(JSON.parse(data), function(i, student){
+            var studentName = student.firstname + " " + student.lastname;
+            $('#report-search').append('<ul class="autocomplete-content dropdown-content"><li>'+studentName+'</li></ul>');
+          })
+        }
+      });
+    });
+>>>>>>> 7e5e4e04d1181d037d3c93dc543f492e5365de11
 });
 
 var ficheNr = 0;
@@ -84,6 +102,7 @@ var changeCollapseIcon = function(el){
         $(el).find('i').html('indeterminate_check_box');
     }
 };
+<<<<<<< HEAD
 
 var addFiche = function(){
     ficheNr++;
@@ -97,3 +116,5 @@ var addFiche = function(){
         "</li>"
     )
 };
+=======
+>>>>>>> 7e5e4e04d1181d037d3c93dc543f492e5365de11

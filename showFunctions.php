@@ -90,7 +90,6 @@ function showStart(){
 }
 
 function showAccount($email){
-    // todo get actual user data from db
     $userDAO = new UserDAO();
     $user = $userDAO->getUserByEmail($email);
 ?>
@@ -113,7 +112,7 @@ function showReportsPage(){
     </div>
     <div class="row">
         <div class="student-search input-field col s6">
-          <input type="text" id="report-search" class="col s8" name="report-search">
+          <input type="text" id="report-search" class="col s8 autocomplete" name="report-search">
           <label for="report-search">Zoek student</label>
           <a class="waves-effect waves-light btn"><i class="material-icons">search</i></a>
         </div>
@@ -186,8 +185,10 @@ function showReportsPage(){
 }
 
 function showStudentsPage(){
-    // todo get actual data from db
-?>
+    $userDAO = new UserDAO();
+    $educations = $userDAO->getAllEducations();
+
+    ?>
     <div class="row">
         <h2>Studenten</h2>
     </div>
@@ -199,83 +200,89 @@ function showStudentsPage(){
         </div>
         <div class="row">
             <div class="addstudent" style="position: relative; height: 90px;">
-            <div class="fixed-action-btn horizontal" style="position: absolute; display: inline-block; right: 24px;">
-                <a class="btn-floating btn-large tooltipped" data-position="top" data-delay="50" data-tooltip="Student Toevoegen">
-                    <i class="large material-icons">add</i>
-                </a>
-                <ul>
-                    <li><a href="index.php?page=editStudent" class="btn-floating red tooltipped" data-position="top" data-delay="50" data-tooltip="Enkele student toevoegen"><i class="material-icons">person_add</i></a></li>
-                    <li><a class="btn-floating yellow darken-1 tooltipped csv-upload" data-delay="50" data-tooltip=".csv uploaden"><i class="material-icons">file_upload</i></a></li>
-                </ul>
-            </div>
+                <div class="fixed-action-btn horizontal" style="position: absolute; display: inline-block; right: 24px;">
+                    <a class="btn-floating btn-large tooltipped" data-position="top" data-delay="50" data-tooltip="Student Toevoegen">
+                        <i class="large material-icons">add</i>
+                    </a>
+                    <ul>
+                        <li><a href="index.php?page=editStudent" class="btn-floating red tooltipped" data-position="top" data-delay="50" data-tooltip="Enkele student toevoegen"><i class="material-icons">person_add</i></a></li>
+                        <li><a class="btn-floating yellow darken-1 tooltipped csv-upload" data-delay="50" data-tooltip=".csv uploaden"><i class="material-icons">file_upload</i></a></li>
+                    </ul>
+                </div>
             </div>
         </div>
     </div>
     <div class="row">
-    <form class="col s3" action="#">
-        <p>
-            <input type="checkbox" id="all-checkboxes" checked="checked" />
-            <label for="all-checkboxes">Alles selecteren</label>
-        </p>
-
-<?php
-        for($opleidingen = 10; $opleidingen > 0; $opleidingen--){
-?>
-            <p class="opleiding-checkbox">
-                <input type="checkbox" id="opleiding<?php echo $opleidingen?>" checked="checked" />
-                <label for="opleiding<?php echo $opleidingen?>">opleiding<?php echo $opleidingen?></label>
+        <form class="col s3" action="#">
+            <p>
+                <input type="checkbox" id="all-checkboxes" checked="checked" />
+                <label for="all-checkboxes">Alles selecteren</label>
             </p>
-<?php
-        }
-?>
-    </form>
-    <table class="col s9 striped bordered">
-        <tr>
-            <th>Student</th>
-            <th>Acties</th>
-        </tr>
-<?php
-            for($students = 30; $students > 0;$students--){
-?>
-            <tr>
-                <td>Student<?php echo $students?></td>
-                <td>
-                    <a class="waves-effect waves-light btn tooltipped" data-delay="50" data-tooltip="Rapport bekijken"><i class="material-icons right">import_contacts</i>Rapport</a>
-                    <a class="waves-effect waves-light btn tooltipped" data-delay="50" data-tooltip="Studiefiche aanpassen"><i class="material-icons">edit</i></a>
-                    <a class="waves-effect waves-light btn tooltipped red right" data-delay="50" data-tooltip="Delete Student"><i class="material-icons">delete</i></a>
-                </td>
-            </tr>
-<?php
+
+            <?php
+            foreach($educations as $opleiding){
+                ?>
+                <p class="opleiding-checkbox">
+                    <input type="checkbox" id="opleiding<?= $opleiding->id?>" checked="checked" />
+                    <label for="opleiding<?=$opleiding->id?>"><?=$opleiding->name?></label>
+                </p>
+                <?php
             }
-?>
+            ?>
+        </form>
+        <table class="col s9 striped bordered">
+            <tr>
+                <th>Student</th>
+                <th>Acties</th>
+            </tr>
+            <?php
+
+            // TODO show or hide students depending on checked checkboxes
+
+            $students = $userDAO->getAllStudentsInEducation('Keukenmedewerker');
+
+
+            foreach($students as $student){
+                ?>
+                <tr>
+                    <td><?=$student->firstname?> <?=$student->lastname?> (<?=$student->email?>)</td>
+                    <td>
+                        <a class="waves-effect waves-light btn tooltipped" data-delay="50" data-tooltip="Rapport bekijken"><i class="material-icons right">import_contacts</i>Rapport</a>
+                        <a class="waves-effect waves-light btn tooltipped" data-delay="50" data-tooltip="Studiefiche aanpassen"><i class="material-icons">edit</i></a>
+                        <a class="waves-effect waves-light btn tooltipped red right" data-delay="50" data-tooltip="Delete Student"><i class="material-icons">delete</i></a>
+                    </td>
+                </tr>
+                <?php
+            }
+            ?>
     </div>
     <div class="csv-upload-popup centered hidden">
         <i class="popup-exit small material-icons right">cancel</i>
         <div class="row">
             <h4>Studenten toevoegen</h4>
             <form action="index.php?page=studenten" method="POST">
-            <div class="row">
-                <div class="file-field input-field">
-                  <div class="btn">
-                    <span>File</span>
-                    <input type="file" accept=".csv">
-                  </div>
-                  <div class="file-path-wrapper">
-                    <input class="file-path validate" type="text">
-                  </div>
+                <div class="row">
+                    <div class="file-field input-field">
+                        <div class="btn">
+                            <span>File</span>
+                            <input type="file" accept=".csv">
+                        </div>
+                        <div class="file-path-wrapper">
+                            <input class="file-path validate" type="text">
+                        </div>
+                    </div>
                 </div>
-            </div>
 
-            <div class="row">
-              <button class="btn waves-effect waves-light csv-submit" type="submit" name="action">Studenten toevoegen
-                <i class="material-icons right">send</i>
-              </button>
-            </div>
+                <div class="row">
+                    <button class="btn waves-effect waves-light csv-submit" type="submit" name="action">Studenten toevoegen
+                        <i class="material-icons right">send</i>
+                    </button>
+                </div>
 
             </form>
         </div>
     </div>
-<?php
+    <?php
 }
 
 function showSubjectPage(){
