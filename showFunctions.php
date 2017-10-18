@@ -552,10 +552,12 @@ function showOpleidingEditPage(){
             </div>
         </div>
         <div class="row">
-            <div class="courseCreator"></div>
+            <ul class="collapsible courseCreator" data-collapsible="expandable">
+
+            </ul>
         </div>
         <div class="row">
-            <button class="btn waves-effect waves-light" name="action">Fiche Toevoegen</button>
+            <button class="btn waves-effect waves-light addFiche">Fiche Toevoegen</button>
         </div>
         <div class="row">
             <button class="btn waves-effect waves-light message-submit" type="submit" name="action">Opleiding opslaan

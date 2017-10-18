@@ -37,11 +37,18 @@ $(document).ready(function () {
 
     $('select').material_select();
 
-    $('.collapsible-fiche').on('click', function(){
+    $('.collapsible').on('click', '.collapsible-fiche', function(){
         changeCollapseIcon(this);
     });
 
+    $('.addFiche').on('click', function(e){
+        e.preventDefault();
+        addFiche();
+    });
+
 });
+
+var ficheNr = 0;
 
 var popupMessage = function(){
     $('.addMessage-popup').removeClass('hidden');
@@ -70,10 +77,23 @@ var closePopup_csv = function(){
 };
 
 var changeCollapseIcon = function(el){
-    if($(el).hasClass('active')){
+    if(!$(el).hasClass('active')){
         $(el).find('i').html('add_box');
     }
     else{
         $(el).find('i').html('indeterminate_check_box');
     }
+};
+
+var addFiche = function(){
+    ficheNr++;
+    $('.courseCreator').append(
+        "<li class='fiche "+ ficheNr +"'>" +
+            "<div class='collapsible-header collapsible-fiche'><i class='material-icons'>add_box</i>Fiche Naam</div>" +
+            "<div class='collapsible-body'>" +
+                "<span>"+
+                "</span>"+
+            "</div>"+
+        "</li>"
+    )
 };
