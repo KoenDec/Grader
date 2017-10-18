@@ -69,6 +69,14 @@ CREATE TABLE `modules` (
   FOREIGN KEY(creatorId) REFERENCES admins(adminId)
 );
 
+CREATE TABLE `opleidingen_modules` (
+  `opleidingId` int NOT NULL,
+  `moduleId` int NOT NULL,
+  CONSTRAINT PK_opleidingen_modules PRIMARY KEY (opleidingId, moduleId),
+  FOREIGN KEY(opleidingId) REFERENCES opleidingen(id),
+  FOREIGN KEY(moduleId) REFERENCES modules(id)
+);
+
 CREATE TABLE `werkfiches_modules` (
   `werkficheId` int NOT NULL,
   `moduleId` int NOT NULL,
