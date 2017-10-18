@@ -12,7 +12,7 @@ function showLogin(){
         <form action="verify.php" method="POST">
           <div class="row">
             <div class="input-field">
-              <input id="username" name="username" type="text" class="validate">
+              <input id="username" name="username" type="email" class="validate">
               <label for="username">Email</label>
             </div>
           </div>
