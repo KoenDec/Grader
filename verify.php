@@ -34,6 +34,7 @@ if (!$captchaResult->success) {
   // TODO return a beautiful username or pw is wrong err
   echo 'Incorrect password or username';
 } elseif ($captchaResult->success && $user->email == $username && $user->password == $password){
+    $_SESSION['email'] = $user->email;
     $_SESSION['username'] = $user->email;
     header("Refresh:0; url=index.php");
 }

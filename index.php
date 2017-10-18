@@ -1,7 +1,6 @@
 <?php
 include_once "header.html";
 include_once "showFunctions.php";
-include_once('graderdb.php');
 
 session_start();
 
@@ -21,7 +20,7 @@ function checkGET()
     if (isset($_GET['page'])) {
         switch ($_GET['page']) {
             case "account":
-                showAccount();
+                showAccount($_SESSION['email']);
                 break;
 
             case "afmelden":
