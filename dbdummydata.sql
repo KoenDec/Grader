@@ -24,7 +24,7 @@ INSERT INTO opleidingen(code,name,description,creatorId) VALUES
 INSERT INTO werkfiches(opleidingId,code,name,description,creatorId) VALUES
 	(1, 'IK', 'Initiatie keuken', 'initiatie keuken', 3);
 
-INSERT INTO modules(name,description, leerkrachtId, creatorId) VALUES
+INSERT INTO modules(name,description, teacherId, creatorId) VALUES
 	('Veiligheid, hygiëne en milieubewustzijn', 'veiligheid, hygiëne en milieubewustzijn', 4, 3),
 	('Houdingen noodzakelijk voor de uitoefening van het beroep', 'houdingen noodzakelijk voor de uitoefening van het beroepn', 4, 3),
    	('Functionele vaardigheden voor de uitoefening van het beroep', 'functionele vaardigheden voor de uitoefening van het beroep', 4, 3),
@@ -42,7 +42,7 @@ INSERT INTO werkfiches_modules(werkficheId,moduleId) VALUES
 	(1,6),
 	(1,7);
     
-INSERT INTO studenten_modules(moduleId,studentId) VALUES
+INSERT INTO studenten_modules(studentId,moduleId) VALUES
 	(6,1),
     (6,2),
     (6,3),
