@@ -160,7 +160,7 @@ class UserDAO {
         return $students;
     }
 
-    public static function getAllStudentsInEducation($educationName){
+    public static function getAllStudentsInEducation($educationId){
         try {
             $conn = graderdb::getConnection();
 
@@ -169,10 +169,10 @@ class UserDAO {
 	                  JOIN studenten_modules sm ON s.studentId = sm.studentId
 	                  JOIN opleidingen_modules om ON om.moduleId = sm.moduleId
 	                  JOIN opleidingen o ON o.id = om.opleidingId
-                      WHERE o.name = :educationName';
+                      WHERE o.id = :educationId';
 
             $stmt = $conn->prepare($sql);
-            $stmt->bindParam(':educationName',$educationName);
+            $stmt->bindParam(':educationId',$educationId);
 
             $stmt->execute();
 

@@ -187,6 +187,7 @@ function showReportsPage(){
 function showStudentsPage(){
     $userDAO = new UserDAO();
     $educations = $userDAO->getAllEducations();
+    $educationIds = array();
 
     ?>
     <div class="row">
@@ -213,7 +214,7 @@ function showStudentsPage(){
         </div>
     </div>
     <div class="row">
-        <form class="col s3" action="#">
+        <form class="col s3" action="#" id="educationsCheckboxesOnShowStudentsPage">
             <p>
                 <input type="checkbox" id="all-checkboxes" checked="checked" />
                 <label for="all-checkboxes">Alles selecteren</label>
@@ -221,6 +222,7 @@ function showStudentsPage(){
 
             <?php
             foreach($educations as $opleiding){
+                array_push($educationIds, $opleiding->id);
                 ?>
                 <p class="opleiding-checkbox">
                     <input type="checkbox" id="opleiding<?= $opleiding->id?>" checked="checked" />
@@ -236,24 +238,24 @@ function showStudentsPage(){
                 <th>Acties</th>
             </tr>
             <?php
+            foreach($educationIds as $id){
+                $students = $userDAO->getAllStudentsInEducation($id);
 
-            // TODO show or hide students depending on checked checkboxes
-
-            $students = $userDAO->getAllStudentsInEducation('Keukenmedewerker');
-
-
-            foreach($students as $student){
-                ?>
-                <tr>
-                    <td><?=$student->firstname?> <?=$student->lastname?> (<?=$student->email?>)</td>
-                    <td>
-                        <a class="waves-effect waves-light btn tooltipped" data-delay="50" data-tooltip="Rapport bekijken"><i class="material-icons right">import_contacts</i>Rapport</a>
-                        <a class="waves-effect waves-light btn tooltipped" data-delay="50" data-tooltip="Studiefiche aanpassen"><i class="material-icons">edit</i></a>
-                        <a class="waves-effect waves-light btn tooltipped red right" data-delay="50" data-tooltip="Delete Student"><i class="material-icons">delete</i></a>
-                    </td>
-                </tr>
-                <?php
+                foreach($students as $student){
+                    ?>
+                    <tr data-opleidingId=<?=$id?>>
+                        <td><?=$student->firstname?> <?=$student->lastname?> (<?=$student->email?>)</td>
+                        <td>
+                            <a class="waves-effect waves-light btn tooltipped" data-delay="50" data-tooltip="Rapport bekijken"><i class="material-icons right">import_contacts</i>Rapport</a>
+                            <a class="waves-effect waves-light btn tooltipped" data-delay="50" data-tooltip="Studiefiche aanpassen"><i class="material-icons">edit</i></a>
+                            <a class="waves-effect waves-light btn tooltipped red right" data-delay="50" data-tooltip="Delete Student"><i class="material-icons">delete</i></a>
+                        </td>
+                    </tr>
+                    <?php
+                }
             }
+
+
             ?>
     </div>
     <div class="csv-upload-popup centered hidden">
