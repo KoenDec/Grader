@@ -103,12 +103,13 @@ var changeCollapseIcon = function(el){
 var addFiche = function(){
     ficheNr++;
     $('.courseCreator').append(
-        "<li class='fiche "+ ficheNr +"'>" +
-            "<div class='collapsible-header collapsible-fiche'><i class='material-icons'>add_box</i>Fiche Naam</div>" +
+        "<li class='fiche"+ ficheNr +"'>" +
+            "<div class='collapsible-header collapsible-fiche'><i class='material-icons'>add_box</i><span class='editable' contenteditable='true'>Fiche Naam</span></div>" +
             "<div class='collapsible-body'>" +
                 "<span>"+
                 "</span>"+
             "</div>"+
         "</li>"
-    )
+    );
+    $('.fiche'+ ficheNr + ' span').focus();
 };

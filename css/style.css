@@ -98,6 +98,11 @@ h4, .button-collapse{
     margin-left: 30px;
 }
 
+.editable{
+    border: 1px solid black;
+    min-width: 50px;
+}
+
 .hidden{
     display: none;
 }
