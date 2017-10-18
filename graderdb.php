@@ -45,6 +45,29 @@ class UserDAO {
     return $users;
   }
 
+  public static function getUserByEmail($email) {
+    try {
+      $conn = graderdb::getConnection();
+
+      $sql = 'SELECT * FROM users WHERE email = :email';
+      $stmt = $conn->prepare($sql);
+      $stmt->bindParam(':email', $email);
+      $stmt->execute();
+
+      $usersTable = $stmt->fetchAll(PDO::FETCH_CLASS);
+    } catch (PDOException $e) {
+      die($e->getMessage());
+    }
+    
+    if(isset($usersTable[0])) {
+      $user = $usersTable[0];
+    } else {
+      die('No user with username = ' . $username);
+    }
+
+    return $user;
+  }
+
   public static function getUserAndPassword($username) {
     try {
       $conn = graderdb::getConnection();

@@ -5,6 +5,7 @@
  * Date: 9/10/2017
  * Time: 9:52
  */
+ require_once('graderdb.php');
 
 function showLogin(){
 ?>
@@ -88,15 +89,17 @@ function showStart(){
 <?php
 }
 
-function showAccount(){
+function showAccount($email){
     // todo get actual user data from db
+    $userDAO = new UserDAO();
+    $user = $userDAO->getUserByEmail($email);
 ?>
     <h2>Mijn account</h2>
     <table class="striped">
-        <tr><td>Voornaam: <span>John</span></td></tr>
-        <tr><td>Familienaam: <span>Doe</span></td></tr>
-        <tr><td>Email: <span>John.Doe@clw.be</span></td></tr>
-        <tr><td>Lid sinds: <span>09/10/2017 17:33:15</span></td></tr>
+        <tr><td>Voornaam: <span><?php echo $user->firstname ?></span></td></tr>
+        <tr><td>Familienaam: <span><?php echo $user->lastname ?></span></td></tr>
+        <tr><td>Email: <span><?php echo $user->email ?></span></td></tr>
+        <tr><td>Lid sinds: <span><?php echo $user->accountCreatedTimestamp ?></span></td></tr>
     </table>
     <a class="waves-effect waves-light btn tooltipped" data-delay="50" data-tooltip="Account wijzigen"><i class="material-icons">edit</i></a>
 <?php
