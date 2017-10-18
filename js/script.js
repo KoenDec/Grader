@@ -61,6 +61,9 @@ $(document).ready(function () {
         }
       });
     });
+
+    $('#educationsCheckboxesOnShowStudentsPage').find('input').on('change', handleCheckboxesOnShowStudentsPage);
+
 });
 
 var ficheNr = 0;
@@ -112,4 +115,31 @@ var addFiche = function(){
         "</li>"
     );
     $('.fiche'+ ficheNr + ' input').focus();
+};
+
+var handleCheckboxesOnShowStudentsPage = function(){
+    var showOrHideStudents = function(educationId, show, trsStudents){
+        for (var i = 0; i < trsStudents.length - 1; i++) {
+            var cur = $(trsStudents[i + 1]);
+            if (educationId == null || cur.attr('data-opleidingid') == educationId) {
+                if (show) {
+                    cur[0].setAttribute("style", "display:normal");
+                }
+                else {
+                    cur[0].setAttribute("style", "display:none");
+                }
+            }
+        }
+    };
+
+    var trsStudents = $(this).parent().parent().parent().find('table').find('tr');
+    var show = $(this).is(':checked');
+    if(!show) $("#all-checkboxes").prop('checked', show); // TODO opposite of this: set checked if all educations are checked
+
+    if ($(this).attr('id') == 'all-checkboxes') {
+        showOrHideStudents(null, show, trsStudents);
+    } else {
+        var id = $(this).attr('id').substr(9);
+        showOrHideStudents(id, show, trsStudents);
+    }
 };
