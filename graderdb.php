@@ -58,7 +58,7 @@ class UserDAO {
     } catch (PDOException $e) {
       die($e->getMessage());
     }
-    
+
     if(isset($usersTable[0])) {
       $user = $usersTable[0];
     } else {
@@ -109,4 +109,33 @@ class UserDAO {
     }
 
   }
+
+  public static function searchStudents($query) {
+    try {
+      $conn = graderdb::getConnection();
+
+      $sql = 'SELECT firstname, lastname FROM users WHERE firstname LIKE :query OR lastname LIKE :query';
+
+      $stmt = $conn->prepare($sql);
+      $query = '%'.$query.'%';
+      $stmt->bindParam(':query',$query,PDO::PARAM_STR);
+      $stmt->execute();
+
+      $studentsTable = $stmt->fetchAll(PDO::FETCH_CLASS);
+    } catch (PDOException $e) {
+      die($e->getMessage());
+    }
+
+      if(isset($studentsTable[0])) {
+        $students = $studentsTable;
+      } else {
+        die('no students found');
+      }
+
+      return $students;
+  }
+
+  /*public static function searchEducations() {
+    return;
+  }*/
 }

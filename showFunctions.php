@@ -90,7 +90,6 @@ function showStart(){
 }
 
 function showAccount($email){
-    // todo get actual user data from db
     $userDAO = new UserDAO();
     $user = $userDAO->getUserByEmail($email);
 ?>
@@ -113,7 +112,7 @@ function showReportsPage(){
     </div>
     <div class="row">
         <div class="student-search input-field col s6">
-          <input type="text" id="report-search" class="col s8" name="report-search">
+          <input type="text" id="report-search" class="col s8 autocomplete" name="report-search">
           <label for="report-search">Zoek student</label>
           <a class="waves-effect waves-light btn"><i class="material-icons">search</i></a>
         </div>

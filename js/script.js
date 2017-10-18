@@ -41,6 +41,21 @@ $(document).ready(function () {
         changeCollapseIcon(this);
     });
 
+    $("#report-search").on('keyup', function(){
+      console.log('new input');
+      $.ajax({
+        type: "POST",
+        url: "studentSearch.php",
+        data:'keyword='+$(this).val(),
+        success: function(data){
+          console.log(data);
+          $.each(JSON.parse(data), function(i, student){
+            var studentName = student.firstname + " " + student.lastname;
+            $('#report-search').append('<ul class="autocomplete-content dropdown-content"><li>'+studentName+'</li></ul>');
+          })
+        }
+      });
+    });
 });
 
 var popupMessage = function(){
