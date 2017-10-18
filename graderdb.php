@@ -22,12 +22,35 @@ class graderdb {
 
 class UserDAO {
 
+  public static function getAllUsers(){
+    try {
+      $conn = graderdb::getConnection();
+
+      $sql = 'SELECT email FROM users';
+      $stmt = $conn->prepare($sql);
+
+      $stmt->execute();
+
+      $usersTable = $stmt->fetchAll(PDO::FETCH_CLASS);
+    } catch (PDOException $e) {
+      die($e->getMessage());
+    }
+
+    if(isset($usersTable[0])) {
+      $users = $usersTable;
+    } else {
+      die('No users found!');
+    }
+
+    return $users;
+  }
+
   public static function getUserAndPassword($username) {
     try {
-      $conn = $graderdb::getConnection();
+      $conn = graderdb::getConnection();
 
-      $sql = 'SELECT username, password FROM users WHERE username = :username';
-      $stmt = $con->prepare($sql);
+      $sql = 'SELECT email, password FROM users WHERE email = :username';
+      $stmt = $conn->prepare($sql);
       $stmt->bindParam(':username', $username);
       $stmt->execute();
 
@@ -36,13 +59,22 @@ class UserDAO {
       die($e->getMessage());
     }
 
-    if(isset(usersTable[0])) {
+    if(isset($usersTable[0])) {
       $user = $usersTable[0];
     } else {
       die('No user with username = ' . $username);
     }
 
     return $user;
+
+  }
+
+  public static function createUser($firstname, $lastname, $email, $password) {
+    try {
+
+    } catch (PDOException $e) {
+      die($e->getMessage());
+    }
 
   }
 }

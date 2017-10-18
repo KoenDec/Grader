@@ -13,7 +13,7 @@ function showLogin(){
           <div class="row">
             <div class="input-field">
               <input id="username" name="username" type="text" class="validate">
-              <label for="username">Gebruikersnaam</label>
+              <label for="username">Email</label>
             </div>
           </div>
           <div class="row">
