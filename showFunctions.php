@@ -288,7 +288,8 @@ function showStudentsPage(){
 }
 
 function showSubjectPage(){
-    // todo get actual data from db
+    $userDAO = new UserDAO();
+    $educations = $userDAO->getAllEducations();
 ?>
     <div class="row">
         <h2>Opleidingen</h2>
@@ -310,10 +311,10 @@ function showSubjectPage(){
                 <th width="200px">Acties</th>
             </tr>
             <?php
-            for($opleiding = 10; $opleiding > 0;$opleiding--){
+            foreach($educations as $opleiding){
                 ?>
                 <tr>
-                    <td>Opleiding<?php echo $opleiding?></td>
+                    <td><?= $opleiding->name?></td>
                     <td>
                         <a class="waves-effect waves-light btn tooltipped" data-delay="50" data-tooltip="Opleiding bewerken"><i class="material-icons">edit</i></a>
                         <a class="waves-effect waves-light btn tooltipped red right" data-delay="50" data-tooltip="Delete Opleiding"><i class="material-icons">delete</i></a>
