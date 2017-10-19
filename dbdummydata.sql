@@ -198,10 +198,19 @@ INSERT INTO rapporten_scores(rapportId,evaluatiecriteriumId,score) VALUES
 	(1, 21, 'G'),
 	(1, 22, 'G');
     
-INSERT INTO meldingen(teacherId, tekst) VALUES
-	(4, "het CLW heet iedereen welkom"),
-	(5, "morgen iedereen een pan meebrengen aub");
+INSERT INTO meldingen(teacherId, titel, tekst) VALUES
+	(4, "welkom", "het CLW heet iedereen welkom"),
+    (4, "Nulla labortis", "Nulla lobortis aliquam placerat. Quisque at justo maximus, commodo diam sit amet, feugiat arcu. Mauris non suscipit ex, vitae tincidunt magna.
+            Etiam neque sem, euismod ac odio vel, rhoncus interdum mauris. Morbi aliquet sollicitudin nisl, sit amet tempus lorem interdum sit amet.
+            Nam sagittis tempus mattis. Etiam mattis eros eget eros vulputate, quis vestibulum lorem convallis. Suspendisse quis sollicitudin enim.
+            Nulla metus dolor, venenatis ut lacus ut, dictum interdum ante. Sed suscipit mi at ante vulputate, quis maximus elit tempor.
+            Nullam elementum venenatis commodo. Etiam vel tristique massa. Etiam libero mauris, posuere sed massa nec, tristique vehicula lacus.
+            Donec lacinia, lorem et mattis tincidunt, lectus metus imperdiet mi, in tempor turpis lectus id lacus.."),
+	(5, "pan meebrengen", "morgen iedereen een pan meebrengen naar de les aub");
     
 INSERT INTO meldingen_opleidingen(meldingId,opleidingId) VALUES
 	(1, 1),
-    (2, 1);
+    (1, 2),
+    (2, 1),
+    (2, 2),
+    (3, 1);

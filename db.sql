@@ -123,7 +123,9 @@ CREATE TABLE `rapporten_scores` (
 CREATE TABLE `meldingen` (
   `id` int NOT NULL AUTO_INCREMENT PRIMARY KEY,
   `teacherId` int NOT NULL,
+  `titel` varchar(100),
   `tekst` text NOT NULL,
+  `datum` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP,
   FOREIGN KEY(teacherId) REFERENCES teachers(teacherId)
 );
 

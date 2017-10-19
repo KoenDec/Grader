@@ -191,4 +191,53 @@ class UserDAO {
 
         return $educations;
     }
+
+    public static function getAllMessages(){
+        try {
+            $conn = graderdb::getConnection();
+
+            $sql = 'SELECT * FROM meldingen ORDER BY id DESC';
+            $stmt = $conn->prepare($sql);
+
+            $stmt->execute();
+
+            $messagesTable = $stmt->fetchAll(PDO::FETCH_CLASS);
+        } catch (PDOException $e) {
+            die($e->getMessage());
+        }
+
+        if(isset($messagesTable[0])) {
+            $messages = $messagesTable;
+        } else {
+
+            die('No messages found!');
+        }
+
+        return $messages;
+    }
+
+    public static function getTeacherById($teacherId){
+        try {
+            $conn = graderdb::getConnection();
+
+            $sql = 'SELECT * FROM users u JOIN teachers t ON u.id = t.teacherId WHERE teacherId = :teacherId';
+            $stmt = $conn->prepare($sql);
+            $stmt->bindParam(':teacherId',$teacherId);
+
+            $stmt->execute();
+
+            $teachersTable = $stmt->fetchAll(PDO::FETCH_CLASS);
+        } catch (PDOException $e) {
+            die($e->getMessage());
+        }
+
+        if(isset($teachersTable[0])) {
+            $teacher = $teachersTable[0];
+        } else {
+            die('No teacher found with id = ' . $teacherId);
+        }
+
+        return $teacher;
+    }
+
 }
