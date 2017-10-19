@@ -45,33 +45,11 @@ class UserDAO {
     return $users;
   }
 
-  public static function getUserByEmail($email) {
+  public static function getUser($username) {
     try {
       $conn = graderdb::getConnection();
 
-      $sql = 'SELECT * FROM users WHERE email = :email';
-      $stmt = $conn->prepare($sql);
-      $stmt->bindParam(':email', $email);
-      $stmt->execute();
-
-      $usersTable = $stmt->fetchAll(PDO::FETCH_CLASS);
-    } catch (PDOException $e) {
-      die($e->getMessage());
-    }
-
-    if(isset($usersTable[0])) {
-      $user = $usersTable[0];
-    } else {
-      die('No user with username = ' . $username);
-    }
-    return $user;
-  }
-
-  public static function getUserAndPassword($username) {
-    try {
-      $conn = graderdb::getConnection();
-
-      $sql = 'SELECT email, password FROM users WHERE email = :username';
+      $sql = 'SELECT * FROM users WHERE email = :username';
       $stmt = $conn->prepare($sql);
       $stmt->bindParam(':username', $username);
       $stmt->execute();
@@ -166,16 +144,15 @@ class UserDAO {
 
             $sql = 'SELECT DISTINCT u.* FROM users u
 	                  JOIN studenten s on u.id = s.studentId
-	                  JOIN studenten_modules sm ON s.studentId = sm.studentId
-	                  JOIN opleidingen_modules om ON om.moduleId = sm.moduleId
-	                  JOIN opleidingen o ON o.id = om.opleidingId
+	                  JOIN studenten_modules_opleidingen smo ON s.studentId = smo.studentId
+	                  JOIN opleidingen o ON o.id = smo.opleidingId
                       WHERE o.id = :educationId';
 
             $stmt = $conn->prepare($sql);
             $stmt->bindParam(':educationId',$educationId);
 
             $stmt->execute();
- 
+
             $studentsTable = $stmt->fetchAll(PDO::FETCH_CLASS);
         } catch (PDOException $e) {
             die($e->getMessage());
@@ -214,4 +191,53 @@ class UserDAO {
 
         return $educations;
     }
+
+    public static function getAllMessages(){
+        try {
+            $conn = graderdb::getConnection();
+
+            $sql = 'SELECT * FROM meldingen ORDER BY id DESC';
+            $stmt = $conn->prepare($sql);
+
+            $stmt->execute();
+
+            $messagesTable = $stmt->fetchAll(PDO::FETCH_CLASS);
+        } catch (PDOException $e) {
+            die($e->getMessage());
+        }
+
+        if(isset($messagesTable[0])) {
+            $messages = $messagesTable;
+        } else {
+
+            die('No messages found!');
+        }
+
+        return $messages;
+    }
+
+    public static function getTeacherById($teacherId){
+        try {
+            $conn = graderdb::getConnection();
+
+            $sql = 'SELECT * FROM users u JOIN teachers t ON u.id = t.teacherId WHERE teacherId = :teacherId';
+            $stmt = $conn->prepare($sql);
+            $stmt->bindParam(':teacherId',$teacherId);
+
+            $stmt->execute();
+
+            $teachersTable = $stmt->fetchAll(PDO::FETCH_CLASS);
+        } catch (PDOException $e) {
+            die($e->getMessage());
+        }
+
+        if(isset($teachersTable[0])) {
+            $teacher = $teachersTable[0];
+        } else {
+            die('No teacher found with id = ' . $teacherId);
+        }
+
+        return $teacher;
+    }
+
 }

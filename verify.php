@@ -25,7 +25,7 @@ $captchaResult = json_decode($response);
 $username = $_POST['username'];
 $password = $_POST['password'];
 
-$user = $userDAO->getUserAndPassword($username);
+$user = $userDAO->getUser($username);
 
 if (!$captchaResult->success) {
     // TODO return a beautiful captcha is wrong err
@@ -35,6 +35,7 @@ if (!$captchaResult->success) {
   echo 'Incorrect password or username';
 } elseif ($captchaResult->success && $user->email == $username && $user->password == $password){
     $_SESSION['email'] = $user->email;
-    $_SESSION['username'] = $user->email;
+    $name = $user->firstname . ' ' . $user->lastname;
+    $_SESSION['name'] = $name;
     header("Refresh:0; url=index.php");
 }

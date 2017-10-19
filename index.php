@@ -4,12 +4,12 @@ include_once "showFunctions.php";
 
 session_start();
 
-if(isset($_SESSION['username'])){
-    showNavigation($_SESSION['username']);
+if(isset($_SESSION['email'])){
+    showNavigation($_SESSION['name']);
     checkGET();
-}elseif(isset($_POST['username'])){
-    $_SESSION['username'] = $_POST['username'];
-    showNavigation($_SESSION['username']);
+}elseif(isset($_POST['email'])){
+    $_SESSION['email'] = $_POST['email'];
+    showNavigation($_SESSION['name']);
     checkGET();
 }else{
     showLogin();
@@ -24,7 +24,7 @@ function checkGET()
                 break;
 
             case "afmelden":
-                unset($_SESSION['username']);
+                unset($_SESSION['email']);
                 header("Refresh:0; url=index.php");
                 break;
 

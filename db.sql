@@ -51,7 +51,6 @@ CREATE TABLE `opleidingen` (
 
 CREATE TABLE `werkfiches` (
   `id` int NOT NULL AUTO_INCREMENT PRIMARY KEY,
-  `opleidingId` int NOT NULL,
   `code` varchar(5) NOT NULL,
   `name` varchar(50) NOT NULL,
   `description` text NOT NULL,
@@ -61,7 +60,7 @@ CREATE TABLE `werkfiches` (
 
 CREATE TABLE `modules` (
   `id` int NOT NULL AUTO_INCREMENT PRIMARY KEY,
-  `name` varchar(50) NOT NULL,
+  `name` varchar(100) NOT NULL,
   `description` text NOT NULL,
   `teacherId` int NOT NULL,
   `creatorId` int,
@@ -69,12 +68,12 @@ CREATE TABLE `modules` (
   FOREIGN KEY(creatorId) REFERENCES admins(adminId)
 );
 
-CREATE TABLE `opleidingen_modules` (
+CREATE TABLE `opleidingen_werkfiches` (
   `opleidingId` int NOT NULL,
-  `moduleId` int NOT NULL,
-  CONSTRAINT PK_opleidingen_modules PRIMARY KEY (opleidingId, moduleId),
+  `werkficheId` int NOT NULL,
+  CONSTRAINT PK_opleidingen_werkfiches PRIMARY KEY (opleidingId, werkficheId),
   FOREIGN KEY(opleidingId) REFERENCES opleidingen(id),
-  FOREIGN KEY(moduleId) REFERENCES modules(id)
+  FOREIGN KEY(werkficheId) REFERENCES werkfiches(id)
 );
 
 CREATE TABLE `werkfiches_modules` (
@@ -85,12 +84,14 @@ CREATE TABLE `werkfiches_modules` (
   FOREIGN KEY(moduleId) REFERENCES modules(id)
 );
 
-create table `studenten_modules` (
+create table `studenten_modules_opleidingen` (
   `moduleId` int NOT NULL,
   `studentId` int NOT NULL,
+  `opleidingId` int NOT NULL,
   `status` enum('Volgt','Beëindigd') NOT NULL DEFAULT 'Volgt',
-  CONSTRAINT PK_studenten_modules PRIMARY KEY (moduleId, studentId),
+  CONSTRAINT PK_studenten_modules_opleidingen PRIMARY KEY (moduleId, studentId),
   FOREIGN KEY(moduleId) REFERENCES modules(id),
+  FOREIGN KEY(opleidingId) REFERENCES opleidingen(id),
   FOREIGN KEY(studentId) REFERENCES studenten(studentId)
 );
 
@@ -122,7 +123,9 @@ CREATE TABLE `rapporten_scores` (
 CREATE TABLE `meldingen` (
   `id` int NOT NULL AUTO_INCREMENT PRIMARY KEY,
   `teacherId` int NOT NULL,
+  `titel` varchar(100),
   `tekst` text NOT NULL,
+  `datum` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP,
   FOREIGN KEY(teacherId) REFERENCES teachers(teacherId)
 );
 

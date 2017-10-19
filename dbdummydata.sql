@@ -19,10 +19,14 @@ INSERT INTO teachers(teacherId) VALUES(4), (5);
 INSERT INTO studenten(studentId) VALUES(6), (7), (8), (9), (10);
 
 INSERT INTO opleidingen(code,name,description,creatorId) VALUES
-	('KM','Keukenmedewerker','keukenmedewerker',3);
+	('KM','Keukenmedewerker','keukenmedewerker',3),
+    ('TT', 'Opleiding 2', 'testtest', 3);
 
-INSERT INTO werkfiches(opleidingId,code,name,description,creatorId) VALUES
-	(1, 'IK', 'Initiatie keuken', 'initiatie keuken', 3);
+INSERT INTO werkfiches(code,name,description,creatorId) VALUES
+    ('IK', 'Initiatie keuken', 'initiatie keuken', 3),
+    ('KT', 'Keukentechnieken', 'keukentechnieken', 3),
+	('TV', 'Taalgebonden vaardigheden', 'taalgebonden vaardigheden', 3),
+    ('AV', 'Algemene vorming', 'algemene vorming', 3);
 
 INSERT INTO modules(name,description, teacherId, creatorId) VALUES
 	('Veiligheid, hygiëne en milieubewustzijn', 'veiligheid, hygiëne en milieubewustzijn', 4, 3),
@@ -31,16 +35,24 @@ INSERT INTO modules(name,description, teacherId, creatorId) VALUES
    	('Eigen werkzaamheden organiseren', 'eigen werkzaamheden organiseren', 5, 3),
    	('Voorbereidende werkzaamheden', 'voorbereidende werkzaamheden', 5, 3),
    	('Elementaire technieken', 'elementaire technieken', 4, 3),
-   	('Vaat volgens procedures uitvoeren', 'vaat volgens procedures uitvoeren', 5, 3);
+   	('Vaat volgens procedures uitvoeren', 'vaat volgens procedures uitvoeren', 5, 3),
+    ('Functionele taalvaardigheid / NT2', 'functionele taalvaardigheid', 4, 3),
+    ('Vaardigheden (specifiek taalgebonden)', 'vaardigheden taalgebonden', 4, 3),
+    ('ATTITUDES (specifiek taalgebonden)', 'attitudes taalgebonden', 4, 3),
+    ('FUNCTIONELE REKENVAARDIGHEID', 'functionele rekenvaardigheid', 4, 3),
+    ('FUNCTIONELE INFORMATIEVERWERVING EN -VERWERKING', 'functionele informatieverwerving en -verwerking', 4, 3),
+    ('ORGANISATIEBEKWAAMHEID', 'organisatiebekwaamheid', 4, 3),
+    ('TIJD- EN RUIMTEBEWUSTZIJN', 'tijd- en ruimtebewustzijn', 4, 3),
+    ('FUNCTIONELE WETENSCHAPPELIJKE VAARDIGHEID', 'functionele wetenschappelijke vaardigheid', 4, 3),
+    ('ATTITUDE', 'attitude', 4, 3);
 
-INSERT INTO opleidingen_modules(opleidingId, moduleId) VALUES
+INSERT INTO opleidingen_werkfiches(opleidingId, werkficheId) VALUES
 	(1,1),
     (1,2),
     (1,3),
     (1,4),
-    (1,5),
-    (1,6),
-    (1,7);
+    (2,3),
+    (2,4);
 
 INSERT INTO werkfiches_modules(werkficheId,moduleId) VALUES
 	(1,1),
@@ -49,24 +61,38 @@ INSERT INTO werkfiches_modules(werkficheId,moduleId) VALUES
 	(1,4),
 	(1,5),
 	(1,6),
-	(1,7);
+	(1,7),
+    (3,8),
+    (3,9),
+    (3,10),
+    (4,11),
+    (4,12),
+    (4,13),
+    (4,14),
+    (4,15),
+    (4,16);
     
-INSERT INTO studenten_modules(studentId,moduleId) VALUES
-	(6,1),
-    (6,2),
-    (6,3),
-    (6,5),
-	(7,2),
-    (7,3),
-    (7,4),
-    (7,6),
-	(7,7),
-	(9,5),
-    (9,6),
-    (9,7),
-    (10,3),
-    (10,4),
-    (10,5);
+INSERT INTO studenten_modules_opleidingen(studentId,moduleId, opleidingId) VALUES
+	(6,1,1),
+    (6,2,1),
+    (6,3,1),
+    (6,5,1),
+	(7,2,1),
+    (7,3,1),
+    (7,4,1),
+    (7,6,1),
+	(7,7,1),
+	(9,5,1),
+    (9,6,1),
+    (9,7,1),
+    (10,3,1),
+    (10,4,1),
+    (10,5,1),
+    (6,8,1),
+    (7,8,1),
+    (9,8,1),
+    (10,8,1),
+    (8,8,2);
     
 INSERT INTO evaluatiecriteria(moduleId,weergaveTitel,creatorId) VALUES
 	(1,'Kan ergonomisch werken',3),
@@ -112,7 +138,44 @@ INSERT INTO evaluatiecriteria(moduleId,weergaveTitel,creatorId) VALUES
 	(7,'Kan serviesgoed en bestek sorteren',3),
 	(7,'Kan manueel afwassen en afdrogen',3),
 	(7,'Kan machinaal afwassen en afdrogen',3),
-	(7,'Kan gewassen stukken controleren en opbergen',3);
+	(7,'Kan gewassen stukken controleren en opbergen',3),
+    (8, 'Kijk- en luistervaardigheid', 3),
+    (8, 'Leesvaardigheid', 3),
+    (8, 'Spreekvaardigheid', 3),
+    (8, 'Schrijfvaardigheid', 3),
+    (8, 'Grammatica (inzicht)', 3),
+    (8, 'Woordenschat', 3),
+    (8, 'Spelling', 3),
+    (9, 'Kan reflecteren op taalgebruik', 3),
+    (9, 'Kan opzoeken, bronnen vinden', 3),
+    (10, 'Is bereid zich te concentreren op de taaltaak', 3),
+    (10, 'Is bereid te luisteren, te lezen, te spreken, te schrijven en gesprekken te voeren in het Nederlands', 3),
+    (10, 'Is bereid correctheid in de formulering na te streven', 3),
+    (11, 'Grootheden', 3),
+    (11, 'Percent', 3),
+    (11, 'Regel van drie', 3),
+    (11, 'Schaal', 3),
+    (11, 'Schematische voorstellingen', 3),
+    (11, '(Basisbewerkingen: +,-,:,x)', 3),
+    (12, 'ICT', 3),
+    (12, 'Informatie vinden en selecteren', 3),
+    (13, 'Groepsopdrachten', 3),
+    (13, 'Individuele opdrachten', 3),
+    (13, 'Omgaan met geld', 3),
+    (13, 'Organisatie eigen leven', 3),
+    (14, 'Actualiteit en dagelijks leven', 3),
+    (14, 'Eigen regio', 3),
+    (14, 'Situeren, oriënteren en verplaatsen', 3),
+    (14, 'Wereldproblemen', 3),
+    (15, 'Duurzame leefomgeving', 3),
+    (15, 'Natuurwetenschappelijke verschijnselen', 3),
+    (16, 'Houding t.o.v. de groep', 3),
+    (16, 'Houding t.o.v. de leerkracht', 3),
+    (16, 'Inzet/Interesse', 3),
+    (16, 'Kritische zin', 3),
+    (16, 'Respect voor leefmilieu en historisch - cultureel erfgoed', 3),
+    (16, 'Samenwerking', 3),
+    (16, 'Inleving in socioculturele diversiteit', 3);
     
 INSERT INTO rapporten(studentId,feedback) VALUES
 	(6, 'Goed gewerkt, proficiat.'),
@@ -134,10 +197,20 @@ INSERT INTO rapporten_scores(rapportId,evaluatiecriteriumId,score) VALUES
 	(1, 20, 'G'),
 	(1, 21, 'G'),
 	(1, 22, 'G');
-
-/* NOG GEEN DUMMYDATA VOOR VOLGENDE TABELLEN:
-
-INSERT INTO meldingen(teacherId, tekst) VALUES();
-INSERT INTO meldingen_opleidingen(meldingId,opleidingId) VALUES();
-
-*/
+    
+INSERT INTO meldingen(teacherId, titel, tekst) VALUES
+	(4, "welkom", "het CLW heet iedereen welkom"),
+    (4, "Nulla labortis", "Nulla lobortis aliquam placerat. Quisque at justo maximus, commodo diam sit amet, feugiat arcu. Mauris non suscipit ex, vitae tincidunt magna.
+            Etiam neque sem, euismod ac odio vel, rhoncus interdum mauris. Morbi aliquet sollicitudin nisl, sit amet tempus lorem interdum sit amet.
+            Nam sagittis tempus mattis. Etiam mattis eros eget eros vulputate, quis vestibulum lorem convallis. Suspendisse quis sollicitudin enim.
+            Nulla metus dolor, venenatis ut lacus ut, dictum interdum ante. Sed suscipit mi at ante vulputate, quis maximus elit tempor.
+            Nullam elementum venenatis commodo. Etiam vel tristique massa. Etiam libero mauris, posuere sed massa nec, tristique vehicula lacus.
+            Donec lacinia, lorem et mattis tincidunt, lectus metus imperdiet mi, in tempor turpis lectus id lacus.."),
+	(5, "pan meebrengen", "morgen iedereen een pan meebrengen naar de les aub");
+    
+INSERT INTO meldingen_opleidingen(meldingId,opleidingId) VALUES
+	(1, 1),
+    (1, 2),
+    (2, 1),
+    (2, 2),
+    (3, 1);
