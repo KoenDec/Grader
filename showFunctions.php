@@ -91,7 +91,7 @@ function showStart(){
 
 function showAccount($email){
     $userDAO = new UserDAO();
-    $user = $userDAO->getUserByEmail($email);
+    $user = $userDAO->getUser($email);
 ?>
     <h2>Mijn account</h2>
     <table class="striped">
