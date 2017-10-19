@@ -67,11 +67,11 @@ class UserDAO {
     return $user;
   }
 
-  public static function getUserAndPassword($username) {
+  public static function getUser($username) {
     try {
       $conn = graderdb::getConnection();
 
-      $sql = 'SELECT email, password FROM users WHERE email = :username';
+      $sql = 'SELECT * FROM users WHERE email = :username';
       $stmt = $conn->prepare($sql);
       $stmt->bindParam(':username', $username);
       $stmt->execute();
@@ -175,7 +175,7 @@ class UserDAO {
             $stmt->bindParam(':educationId',$educationId);
 
             $stmt->execute();
- 
+
             $studentsTable = $stmt->fetchAll(PDO::FETCH_CLASS);
         } catch (PDOException $e) {
             die($e->getMessage());
