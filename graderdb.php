@@ -175,7 +175,7 @@ class UserDAO {
             $stmt->bindParam(':educationId',$educationId);
 
             $stmt->execute();
-
+ 
             $studentsTable = $stmt->fetchAll(PDO::FETCH_CLASS);
         } catch (PDOException $e) {
             die($e->getMessage());
