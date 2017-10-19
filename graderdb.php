@@ -144,9 +144,8 @@ class UserDAO {
 
             $sql = 'SELECT DISTINCT u.* FROM users u
 	                  JOIN studenten s on u.id = s.studentId
-	                  JOIN studenten_modules sm ON s.studentId = sm.studentId
-	                  JOIN opleidingen_modules om ON om.moduleId = sm.moduleId
-	                  JOIN opleidingen o ON o.id = om.opleidingId
+	                  JOIN studenten_modules_opleidingen smo ON s.studentId = smo.studentId
+	                  JOIN opleidingen o ON o.id = smo.opleidingId
                       WHERE o.id = :educationId';
 
             $stmt = $conn->prepare($sql);
