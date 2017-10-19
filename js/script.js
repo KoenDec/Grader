@@ -107,21 +107,29 @@ var addFiche = function(){
     ficheNr++;
     $('.courseCreator').append(
         "<li class='fiche"+ ficheNr +"'>" +
-            "<div class='collapsible-header collapsible-fiche'><i class='material-icons'>add_box</i><input placeholder='Fiche naam' type='text' /></div>" +
+            "<div class='valign-wrapper collapsible-header collapsible-fiche'><i class='material-icons'>add_box</i>" +
+                "<div class='input-field'>" +
+                    "<input class='fiche-name' name='fiche-name' type='text'>" +
+                    "<label for='fiche-name'>Fiche naam</label>" +
+                "</div>"+
+            "</div>" +
             "<div class='collapsible-body'>" +
                 "<span>"+
+                    "Geen modules"+
                 "</span>"+
             "</div>"+
         "</li>"
     );
     $('.fiche'+ ficheNr + ' input').focus();
+    $('.fiche'+ ficheNr + ' .collapsible-header').addClass('active');
+
 };
 
 var handleCheckboxesOnShowStudentsPage = function(){
     var showOrHideStudents = function(educationId, show, trsStudents){
         for (var i = 0; i < trsStudents.length - 1; i++) {
             var cur = $(trsStudents[i + 1]);
-            if (educationId == null || cur.attr('data-opleidingid') == educationId) {
+            if (educationId === null || cur.attr('data-opleidingid') === educationId) {
                 if (show) {
                     cur[0].setAttribute("style", "display:normal");
                 }
@@ -136,7 +144,7 @@ var handleCheckboxesOnShowStudentsPage = function(){
     var show = $(this).is(':checked');
     if(!show) $("#all-checkboxes").prop('checked', show); // TODO opposite of this: set checked if all educations are checked
 
-    if ($(this).attr('id') == 'all-checkboxes') {
+    if ($(this).attr('id') === 'all-checkboxes') {
         showOrHideStudents(null, show, trsStudents);
     } else {
         var id = $(this).attr('id').substr(9);
