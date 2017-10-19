@@ -510,7 +510,7 @@ function showStudentEditPage(){
                 for($fiches = 3; $fiches > 0; $fiches--) {
 ?>
                     <li>
-                        <div class="collapsible-header collapsible-fiche active"><i class="material-icons">indeterminate_check_box</i>Fiche<?php echo $fiches ?></div>
+                        <div class="collapsible-header collapsible-fiche active"><i class="collapse-icon material-icons">indeterminate_check_box</i>Fiche<?php echo $fiches ?></div>
                         <div class="collapsible-body">
                             <span>
                                 <table class="striped bordered">
@@ -562,7 +562,7 @@ function showOpleidingEditPage(){
             </div>
         </div>
         <div class="row">
-            <ul class="collapsible courseCreator" data-collapsible="expandable">
+            <ul class="popout collapsible courseCreator" data-collapsible="expandable">
 
             </ul>
         </div>

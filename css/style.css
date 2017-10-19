@@ -98,6 +98,22 @@ h4, .button-collapse{
     margin-left: 30px;
 }
 
+.fiche-input{
+    width: 50%;
+}
+
+.fiche-btns{
+    width: 40%;
+    margin-left: 3%;
+}
+
+.del-fiche-btn{
+    margin-left: 1%;
+}
+#fiche-del-icon{
+    margin:0;
+}
+
 .hidden{
     display: none;
 }
