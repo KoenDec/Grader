@@ -105,12 +105,17 @@ function showAccount($email){
 }
 
 function showReportsPage(){
+    $userDAO = new UserDAO();
+    // todo now only student 1's report (hardcoded) is shown, create functionality for other students
+    $studentId = 6; // faisal
+    $fiches = $userDAO->getWerkfichesFromStudent($studentId);
+
   if(!empty($_POST['student'])) {
     $selectedStudent = $_POST['student'];
   } else {
     $selectedStudent = 'nothing';
   }
-    // todo get actual data from db ... a lot of data + don't show edit report button for students, that'd be weird  ;) (aslo show ONLY his report)
+    // todo don't show edit report button for students, that'd be weird  ;) (aslo show ONLY his report)
 ?>
     <div class="row">
         <h2>Rapporten</h2>
@@ -128,7 +133,7 @@ function showReportsPage(){
         </div>
     </div>
     <div class="row selectedStudent">
-        <p>Studiefiches van: <span style="font-weight: bold"></span></p>
+        <p>Studiefiches van: <span style="font-weight: bold">Faisal Nizami</span></p>
     </div>
     <div class="row">
         <div class="fiches-progress col s11">
@@ -152,18 +157,20 @@ function showReportsPage(){
         </tr>
         <tr>
 <?php
-    for($fiches = 5; $fiches > 0; $fiches--){
+    foreach($fiches as $fiche){
 /* rowspan here is modules * criteria + modules */?>
-        <td rowspan="15">Fiche<?php echo $fiches?></td>
+        <td rowspan="15"><?= $fiche->name ?></td> <!-- TODO rowspan dynamisch -->
 <?php
-        for($modules= 3; $modules > 0; $modules--){
+    $modules = $userDAO->getFollowedModulesInFiche($fiche->id, $studentId);
+        foreach($modules as $module){
 ?>
-            <td colspan="4">Module<?php echo $modules?></td>
+            <td colspan="4"><?= $module->name ?></td>
             </tr><tr>
 <?php
-            for($criteria = 4; $criteria > 0;$criteria--){
+    $criteria = $userDAO->getCriteriaForModule($module->id);
+            foreach($criteria as $criterium){
 ?>
-                <td class="valign-wrapper"><i class="material-icons">navigate_next</i>Criteria<?php echo $criteria?></td>
+                <td class="valign-wrapper"><i class="material-icons">navigate_next</i><?= $criterium->weergaveTitel ?></td>
                 <td contenteditable="false">
                   <div class="input-field">
                     <select disabled>
@@ -417,6 +424,9 @@ function showMessagesPage(){
 }
 
 function showPrintPage(){
+    // TODO checkbox functionality on this page (javascript)
+    $userDAO = new UserDAO();
+    $educations = $userDAO->getAllEducations();
 ?>
     <div class="row">
         <h2>Rapporten afdrukken</h2>
@@ -426,9 +436,9 @@ function showPrintPage(){
             <select multiple>
             <option selected value="0">Alle opleidingen</option>
             <?php
-            for($opleidingen = 10; $opleidingen > 0; $opleidingen--){
+            foreach($educations as $opleiding){
                 ?>
-                <option value="<?php echo $opleidingen?>">Opleiding<?php echo $opleidingen?></option>
+                <option value="<?= $opleiding->id ?>"><?= $opleiding->name ?></option>
                 <?php
             }
             ?>
@@ -443,18 +453,24 @@ function showPrintPage(){
             <table class="striped bordered">
                 <tr><th>Studenten</th></tr>
             <?php
-            for($studenten = 10; $studenten > 0; $studenten--){
-                ?>
-                <tr>
-                    <td>
-                        <p class="opleiding-checkbox " style="display:inline-block">
-                            <input type="checkbox" id="student-checkbox<?php echo $studenten?>" checked="checked" />
-                            <label for="student-checkbox<?php echo $studenten?>">Student<?php echo $studenten?></label>
-                        </p>
-                        <a class="waves-effect waves-light btn tooltipped right"  data-delay="50" data-tooltip="Rapport bekijken"><i class="material-icons right">import_contacts</i>Rapport</a>
-                    </td>
-                </tr>
-                <?php
+            foreach($educations as $education) {
+                $students = $userDAO->getAllStudentsInEducation($education->id);
+
+                foreach ($students as $student) {
+                    ?>
+                    <tr>
+                        <td>
+                            <p class="opleiding-checkbox " style="display:inline-block">
+                                <input type="checkbox" id="student-checkbox<?= $student->id ?>" checked="checked"/>
+                                <label
+                                    for="student-checkbox<?= $student->id ?>"><?= $student->firstname ?> <?= $student->lastname ?></label>
+                            </p>
+                            <a class="waves-effect waves-light btn tooltipped right" data-delay="50"
+                               data-tooltip="Rapport bekijken"><i class="material-icons right">import_contacts</i>Rapport</a>
+                        </td>
+                    </tr>
+                    <?php
+                }
             }
             ?>
             </table>

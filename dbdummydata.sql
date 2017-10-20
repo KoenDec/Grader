@@ -92,14 +92,13 @@ INSERT INTO studenten_modules(studentId, moduleId, opleidingId) VALUES
     (7,24,2),
     (7,25,2),
     
-    -- RANDOM DATA: student 3 volgt kapper, 4 en 5 volgen kok.
+    -- RANDOM DATA: student 3 (id 8) volgt kapper, 4 en 5 (ids 9 en 10) volgen kok.
 	(9,5,1),
     (9,6,1),
     (9,7,1),
     (10,3,1),
     (10,4,1),
     (10,5,1),
-    (7,8,1),
     (9,8,1),
     (10,8,1),
     (8,8,2);
