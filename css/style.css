@@ -98,17 +98,31 @@ h4, .button-collapse{
     margin-left: 30px;
 }
 
+.addFiche-row{
+    text-align: center;
+}
+
 .fiche-input{
     width: 50%;
 }
 
-.fiche-btns{
-    width: 40%;
-    margin-left: 3%;
+.module-input, .criteria-input{
+    width: 54%;
+    display: inline-block;
 }
 
-.del-fiche-btn{
-    margin-left: 1%;
+.criteria-input{
+    width: 51%;
+}
+
+.creator-btns{
+    width: 40%;
+    margin-left: 10px;
+    display: inline-block;
+}
+
+.del-fiche-btn, .del-module-btn{
+    margin-left: 10px;
 }
 #fiche-del-icon{
     margin:0;

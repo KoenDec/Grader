@@ -559,11 +559,11 @@ function showOpleidingEditPage(){
 
             </ul>
         </div>
-        <div class="row">
+        <div class="row addFiche-row">
             <button class="btn waves-effect waves-light addFiche">Fiche Toevoegen</button>
         </div>
         <div class="row">
-            <button class="btn waves-effect waves-light message-submit" type="submit" name="action">Opleiding opslaan
+            <button class="right btn waves-effect waves-light opleiding-submit" type="submit" name="action">Opleiding opslaan
                 <i class="material-icons right">send</i>
             </button>
         </div>
