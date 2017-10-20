@@ -46,6 +46,11 @@ $(document).ready(function () {
         addFiche();
     });
 
+    $('.courseCreator').on('click', '.add-module-btn', function (e) {
+        e.stopPropagation();
+        addModule(this);
+    });
+
     $("#report-search").on('keyup', function(){
       $.ajax({
         type: "POST",
@@ -78,6 +83,7 @@ $(document).ready(function () {
 });
 
 var ficheNr = 0;
+var moduleNr = 0;
 
 var popupMessage = function(){
     $('.addMessage-popup').removeClass('hidden');
@@ -107,10 +113,10 @@ var closePopup_csv = function(){
 
 var changeCollapseIcon = function(el){
     if(!$(el).hasClass('active')){
-        $(el).find('i').html('add_box');
+        $(el).find('.collapse-icon').html('add_box');
     }
     else{
-        $(el).find('i').html('indeterminate_check_box');
+        $(el).find('.collapse-icon').html('indeterminate_check_box');
     }
 };
 
@@ -118,22 +124,44 @@ var addFiche = function(){
     ficheNr++;
     $('.courseCreator').append(
         "<li class='fiche"+ ficheNr +"'>" +
-            "<div class='valign-wrapper collapsible-header collapsible-fiche'><i class='material-icons'>add_box</i>" +
-                "<div class='input-field'>" +
+            "<div class='valign-wrapper collapsible-header collapsible-fiche'><i class='collapse-icon material-icons'>add_box</i>" +
+                "<div class='input-field fiche-input'>" +
                     "<input class='fiche-name' name='fiche-name' type='text'>" +
                     "<label for='fiche-name'>Fiche naam</label>" +
                 "</div>"+
+                "<div class='fiche-btns'>"+
+                    "<a class='add-module-btn waves-effect waves-light btn' data-fiche='fiche"+ ficheNr +"'><i class='material-icons left'>add</i>Module toevoegen</a>"+
+                    "<a class='del-fiche-btn waves-effect waves-light btn red' data-fiche='fiche"+ ficheNr +"'><i id='fiche-del-icon' class='material-icons'>delete</i></a>"+
+                "</div>"+
             "</div>" +
             "<div class='collapsible-body'>" +
-                "<span>"+
-                    "Geen modules"+
-                "</span>"+
+                "<table class='module-table'>"+
+                    "<p class='no-modules'>Geen modules</p>"+
+                "</table>"+
             "</div>"+
         "</li>"
     );
     $('.fiche'+ ficheNr + ' input').focus();
-    $('.fiche'+ ficheNr + ' .collapsible-header').addClass('active');
 
+};
+
+var addModule = function(el){
+    moduleNr++;
+    var fiche =  $(el).data('fiche');
+    var colHead = $('.' + fiche + ' .collapsible-header');
+    if(!colHead.hasClass('active')){
+        colHead.trigger('click');
+    }
+    $('.'+ fiche + ' .no-modules').addClass('hidden');
+
+    $('.'+ fiche + ' .module-table').append(
+    "<tr><th>" +
+    "<div class='input-field fiche-input'>" +
+        "<input class='module-name' name='module-name' type='text'>" +
+        "<label for='module-name'>Module naam</label>" +
+    "</div>"+
+    "</th></tr>"
+    );
 };
 
 var handleCheckboxesOnShowStudentsPage = function(){

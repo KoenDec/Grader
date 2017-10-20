@@ -334,8 +334,10 @@ function showSubjectPage(){
 }
 
 function showMessagesPage(){
-        // todo get actual data from db + don't show add button for students
-
+        // todo don't show add button for students
+        // todo only show messages that are relevant for the user
+    $userDAO = new UserDAO();
+    $messages = $userDAO->getAllMessages();
 ?>
         <div class="row">
             <h2>Meldingen</h2>
@@ -345,32 +347,23 @@ function showMessagesPage(){
             <ul class="collapsible popout col s8 offset-s1" data-collapsible="expandable">
 
 <?php
-    for($meldingen = 3; $meldingen > 0;$meldingen--){
+    foreach($messages as $melding) {
+        $teacher = $userDAO->getTeacherById($melding->teacherId);
 ?>
         <li>
             <div class="collapsible-header
 <?php
-            if($meldingen === 3)
-            {
-                echo "active\"><i class=\"material-icons\">sms_failed</i>";
-            }
-            else{
-                echo "\"><i class=\"material-icons \">navigate_next</i>";
-            }
+            // todo not hardcode this 'active'-class
+            if($melding->id == 3) echo "active\"><i class=\"material-icons\">sms_failed</i>";
+            else echo "\"><i class=\"material-icons\">navigate_next</i>";
 ?>
-            Melding
-<?php
-            echo $meldingen
-?>
+            <?= $melding->titel ?> (geplaatst door <?=$teacher->firstname?> <?=$teacher->lastname?> op <?=$melding->datum?>)
+
             </div>
             <div class="collapsible-body">
             <span>
-            Nulla lobortis aliquam placerat. Quisque at justo maximus, commodo diam sit amet, feugiat arcu. Mauris non suscipit ex, vitae tincidunt magna.
-            Etiam neque sem, euismod ac odio vel, rhoncus interdum mauris. Morbi aliquet sollicitudin nisl, sit amet tempus lorem interdum sit amet.
-            Nam sagittis tempus mattis. Etiam mattis eros eget eros vulputate, quis vestibulum lorem convallis. Suspendisse quis sollicitudin enim.
-            Nulla metus dolor, venenatis ut lacus ut, dictum interdum ante. Sed suscipit mi at ante vulputate, quis maximus elit tempor.
-            Nullam elementum venenatis commodo. Etiam vel tristique massa. Etiam libero mauris, posuere sed massa nec, tristique vehicula lacus.
-            Donec lacinia, lorem et mattis tincidunt, lectus metus imperdiet mi, in tempor turpis lectus id lacus..</span>
+                <?=$melding->tekst?>
+            </span>
             <div class="row">
                 <a class="waves-effect waves-light btn tooltipped red right" data-delay="50" data-tooltip="Delete melding"><i class="material-icons">delete</i></a>
             </div>
@@ -516,7 +509,7 @@ function showStudentEditPage(){
                 for($fiches = 3; $fiches > 0; $fiches--) {
 ?>
                     <li>
-                        <div class="collapsible-header collapsible-fiche active"><i class="material-icons">indeterminate_check_box</i>Fiche<?php echo $fiches ?></div>
+                        <div class="collapsible-header collapsible-fiche active"><i class="collapse-icon material-icons">indeterminate_check_box</i>Fiche<?php echo $fiches ?></div>
                         <div class="collapsible-body">
                             <span>
                                 <table class="striped bordered">
@@ -568,7 +561,7 @@ function showOpleidingEditPage(){
             </div>
         </div>
         <div class="row">
-            <ul class="collapsible courseCreator" data-collapsible="expandable">
+            <ul class="popout collapsible courseCreator" data-collapsible="expandable">
 
             </ul>
         </div>
