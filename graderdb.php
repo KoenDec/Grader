@@ -143,10 +143,12 @@ class UserDAO {
             $conn = graderdb::getConnection();
 
             $sql = 'SELECT DISTINCT u.* FROM users u
-	                  JOIN studenten s on u.id = s.studentId
-	                  JOIN studenten_modules_opleidingen smo ON s.studentId = smo.studentId
-	                  JOIN opleidingen o ON o.id = smo.opleidingId
-                      WHERE o.id = :educationId';
+		              JOIN studenten s on u.id = s.studentId
+	                  JOIN studenten_modules sm ON s.studentId = sm.studentId
+	                  JOIN modules m ON sm.moduleId = m.id
+                      JOIN werkfiches w ON m.werkficheId = w.id
+                      WHERE sm.status = \'volgt\'
+			            AND w.opleidingId = :educationId OR sm.opleidingId = :educationId';
 
             $stmt = $conn->prepare($sql);
             $stmt->bindParam(':educationId',$educationId);
