@@ -90,7 +90,7 @@ class UserDAO {
     try {
       $conn = graderdb::getConnection();
 
-      $sql = 'SELECT firstname, lastname FROM users WHERE firstname LIKE :query OR lastname LIKE :query';
+      $sql = 'SELECT * FROM users WHERE firstname LIKE :query OR lastname LIKE :query';
 
       $stmt = $conn->prepare($sql);
       $query = '%'.$query.'%';

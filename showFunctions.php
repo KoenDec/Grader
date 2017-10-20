@@ -105,6 +105,11 @@ function showAccount($email){
 }
 
 function showReportsPage(){
+  if(!empty($_POST['student'])) {
+    $selectedStudent = $_POST['student'];
+  } else {
+    $selectedStudent = '';
+  }
     // todo get actual data from db ... a lot of data + don't show edit report button for students, that'd be weird  ;) (aslo show ONLY his report)
 ?>
     <div class="row">
@@ -112,9 +117,10 @@ function showReportsPage(){
     </div>
     <div class="row">
         <div class="student-search input-field col s6">
-          <input type="text" id="report-search" class="col s8 autocomplete" name="report-search">
+          <input type="text" id="report-search" class="col s8 autocomplete" name="report-search" />
           <label for="report-search">Zoek student</label>
           <a class="waves-effect waves-light btn"><i class="material-icons">search</i></a>
+          <ul class="autocomplete-content dropdown-content"></ul>
         </div>
         <div class="right-align col s6 reports-btns">
             <a class="waves-effect waves-light btn tooltipped" data-delay="50" data-tooltip="Rapport downloaden"><i class="material-icons">file_download</i></a>
@@ -122,7 +128,7 @@ function showReportsPage(){
         </div>
     </div>
     <div class="row">
-        <p>Studiefiches van: <span style="font-weight: bold">Studentennaam</span></p>
+        <p>Studiefiches van: <span style="font-weight: bold"><?php echo $selectedStudent ?></span></p>
     </div>
     <div class="row">
         <div class="fiches-progress col s11">
