@@ -239,7 +239,8 @@ var createEditCourseJSON = function(){
         ficheName = $(this).find('.fiche-name').val();
         final.push({fiche: [ficheName,modules]});
     });
-    console.log(final);
+    var myJsonString = JSON.stringify(final);
+    console.log(myJsonString);
 };
 
 var handleCheckboxesOnShowStudentsPage = function(){
