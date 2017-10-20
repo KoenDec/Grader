@@ -108,7 +108,7 @@ function showReportsPage(){
   if(!empty($_POST['student'])) {
     $selectedStudent = $_POST['student'];
   } else {
-    $selectedStudent = '';
+    $selectedStudent = 'nothing';
   }
     // todo get actual data from db ... a lot of data + don't show edit report button for students, that'd be weird  ;) (aslo show ONLY his report)
 ?>
@@ -127,8 +127,8 @@ function showReportsPage(){
             <a class="waves-effect waves-light btn tooltipped" data-delay="50" data-tooltip="Rapport afdrukken"><i class="material-icons">print</i></a>
         </div>
     </div>
-    <div class="row">
-        <p>Studiefiches van: <span style="font-weight: bold"><?php echo $selectedStudent ?></span></p>
+    <div class="row selectedStudent">
+        <p>Studiefiches van: <span style="font-weight: bold"></span></p>
     </div>
     <div class="row">
         <div class="fiches-progress col s11">

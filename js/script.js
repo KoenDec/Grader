@@ -70,8 +70,9 @@ $(document).ready(function () {
               $('#report-search').val(student);
               $('.dropdown-content').html('');
               var selectedStudent = $(this).data('email');
-              $.post('index.php',{student: selectedStudent});
               console.log(selectedStudent);
+              $('.selectedStudent span').text(selectedStudent);
+
             });
           }
         }
