@@ -61,7 +61,6 @@ $(document).ready(function () {
           if(data !== 'no students'){
             $('.dropdown-content').html('');
             $.each(data, function(i, student){
-              console.log(student);
               var studentName = student.firstname + " " + student.lastname;
               $('.dropdown-content').append('<li data-email='+student.email+'>'+studentName+'</li>');
             })
@@ -69,9 +68,7 @@ $(document).ready(function () {
               var student = $(this).text();
               $('#report-search').val(student);
               $('.dropdown-content').html('');
-              var selectedStudent = $(this).data('email');
-              console.log(selectedStudent);
-              $('.selectedStudent span').text(selectedStudent);
+              $('.selectedStudent span').text(student);
 
             });
           }
