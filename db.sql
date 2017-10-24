@@ -54,7 +54,9 @@ CREATE TABLE `werkfiches` (
   `code` varchar(5) NOT NULL,
   `name` varchar(50) NOT NULL,
   `description` text NOT NULL,
+  `opleidingId` int,
   `creatorId` int,
+  FOREIGN KEY(opleidingId) REFERENCES opleidingen(id),
   FOREIGN KEY(creatorId) REFERENCES admins(adminId)
 );
 
@@ -62,37 +64,33 @@ CREATE TABLE `modules` (
   `id` int NOT NULL AUTO_INCREMENT PRIMARY KEY,
   `name` varchar(100) NOT NULL,
   `description` text NOT NULL,
+  `werkficheId` int NOT NULL,
   `teacherId` int NOT NULL,
   `creatorId` int,
+  FOREIGN KEY(werkficheId) REFERENCES werkfiches(id),
   FOREIGN KEY(teacherId) REFERENCES teachers(teacherId),
   FOREIGN KEY(creatorId) REFERENCES admins(adminId)
 );
 
-CREATE TABLE `opleidingen_werkfiches` (
-  `opleidingId` int NOT NULL,
-  `werkficheId` int NOT NULL,
-  CONSTRAINT PK_opleidingen_werkfiches PRIMARY KEY (opleidingId, werkficheId),
-  FOREIGN KEY(opleidingId) REFERENCES opleidingen(id),
-  FOREIGN KEY(werkficheId) REFERENCES werkfiches(id)
-);
-
-CREATE TABLE `werkfiches_modules` (
-  `werkficheId` int NOT NULL,
-  `moduleId` int NOT NULL,
-  CONSTRAINT PK_werkfiches_modules PRIMARY KEY (werkficheId, moduleId),
-  FOREIGN KEY(werkficheId) REFERENCES werkfiches(id),
-  FOREIGN KEY(moduleId) REFERENCES modules(id)
-);
-
-create table `studenten_modules_opleidingen` (
+create table `studenten_modules` (
   `moduleId` int NOT NULL,
   `studentId` int NOT NULL,
-  `opleidingId` int NOT NULL,
+  `opleidingId` int DEFAULT NULL,
   `status` enum('Volgt','Beëindigd') NOT NULL DEFAULT 'Volgt',
-  CONSTRAINT PK_studenten_modules_opleidingen PRIMARY KEY (moduleId, studentId),
+  CONSTRAINT PK_studenten_modules PRIMARY KEY (moduleId, studentId),
   FOREIGN KEY(moduleId) REFERENCES modules(id),
   FOREIGN KEY(opleidingId) REFERENCES opleidingen(id),
   FOREIGN KEY(studentId) REFERENCES studenten(studentId)
+  
+	-- TODO DODO
+    --
+    -- opleidingId in werkfiches can be null because some werkfiches are general and are used in all opleidingen.
+    -- opleidingId in studenten_modules is default null because the opleidingId is already mentioned in werkfiches.
+    -- SO
+    -- if you add a record in studenten_modules and for the werkfiche that that module belongs to the oplidingId is null
+    -- a constraint should oblige you to fill out the opleidingId in studenten_modules.
+    -- (if dat is possible in mysql)
+  
 );
 
 CREATE TABLE `evaluatiecriteria` (

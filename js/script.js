@@ -51,6 +51,28 @@ $(document).ready(function () {
         addModule(this);
     });
 
+    $('.courseCreator').on('click', '.del-fiche-btn', function(e){
+        e.stopPropagation();
+        $('.' + $(this).data('fiche')).remove();
+    });
+
+    $('.courseCreator').on('click', '.add-criteria-btn', function(){
+        addCriteria(this);
+    });
+
+    $('.courseCreator').on('click', '.del-module-btn', function(){
+        $('.' + $(this).data('module')).remove();
+    });
+
+    $('.courseCreator').on('click', '.del-criteria-btn', function(){
+        $('.' + $(this).data('criteria')).remove();
+    });
+
+    $('.opleiding-submit').on('click', function(e){
+        e.preventDefault();
+        createEditCourseJSON();
+    });
+
     $("#report-search").on('keyup', function(){
       $.ajax({
         type: "POST",
@@ -82,6 +104,7 @@ $(document).ready(function () {
 
 var ficheNr = 0;
 var moduleNr = 0;
+var criteriaNr = 0;
 
 var popupMessage = function(){
     $('.addMessage-popup').removeClass('hidden');
@@ -121,19 +144,19 @@ var changeCollapseIcon = function(el){
 var addFiche = function(){
     ficheNr++;
     $('.courseCreator').append(
-        "<li class='fiche"+ ficheNr +"'>" +
+        "<li class='fiche-container fiche"+ ficheNr +"'>" +
             "<div class='valign-wrapper collapsible-header collapsible-fiche'><i class='collapse-icon material-icons'>add_box</i>" +
                 "<div class='input-field fiche-input'>" +
                     "<input class='fiche-name' name='fiche-name' type='text'>" +
                     "<label for='fiche-name'>Fiche naam</label>" +
                 "</div>"+
-                "<div class='fiche-btns'>"+
+                "<div class='creator-btns'>"+
                     "<a class='add-module-btn waves-effect waves-light btn' data-fiche='fiche"+ ficheNr +"'><i class='material-icons left'>add</i>Module toevoegen</a>"+
                     "<a class='del-fiche-btn waves-effect waves-light btn red' data-fiche='fiche"+ ficheNr +"'><i id='fiche-del-icon' class='material-icons'>delete</i></a>"+
                 "</div>"+
             "</div>" +
             "<div class='collapsible-body'>" +
-                "<table class='module-table'>"+
+                "<table class='striped bordered module-table'>"+
                     "<p class='no-modules'>Geen modules</p>"+
                 "</table>"+
             "</div>"+
@@ -153,13 +176,68 @@ var addModule = function(el){
     $('.'+ fiche + ' .no-modules').addClass('hidden');
 
     $('.'+ fiche + ' .module-table').append(
+    "<div class='module-container module" + moduleNr + "'>"+
     "<tr><th>" +
-    "<div class='input-field fiche-input'>" +
+    "<div class='row'>"+
+        "<div class='input-field module-input'>" +
         "<input class='module-name' name='module-name' type='text'>" +
         "<label for='module-name'>Module naam</label>" +
+        "</div>"+
+        "<div class='creator-btns'>"+
+        "<a class='add-criteria-btn waves-effect waves-light btn' data-module='module"+ moduleNr +"'><i class='material-icons left'>add</i>Criteria toevoegen</a>"+
+        "<a class='del-module-btn waves-effect waves-light btn red' data-module='module"+ moduleNr +"'><i id='fiche-del-icon' class='material-icons'>delete</i></a>"+
+        "</div>"+
     "</div>"+
-    "</th></tr>"
+    "</th></tr><div class='criteria-rows'></div></div>"
     );
+    $('.module' + moduleNr + ' input').focus();
+};
+
+var addCriteria = function(el){
+    criteriaNr++;
+    var module = $(el).data('module');
+
+    $('.' + module + ' .criteria-rows').append(
+        "<div class='criteria-container criteria" + criteriaNr + " criteria-row'>" +
+            "<div class='valign-wrapper row'>"+
+                "<i style='margin-right: 10px' class='material-icons'>navigate_next</i>"+
+                "<div class='input-field criteria-input'>" +
+                    "<input class='criteria-name' name='criteria-name' type='text'>" +
+                    "<label for='criteria-name'>Criteria naam</label>" +
+                "</div>"+
+                "<div class='creator-btns'>"+
+                    "<a class='del-criteria-btn waves-effect waves-light btn red' data-criteria='criteria"+ criteriaNr +"'><i id='fiche-del-icon' class='material-icons'>delete</i></a>"+
+                "</div>"+
+            "</div>"+
+        "</div>"
+    );
+    $('.criteria' + criteriaNr + ' input').focus();
+};
+
+var createEditCourseJSON = function(){
+    var final = [];
+    var modules = [];
+    var criteria = [];
+    var moduleName;
+    var ficheName;
+
+    var CourseName = $('#opleiding-name').val();
+    final.push({CourseName: CourseName});
+    $('.fiche-container').each(function(){
+        modules = [];
+        $(this).find('.module-container').each(function(){
+            criteria = [];
+            $(this).find('.criteria-container').each(function(){
+                criteria.push($(this).find('.criteria-name').val());
+            });
+            moduleName =$(this).find('.module-name').val();
+            modules.push({module: [moduleName, criteria]});
+        });
+        ficheName = $(this).find('.fiche-name').val();
+        final.push({fiche: [ficheName,modules]});
+    });
+    var myJsonString = JSON.stringify(final);
+    console.log(myJsonString);
 };
 
 var handleCheckboxesOnShowStudentsPage = function(){

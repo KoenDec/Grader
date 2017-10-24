@@ -3991,7 +3991,7 @@
 								"reference": {
 									"$ref": "AAAAAAFfC5LNiJZI+Hg="
 								},
-								"cardinality": "1..*"
+								"cardinality": "1"
 							},
 							"end2": {
 								"_type": "ERDRelationshipEnd",
