@@ -28,12 +28,8 @@ $(document).ready(function () {
         checkboxes.prop('checked', $(this).is(':checked'));
     });
 
-    $('.csv-upload').on('click', popup_csv);
-    $('.csv-submit, .popup-exit').on('click', closePopup_csv);
-
-
-    $('.addMessage').on('click', popupMessage);
-    $('.message-submit, .popup-exit').on('click', closePopupMessage);
+    $('.openPopup').on('click', popup);
+    $('.popup-submit, .popup-exit').on('click', closePopup);
 
     $('select').material_select();
 
@@ -106,28 +102,13 @@ var ficheNr = 0;
 var moduleNr = 0;
 var criteriaNr = 0;
 
-var popupMessage = function(){
-    $('.addMessage-popup').removeClass('hidden');
-    $('.addMessage').addClass('hidden');
+var popup = function(){
+    $('.popup').removeClass('hidden');
     $('.blur-overlay').removeClass('hidden');
 };
 
-var closePopupMessage = function(){
-    $('.addMessage-popup').addClass('hidden');
-    $('.addMessage').removeClass('hidden');
-    $('.blur-overlay').addClass('hidden');
-
-};
-
-var popup_csv = function(){
-    $('.csv-upload-popup').removeClass('hidden');
-    $('.addstudent').addClass('hidden');
-    $('.blur-overlay').removeClass('hidden');
-};
-
-var closePopup_csv = function(){
-    $('.csv-upload-popup').addClass('hidden');
-    $('.addstudent').removeClass('hidden');
+var closePopup = function(){
+    $('.popup').addClass('hidden');
     $('.blur-overlay').addClass('hidden');
 
 };

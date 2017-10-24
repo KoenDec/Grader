@@ -220,7 +220,7 @@ function showStudentsPage(){
                     </a>
                     <ul>
                         <li><a href="index.php?page=editStudent" class="btn-floating red tooltipped" data-position="top" data-delay="50" data-tooltip="Enkele student toevoegen"><i class="material-icons">person_add</i></a></li>
-                        <li><a class="btn-floating yellow darken-1 tooltipped csv-upload" data-delay="50" data-tooltip=".csv uploaden"><i class="material-icons">file_upload</i></a></li>
+                        <li><a class="btn-floating yellow darken-1 tooltipped openPopup" data-delay="50" data-tooltip=".csv uploaden"><i class="material-icons">file_upload</i></a></li>
                     </ul>
                 </div>
             </div>
@@ -271,7 +271,7 @@ function showStudentsPage(){
 
             ?>
     </div>
-    <div class="csv-upload-popup centered hidden">
+    <div class="popup centered hidden">
         <i class="popup-exit small material-icons right">cancel</i>
         <div class="row">
             <h4>Studenten toevoegen</h4>
@@ -289,7 +289,7 @@ function showStudentsPage(){
                 </div>
 
                 <div class="row">
-                    <button class="btn waves-effect waves-light csv-submit" type="submit" name="action">Studenten toevoegen
+                    <button class="btn waves-effect waves-light popup-submit" type="submit" name="action">Studenten toevoegen
                         <i class="material-icons right">send</i>
                     </button>
                 </div>
@@ -350,7 +350,7 @@ function showMessagesPage(){
             <h2>Meldingen</h2>
         </div>
         <div class="row">
-            <a class="btn-floating btn-large waves-effect waves-light tooltipped addMessage" data-delay="50" data-tooltip="Melding Toevoegen"><i class="material-icons">add</i></a>
+            <a class="btn-floating btn-large waves-effect waves-light tooltipped openPopup" data-delay="50" data-tooltip="Melding Toevoegen"><i class="material-icons">add</i></a>
             <ul class="collapsible popout col s8 offset-s1" data-collapsible="expandable">
 
 <?php
@@ -381,7 +381,7 @@ function showMessagesPage(){
 ?>
         </ul>
         </div>
-        <div class="addMessage-popup centered hidden">
+        <div class="popup centered hidden">
             <i class="popup-exit small material-icons right">cancel</i>
             <div class="row">
                 <h4>Melding toevoegen</h4>
@@ -413,7 +413,7 @@ function showMessagesPage(){
               </select>
             </div>
             <div class="row">
-              <button class="btn waves-effect waves-light message-submit" type="submit" name="action">Melding toevoegen
+              <button class="btn waves-effect waves-light popup-submit" type="submit" name="action">Melding toevoegen
                 <i class="material-icons right">send</i>
               </button>
             </div>
