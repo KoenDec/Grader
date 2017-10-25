@@ -275,7 +275,7 @@ function showStudentsPage(){
     </div>
     <div class="row">
         <div class="student-search input-field col s6">
-            <input type="text" id="student-search" class="col s8" name="student-search">
+            <input type="text" id="student-search" class="col s8" name="student-search" />
             <label for="student-search">Zoek student</label>
             <a class="waves-effect waves-light btn"><i class="material-icons">search</i></a>
         </div>
