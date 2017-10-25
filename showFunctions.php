@@ -211,7 +211,7 @@ function showReportsPage(){
     $criteria = $userDAO->getCriteriaForModule($module->id);
             foreach($criteria as $criterium){
 ?>
-                <td class="valign-wrapper"><i class="material-icons">navigate_next</i><?= $criterium->weergaveTitel ?></td>
+                <td style="padding-left: 30px" class="valign-wrapper"><i class="material-icons">navigate_next</i><?= $criterium->weergaveTitel ?></td>
                 <td contenteditable="false">
                   <div class="input-field">
                     <select disabled>
@@ -413,6 +413,8 @@ function showMessagesPage(){
         // todo only show messages that are relevant for the user
     $userDAO = new UserDAO();
     $messages = $userDAO->getAllMessages();
+    $educations = $userDAO->getAllEducations();
+    $educationIds = array();
 ?>
         <div class="row">
             <h2>Meldingen</h2>
@@ -454,6 +456,7 @@ function showMessagesPage(){
             <div class="row">
                 <h4>Melding toevoegen</h4>
             </div>
+            <div class="col 9">
              <form action="index.php?page=meldingen" method="POST">
               <div class="row">
                 <div class="input-field">
@@ -467,18 +470,26 @@ function showMessagesPage(){
                     <label for="message">Melding</label>
                 </div>
             </div>
-            <div class="row ">
-              <label>Zichtbaar voor:</label>
-              <select multiple>
-                <option value="0" selected>Iedereen</option>
-<?php
-                for($opleidingen = 10; $opleidingen > 0; $opleidingen--){
-?>
-                    <option value="<?php echo $opleidingen?>">Opleiding<?php echo $opleidingen?></option>
-<?php
-                }
-?>
-              </select>
+
+            <div class="row">
+            <p style="color: #9e9e9e">Zichtbaar voor:</p>
+              <form class=""  action="#" id="">
+            <p>
+                <input type="checkbox" id="all-checkboxes" checked="checked" />
+                <label for="all-checkboxes">Alles selecteren</label>
+            </p>
+            <?php
+            foreach($educations as $opleiding){
+                array_push($educationIds, $opleiding->id);
+                ?>
+                <p class="opleiding-checkbox">
+                    <input type="checkbox" id="opleiding<?= $opleiding->id?>" checked="checked" />
+                    <label for="opleiding<?=$opleiding->id?>"><?=$opleiding->name?></label>
+                </p>
+                <?php
+            }
+            ?>
+              </form>
             </div>
             <div class="row">
               <button class="btn waves-effect waves-light popup-submit" type="submit" name="action">Melding toevoegen
@@ -500,30 +511,35 @@ function showPrintPage(){
         <h2>Rapporten afdrukken</h2>
     </div>
     <div class="row">
-            <label>Selecteer opleidingen</label>
-            <select multiple>
-            <option selected value="0">Alle opleidingen</option>
-            <?php
-            foreach($educations as $opleiding){
-                ?>
-                <option value="<?= $opleiding->id ?>"><?= $opleiding->name ?></option>
-                <?php
-            }
-            ?>
-            </select>
-    </div>
-    <div class="row">
-        <form class="col s10" action="#">
+            <p style="color: #9e9e9e">Selecteer opleidingen</p>
+        <form class="col s3" action="#" id="educationsCheckboxesOnShowStudentsPage">
             <p>
                 <input type="checkbox" id="all-checkboxes" checked="checked" />
                 <label for="all-checkboxes">Alles selecteren</label>
+            </p>
+            <?php
+            foreach($educations as $opleiding){
+                ?>
+                <p class="opleiding-checkbox">
+                    <input type="checkbox" id="opleiding<?= $opleiding->id?>" checked="checked" />
+                    <label for="opleiding<?=$opleiding->id?>"><?=$opleiding->name?></label>
+                </p>
+                <?php
+            }
+            ?>
+        </form>
+
+        <form class="col s7" action="#">
+            <p>
+                <input type="checkbox" id="more-checkboxes" checked="checked" />
+                <label for="more-checkboxes">Alles selecteren</label>
             </p>
             <table class="striped bordered">
                 <tr><th>Studenten</th></tr>
             <?php
             foreach($educations as $education) {
                 $students = $userDAO->getAllStudentsInEducation($education->id);
-
+//TODO show correct students when education is selected
                 foreach ($students as $student) {
                     ?>
                     <tr>
