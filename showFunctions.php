@@ -282,7 +282,7 @@ function showStudentsPage(){
         <div class="row">
             <div class="addstudent" style="position: relative; height: 90px;">
                 <div class="fixed-action-btn horizontal" style="position: absolute; display: inline-block; right: 24px;">
-                    <a class="btn-floating btn-large tooltipped" data-position="top" data-delay="50" data-tooltip="Student Toevoegen">
+                    <a class="btn-floating waves-effect waves-light btn-large tooltipped" data-position="top" data-delay="50" data-tooltip="Student Toevoegen">
                         <i class="large material-icons">add</i>
                     </a>
                     <ul>
