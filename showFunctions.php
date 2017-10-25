@@ -147,24 +147,25 @@ function showReportsPage(){
             <a class="waves-effect waves-light btn tooltipped" data-delay="50" data-tooltip="Aanpassen inschakelen"><i class="material-icons">edit</i></a>
         </div>
     </div>
+<?php
+    // todo get students results and comments from database
+    foreach($fiches as $fiche){
+?>
+    <h4>Werkfiche: <?= $fiche->name ?></h4>
     <table class="striped bordered">
         <tr>
-            <th>Fiche</th>
             <th>Module</th>
             <th>Resultaat</th>
             <th>Datum (dd/mm/yyyy)</th>
             <th>Opmerkingen</th>
         </tr>
         <tr>
-<?php
-    foreach($fiches as $fiche){
-/* rowspan here is modules * criteria + modules */?>
-        <td rowspan="15"><?= $fiche->name ?></td> <!-- TODO rowspan dynamisch -->
+
 <?php
     $modules = $userDAO->getFollowedModulesInFiche($fiche->id, $studentId);
         foreach($modules as $module){
 ?>
-            <td colspan="4"><?= $module->name ?></td>
+            <th colspan="4"><strong><?= $module->name ?></strong></th>
             </tr><tr>
 <?php
     $criteria = $userDAO->getCriteriaForModule($module->id);
@@ -189,11 +190,35 @@ function showReportsPage(){
             }
 
         }
-
-    }
 ?>
         </tr>
     </table>
+        <p>Commentaar bij deze werkfiche: </p>
+        <p>Etiam quis accumsan leo, id gravida urna. Duis ac velit quis risus egestas ornare non eu tortor. Pellentesque habitant
+            morbi tristique senectus et netus et malesuada fames ac turpis egestas. Nullam molestie tincidunt diam, id suscipit
+            nisi cursus sit amet. Aliquam in nisi eget erat laoreet feugiat. Pellentesque non tellus augue. Fusce ante neque,
+            consectetur at tincidunt ac, iaculis quis ante. Suspendisse potenti. Nam tempus nisi eu erat facilisis tempus. Vestibulum
+            ultricies, diam vitae laoreet congue, ipsum elit tempor diam, nec gravida lacus mi nec ligula. Duis posuere lacinia magna a
+            venenatis. Ut feugiat a velit a malesuada. Ut odio sem, lacinia ac metus nec, sollicitudin efficitur erat.
+        </p>
+        <br />
+<?php
+    }
+?>
+    <p>Algemeen commentaar:</p>
+    <p>Cras non urna tellus. Nunc eu aliquam sem, eget ultrices ligula. Pellentesque convallis odio nec neque egestas volutpat. Aliquam
+        venenatis augue quis est blandit pretium. Aliquam fringilla tortor at turpis venenatis hendrerit. Vestibulum auctor, est nec
+        elementum tempus, sem purus malesuada arcu, at molestie massa justo sed risus. Cras laoreet accumsan erat ac elementum. Fusce
+        tristique egestas orci, a vehicula lorem tristique blandit. Aenean et congue purus.</p>
+    <br />
+    <p>Commentaar klassenraad:</p>
+    <p>Suspendisse sem neque, consequat nec ultricies at, maximus sit amet ante. Nunc rhoncus gravida molestie. Vestibulum ante
+        ipsum primis in faucibus orci luctus et ultrices posuere cubilia Curae; Phasellus nibh eros, ornare eu mattis in, gravida
+        ac massa. Praesent placerat lacinia pulvinar. Aenean interdum metus ac neque aliquet, gravida pellentesque mauris congue.
+        Quisque commodo a libero non venenatis. Vestibulum ante ipsum primis in faucibus orci luctus et ultrices posuere cubilia Curae;
+        Mauris sit amet ante vitae nisl vulputate tempor. Donec feugiat orci lectus, bibendum condimentum neque ultrices et. Praesent
+        ac leo sit amet libero tempor dignissim. Aliquam vehicula augue vel ante ullamcorper ornare. Sed est turpis, luctus et neque et,
+        pellentesque finibus tellus. Class aptent taciti sociosqu ad litora torquent per conubia nostra, per inceptos himenaeos.</p>
 <?php
 }
 

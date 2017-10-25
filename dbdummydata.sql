@@ -190,7 +190,7 @@ INSERT INTO evaluatiecriteria(moduleId,weergaveTitel,creatorId) VALUES
     (17, 'Samenwerking', 3),
     (17, 'Inleving in socioculturele diversiteit', 3);
     
-INSERT INTO rapporten(studentId,feedback) VALUES
+INSERT INTO rapporten(studentId, feedback) VALUES
 	(6, 'Goed gewerkt, proficiat.'),
     (7, 'Niet goed gewerkt, niet proficiat.');
     
