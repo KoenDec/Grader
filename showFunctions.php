@@ -181,25 +181,31 @@ function showReportsPage(){
             <a class="waves-effect waves-light btn tooltipped" data-delay="50" data-tooltip="Aanpassen inschakelen"><i class="material-icons">edit</i></a>
         </div>
     </div>
+    <ul class="popout collapsible courseCreator" data-collapsible="expandable">
 <?php
     // todo get students results and comments from database
     foreach($fiches as $fiche){
 ?>
+
+    <li>
+    <div class='valign-wrapper collapsible-header collapsible-fiche active'><i class='collapse-icon material-icons'>indeterminate_check_box</i>
     <h4>Werkfiche: <?= $fiche->name ?></h4>
-    <table class="striped bordered">
-        <tr>
-            <th>Module</th>
-            <th>Resultaat</th>
-            <th>Datum (dd/mm/yyyy)</th>
-            <th>Opmerkingen</th>
-        </tr>
-        <tr>
+    </div>
+    <div class='collapsible-body'>
+        <table class="striped bordered">
+            <tr>
+                <th>Module</th>
+                <th>Resultaat</th>
+                <th>Datum (dd/mm/yyyy)</th>
+                <th>Opmerkingen</th>
+            </tr>
+            <tr>
 
 <?php
     $modules = $userDAO->getFollowedModulesInFiche($fiche->id, $studentId);
         foreach($modules as $module){
 ?>
-            <th colspan="4"><strong><?= $module->name ?></strong></th>
+            <th style="border-top: 2px solid gray; border-bottom: 2px solid gray" colspan="4"><strong><?= $module->name ?></strong></th>
             </tr><tr>
 <?php
     $criteria = $userDAO->getCriteriaForModule($module->id);
@@ -214,7 +220,6 @@ function showReportsPage(){
                       <option value="2">Option 2</option>
                       <option value="3">Option 3</option>
                     </select>
-                    <label>Resultaat</label>
                   </div>
                 </td>
                 <td contenteditable="false">00/00/0000</td>
@@ -225,8 +230,9 @@ function showReportsPage(){
 
         }
 ?>
-        </tr>
-    </table>
+            </tr>
+        </table>
+
         <p>Commentaar bij deze werkfiche: </p>
         <p>Etiam quis accumsan leo, id gravida urna. Duis ac velit quis risus egestas ornare non eu tortor. Pellentesque habitant
             morbi tristique senectus et netus et malesuada fames ac turpis egestas. Nullam molestie tincidunt diam, id suscipit
@@ -235,10 +241,12 @@ function showReportsPage(){
             ultricies, diam vitae laoreet congue, ipsum elit tempor diam, nec gravida lacus mi nec ligula. Duis posuere lacinia magna a
             venenatis. Ut feugiat a velit a malesuada. Ut odio sem, lacinia ac metus nec, sollicitudin efficitur erat.
         </p>
-        <br />
+    </div>
+    </li>
 <?php
     }
 ?>
+    </ul>
     <p>Algemeen commentaar:</p>
     <p>Cras non urna tellus. Nunc eu aliquam sem, eget ultrices ligula. Pellentesque convallis odio nec neque egestas volutpat. Aliquam
         venenatis augue quis est blandit pretium. Aliquam fringilla tortor at turpis venenatis hendrerit. Vestibulum auctor, est nec
