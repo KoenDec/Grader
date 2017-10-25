@@ -100,7 +100,41 @@ function showAccount($email){
         <tr><td>Email: <span><?php echo $user->email ?></span></td></tr>
         <tr><td>Lid sinds: <span><?php echo $user->accountCreatedTimestamp ?></span></td></tr>
     </table>
-    <a class="waves-effect waves-light btn tooltipped" data-delay="50" data-tooltip="Account wijzigen"><i class="material-icons">edit</i></a>
+    <a class="waves-effect waves-light btn tooltipped openPopup" data-delay="50" data-tooltip="Account wijzigen"><i class="material-icons">edit</i></a>
+
+    <div class="popup centered hidden">
+        <i class="popup-exit small material-icons right">cancel</i>
+        <div class="row">
+            <h4>Gegevens aanpassen</h4>
+        </div>
+            <form action="index.php?page=account" method="POST">
+                <div class="row">
+                    <div class="input-field">
+                        <input id="account-FirstName" name="account-FirstName" type="text">
+                        <label for="account-FirstName">Voornaam</label>
+                    </div>
+                </div>
+                <div class="row">
+                    <div class="input-field">
+                        <input id="account-LastName" name="account-LastName" type="text">
+                        <label for="account-LastName">Naam</label>
+                    </div>
+                </div>
+                <div class="row">
+                    <div class="input-field">
+                        <input id="student-email" name="student-email" type="text">
+                        <label for="student-email">Email</label>
+                    </div>
+                </div>
+                <div class="row">
+                    <button class="btn waves-effect waves-light popup-submit" type="submit" name="action">Aanpassingen opslaan
+                        <i class="material-icons right">send</i>
+                    </button>
+                </div>
+
+            </form>
+        </div>
+    </div>
 <?php
 }
 
@@ -275,6 +309,7 @@ function showStudentsPage(){
         <i class="popup-exit small material-icons right">cancel</i>
         <div class="row">
             <h4>Studenten toevoegen</h4>
+        </div>
             <form action="index.php?page=studenten" method="POST">
                 <div class="row">
                     <div class="file-field input-field">
