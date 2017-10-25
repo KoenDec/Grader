@@ -52,7 +52,7 @@ h4, .button-collapse{
     transform: translate(-50%, -50%);
 }
 
-.login, .addMessage-popup, .csv-upload-popup {
+.login, .popup {
     text-align: center;
     border: solid #4db6ac 3px;
     width: 500px;
@@ -60,10 +60,14 @@ h4, .button-collapse{
     padding: 30px;
 }
 
-.addMessage-popup, .csv-upload-popup{
+.popup{
     width: 800px;
     background-color: white;
     z-index: 10;
+}
+
+.addstudent{
+    z-index: 5;
 }
 
 .popup-exit{

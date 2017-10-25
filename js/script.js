@@ -28,12 +28,8 @@ $(document).ready(function () {
         checkboxes.prop('checked', $(this).is(':checked'));
     });
 
-    $('.csv-upload').on('click', popup_csv);
-    $('.csv-submit, .popup-exit').on('click', closePopup_csv);
-
-
-    $('.addMessage').on('click', popupMessage);
-    $('.message-submit, .popup-exit').on('click', closePopupMessage);
+    $('.openPopup').on('click', popup);
+    $('.popup-submit, .popup-exit').on('click', closePopup);
 
     $('select').material_select();
 
@@ -83,7 +79,6 @@ $(document).ready(function () {
           if(data !== 'no students'){
             $('.dropdown-content').html('');
             $.each(data, function(i, student){
-              console.log(student);
               var studentName = student.firstname + " " + student.lastname;
               $('.dropdown-content').append('<li data-email='+student.email+'>'+studentName+'</li>');
             })
@@ -91,9 +86,7 @@ $(document).ready(function () {
               var student = $(this).text();
               $('#report-search').val(student);
               $('.dropdown-content').html('');
-              var selectedStudent = $(this).data('email');
-              console.log(selectedStudent);
-              $('.selectedStudent span').text(selectedStudent);
+              $('.selectedStudent span').text(student);
 
             });
           }
@@ -109,28 +102,13 @@ var ficheNr = 0;
 var moduleNr = 0;
 var criteriaNr = 0;
 
-var popupMessage = function(){
-    $('.addMessage-popup').removeClass('hidden');
-    $('.addMessage').addClass('hidden');
+var popup = function(){
+    $('.popup').removeClass('hidden');
     $('.blur-overlay').removeClass('hidden');
 };
 
-var closePopupMessage = function(){
-    $('.addMessage-popup').addClass('hidden');
-    $('.addMessage').removeClass('hidden');
-    $('.blur-overlay').addClass('hidden');
-
-};
-
-var popup_csv = function(){
-    $('.csv-upload-popup').removeClass('hidden');
-    $('.addstudent').addClass('hidden');
-    $('.blur-overlay').removeClass('hidden');
-};
-
-var closePopup_csv = function(){
-    $('.csv-upload-popup').addClass('hidden');
-    $('.addstudent').removeClass('hidden');
+var closePopup = function(){
+    $('.popup').addClass('hidden');
     $('.blur-overlay').addClass('hidden');
 
 };
