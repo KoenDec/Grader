@@ -128,7 +128,7 @@ var addFiche = function(){
         "<li class='fiche-container fiche"+ ficheNr +"'>" +
             "<div class='valign-wrapper collapsible-header collapsible-fiche'><i class='collapse-icon material-icons'>add_box</i>" +
                 "<div class='input-field fiche-input'>" +
-                    "<input class='fiche-name' name='fiche-name' type='text'>" +
+                    "<input name='fiche-name' type='text'>" +
                     "<label for='fiche-name'>Fiche naam</label>" +
                 "</div>"+
                 "<div class='creator-btns'>"+

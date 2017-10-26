@@ -59,7 +59,6 @@ CREATE TABLE `werkfiches` (
 CREATE TABLE `modules` (
   `id` int NOT NULL AUTO_INCREMENT PRIMARY KEY,
   `name` varchar(100) NOT NULL,
-  `description` text NOT NULL,
   `werkficheId` int NOT NULL,
   `teacherId` int NOT NULL,
   `creatorId` int,

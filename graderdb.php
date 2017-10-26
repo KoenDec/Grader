@@ -339,8 +339,40 @@ class UserDAO {
 
             $sql = 'INSERT INTO opleidingen(name, creatorId) VALUES(:name, :creatorId)';
             $stmt = $conn->prepare($sql);
-            $stmt->bindParam(':name',$name);
-            $stmt->bindParam(':creatorId',$creatorId);
+            $stmt->bindParam(':name', $name);
+            $stmt->bindParam(':creatorId', $creatorId);
+            $stmt->execute();
+
+        } catch (PDOException $e) {
+            die($e->getMessage());
+        }
+    }
+
+    public static function createWerkfiche($name, $opleidingId, $creatorId) {
+        try {
+            $conn = graderdb::getConnection();
+
+            $sql = 'INSERT INTO werkfiches(name, opleidingId, creatorId) VALUES(:name, :opleidingId, :creatorId)';
+            $stmt = $conn->prepare($sql);
+            $stmt->bindParam(':name', $name);
+            $stmt->bindParam(':opleidingId', $opleidingId);
+            $stmt->bindParam(':creatorId', $creatorId);
+            $stmt->execute();
+
+        } catch (PDOException $e) {
+            die($e->getMessage());
+        }
+    }
+
+    public static function createModule($name, $opleidingId, $creatorId) {
+        try {
+            $conn = graderdb::getConnection();
+
+            $sql = 'INSERT INTO werkfiches(name, opleidingId, creatorId) VALUES(:name, :opleidingId, :creatorId)';
+            $stmt = $conn->prepare($sql);
+            $stmt->bindParam(':name', $name);
+            $stmt->bindParam(':opleidingId', $opleidingId);
+            $stmt->bindParam(':creatorId', $creatorId);
             $stmt->execute();
 
         } catch (PDOException $e) {
