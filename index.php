@@ -1,6 +1,7 @@
 <?php
 include_once "header.html";
 include_once "showFunctions.php";
+include_once "graderdb.php";
 
 session_start();
 
@@ -17,6 +18,7 @@ if(isset($_SESSION['email'])){
 
 function checkGET()
 {
+    $userDAO = new userDAO();
     if (isset($_GET['page'])) {
         switch ($_GET['page']) {
             case "account":
@@ -37,6 +39,7 @@ function checkGET()
                 break;
 
             case "opleidingen":
+                $userDAO->createEducation($_POST["opleiding-name"],$userDAO->getUser($_SESSION['email'])->id);
                 showSubjectPage();
                 break;
 

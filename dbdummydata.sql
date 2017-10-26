@@ -19,17 +19,17 @@ INSERT INTO teachers(teacherId) VALUES(4), (5);
 
 INSERT INTO studenten(studentId) VALUES(6), (7), (8), (9), (10);
 
-INSERT INTO opleidingen(code, name, description, creatorId) VALUES
-	('KM','Keukenmedewerker','keukenmedewerker',3),
-    ('K', 'Kapper', 'kapper', 3);
+INSERT INTO opleidingen(name, creatorId) VALUES
+	('Keukenmedewerker', 3),
+    ('Kapper', 3);
 
-INSERT INTO werkfiches(code, name, description, opleidingId, creatorId) VALUES
-    ('IK', 'Initiatie keuken', 'initiatie keuken', 1, 3),
-    ('KT', 'Keukentechnieken', 'keukentechnieken', 1, 3),
-	('TV', 'Taalgebonden vaardigheden', 'taalgebonden vaardigheden', null, 3),
-    ('AV', 'Algemene vorming', 'algemene vorming', null, 3),
-    ('EN', 'Vak Engels', 'engels', null, 3),
-    ('HV', 'Haarverzorging', 'haarverzorging', 2, 3);
+INSERT INTO werkfiches(name, opleidingId, creatorId) VALUES
+    ('Initiatie keuken', 1, 3),
+    ('Keukentechnieken', 1, 3),
+	('Taalgebonden vaardigheden', null, 3),
+    ('Algemene vorming', null, 3),
+    ('Vak Engels', null, 3),
+    ('Haarverzorging', 2, 3);
 
 INSERT INTO modules(name, description, werkficheId, teacherId, creatorId) VALUES
 	('Veiligheid, hygiëne en milieubewustzijn', 'veiligheid, hygiëne en milieubewustzijn', 1, 4, 3),

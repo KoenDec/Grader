@@ -4,7 +4,7 @@ require_once('config.php');
 
 class graderdb {
 
-  public static function getConnection() {
+    public static function getConnection() {
 
         // Construct the PDO adress line
         $host = Config::$dbServer;
@@ -22,98 +22,84 @@ class graderdb {
 
 class UserDAO {
 
-  public static function getAllUsers(){
-    try {
-      $conn = graderdb::getConnection();
+     ///////////////////////////////////////////
+    //              GET-QUERIES              //
+   ///////////////////////////////////////////
 
-      $sql = 'SELECT email FROM users';
-      $stmt = $conn->prepare($sql);
+    public static function getAllUsers(){
+        try {
+            $conn = graderdb::getConnection();
 
-      $stmt->execute();
+            $sql = 'SELECT email FROM users';
+            $stmt = $conn->prepare($sql);
 
-      $usersTable = $stmt->fetchAll(PDO::FETCH_CLASS);
-    } catch (PDOException $e) {
-      die($e->getMessage());
+            $stmt->execute();
+
+            $usersTable = $stmt->fetchAll(PDO::FETCH_CLASS);
+        } catch (PDOException $e) {
+            die($e->getMessage());
+        }
+
+        if(isset($usersTable[0])) {
+            $users = $usersTable;
+        } else {
+            die('No users found!');
+        }
+
+        return $users;
     }
 
-    if(isset($usersTable[0])) {
-      $users = $usersTable;
-    } else {
-      die('No users found!');
+    public static function getUser($username) {
+        try {
+            $conn = graderdb::getConnection();
+
+            $sql = 'SELECT * FROM users WHERE email = :username';
+            $stmt = $conn->prepare($sql);
+            $stmt->bindParam(':username', $username);
+            $stmt->execute();
+
+            $usersTable = $stmt->fetchAll(PDO::FETCH_CLASS);
+        } catch (PDOException $e) {
+            die($e->getMessage());
+        }
+
+        if(isset($usersTable[0])) {
+            $user = $usersTable[0];
+        } else {
+            die('No user with username = ' . $username);
+        }
+
+        return $user;
     }
 
-    return $users;
-  }
+    public static function searchStudents($query) {
+        try {
+            $conn = graderdb::getConnection();
 
-  public static function getUser($username) {
-    try {
-      $conn = graderdb::getConnection();
+            $sql = 'SELECT * FROM users WHERE firstname LIKE :query OR lastname LIKE :query';
 
-      $sql = 'SELECT * FROM users WHERE email = :username';
-      $stmt = $conn->prepare($sql);
-      $stmt->bindParam(':username', $username);
-      $stmt->execute();
+            $stmt = $conn->prepare($sql);
+            $query = '%'.$query.'%';
+            $stmt->bindParam(':query',$query,PDO::PARAM_STR);
+            $stmt->execute();
 
-      $usersTable = $stmt->fetchAll(PDO::FETCH_CLASS);
-    } catch (PDOException $e) {
-      die($e->getMessage());
+            $studentsTable = $stmt->fetchAll(PDO::FETCH_CLASS);
+        } catch (PDOException $e) {
+            die($e->getMessage());
+        }
+
+        if(isset($studentsTable[0])) {
+            $students = $studentsTable;
+        } else {
+            die('no students found');
+        }
+
+        return $students;
     }
 
-    if(isset($usersTable[0])) {
-      $user = $usersTable[0];
-    } else {
-      die('No user with username = ' . $username);
-    }
-
-    return $user;
-  }
-
-  public static function createUser($firstname, $lastname, $email, $password) {
-    try {
-      $conn = graderdb::getConnection();
-
-      $sql = 'INSERT INTO users VALUES(:firstname, :lastname, :email, :password)';
-      $stmt = $conn->prepare($sql);
-      $stmt->bindParam(':firstname',$firstname);
-      $stmt->bindParam(':lastname',$lastname);
-      $stmt->bindParam(':email',$email);
-      $stmt->bindParam(':password',$password);
-      $stmt->execute();
-
-    } catch (PDOException $e) {
-      die($e->getMessage());
-    }
-
-  }
-
-  public static function searchStudents($query) {
-    try {
-      $conn = graderdb::getConnection();
-
-      $sql = 'SELECT * FROM users WHERE firstname LIKE :query OR lastname LIKE :query';
-
-      $stmt = $conn->prepare($sql);
-      $query = '%'.$query.'%';
-      $stmt->bindParam(':query',$query,PDO::PARAM_STR);
-      $stmt->execute();
-
-      $studentsTable = $stmt->fetchAll(PDO::FETCH_CLASS);
-    } catch (PDOException $e) {
-      die($e->getMessage());
-    }
-
-      if(isset($studentsTable[0])) {
-        $students = $studentsTable;
-      } else {
-        die('no students found');
-      }
-
-      return $students;
-  }
-
-  /*public static function searchEducations() {
-    return;
-  }*/
+    /*public static function searchEducations() {
+      return;
+    }*/
 
     public static function getAllStudents(){
         try {
@@ -324,5 +310,41 @@ class UserDAO {
         }
 
         return $criteria;
+    }
+
+     //////////////////////////////////////////////
+    //              SELECT-QUERIES              //
+   //////////////////////////////////////////////
+
+    public static function createUser($firstname, $lastname, $email, $password) {
+        try {
+            $conn = graderdb::getConnection();
+
+            $sql = 'INSERT INTO users VALUES(:firstname, :lastname, :email, :password)';
+            $stmt = $conn->prepare($sql);
+            $stmt->bindParam(':firstname',$firstname);
+            $stmt->bindParam(':lastname',$lastname);
+            $stmt->bindParam(':email',$email);
+            $stmt->bindParam(':password',$password);
+            $stmt->execute();
+
+        } catch (PDOException $e) {
+            die($e->getMessage());
+        }
+    }
+
+    public static function createEducation($name, $creatorId) {
+        try {
+            $conn = graderdb::getConnection();
+
+            $sql = 'INSERT INTO opleidingen(name, creatorId) VALUES(:name, :creatorId)';
+            $stmt = $conn->prepare($sql);
+            $stmt->bindParam(':name',$name);
+            $stmt->bindParam(':creatorId',$creatorId);
+            $stmt->execute();
+
+        } catch (PDOException $e) {
+            die($e->getMessage());
+        }
     }
 }

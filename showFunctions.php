@@ -654,10 +654,9 @@ function showOpleidingEditPage(){
         <h2>Opleiding aanpassen</h2>
     </div>
     <form action="index.php?page=opleidingen" method="POST">
-        <div class="row">
             <div class="input-field">
-                <input id="opleiding-name" name="opleiding-name" type="text">
                 <label for="opleiding-name">Naam opleiding</label>
+                <input id="opleiding-name" name="opleiding-name" type="text" required />
             </div>
         </div>
         <div class="row">
@@ -669,9 +668,7 @@ function showOpleidingEditPage(){
             <button class="btn waves-effect waves-light addFiche">Fiche Toevoegen</button>
         </div>
         <div class="row">
-            <button class="right btn waves-effect waves-light opleiding-submit" type="submit" name="action">Opleiding opslaan
-                <i class="material-icons right">send</i>
-            </button>
+            <button class="right btn waves-effect waves-light opleiding-submit" type="submit"><i class='material-icons right'>send</i>Opleiding opslaan</button>
         </div>
     </form>
 <?php

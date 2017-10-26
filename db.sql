@@ -41,9 +41,7 @@ CREATE TABLE `studenten` (
 
 CREATE TABLE `opleidingen` (
   `id` int NOT NULL AUTO_INCREMENT PRIMARY KEY,
-  `code` varchar(5) NOT NULL,
   `name` varchar(50) NOT NULL,
-  `description` text NOT NULL,
   `active` tinyint(1) NOT NULL DEFAULT '1',
   `creatorId` int,
   FOREIGN KEY(creatorId) REFERENCES admins(adminId)
@@ -51,9 +49,7 @@ CREATE TABLE `opleidingen` (
 
 CREATE TABLE `werkfiches` (
   `id` int NOT NULL AUTO_INCREMENT PRIMARY KEY,
-  `code` varchar(5) NOT NULL,
   `name` varchar(50) NOT NULL,
-  `description` text NOT NULL,
   `opleidingId` int,
   `creatorId` int,
   FOREIGN KEY(opleidingId) REFERENCES opleidingen(id),
@@ -99,6 +95,7 @@ CREATE TABLE `evaluatiecriteria` (
   `weergaveTitel` varchar(200) NOT NULL,
   `inGebruik` tinyint(1) NOT NULL DEFAULT 1,
   `creatorId` int,
+  FOREIGN KEY(moduleId) REFERENCES modules(id),
   FOREIGN KEY(creatorId) REFERENCES admins(adminId)
 );
 

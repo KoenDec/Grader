@@ -64,10 +64,10 @@ $(document).ready(function () {
         $('.' + $(this).data('criteria')).remove();
     });
 
-    $('.opleiding-submit').on('click', function(e){
+    /*$('.opleiding-submit').on('click', function(e){
         e.preventDefault();
         createEditCourseJSON();
-    });
+    });*/
 
     $("#report-search").on('keyup', function(){
       $.ajax({
