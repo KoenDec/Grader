@@ -189,12 +189,12 @@ function showReportsPage(){
 
     <li>
     <div class='valign-wrapper collapsible-header collapsible-fiche active'><i class='collapse-icon material-icons'>indeterminate_check_box</i>
-    <h4>Werkfiche: <?= $fiche->name ?></h4>
+    <h4><?= $fiche->name ?></h4>
     </div>
     <div class='collapsible-body'>
         <table class="striped bordered">
             <tr>
-                <th>Module</th>
+                <th>Doelstellingen</th>
                 <th>Resultaat</th>
                 <th>Datum (dd/mm/yyyy)</th>
                 <th>Opmerkingen</th>
