@@ -142,7 +142,7 @@ function showReportsPage(){
     $userDAO = new UserDAO();
     // todo now only student 1's report (hardcoded) is shown, create functionality for other students
     $studentId = 6; // faisal
-    $fiches = $userDAO->getModulesFromStudent($studentId);
+    $modules = $userDAO->getModulesFromStudent($studentId);
 
   if(!empty($_POST['student'])) {
     $selectedStudent = $_POST['student'];
@@ -167,11 +167,11 @@ function showReportsPage(){
         </div>
     </div>
     <div class="row selectedStudent">
-        <p>Studiefiches van: <span style="font-weight: bold">Faisal Nizami</span></p>
+        <p>Studiemodules van: <span style="font-weight: bold">Faisal Nizami</span></p>
     </div>
     <div class="row">
-        <div class="fiches-progress col s11">
-            <span><span>1</span>/4 fiches geslaagd</span>
+        <div class="modules-progress col s11">
+            <span><span>1</span>/4 modules geslaagd</span>
             <div class="progress">
                 <div class="determinate" style="width: 25%"></div>
             </div>
@@ -184,12 +184,12 @@ function showReportsPage(){
     <ul class="popout collapsible courseCreator" data-collapsible="expandable">
 <?php
     // todo get students results and comments from database
-    foreach($fiches as $fiche){
+    foreach($modules as $module){
 ?>
 
     <li>
-    <div class='valign-wrapper collapsible-header collapsible-fiche active'><i class='collapse-icon material-icons'>indeterminate_check_box</i>
-    <h4><?= $fiche->name ?></h4>
+    <div class='valign-wrapper collapsible-header collapsible-module active'><i class='collapse-icon material-icons'>indeterminate_check_box</i>
+    <h4><?= $module->name ?></h4>
     </div>
     <div class='collapsible-body'>
         <table class="striped bordered">
@@ -202,7 +202,7 @@ function showReportsPage(){
             <tr>
 
 <?php
-    $doelstellingen = $userDAO->getFollowedDoelstellingenInFiche($fiche->id, $studentId);
+    $doelstellingen = $userDAO->getFollowedDoelstellingenInModule($module->id, $studentId);
         foreach($doelstellingen as $doelstelling){
 ?>
             <th style="border-top: 2px solid gray; border-bottom: 2px solid gray" colspan="4"><strong><?= $doelstelling->name ?></strong></th>
@@ -327,7 +327,7 @@ function showStudentsPage(){
                         <td><?=$student->firstname?> <?=$student->lastname?> (<?=$student->email?>)</td>
                         <td>
                             <a class="waves-effect waves-light btn tooltipped" data-delay="50" data-tooltip="Rapport bekijken"><i class="material-icons right">import_contacts</i>Rapport</a>
-                            <a class="waves-effect waves-light btn tooltipped" data-delay="50" data-tooltip="Studiefiche aanpassen"><i class="material-icons">edit</i></a>
+                            <a class="waves-effect waves-light btn tooltipped" data-delay="50" data-tooltip="Studiemodule aanpassen"><i class="material-icons">edit</i></a>
                             <a class="waves-effect waves-light btn tooltipped red right" data-delay="50" data-tooltip="Delete Student"><i class="material-icons">delete</i></a>
                         </td>
                     </tr>
@@ -606,10 +606,10 @@ function showStudentEditPage(){
         <div class="row">
             <ul class="collapsible" data-collapsible="expandable">
 <?php
-                for($fiches = 3; $fiches > 0; $fiches--) {
+                for($modules = 3; $modules > 0; $modules--) {
 ?>
                     <li>
-                        <div class="collapsible-header collapsible-fiche active"><i class="collapse-icon material-icons">indeterminate_check_box</i>Fiche<?php echo $fiches ?></div>
+                        <div class="collapsible-header collapsible-module active"><i class="collapse-icon material-icons">indeterminate_check_box</i>Module<?php echo $modules ?></div>
                         <div class="collapsible-body">
                             <span>
                                 <table class="striped bordered">
@@ -664,8 +664,8 @@ function showOpleidingAddPage(){
 
             </ul>
         </div>
-        <div class="row addFiche-row">
-            <button class="btn waves-effect waves-light addFiche">Opleidingsspecifieke module toevoegen</button>
+        <div class="row addModule-row">
+            <button class="btn waves-effect waves-light addModule">Opleidingsspecifieke module toevoegen</button>
         </div>
         <div class="row">
             <button class="right btn waves-effect waves-light opleiding-submit" type="submit"><i class='material-icons right'>send</i>Opleiding opslaan</button>
