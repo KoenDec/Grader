@@ -142,7 +142,7 @@ function showReportsPage(){
     $userDAO = new UserDAO();
     // todo now only student 1's report (hardcoded) is shown, create functionality for other students
     $studentId = 6; // faisal
-    $fiches = $userDAO->getWerkfichesFromStudent($studentId);
+    $fiches = $userDAO->getModulesFromStudent($studentId);
 
   if(!empty($_POST['student'])) {
     $selectedStudent = $_POST['student'];
@@ -233,7 +233,7 @@ function showReportsPage(){
             </tr>
         </table>
 
-        <p>Commentaar bij deze werkfiche: </p>
+        <p>Commentaar bij deze module: </p>
         <p>Etiam quis accumsan leo, id gravida urna. Duis ac velit quis risus egestas ornare non eu tortor. Pellentesque habitant
             morbi tristique senectus et netus et malesuada fames ac turpis egestas. Nullam molestie tincidunt diam, id suscipit
             nisi cursus sit amet. Aliquam in nisi eget erat laoreet feugiat. Pellentesque non tellus augue. Fusce ante neque,
