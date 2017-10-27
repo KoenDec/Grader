@@ -26,6 +26,12 @@ CREATE TABLE `admins` (
 
 ALTER TABLE `users` ADD CONSTRAINT FK_users_creator FOREIGN KEY(creatorId) REFERENCES admins(adminId);
 
+CREATE TABLE `loginTokens` (
+  `id` int NOT NULL AUTO_INCREMENT PRIMARY KEY,
+  `token` char(64) NOT NULL UNIQUE,
+  `userId` int NOT NULL,
+  FOREIGN KEY(userId) REFERENCES users(id)
+);
 
 CREATE TABLE `teachers` (
   `teacherId` int NOT NULL,
