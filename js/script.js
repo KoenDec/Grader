@@ -69,6 +69,8 @@ $(document).ready(function () {
         createEditCourseJSON();
     });*/
 
+    $('.edit-opslaan-rapport').on('click', handleReportEdit);
+
     $("#report-search").on('keyup', function(){
       $.ajax({
         type: "POST",
@@ -119,6 +121,20 @@ var changeCollapseIcon = function(el){
     }
     else{
         $(el).find('.collapse-icon').html('indeterminate_check_box');
+    }
+};
+
+var handleReportEdit = function(){
+    console.log($(this).data('editing'));
+    if($(this).data('editing') === false){
+        $(this).find('i').text('save');
+        $('select').prop('disabled', false).material_select();
+        $(this).data('editing', true);
+    }
+    else{
+        $(this).find('i').text('edit');
+        $('select').prop('disabled', true).material_select();
+        $(this).data('editing', false);
     }
 };
 
