@@ -33,31 +33,31 @@ $(document).ready(function () {
 
     $('select').material_select();
 
-    $('.collapsible').on('click', '.collapsible-fiche', function(){
+    $('.collapsible').on('click', '.collapsible-module', function(){
         changeCollapseIcon(this);
     });
 
-    $('.addFiche').on('click', function(e){
+    $('.addModule').on('click', function(e){
         e.preventDefault();
-        addFiche();
+        addModule();
     });
 
-    $('.courseCreator').on('click', '.add-module-btn', function (e) {
+    $('.courseCreator').on('click', '.add-doelstelling-btn', function (e) {
         e.stopPropagation();
-        addModule(this);
+        addDoelstelling(this);
     });
 
-    $('.courseCreator').on('click', '.del-fiche-btn', function(e){
+    $('.courseCreator').on('click', '.del-module-btn', function(e){
         e.stopPropagation();
-        $('.' + $(this).data('fiche')).remove();
+        $('.' + $(this).data('module')).remove();
     });
 
     $('.courseCreator').on('click', '.add-criteria-btn', function(){
         addCriteria(this);
     });
 
-    $('.courseCreator').on('click', '.del-module-btn', function(){
-        $('.' + $(this).data('module')).remove();
+    $('.courseCreator').on('click', '.del-doelstelling-btn', function(){
+        $('.' + $(this).data('doelstelling')).remove();
     });
 
     $('.courseCreator').on('click', '.del-criteria-btn', function(){
@@ -98,8 +98,8 @@ $(document).ready(function () {
 
 });
 
-var ficheNr = 0;
 var moduleNr = 0;
+var doelstellingNr = 0;
 var criteriaNr = 0;
 
 var popup = function(){
@@ -122,63 +122,63 @@ var changeCollapseIcon = function(el){
     }
 };
 
-var addFiche = function(){
-    ficheNr++;
+var addModule = function(){
+    moduleNr++;
     $('.courseCreator').append(
-        "<li class='fiche-container fiche"+ ficheNr +"'>" +
-            "<div class='valign-wrapper collapsible-header collapsible-fiche'><i class='collapse-icon material-icons'>add_box</i>" +
-                "<div class='input-field fiche-input'>" +
-                    "<input name='fiche-name' type='text'>" +
-                    "<label for='fiche-name'>Fiche naam</label>" +
+        "<li class='module-container module"+ moduleNr +"'>" +
+            "<div class='valign-wrapper collapsible-header collapsible-module'><i class='collapse-icon material-icons'>add_box</i>" +
+                "<div class='input-field module-input'>" +
+                    "<input name='module-name' data-doelstelling='module"+ moduleNr +"' type='text'>" +
+                    "<label for='module-name'>Doelstelling naam</label>" +
                 "</div>"+
                 "<div class='creator-btns'>"+
-                    "<a class='add-module-btn waves-effect waves-light btn' data-fiche='fiche"+ ficheNr +"'><i class='material-icons left'>add</i>Module toevoegen</a>"+
-                    "<a class='del-fiche-btn waves-effect waves-light btn red' data-fiche='fiche"+ ficheNr +"'><i id='fiche-del-icon' class='material-icons'>delete</i></a>"+
+                    "<a class='add-doelstelling-btn waves-effect waves-light btn' data-module='module"+ moduleNr +"'><i class='material-icons left'>add</i>Doelstelling toevoegen</a>"+
+                    "<a class='del-module-btn waves-effect waves-light btn red' data-module='module"+ moduleNr +"'><i id='module-del-icon' class='material-icons'>delete</i></a>"+
                 "</div>"+
             "</div>" +
             "<div class='collapsible-body'>" +
-                "<table class='striped bordered module-table'>"+
-                    "<p class='no-modules'>Geen modules</p>"+
+                "<table class='striped bordered doelstelling-table'>"+
+                    "<p class='no-doelstellingen'>Geen doelstellingen</p>"+
                 "</table>"+
             "</div>"+
         "</li>"
     );
-    $('.fiche'+ ficheNr + ' input').focus();
+    $('.module'+ moduleNr + ' input').focus();
 
 };
 
-var addModule = function(el){
-    moduleNr++;
-    var fiche =  $(el).data('fiche');
-    var colHead = $('.' + fiche + ' .collapsible-header');
+var addDoelstelling = function(el){
+    doelstellingNr++;
+    var module =  $(el).data('module');
+    var colHead = $('.' + module + ' .collapsible-header');
     if(!colHead.hasClass('active')){
         colHead.trigger('click');
     }
-    $('.'+ fiche + ' .no-modules').addClass('hidden');
+    $('.'+ module + ' .no-doelstellingen').addClass('hidden');
 
-    $('.'+ fiche + ' .module-table').append(
-    "<div class='module-container module" + moduleNr + "'>"+
+    $('.'+ module + ' .doelstelling-table').append(
+    "<div class='doelstelling-container doelstelling" + doelstellingNr + "'>"+
     "<tr><th>" +
     "<div class='row'>"+
-        "<div class='input-field module-input'>" +
-        "<input class='module-name' name='module-name' type='text'>" +
-        "<label for='module-name'>Module naam</label>" +
+        "<div class='input-field doelstelling-input'>" +
+        "<input class='doelstelling-name' name='doelstelling-name' type='text'>" +
+        "<label for='doelstelling-name'>Doelstelling naam</label>" +
         "</div>"+
         "<div class='creator-btns'>"+
-        "<a class='add-criteria-btn waves-effect waves-light btn' data-module='module"+ moduleNr +"'><i class='material-icons left'>add</i>Criteria toevoegen</a>"+
-        "<a class='del-module-btn waves-effect waves-light btn red' data-module='module"+ moduleNr +"'><i id='fiche-del-icon' class='material-icons'>delete</i></a>"+
+        "<a class='add-criteria-btn waves-effect waves-light btn' data-doelstelling='doelstelling"+ doelstellingNr +"'><i class='material-icons left'>add</i>Criteria toevoegen</a>"+
+        "<a class='del-doelstelling-btn waves-effect waves-light btn red' data-doelstelling='doelstelling"+ doelstellingNr +"'><i id='module-del-icon' class='material-icons'>delete</i></a>"+
         "</div>"+
     "</div>"+
     "</th></tr><div class='criteria-rows'></div></div>"
     );
-    $('.module' + moduleNr + ' input').focus();
+    $('.doelstelling' + doelstellingNr + ' input').focus();
 };
 
 var addCriteria = function(el){
     criteriaNr++;
-    var module = $(el).data('module');
+    var doelstelling = $(el).data('doelstelling');
 
-    $('.' + module + ' .criteria-rows').append(
+    $('.' + doelstelling + ' .criteria-rows').append(
         "<div class='criteria-container criteria" + criteriaNr + " criteria-row'>" +
             "<div class='valign-wrapper row'>"+
                 "<i style='margin-right: 10px' class='material-icons'>navigate_next</i>"+
@@ -187,7 +187,7 @@ var addCriteria = function(el){
                     "<label for='criteria-name'>Criteria naam</label>" +
                 "</div>"+
                 "<div class='creator-btns'>"+
-                    "<a class='del-criteria-btn waves-effect waves-light btn red' data-criteria='criteria"+ criteriaNr +"'><i id='fiche-del-icon' class='material-icons'>delete</i></a>"+
+                    "<a class='del-criteria-btn waves-effect waves-light btn red' data-criteria='criteria"+ criteriaNr +"'><i id='module-del-icon' class='material-icons'>delete</i></a>"+
                 "</div>"+
             "</div>"+
         "</div>"
@@ -197,25 +197,25 @@ var addCriteria = function(el){
 
 var createEditCourseJSON = function(){
     var final = [];
-    var modules = [];
+    var doelstellingen = [];
     var criteria = [];
+    var doelstellingName;
     var moduleName;
-    var ficheName;
 
     var CourseName = $('#opleiding-name').val();
     final.push({CourseName: CourseName});
-    $('.fiche-container').each(function(){
-        modules = [];
-        $(this).find('.module-container').each(function(){
+    $('.module-container').each(function(){
+        doelstellingen = [];
+        $(this).find('.doelstelling-container').each(function(){
             criteria = [];
             $(this).find('.criteria-container').each(function(){
                 criteria.push($(this).find('.criteria-name').val());
             });
-            moduleName =$(this).find('.module-name').val();
-            modules.push({module: [moduleName, criteria]});
+            doelstellingName =$(this).find('.doelstelling-name').val();
+            doelstellingen.push({doelstelling: [doelstellingName, criteria]});
         });
-        ficheName = $(this).find('.fiche-name').val();
-        final.push({fiche: [ficheName,modules]});
+        moduleName = $(this).find('.module-name').val();
+        final.push({module: [moduleName,doelstellingen]});
     });
     var myJsonString = JSON.stringify(final);
     console.log(myJsonString);

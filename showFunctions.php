@@ -202,13 +202,13 @@ function showReportsPage(){
             <tr>
 
 <?php
-    $modules = $userDAO->getFollowedModulesInFiche($fiche->id, $studentId);
-        foreach($modules as $module){
+    $doelstellingen = $userDAO->getFollowedDoelstellingenInFiche($fiche->id, $studentId);
+        foreach($doelstellingen as $doelstelling){
 ?>
-            <th style="border-top: 2px solid gray; border-bottom: 2px solid gray" colspan="4"><strong><?= $module->name ?></strong></th>
+            <th style="border-top: 2px solid gray; border-bottom: 2px solid gray" colspan="4"><strong><?= $doelstelling->name ?></strong></th>
             </tr><tr>
 <?php
-    $criteria = $userDAO->getCriteriaForModule($module->id);
+    $criteria = $userDAO->getCriteriaForDoelstelling($doelstelling->id);
             foreach($criteria as $criterium){
 ?>
                 <td style="padding-left: 30px" class="valign-wrapper"><i class="material-icons">navigate_next</i><?= $criterium->weergaveTitel ?></td>
@@ -615,9 +615,9 @@ function showStudentEditPage(){
                                 <table class="striped bordered">
                                     <tr>
 <?php
-                                    for($modules = 3; $modules > 0; $modules--) {
+                                    for($doelstellingen = 3; $doelstellingen > 0; $doelstellingen--) {
 ?>
-                                            <th>Module<?php echo $modules ?></th>
+                                            <th>Doelstelling<?php echo $doelstellingen ?></th>
 <?php
                                             for($criteria = 3; $criteria > 0; $criteria--) {
 ?>
@@ -665,7 +665,7 @@ function showOpleidingAddPage(){
             </ul>
         </div>
         <div class="row addFiche-row">
-            <button class="btn waves-effect waves-light addFiche">Opleidingsspecifieke fiche toevoegen</button>
+            <button class="btn waves-effect waves-light addFiche">Opleidingsspecifieke module toevoegen</button>
         </div>
         <div class="row">
             <button class="right btn waves-effect waves-light opleiding-submit" type="submit"><i class='material-icons right'>send</i>Opleiding opslaan</button>

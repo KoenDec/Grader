@@ -130,9 +130,9 @@ class UserDAO {
 
             $sql = 'SELECT DISTINCT u.* FROM users u
 		              JOIN studenten s on u.id = s.studentId
-	                  JOIN studenten_modules sm ON s.studentId = sm.studentId
-	                  JOIN modules m ON sm.moduleId = m.id
-                      JOIN werkfiches w ON m.werkficheId = w.id
+	                  JOIN studenten_doelstellingen sm ON s.studentId = sm.studentId
+	                  JOIN doelstellingen m ON sm.doelstellingId = m.id
+                      JOIN modules w ON m.moduleId = w.id
                       WHERE sm.status = \'volgt\'
 			            AND w.opleidingId = :educationId OR sm.opleidingId = :educationId';
 
@@ -228,16 +228,16 @@ class UserDAO {
         return $teacher;
     }
 
-    public static function getWerkfichesFromStudent($studentId){
+    public static function getModulesFromStudent($studentId){
         try{
             $conn = graderdb::getConnection();
 
             $sql = 'SELECT DISTINCT w.* FROM users u JOIN studenten s ON u.id = s.studentId
-                      JOIN studenten_modules sm ON s.studentId = sm.studentId
-                      JOIN modules m ON m.id = sm.moduleId
-                      JOIN werkfiches w ON m.werkficheId = w.id
-                      -- JOIN opleidingen o ON sm.opleidingId = o.id -- geeft de algemene werkfiches, niet specifiek aan de opleiding
-                      -- JOIN opleidingen o ON w.opleidingId = o.id -- geeft de opleidingsspecifieke werkfiches
+                      JOIN studenten_doelstellingen sm ON s.studentId = sm.studentId
+                      JOIN doelstellingen m ON m.id = sm.doelstellingId
+                      JOIN modules w ON m.moduleId = w.id
+                      -- JOIN opleidingen o ON sm.opleidingId = o.id -- geeft de algemene modules, niet specifiek aan de opleiding
+                      -- JOIN opleidingen o ON w.opleidingId = o.id -- geeft de opleidingsspecifieke modules
                       WHERE sm.status = \'volgt\'
 	                    AND s.studentId = :studentId';
             $stmt = $conn->prepare($sql);
@@ -245,56 +245,56 @@ class UserDAO {
 
             $stmt->execute();
 
-            $werkficheTable = $stmt->fetchAll(PDO::FETCH_CLASS);
+            $moduleTable = $stmt->fetchAll(PDO::FETCH_CLASS);
         } catch (PDOException $e) {
             die($e->getMessage());
         }
 
-        if(isset($werkficheTable[0])) {
-            $werkfiches = $werkficheTable;
+        if(isset($moduleTable[0])) {
+            $modules = $moduleTable;
         } else {
-            die('No werkfiches found for student with id = ' . $studentId);
+            die('No modules found for student with id = ' . $studentId);
         }
-        return $werkfiches;
-    }
-
-    public static function getFollowedModulesInFiche($werkficheId, $studentId){
-        try{
-            $conn = graderdb::getConnection();
-
-            $sql = 'SELECT m.* FROM studenten_modules sm
-                      JOIN modules m ON sm.moduleId = m.id
-                      JOIN werkfiches w on m.werkficheId = w.id
-                      WHERE studentId = :studentId AND werkficheId = :werkficheId
-                        AND status=\'volgt\'';
-            $stmt = $conn->prepare($sql);
-            $stmt->bindParam(':studentId',$studentId);
-            $stmt->bindParam(':werkficheId',$werkficheId);
-
-            $stmt->execute();
-
-            $werkficheTable = $stmt->fetchAll(PDO::FETCH_CLASS);
-        } catch (PDOException $e) {
-            die($e->getMessage());
-        }
-
-        if(isset($werkficheTable[0])) {
-            $modules = $werkficheTable;
-        } else {
-            die('No modules found for student with id = ' . $studentId . ' in werkfiche with id ' . $werkficheId);
-        }
-
         return $modules;
     }
 
-    public static function getCriteriaForModule($moduleId){
+    public static function getFollowedDoelstellingenInModule($moduleId, $studentId){
+        try{
+            $conn = graderdb::getConnection();
+
+            $sql = 'SELECT m.* FROM studenten_doelstellingen sm
+                      JOIN doelstellingen m ON sm.doelstellingId = m.id
+                      JOIN modules w on m.moduleId = w.id
+                      WHERE studentId = :studentId AND moduleId = :moduleId
+                        AND status=\'volgt\'';
+            $stmt = $conn->prepare($sql);
+            $stmt->bindParam(':studentId',$studentId);
+            $stmt->bindParam(':moduleId',$moduleId);
+
+            $stmt->execute();
+
+            $moduleTable = $stmt->fetchAll(PDO::FETCH_CLASS);
+        } catch (PDOException $e) {
+            die($e->getMessage());
+        }
+
+        if(isset($moduleTable[0])) {
+            $doelstellingen = $moduleTable;
+        } else {
+            die('No doelstellingen found for student with id = ' . $studentId . ' in module with id ' . $moduleId);
+        }
+
+        return $doelstellingen;
+    }
+
+    public static function getCriteriaForDoelstelling($doelstellingId){
         try{
             $conn = graderdb::getConnection();
 
             $sql = 'SELECT * from evaluatiecriteria
-                    WHERE moduleId = :moduleId';
+                    WHERE doelstellingId = :doelstellingId';
             $stmt = $conn->prepare($sql);
-            $stmt->bindParam(':moduleId',$moduleId);
+            $stmt->bindParam(':doelstellingId',$doelstellingId);
 
             $stmt->execute();
 
@@ -306,7 +306,7 @@ class UserDAO {
         if(isset($criteriaTable[0])) {
             $criteria = $criteriaTable;
         } else {
-            die('No criteria found for module with id = ' . $moduleId);
+            die('No criteria found for doelstelling with id = ' . $doelstellingId);
         }
 
         return $criteria;
@@ -348,11 +348,11 @@ class UserDAO {
         }
     }
 
-    public static function createWerkfiche($name, $opleidingId, $creatorId) {
+    public static function createModule($name, $opleidingId, $creatorId) {
         try {
             $conn = graderdb::getConnection();
 
-            $sql = 'INSERT INTO werkfiches(name, opleidingId, creatorId) VALUES(:name, :opleidingId, :creatorId)';
+            $sql = 'INSERT INTO modules(name, opleidingId, creatorId) VALUES(:name, :opleidingId, :creatorId)';
             $stmt = $conn->prepare($sql);
             $stmt->bindParam(':name', $name);
             $stmt->bindParam(':opleidingId', $opleidingId);
@@ -364,11 +364,11 @@ class UserDAO {
         }
     }
 
-    public static function createModule($name, $opleidingId, $creatorId) {
+    public static function createDoelstellingen($name, $opleidingId, $creatorId) {
         try {
             $conn = graderdb::getConnection();
 
-            $sql = 'INSERT INTO werkfiches(name, opleidingId, creatorId) VALUES(:name, :opleidingId, :creatorId)';
+            $sql = 'INSERT INTO modules(name, opleidingId, creatorId) VALUES(:name, :opleidingId, :creatorId)';
             $stmt = $conn->prepare($sql);
             $stmt->bindParam(':name', $name);
             $stmt->bindParam(':opleidingId', $opleidingId);
