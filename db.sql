@@ -10,9 +10,9 @@ CREATE TABLE `users` (
   `firstname` varchar(50) NOT NULL,
   `lastname` varchar(100) NOT NULL,
   `password` varchar(128) NOT NULL,
-  `language` enum('NL','EN') NOT NULL DEFAULT 'EN',
+  `language` enum('NL','EN') NOT NULL DEFAULT 'NL',
   `activationKey` varchar(100) DEFAULT NULL,
-  `status` enum('WAIT_ACTIVATION','ACTIVE','DISABLED') CHARACTER SET utf8 COLLATE utf8_unicode_ci NOT NULL DEFAULT 'WAIT_ACTIVATION',
+  `status` enum('WAIT_ACTIVATION','ACTIVE','DISABLED') NOT NULL DEFAULT 'WAIT_ACTIVATION',
   `accountCreatedTimestamp` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP,
   `resetcode` char(36) DEFAULT NULL,
   `creatorId` int
@@ -53,7 +53,7 @@ CREATE TABLE `opleidingen` (
   FOREIGN KEY(creatorId) REFERENCES admins(adminId)
 );
 
-CREATE TABLE `werkfiches` (
+CREATE TABLE `modules` (
   `id` int NOT NULL AUTO_INCREMENT PRIMARY KEY,
   `name` varchar(50) NOT NULL,
   `opleidingId` int,
@@ -62,45 +62,45 @@ CREATE TABLE `werkfiches` (
   FOREIGN KEY(creatorId) REFERENCES admins(adminId)
 );
 
-CREATE TABLE `modules` (
+CREATE TABLE `doelstellingen` (
   `id` int NOT NULL AUTO_INCREMENT PRIMARY KEY,
   `name` varchar(100) NOT NULL,
-  `werkficheId` int NOT NULL,
+  `moduleId` int NOT NULL,
   `teacherId` int NOT NULL,
   `creatorId` int,
-  FOREIGN KEY(werkficheId) REFERENCES werkfiches(id),
+  FOREIGN KEY(moduleId) REFERENCES modules(id),
   FOREIGN KEY(teacherId) REFERENCES teachers(teacherId),
   FOREIGN KEY(creatorId) REFERENCES admins(adminId)
 );
 
-create table `studenten_modules` (
-  `moduleId` int NOT NULL,
+create table `studenten_doelstellingen` (
+  `doelstellingId` int NOT NULL,
   `studentId` int NOT NULL,
   `opleidingId` int DEFAULT NULL,
   `status` enum('Volgt','Beëindigd') NOT NULL DEFAULT 'Volgt',
-  CONSTRAINT PK_studenten_modules PRIMARY KEY (moduleId, studentId),
-  FOREIGN KEY(moduleId) REFERENCES modules(id),
+  CONSTRAINT PK_studenten_doelstellingen PRIMARY KEY (doelstellingId, studentId),
+  FOREIGN KEY(doelstellingId) REFERENCES doelstellingen(id),
   FOREIGN KEY(opleidingId) REFERENCES opleidingen(id),
   FOREIGN KEY(studentId) REFERENCES studenten(studentId)
   
 	-- TODO DODO
     --
     -- opleidingId in werkfiches can be null because some werkfiches are general and are used in all opleidingen.
-    -- opleidingId in studenten_modules is default null because the opleidingId is already mentioned in werkfiches.
+    -- opleidingId in studenten_doelstellingen is default null because the opleidingId is already mentioned in werkfiches.
     -- SO
-    -- if you add a record in studenten_modules and for the werkfiche that that module belongs to the oplidingId is null
-    -- a constraint should oblige you to fill out the opleidingId in studenten_modules.
+    -- if you add a record in studenten_doelstellingen and for the werkfiche that that module belongs to the oplidingId is null
+    -- a constraint should oblige you to fill out the opleidingId in studenten_doelstellingen.
     -- (if dat is possible in mysql)
   
 );
 
 CREATE TABLE `evaluatiecriteria` (
   `id` int NOT NULL AUTO_INCREMENT PRIMARY KEY,
-  `moduleId` int NOT NULL,
+  `doelstellingId` int NOT NULL,
   `weergaveTitel` varchar(200) NOT NULL,
   `inGebruik` tinyint(1) NOT NULL DEFAULT 1,
   `creatorId` int,
-  FOREIGN KEY(moduleId) REFERENCES modules(id),
+  FOREIGN KEY(doelstellingId) REFERENCES doelstellingen(id),
   FOREIGN KEY(creatorId) REFERENCES admins(adminId)
 );
 

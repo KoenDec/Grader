@@ -23,7 +23,7 @@ INSERT INTO opleidingen(name, creatorId) VALUES
 	('Keukenmedewerker', 3),
     ('Kapper', 3);
 
-INSERT INTO werkfiches(name, opleidingId, creatorId) VALUES
+INSERT INTO modules(name, opleidingId, creatorId) VALUES
     ('Initiatie keuken', 1, 3),
     ('Keukentechnieken', 1, 3),
 	('Taalgebonden vaardigheden', null, 3),
@@ -31,7 +31,7 @@ INSERT INTO werkfiches(name, opleidingId, creatorId) VALUES
     ('Vak Engels', null, 3),
     ('Haarverzorging', 2, 3);
 
-INSERT INTO modules(name, werkficheId, teacherId, creatorId) VALUES
+INSERT INTO doelstellingen(name, moduleId, teacherId, creatorId) VALUES
 	('Veiligheid, hygiëne en milieubewustzijn', 1, 4, 3),
 	('Houdingen noodzakelijk voor de uitoefening van het beroep', 1, 4, 3),
    	('Functionele vaardigheden voor de uitoefening van het beroep', 1, 4, 3),
@@ -58,7 +58,7 @@ INSERT INTO modules(name, werkficheId, teacherId, creatorId) VALUES
     ('Ruimt de werpost na een haarverzorging op en maakt deze schoon', 6, 4, 3),
     ('Te integreren kennis', 6, 4, 3);
        
-INSERT INTO studenten_modules(studentId, moduleId, opleidingId) VALUES
+INSERT INTO studenten_doelstellingen(studentId, doelstellingId, opleidingId) VALUES
 	-- REAL DATA
     (6,1,null),
     (6,2,null),
@@ -103,7 +103,7 @@ INSERT INTO studenten_modules(studentId, moduleId, opleidingId) VALUES
     (10,8,1),
     (8,8,2);
     
-INSERT INTO evaluatiecriteria(moduleId,weergaveTitel,creatorId) VALUES
+INSERT INTO evaluatiecriteria(doelstellingId,weergaveTitel,creatorId) VALUES
 	(1,'Kan ergonomisch werken',3),
 	(1,'Kan economisch werken',3),
 	(1,'Kan handelen volgens de regels van de voedselveiligheid',3),
