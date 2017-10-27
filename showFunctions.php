@@ -1,11 +1,50 @@
 <?php
-/**
- * Created by PhpStorm.
- * User: Kenny
- * Date: 9/10/2017
- * Time: 9:52
- */
  require_once('graderdb.php');
+
+
+/**************************
+ *   REUSABLE FUNCTIONS   *
+ **************************/
+
+function showEducationsCheckboxes($onlyGuiFunction){
+    $userDAO = new UserDAO();
+    $educations = $userDAO->getAllEducations();
+    if($onlyGuiFunction) {
+        $educationIds = array();
+        echo '<form class="col s3" action="#" ';
+    } else {
+        echo '<span ';
+    }
+    echo 'id="educationsCheckboxes">';
+?>
+        <p>
+            <input type="checkbox" id="all-checkboxes" checked="checked" />
+            <label for="all-checkboxes">Alles selecteren</label>
+        </p>
+
+        <?php
+        foreach($educations as $opleiding){
+            if($onlyGuiFunction) array_push($educationIds, $opleiding->id);
+            ?>
+            <p class="opleiding-checkbox">
+                <input type="checkbox" id="opleiding<?= $opleiding->id?>" checked="checked" />
+                <label for="opleiding<?=$opleiding->id?>"><?=$opleiding->name?></label>
+            </p>
+            <?php
+        }
+    if($onlyGuiFunction) {
+        echo '</form>';
+        return $educationIds;
+    } else {
+        echo '</span>';
+    }
+}
+
+
+
+/**************************
+ *     SPECIFIC PAGES     *
+ **************************/
 
 function showLogin(){
 ?>
@@ -266,8 +305,6 @@ function showReportsPage(){
 
 function showStudentsPage(){
     $userDAO = new UserDAO();
-    $educations = $userDAO->getAllEducations();
-    $educationIds = array();
 
     ?>
     <div class="row">
@@ -294,24 +331,10 @@ function showStudentsPage(){
         </div>
     </div>
     <div class="row">
-        <form class="col s3" action="#" id="educationsCheckboxesOnShowStudentsPage">
-            <p>
-                <input type="checkbox" id="all-checkboxes" checked="checked" />
-                <label for="all-checkboxes">Alles selecteren</label>
-            </p>
 
-            <?php
-            foreach($educations as $opleiding){
-                array_push($educationIds, $opleiding->id);
-                ?>
-                <p class="opleiding-checkbox">
-                    <input type="checkbox" id="opleiding<?= $opleiding->id?>" checked="checked" />
-                    <label for="opleiding<?=$opleiding->id?>"><?=$opleiding->name?></label>
-                </p>
-                <?php
-            }
-            ?>
-        </form>
+<?php
+$educationIds = showEducationsCheckboxes(true);
+?>
         <table class="col s9 striped bordered">
             <tr>
                 <th>Student</th>
@@ -413,8 +436,6 @@ function showMessagesPage(){
         // todo only show messages that are relevant for the user
     $userDAO = new UserDAO();
     $messages = $userDAO->getAllMessages();
-    $educations = $userDAO->getAllEducations();
-    $educationIds = array();
 ?>
         <div class="row">
             <h2>Meldingen</h2>
@@ -474,21 +495,9 @@ function showMessagesPage(){
             <div class="row">
             <p style="color: #9e9e9e">Zichtbaar voor:</p>
               <form class=""  action="#" id="">
-            <p>
-                <input type="checkbox" id="all-checkboxes" checked="checked" />
-                <label for="all-checkboxes">Alles selecteren</label>
-            </p>
-            <?php
-            foreach($educations as $opleiding){
-                array_push($educationIds, $opleiding->id);
-                ?>
-                <p class="opleiding-checkbox">
-                    <input type="checkbox" id="opleiding<?= $opleiding->id?>" checked="checked" />
-                    <label for="opleiding<?=$opleiding->id?>"><?=$opleiding->name?></label>
-                </p>
-                <?php
-            }
-            ?>
+<?php
+            showEducationsCheckboxes(false);
+?>
               </form>
             </div>
             <div class="row">
@@ -503,31 +512,18 @@ function showMessagesPage(){
 }
 
 function showPrintPage(){
-    // TODO checkbox functionality on this page (javascript)
     $userDAO = new UserDAO();
-    $educations = $userDAO->getAllEducations();
+    // TODO checkbox functionality on this page (javascript)
+
 ?>
     <div class="row">
         <h2>Rapporten afdrukken</h2>
     </div>
     <div class="row">
             <p style="color: #9e9e9e">Selecteer opleidingen</p>
-        <form class="col s3" action="#" id="educationsCheckboxesOnShowStudentsPage">
-            <p>
-                <input type="checkbox" id="all-checkboxes" checked="checked" />
-                <label for="all-checkboxes">Alles selecteren</label>
-            </p>
-            <?php
-            foreach($educations as $opleiding){
-                ?>
-                <p class="opleiding-checkbox">
-                    <input type="checkbox" id="opleiding<?= $opleiding->id?>" checked="checked" />
-                    <label for="opleiding<?=$opleiding->id?>"><?=$opleiding->name?></label>
-                </p>
-                <?php
-            }
-            ?>
-        </form>
+<?php
+        $educationIds = showEducationsCheckboxes(true);
+?>
 
         <form class="col s7" action="#">
             <p>
@@ -535,19 +531,19 @@ function showPrintPage(){
                 <label for="more-checkboxes">Alles selecteren</label>
             </p>
             <table class="striped bordered">
-                <tr><th>Studenten</th></tr>
+                <tr><th>Student</th></tr>
             <?php
-            foreach($educations as $education) {
-                $students = $userDAO->getAllStudentsInEducation($education->id);
+            foreach($educationIds as $educationId) {
+                $students = $userDAO->getAllStudentsInEducation($educationId);
 //TODO show correct students when education is selected
                 foreach ($students as $student) {
                     ?>
-                    <tr>
+                    <tr data-opleidingId="<?=$educationId?>">
                         <td>
                             <p class="opleiding-checkbox " style="display:inline-block">
                                 <input type="checkbox" id="student-checkbox<?= $student->id ?>" checked="checked"/>
                                 <label
-                                    for="student-checkbox<?= $student->id ?>"><?= $student->firstname ?> <?= $student->lastname ?></label>
+                                    for="student-checkbox<?= $student->id ?>"><?= $student->firstname ?> <?= $student->lastname ?> (<?= $student->email ?>)</label>
                             </p>
                             <a class="waves-effect waves-light btn tooltipped right" data-delay="50"
                                data-tooltip="Rapport bekijken"><i class="material-icons right">import_contacts</i>Rapport</a>
