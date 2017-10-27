@@ -88,6 +88,15 @@ h4, .button-collapse{
     margin:auto;
 }
 
+.doelstellingwidth{
+    max-width: 300px;
+}
+
+.eerder-resultaat:hover{
+    font-weight: bold;
+    color: #4db6ac
+}
+
 .row .reports-btns, .row .student-btn, .row .subject-btn{
     margin-top: 1rem;
     padding-right: 0;

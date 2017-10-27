@@ -194,8 +194,8 @@ function showReportsPage(){
     <div class='collapsible-body'>
         <table class="striped bordered">
             <tr>
-                <th>Doelstellingen</th>
-                <th>Resultaat</th>
+                <th class="doelstellingwidth">Doelstellingen</th>
+                <th class="resultaatwidth">Resultaat</th>
                 <th>Datum (dd/mm/yyyy)</th>
                 <th>Opmerkingen</th>
             </tr>
@@ -205,14 +205,14 @@ function showReportsPage(){
     $doelstellingen = $userDAO->getFollowedDoelstellingenInModule($module->id, $studentId);
         foreach($doelstellingen as $doelstelling){
 ?>
-            <th style="border-top: 2px solid gray; border-bottom: 2px solid gray" colspan="4"><strong><?= $doelstelling->name ?></strong></th>
+            <th style="border-top: 2px solid gray; border-bottom: 2px solid gray" class="doelstellingwidth" colspan="4"><strong><?= $doelstelling->name ?></strong></th>
             </tr><tr>
 <?php
     $criteria = $userDAO->getCriteriaForDoelstelling($doelstelling->id);
             foreach($criteria as $criterium){
 ?>
-                <td style="padding-left: 30px" class="valign-wrapper"><i class="material-icons">navigate_next</i><?= $criterium->weergaveTitel ?></td>
-                <td contenteditable="false">
+                <td style="padding-left: 30px" class="valign-wrapper doelstellingwidth"><i class="material-icons">navigate_next</i><?= $criterium->weergaveTitel ?></td>
+                <td class="resultaatwidth" contenteditable="false">
                   <div class="input-field">
                     <select disabled>
                       <option value="" disabled selected>Niets geselecteerd</option>
@@ -221,6 +221,7 @@ function showReportsPage(){
                       <option value="3">Option 3</option>
                     </select>
                   </div>
+                    <p><span class="eerder-resultaat tooltipped" data-delay="50" data-tooltip="11/09/2017"> OV</span>,<span class="eerder-resultaat tooltipped" data-delay="50" data-tooltip="18/09/2017"> G</span>,<span class="eerder-resultaat tooltipped" data-delay="50" data-tooltip="25/09/2017"> ZG</span></p>
                 </td>
                 <td contenteditable="false">00/00/0000</td>
                 <td contenteditable="false">Opmerking</td>
