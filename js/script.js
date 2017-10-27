@@ -96,7 +96,7 @@ $(document).ready(function () {
       });
     });
 
-    $('#educationsCheckboxesOnShowStudentsPage').find('input').on('change', handleCheckboxesOnShowStudentsPage);
+    $('#educationsCheckboxes').find('input').on('change', handleEducationsCheckboxes);
 
 });
 
@@ -237,7 +237,8 @@ var createEditCourseJSON = function(){
     console.log(myJsonString);
 };
 
-var handleCheckboxesOnShowStudentsPage = function(){
+var handleEducationsCheckboxes = function(){
+    console.log("test");
     var showOrHideStudents = function(educationId, show, trsStudents){
         for (var i = 0; i < trsStudents.length - 1; i++) {
             var cur = $(trsStudents[i + 1]);
