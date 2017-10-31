@@ -7,36 +7,25 @@ include_once('Login.php');
 //session_start();
 $userDAO = new UserDAO();
 
-$currentUser = '';
+$currentUser;
 if (Login::isLoggedIn()) {
-  $currentUser = $userDAO->getUserById(Login::isLoggedIn())->email;
-  showNavigation($currentUser);
+  $currentUser = $userDAO->getUserById(Login::isLoggedIn());
+  showNavigation($currentUser->firstname . ' ' . $currentUser->lastname);
   checkGET();
 } else {
   showLogin();
 }
 
-/*if(isset($_SESSION['email'])){
-    showNavigation($_SESSION['name']);
-    checkGET();
-}elseif(isset($_POST['email'])){
-    $_SESSION['email'] = $_POST['email'];
-    showNavigation($_SESSION['name']);
-    checkGET();
-}else{
-    showLogin();
-}*/
 function checkGET()
 {
     $userDAO = new userDAO();
     if (isset($_GET['page'])) {
         switch ($_GET['page']) {
             case "account":
-                showAccount($GLOBALS['currentUser']);
+                showAccount($GLOBALS['currentUser']->email);
                 break;
 
             case "afmelden": // TODO via api or logout.php
-                unset($_SESSION['email']);
                 header("Refresh:0; url=index.php");
                 break;
 
@@ -51,7 +40,7 @@ function checkGET()
             case "opleidingen":
                 if(isset($_POST["opleiding-name"]))
                 {
-                    $userDAO->createEducation($_POST["opleiding-name"],$userDAO->getUser($_SESSION['email'])->id);
+                    $userDAO->createEducation($_POST["opleiding-name"],$userDAO->getUser($GLOBALS['currentUser'])->id);
                 }
                 showSubjectPage();
                 break;

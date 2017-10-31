@@ -10,7 +10,7 @@
 function showLogin(){
 ?>
     <div class="login centered z-depth-5">
-        <form action="verify.php" method="POST">
+        <form method="POST">
           <div class="row">
             <div class="input-field">
               <input id="username" name="username" type="email" class="validate">
@@ -23,10 +23,10 @@ function showLogin(){
               <label for="password">Wachtwoord</label>
             </div>
           </div>
-            <div class="row">
+            <!--<div class="row">
                 <div class="g-recaptcha" id="captcha" data-sitekey="6LepDTQUAAAAAJQCkfOXuM_mxjH7wsgXfKYbPNKy"></div>
-            </div>
-          <button class="btn waves-effect waves-light" type="submit" name="action">Log in
+            </div>-->
+          <button class="btn waves-effect waves-light" type="submit" name="login" id="login">Log in
             <i class="material-icons right">send</i>
           </button>
         </form>
@@ -55,7 +55,7 @@ function showNavigation($name){
     <ul id="userDropdown" class="dropdown-content">
         <li><a href="index.php?page=account">Account</a></li>
         <li class="divider"></li>
-        <li><a href="index.php?page=afmelden">Afmelden</a></li>
+        <li id="logout"><a href="index.php?page=afmelden">Afmelden</a></li>
     </ul>
 
 </header>

@@ -2,6 +2,22 @@
  * Created by Kenny on 9/10/2017.
  */
 $(document).ready(function () {
+
+  $('#login').on('click', function() {
+    $.ajax({
+      type: 'POST',
+      url: 'api/auth',
+      content: 'application/json',
+      data: '{"username": "'+$('#username').val()+'", "password": "'+$('#password').val()+'"}',
+      success: function(r) {
+        console.log(r);
+      },
+      error: function(r) {
+        console.log(r);
+      }
+    });
+  });
+
     $(".button-collapse").sideNav({
         onOpen: function (el) {
             $('main').css('padding-left', '300px');

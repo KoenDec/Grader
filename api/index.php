@@ -1,5 +1,5 @@
 <?php
-require_once('graderdb.php');
+require_once('../graderdb.php');
 
 $userDAO = new UserDAO();
 
@@ -23,7 +23,9 @@ if ($_SERVER['REQUEST_METHOD'] == 'GET') {
         $token = bin2hex(openssl_random_pseudo_bytes(64, $cstrong));
         $user_id = $userDAO->getUser($username)->id;
         $userDAO->insertNewLoginToken($user_id, sha1($token));
-        echo '{ "Token": "'.$token.'"}';
+        setcookie("GID", $token, time() + 60 * 60 * 24 * 7, '/', NULL, NULL, TRUE);
+        setcookie("GID_", '1', time() + 60 * 60 * 24 * 3, '/', NULL, NULL, TRUE);
+        // TODO go to index.php
       } else {
         http_response_code(401);
       }
@@ -34,6 +36,7 @@ if ($_SERVER['REQUEST_METHOD'] == 'GET') {
 
 } else if ($_SERVER['REQUEST_METHOD'] == 'DELETE') {
   if ($_GET['url'] == 'auth') {
+    echo $_GET['token'];
     if (isset($_GET['token'])) {
       if ($userDAO->getToken(sha1($_GET['token']))) {
         $userDAO->removeLoginToken(sha1($_GET['token']));
