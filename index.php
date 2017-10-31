@@ -2,10 +2,21 @@
 include_once "header.html";
 include_once "showFunctions.php";
 include_once "graderdb.php";
+include_once('Login.php');
 
-session_start();
+//session_start();
+$userDAO = new UserDAO();
 
-if(isset($_SESSION['email'])){
+$currentUser = '';
+if (Login::isLoggedIn()) {
+  $currentUser = $userDAO->getUserById(Login::isLoggedIn())->email;
+  showNavigation($currentUser);
+  checkGET();
+} else {
+  showLogin();
+}
+
+/*if(isset($_SESSION['email'])){
     showNavigation($_SESSION['name']);
     checkGET();
 }elseif(isset($_POST['email'])){
@@ -14,8 +25,7 @@ if(isset($_SESSION['email'])){
     checkGET();
 }else{
     showLogin();
-}
-
+}*/
 function checkGET()
 {
     $userDAO = new userDAO();

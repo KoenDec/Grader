@@ -72,6 +72,75 @@ class UserDAO {
         return $user;
     }
 
+    public static function getUserById($userid) {
+        try {
+            $conn = graderdb::getConnection();
+
+            $sql = 'SELECT * FROM users WHERE id = :userid';
+            $stmt = $conn->prepare($sql);
+            $stmt->bindParam(':userid', $userid);
+            $stmt->execute();
+
+            $usersTable = $stmt->fetchAll(PDO::FETCH_CLASS);
+        } catch (PDOException $e) {
+            die($e->getMessage());
+        }
+
+        if(isset($usersTable[0])) {
+            $user = $usersTable[0];
+        } else {
+            die('No user with username = ' . $username);
+        }
+
+        return $user;
+    }
+
+    public static function getLoggedInUserId($token) {
+        try {
+            $conn = graderdb::getConnection();
+
+            $sql = 'SELECT userId FROM loginTokens WHERE token = :token';
+            $stmt = $conn->prepare($sql);
+            $stmt->bindParam(':token', $token);
+            $stmt->execute();
+
+            $usersTable = $stmt->fetchAll(PDO::FETCH_CLASS);
+        } catch (PDOException $e) {
+            die($e->getMessage());
+        }
+
+        if(isset($usersTable[0])) {
+            $userid = $usersTable[0];
+        } /*else {
+            die('No userid found');
+        }*/
+
+        return $userid;
+    }
+
+    public static function getToken($token) {
+        try {
+            $conn = graderdb::getConnection();
+
+            $sql = 'SELECT token FROM loginTokens WHERE token = :token';
+            $stmt = $conn->prepare($sql);
+            $stmt->bindParam(':token', $token);
+            $stmt->execute();
+
+            $tokenTable = $stmt->fetchAll(PDO::FETCH_CLASS);
+        } catch (PDOException $e) {
+            die($e->getMessage());
+        }
+
+        if(isset($tokenTable[0])) {
+            $token = $tokenTable[0];
+        } /*else {
+            die('No userid found');
+        }*/
+
+        return $token;
+    }
+
     public static function searchStudents($query) {
         try {
             $conn = graderdb::getConnection();
@@ -379,4 +448,55 @@ class UserDAO {
             die($e->getMessage());
         }
     }
+
+    public static function insertNewLoginToken($userid, $token) {
+      try {
+        $conn = graderdb::getConnection();
+
+        $sql = 'INSERT INTO loginTokens(token, userId) VALUES(:token, :userid)';
+        $stmt = $conn->prepare($sql);
+        $stmt->bindParam(':token', $token);
+        $stmt->bindParam(':userid', $userid);
+
+        $stmt->execute();
+      } catch (PDOException $e) {
+        die($e->getMessage());
+      }
+
+    }
+
+    //////////////////////////////////////////////
+   //              DELETE-QUERIES              //
+  //////////////////////////////////////////////
+
+  public static function removeLoginToken($token) {
+    try {
+      $conn = graderdb::getConnection();
+
+      $sql = 'DELETE FROM loginTokens WHERE token=:token';
+      $stmt = $conn->prepare($sql);
+      $stmt->bindParam(':token', $token);
+
+      $stmt->execute();
+
+    } catch (PDOException $e) {
+      die($e->getMessage());
+    }
+
+  }
+
+  public static function removeAllTokensFromUser($userid) {
+    try {
+      $conn = graderdb::getConnection();
+
+      $sql = 'DELETE FROM loginTokens WHERE userId=:userid';
+      $stmt = $conn->prepare($sql);
+      $stmt->bindParam(':userid', $userid);
+
+      $stmt->execute();
+    } catch (PDOException $e) {
+      die($e->getMessage());
+    }
+
+  }
 }
