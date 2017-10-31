@@ -567,6 +567,8 @@ function showPrintPage(){
 <?php
 }
 function showStudentEditPage(){
+    $userDAO = new UserDAO();
+    $opleidingen = $userDAO->getAllEducations();
 ?>
     <div class="row">
         <h2>Student aanpassen</h2>
@@ -591,13 +593,13 @@ function showStudentEditPage(){
             </div>
         </div>
         <div class="row ">
-            <label>Selecteer een richting</label>
+            <label>Selecteer een opleiding</label>
             <select>
                 <option value="0" disabled selected>Geen selectie</option>
 <?php
-                for($opleidingen = 10; $opleidingen > 0; $opleidingen--){
+                foreach($opleidingen as $opleiding){
 ?>
-                    <option value="<?php echo $opleidingen?>">Opleiding<?php echo $opleidingen?></option>
+                    <option value="<?= $opleiding->id?>"> <?= $opleiding->name ?></option>
 <?php
                 }
 ?>
@@ -606,7 +608,8 @@ function showStudentEditPage(){
         <div class="row">
             <ul class="collapsible" data-collapsible="expandable">
 <?php
-                for($modules = 3; $modules > 0; $modules--) {
+//
+for($modules = 3; $modules > 0; $modules--) {
 ?>
                     <li>
                         <div class="collapsible-header collapsible-module active"><i class="collapse-icon material-icons">indeterminate_check_box</i>Module<?php echo $modules ?></div>
