@@ -32,10 +32,10 @@ function checkGET()
     if (isset($_GET['page'])) {
         switch ($_GET['page']) {
             case "account":
-                showAccount($_SESSION['email']);
+                showAccount($GLOBALS['currentUser']);
                 break;
 
-            case "afmelden":
+            case "afmelden": // TODO via api or logout.php
                 unset($_SESSION['email']);
                 header("Refresh:0; url=index.php");
                 break;

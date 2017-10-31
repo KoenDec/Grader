@@ -1,50 +1,11 @@
 <?php
+/**
+ * Created by PhpStorm.
+ * User: Kenny
+ * Date: 9/10/2017
+ * Time: 9:52
+ */
  require_once('graderdb.php');
-
-
-/**************************
- *   REUSABLE FUNCTIONS   *
- **************************/
-
-function showEducationsCheckboxes($onlyGuiFunction){
-    $userDAO = new UserDAO();
-    $educations = $userDAO->getAllEducations();
-    if($onlyGuiFunction) {
-        $educationIds = array();
-        echo '<form class="col s3" action="#" ';
-    } else {
-        echo '<span ';
-    }
-    echo 'id="educationsCheckboxes">';
-?>
-        <p>
-            <input type="checkbox" id="all-checkboxes" checked="checked" />
-            <label for="all-checkboxes">Alles selecteren</label>
-        </p>
-
-        <?php
-        foreach($educations as $opleiding){
-            if($onlyGuiFunction) array_push($educationIds, $opleiding->id);
-            ?>
-            <p class="opleiding-checkbox">
-                <input type="checkbox" id="opleiding<?= $opleiding->id?>" checked="checked" />
-                <label for="opleiding<?=$opleiding->id?>"><?=$opleiding->name?></label>
-            </p>
-            <?php
-        }
-    if($onlyGuiFunction) {
-        echo '</form>';
-        return $educationIds;
-    } else {
-        echo '</span>';
-    }
-}
-
-
-
-/**************************
- *     SPECIFIC PAGES     *
- **************************/
 
 function showLogin(){
 ?>
@@ -217,7 +178,7 @@ function showReportsPage(){
         </div>
 
         <div class="right-align">
-            <a class="waves-effect waves-light btn tooltipped edit-opslaan-rapport" data-editing="false" data-delay="50" data-tooltip="Aanpassen inschakelen"><i class="material-icons">edit</i></a>
+            <a class="waves-effect waves-light btn tooltipped" data-delay="50" data-tooltip="Aanpassen inschakelen"><i class="material-icons">edit</i></a>
         </div>
     </div>
     <ul class="popout collapsible courseCreator" data-collapsible="expandable">
@@ -233,10 +194,10 @@ function showReportsPage(){
     <div class='collapsible-body'>
         <table class="striped bordered">
             <tr>
-                <th class="doelstellingwidth">Doelstellingen</th>
-                <th class="resultaatwidth">Resultaat</th>
+                <th>Doelstellingen</th>
+                <th>Resultaat</th>
                 <th>Datum (dd/mm/yyyy)</th>
-                <th class="opmerkingenwidth">Opmerkingen</th>
+                <th>Opmerkingen</th>
             </tr>
             <tr>
 
@@ -244,27 +205,25 @@ function showReportsPage(){
     $doelstellingen = $userDAO->getFollowedDoelstellingenInModule($module->id, $studentId);
         foreach($doelstellingen as $doelstelling){
 ?>
-            <th style="border-top: 2px solid gray; border-bottom: 2px solid gray" class="doelstellingwidth" colspan="4"><strong><?= $doelstelling->name ?></strong></th>
+            <th style="border-top: 2px solid gray; border-bottom: 2px solid gray" colspan="4"><strong><?= $doelstelling->name ?></strong></th>
             </tr><tr>
 <?php
     $criteria = $userDAO->getCriteriaForDoelstelling($doelstelling->id);
             foreach($criteria as $criterium){
 ?>
-                <td style="padding-left: 30px" class="valign-wrapper doelstellingwidth"><i class="material-icons">navigate_next</i><?= $criterium->weergaveTitel ?></td>
-                <td class="resultaatwidth" contenteditable="false">
-                  <div class="input-field resultaat-input">
+                <td style="padding-left: 30px" class="valign-wrapper"><i class="material-icons">navigate_next</i><?= $criterium->weergaveTitel ?></td>
+                <td contenteditable="false">
+                  <div class="input-field">
                     <select disabled>
-                        <option value="" disabled selected>Niets geselecteerd</option>
-                        <option value="1">R</option>
-                        <option value="2">O</option>
-                        <option value="3">V</option>
-                        <option value="4">G</option>
+                      <option value="" disabled selected>Niets geselecteerd</option>
+                      <option value="1">Option 1</option>
+                      <option value="2">Option 2</option>
+                      <option value="3">Option 3</option>
                     </select>
                   </div>
-                    <p><span class="eerder-resultaat tooltipped" data-delay="50" data-tooltip="11/09/2017"> OV</span>,<span class="eerder-resultaat tooltipped" data-delay="50" data-tooltip="18/09/2017"> G</span>,<span class="eerder-resultaat tooltipped" data-delay="50" data-tooltip="25/09/2017"> ZG</span></p>
                 </td>
                 <td contenteditable="false">00/00/0000</td>
-                <td class="opmerkingenwidth" contenteditable="false">Opmerking</td>
+                <td contenteditable="false">Opmerking</td>
                 </tr><tr>
 <?php
             }
@@ -307,6 +266,8 @@ function showReportsPage(){
 
 function showStudentsPage(){
     $userDAO = new UserDAO();
+    $educations = $userDAO->getAllEducations();
+    $educationIds = array();
 
     ?>
     <div class="row">
@@ -333,10 +294,24 @@ function showStudentsPage(){
         </div>
     </div>
     <div class="row">
+        <form class="col s3" action="#" id="educationsCheckboxesOnShowStudentsPage">
+            <p>
+                <input type="checkbox" id="all-checkboxes" checked="checked" />
+                <label for="all-checkboxes">Alles selecteren</label>
+            </p>
 
-<?php
-$educationIds = showEducationsCheckboxes(true);
-?>
+            <?php
+            foreach($educations as $opleiding){
+                array_push($educationIds, $opleiding->id);
+                ?>
+                <p class="opleiding-checkbox">
+                    <input type="checkbox" id="opleiding<?= $opleiding->id?>" checked="checked" />
+                    <label for="opleiding<?=$opleiding->id?>"><?=$opleiding->name?></label>
+                </p>
+                <?php
+            }
+            ?>
+        </form>
         <table class="col s9 striped bordered">
             <tr>
                 <th>Student</th>
@@ -406,16 +381,8 @@ function showSubjectPage(){
             <label for="subject-search">Zoek Opleiding</label>
             <a class="waves-effect waves-light btn"><i class="material-icons">search</i></a>
         </div>
-        <div class="addSubject" style="position: relative; height: 90px;">
-            <div class="fixed-action-btn horizontal" style="position: absolute; display: inline-block; right: 24px;">
-                <a class="btn-floating waves-effect waves-light btn-large tooltipped" data-position="top" data-delay="50" data-tooltip="Opleiding Toevoegen">
-                    <i class="large material-icons">add</i>
-                </a>
-                <ul>
-                    <li><a href="index.php?page=editOpleiding" class="btn-floating red tooltipped" data-position="top" data-delay="50" data-tooltip="Enkele opleiding toevoegen"><i class="material-icons">library_add</i></a></li>
-                    <li><a class="btn-floating yellow darken-1 tooltipped openPopup" data-delay="50" data-tooltip=".csv uploaden"><i class="material-icons">file_upload</i></a></li>
-                </ul>
-            </div>
+        <div class="right-align col s6 subject-btn">
+            <a class="btn-floating btn-large waves-effect waves-light tooltipped" href="index.php?page=editOpleiding" data-delay="50" data-tooltip="Opleiding Toevoegen"><i class="material-icons">add</i></a>
         </div>
     </div>
     <div class="row">
@@ -438,34 +405,6 @@ function showSubjectPage(){
             }
             ?>
     </div>
-    <div class="popup centered hidden">
-        <i class="popup-exit small material-icons right">cancel</i>
-        <div class="row">
-            <h4>Opleiding toevoegen</h4>
-        </div>
-        <form action="index.php?page=opleidingen" method="POST">
-            <div class="row">
-                <div class="file-field input-field">
-                    <div class="btn">
-                        <span>File</span>
-                        <input type="file" accept=".csv">
-                    </div>
-                    <div class="file-path-wrapper">
-                        <input class="file-path validate" type="text">
-                    </div>
-                </div>
-            </div>
-
-            <div class="row">
-                <button class="btn waves-effect waves-light popup-submit" type="submit" name="action">Opleiding toevoegen
-                    <i class="material-icons right">send</i>
-                </button>
-            </div>
-
-        </form>
-    </div>
-    </div>
-
     <?php
 }
 
@@ -474,6 +413,8 @@ function showMessagesPage(){
         // todo only show messages that are relevant for the user
     $userDAO = new UserDAO();
     $messages = $userDAO->getAllMessages();
+    $educations = $userDAO->getAllEducations();
+    $educationIds = array();
 ?>
         <div class="row">
             <h2>Meldingen</h2>
@@ -533,9 +474,21 @@ function showMessagesPage(){
             <div class="row">
             <p style="color: #9e9e9e">Zichtbaar voor:</p>
               <form class=""  action="#" id="">
-<?php
-            showEducationsCheckboxes(false);
-?>
+            <p>
+                <input type="checkbox" id="all-checkboxes" checked="checked" />
+                <label for="all-checkboxes">Alles selecteren</label>
+            </p>
+            <?php
+            foreach($educations as $opleiding){
+                array_push($educationIds, $opleiding->id);
+                ?>
+                <p class="opleiding-checkbox">
+                    <input type="checkbox" id="opleiding<?= $opleiding->id?>" checked="checked" />
+                    <label for="opleiding<?=$opleiding->id?>"><?=$opleiding->name?></label>
+                </p>
+                <?php
+            }
+            ?>
               </form>
             </div>
             <div class="row">
@@ -550,18 +503,31 @@ function showMessagesPage(){
 }
 
 function showPrintPage(){
-    $userDAO = new UserDAO();
     // TODO checkbox functionality on this page (javascript)
-
+    $userDAO = new UserDAO();
+    $educations = $userDAO->getAllEducations();
 ?>
     <div class="row">
         <h2>Rapporten afdrukken</h2>
     </div>
     <div class="row">
             <p style="color: #9e9e9e">Selecteer opleidingen</p>
-<?php
-        $educationIds = showEducationsCheckboxes(true);
-?>
+        <form class="col s3" action="#" id="educationsCheckboxesOnShowStudentsPage">
+            <p>
+                <input type="checkbox" id="all-checkboxes" checked="checked" />
+                <label for="all-checkboxes">Alles selecteren</label>
+            </p>
+            <?php
+            foreach($educations as $opleiding){
+                ?>
+                <p class="opleiding-checkbox">
+                    <input type="checkbox" id="opleiding<?= $opleiding->id?>" checked="checked" />
+                    <label for="opleiding<?=$opleiding->id?>"><?=$opleiding->name?></label>
+                </p>
+                <?php
+            }
+            ?>
+        </form>
 
         <form class="col s7" action="#">
             <p>
@@ -569,19 +535,19 @@ function showPrintPage(){
                 <label for="more-checkboxes">Alles selecteren</label>
             </p>
             <table class="striped bordered">
-                <tr><th>Student</th></tr>
+                <tr><th>Studenten</th></tr>
             <?php
-            foreach($educationIds as $educationId) {
-                $students = $userDAO->getAllStudentsInEducation($educationId);
+            foreach($educations as $education) {
+                $students = $userDAO->getAllStudentsInEducation($education->id);
 //TODO show correct students when education is selected
                 foreach ($students as $student) {
                     ?>
-                    <tr data-opleidingId="<?=$educationId?>">
+                    <tr>
                         <td>
                             <p class="opleiding-checkbox " style="display:inline-block">
                                 <input type="checkbox" id="student-checkbox<?= $student->id ?>" checked="checked"/>
                                 <label
-                                    for="student-checkbox<?= $student->id ?>"><?= $student->firstname ?> <?= $student->lastname ?> (<?= $student->email ?>)</label>
+                                    for="student-checkbox<?= $student->id ?>"><?= $student->firstname ?> <?= $student->lastname ?></label>
                             </p>
                             <a class="waves-effect waves-light btn tooltipped right" data-delay="50"
                                data-tooltip="Rapport bekijken"><i class="material-icons right">import_contacts</i>Rapport</a>
