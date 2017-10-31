@@ -25,7 +25,6 @@ if ($_SERVER['REQUEST_METHOD'] == 'GET') {
         $userDAO->insertNewLoginToken($user_id, sha1($token));
         setcookie("GID", $token, time() + 60 * 60 * 24 * 7, '/', NULL, NULL, TRUE);
         setcookie("GID_", '1', time() + 60 * 60 * 24 * 3, '/', NULL, NULL, TRUE);
-        // TODO go to index.php
       } else {
         http_response_code(401);
       }

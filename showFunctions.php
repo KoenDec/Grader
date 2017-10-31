@@ -26,7 +26,7 @@ function showLogin(){
             <!--<div class="row">
                 <div class="g-recaptcha" id="captcha" data-sitekey="6LepDTQUAAAAAJQCkfOXuM_mxjH7wsgXfKYbPNKy"></div>
             </div>-->
-          <button class="btn waves-effect waves-light" type="submit" name="login" id="login">Log in
+          <button class="btn waves-effect waves-light" type="submit" name="action" id="login">Log in
             <i class="material-icons right">send</i>
           </button>
         </form>
@@ -567,8 +567,6 @@ function showPrintPage(){
 <?php
 }
 function showStudentEditPage(){
-    $userDAO = new UserDAO();
-    $opleidingen = $userDAO->getAllEducations();
 ?>
     <div class="row">
         <h2>Student aanpassen</h2>
@@ -593,13 +591,13 @@ function showStudentEditPage(){
             </div>
         </div>
         <div class="row ">
-            <label>Selecteer een opleiding</label>
+            <label>Selecteer een richting</label>
             <select>
                 <option value="0" disabled selected>Geen selectie</option>
 <?php
-                foreach($opleidingen as $opleiding){
+                for($opleidingen = 10; $opleidingen > 0; $opleidingen--){
 ?>
-                    <option value="<?= $opleiding->id?>"> <?= $opleiding->name ?></option>
+                    <option value="<?php echo $opleidingen?>">Opleiding<?php echo $opleidingen?></option>
 <?php
                 }
 ?>
@@ -608,8 +606,7 @@ function showStudentEditPage(){
         <div class="row">
             <ul class="collapsible" data-collapsible="expandable">
 <?php
-//
-for($modules = 3; $modules > 0; $modules--) {
+                for($modules = 3; $modules > 0; $modules--) {
 ?>
                     <li>
                         <div class="collapsible-header collapsible-module active"><i class="collapse-icon material-icons">indeterminate_check_box</i>Module<?php echo $modules ?></div>
