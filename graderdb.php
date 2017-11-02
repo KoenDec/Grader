@@ -89,7 +89,7 @@ class UserDAO {
         if(isset($usersTable[0])) {
             $user = $usersTable[0];
         } else {
-            die('No user with username = ' . $username);
+            die('No user with username = ' . $userid);
         }
 
         return $user;

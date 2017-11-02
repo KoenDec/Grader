@@ -55,7 +55,7 @@ function showNavigation($name){
     <ul id="userDropdown" class="dropdown-content">
         <li><a href="index.php?page=account">Account</a></li>
         <li class="divider"></li>
-        <li id="logout"><a href="index.php?page=afmelden">Afmelden</a></li>
+        <li id="logout"><a href="" data-id=<?php echo $GLOBALS['currentUser']->id?>>Afmelden</a></li>
     </ul>
 
 </header>

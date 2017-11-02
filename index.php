@@ -4,7 +4,6 @@ include_once "showFunctions.php";
 include_once "graderdb.php";
 include_once('Login.php');
 
-//session_start();
 $userDAO = new UserDAO();
 
 $currentUser;

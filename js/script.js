@@ -10,7 +10,23 @@ $(document).ready(function () {
       content: 'application/json',
       data: '{"username": "'+$('#username').val()+'", "password": "'+$('#password').val()+'"}',
       success: function(r) {
+        console.log('Logged in');
+      },
+      error: function(r) {
         console.log(r);
+      }
+    });
+  });
+
+  $('#logout').on('click', function() {
+    var userid = $(this).children('a').data('id');
+    console.log($(this).children('a').data('id'));
+    $.ajax({
+      type: 'DELETE',
+      url: 'api/auth?' + $.param({"userid":userid}),
+      content: 'application/json',
+      success: function(r) {
+        console.log('Logged out',r);
       },
       error: function(r) {
         console.log(r);
