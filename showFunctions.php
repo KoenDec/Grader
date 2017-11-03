@@ -29,6 +29,7 @@ function showLogin(){
           <button class="btn waves-effect waves-light" type="submit" name="action" id="login">Log in
             <i class="material-icons right">send</i>
           </button>
+          <div id="error"></div>
         </form>
     </div>
 <?php

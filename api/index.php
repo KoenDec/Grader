@@ -38,7 +38,7 @@ if ($_SERVER['REQUEST_METHOD'] == 'GET') {
     if (isset($_GET['userid'])) {
       if ($userDAO->getUserById($_GET['userid'])) {
         $userDAO->removeAllTokensFromUser($_GET['userid']);
-        echo '{ "Status": "Success", "userid": "'.$_GET['userid'].'" }';
+        echo '{ "Status": "Success"}';
         http_response_code(200);
       } else {
         echo '{ "Error": "Invalid userid" }';

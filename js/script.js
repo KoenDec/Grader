@@ -3,7 +3,8 @@
  */
 $(document).ready(function () {
 
-  $('#login').on('click', function() {
+  $('#login').on('click', function(e) {
+    e.preventDefault();
     $.ajax({
       type: 'POST',
       url: 'api/auth',
@@ -11,16 +12,17 @@ $(document).ready(function () {
       data: '{"username": "'+$('#username').val()+'", "password": "'+$('#password').val()+'"}',
       success: function(r) {
         console.log('Logged in');
+        window.location.replace('index.php');
       },
-      error: function(r) {
-        console.log(r);
+      error: function(xhr,status,err) {
+        console.log(status);
+        $('#error').append('<p style="color:red;">Incorrect username or password.</p>')
       }
     });
   });
 
   $('#logout').on('click', function() {
     var userid = $(this).children('a').data('id');
-    console.log($(this).children('a').data('id'));
     $.ajax({
       type: 'DELETE',
       url: 'api/auth?' + $.param({"userid":userid}),
