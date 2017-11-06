@@ -18,7 +18,7 @@ class Login {
           $userDAO->insertNewLoginToken($userid, sha1($token));
           $userDAO->removeLoginToken(sha1($_COOKIE['GID']));
 
-          setcookie('GID', $token, time() + 60 * 60 * 24 * 7, '/', NULL, NULL, true);
+          setcookie('GID', $token, time() + 60 * 60 * 24 * 7, '/', NULL, NULL, false);
           setcookie('GID_', '1', time() + 60 * 60 * 24 * 3, '/', NULL, NULL, true);
 
           return $userid;
