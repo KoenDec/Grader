@@ -17,6 +17,7 @@ if (Login::isLoggedIn()) {
 
 function checkGET()
 {
+    $loggedInUserId = Login::isLoggedIn();
     $userDAO = new userDAO();
     if (isset($_GET['page'])) {
         switch ($_GET['page']) {
@@ -39,7 +40,7 @@ function checkGET()
             case "opleidingen":
                 if(isset($_POST["opleiding-name"]))
                 {
-                    $userDAO->createEducation($_POST["opleiding-name"],$userDAO->getUser($GLOBALS['currentUser'])->id);
+                    $userDAO->createEducation($_POST["opleiding-name"], $loggedInUserId);
                 }
                 showSubjectPage();
                 break;
@@ -53,7 +54,24 @@ function checkGET()
                 break;
 
             case "editStudent":
-                showStudentEditPage();
+                ShowStudentAddPage();
+                break;
+
+            case "editStudentModules":
+                $opleidingId = $_POST["student-opleidingId"];
+                $userEmail = $_POST["student-email"];
+
+                if(isset($_POST["student-email"])){
+                    $user = $userDAO->getUser($_POST["student-email"]);
+                    if(isset($user)) { // user bestaat al --> modules laden om aan te passen
+                    }
+                    else { // nieuwe student aanmaken en toon modules uit gekozen opleiding
+                        $userDAO->createUser($_POST["student-firstname"],$_POST["student-name"],$userEmail,"pw",$loggedInUserId); // TODO random wachtwoord genereren en emailen naar user
+                        $newUserId = $userDAO->getUser($userEmail)->id;
+                        $userDAO->makeUserStudent($newUserId);
+                    }
+                }
+                showStudentEditModulesPage();
                 break;
 
             case "editOpleiding":

@@ -564,36 +564,36 @@ function showPrintPage(){
     </div>
 <?php
 }
-function showStudentEditPage(){
+function ShowStudentAddPage(){
     $userDAO = new UserDAO();
     $opleidingen = $userDAO->getAllEducations();
 ?>
     <div class="row">
-        <h2>Student aanpassen</h2>
+        <h2>Student toevoegen</h2>
     </div>
-    <form action="index.php?page=studenten" method="POST">
+    <form action="index.php?page=editStudentModules" method="POST">
         <div class="row">
             <div class="input-field">
-                <input id="student-name" name="student-name" type="text">
+                <input id="student-name" name="student-name" type="text" required>
                 <label for="student-name">Naam</label>
             </div>
         </div>
         <div class="row">
             <div class="input-field">
-                <input id="student-firstname" name="student-firstname" type="text">
+                <input id="student-firstname" name="student-firstname" type="text" required>
                 <label for="student-firstname">Voornaam</label>
             </div>
         </div>
         <div class="row">
             <div class="input-field">
-                <input id="student-email" name="student-email" type="text">
+                <input id="student-email" name="student-email" type="text" required>
                 <label for="student-email">Email</label>
             </div>
         </div>
         <div class="row ">
             <label>Selecteer een opleiding</label>
-            <select>
-                <option value="0" disabled selected>Geen selectie</option>
+            <select name="student-opleidingId" required>
+                <option value="" disabled selected>Geen selectie</option>
 <?php
 foreach($opleidingen as $opleiding){
 ?>
@@ -604,9 +604,23 @@ foreach($opleidingen as $opleiding){
             </select>
         </div>
         <div class="row">
+            <button class="btn waves-effect waves-light message-submit" type="submit" name="action">Ga verder naar modules
+                <i class="material-icons right">send</i>
+            </button>
+        </div>
+        </form>
+
+    <?php
+}
+function showStudentEditModulesPage(){
+
+?>
+        <form action="index.php?page=studenten" method="POST">
+
+        <div class="row">
             <ul class="collapsible" data-collapsible="expandable">
 <?php
-                for($modules = 3; $modules > 0; $modules--) {
+for($modules = 3; $modules > 0; $modules--) {
 ?>
                     <li>
                         <div class="collapsible-header collapsible-module active"><i class="collapse-icon material-icons">indeterminate_check_box</i>Module<?php echo $modules ?></div>

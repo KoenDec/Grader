@@ -66,7 +66,8 @@ class UserDAO {
         if(isset($usersTable[0])) {
             $user = $usersTable[0];
         } else {
-            die('No user with username = ' . $username);
+            //die('No user with username = ' . $username);
+            $user = null;
         }
 
         return $user;
@@ -89,7 +90,8 @@ class UserDAO {
         if(isset($usersTable[0])) {
             $user = $usersTable[0];
         } else {
-            die('No user with username = ' . $userid);
+            //die('No user with username = ' . $userid);
+
         }
 
         return $user;
@@ -382,19 +384,34 @@ class UserDAO {
     }
 
      //////////////////////////////////////////////
-    //              SELECT-QUERIES              //
+    //              INSERT-QUERIES              //
    //////////////////////////////////////////////
 
-    public static function createUser($firstname, $lastname, $email, $password) {
+    public static function createUser($firstname, $lastname, $email, $password, $creatorId) {
         try {
             $conn = graderdb::getConnection();
 
-            $sql = 'INSERT INTO users VALUES(:firstname, :lastname, :email, :password)';
+            $sql = 'INSERT INTO users(firstname,lastname,email,password,creatorId) VALUES(:firstname, :lastname, :email, :password, :creatorId)';
             $stmt = $conn->prepare($sql);
             $stmt->bindParam(':firstname',$firstname);
             $stmt->bindParam(':lastname',$lastname);
             $stmt->bindParam(':email',$email);
             $stmt->bindParam(':password',$password);
+            $stmt->bindParam(':creatorId',$creatorId);
+            $stmt->execute();
+
+        } catch (PDOException $e) {
+            die($e->getMessage());
+        }
+    }
+
+    public static function makeUserStudent($userId){
+        try {
+            $conn = graderdb::getConnection();
+
+            $sql = 'INSERT INTO studenten(studentId) VALUES(:userId)';
+            $stmt = $conn->prepare($sql);
+            $stmt->bindParam(':userId',$userId);
             $stmt->execute();
 
         } catch (PDOException $e) {
