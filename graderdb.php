@@ -249,6 +249,30 @@ class UserDAO {
         return $educations;
     }
 
+    public static function getEducation($educationId){
+        try {
+            $conn = graderdb::getConnection();
+
+            $sql = 'SELECT * FROM opleidingen WHERE id = :educationId';
+            $stmt = $conn->prepare($sql);
+            $stmt->bindParam(':educationId',$educationId);
+
+            $stmt->execute();
+
+            $educationsTable = $stmt->fetchAll(PDO::FETCH_CLASS);
+        } catch (PDOException $e) {
+            die($e->getMessage());
+        }
+
+        if(isset($educationsTable[0])) {
+            $educations = $educationsTable[0];
+        } else {
+            die('No education found with id '.$educationId);
+        }
+
+        return $educations;
+    }
+
     public static function getAllMessages(){
         try {
             $conn = graderdb::getConnection();
@@ -301,7 +325,8 @@ class UserDAO {
         try {
             $conn = graderdb::getConnection();
 
-            $sql = 'SELECT * FROM modules WHERE opleidingId = :opleidingId';
+            if($opleidingId == null) $sql = 'SELECT * FROM modules WHERE opleidingId is null';
+            else $sql = 'SELECT * FROM modules WHERE opleidingId = :opleidingId';
             $stmt = $conn->prepare($sql);
             $stmt->bindParam(':opleidingId',$opleidingId);
 
@@ -315,7 +340,8 @@ class UserDAO {
         if(isset($modulesTable[0])) {
             $modules = $modulesTable;
         } else {
-            die('No modules found!');
+            //die('No modules found!');
+            $modules = null;
         }
 
         return $modules;
@@ -424,7 +450,8 @@ class UserDAO {
         if(isset($criteriaTable[0])) {
             $criteria = $criteriaTable;
         } else {
-            die('No criteria found for doelstelling with id = ' . $doelstellingId);
+            //die('No criteria found for doelstelling with id = ' . $doelstellingId);
+            $criteria = null;
         }
 
         return $criteria;

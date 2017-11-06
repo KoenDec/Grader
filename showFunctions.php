@@ -647,7 +647,7 @@ function showNavigation($name){
                     </select>
                 </div>
                 <div class="row">
-                    <button class="btn waves-effect waves-light message-submit" type="submit" name="action">Ga verder naar modules
+                    <button class="btn waves-effect waves-light message-submit" type="submit" name="action">Sla op en wijs modules toe
                         <i class="material-icons right">send</i>
                     </button>
                 </div>
@@ -657,14 +657,32 @@ function showNavigation($name){
         }
         function showStudentEditModulesPage($opleidingId, $studentId){
             $userDAO = new UserDAO();
+            $user = $userDAO->getUserById($studentId);
             $modules = $userDAO->getModulesInOpleiding($opleidingId);
+            $algemeneModules = $userDAO->getModulesInOpleiding(null);
             //$studentModules = $userDAO->getModulesFromStudent($studentId);
             // TODO compare with studentModules, check modules student is already in
 
             ?>
+            <div class="row">
+                <h2>Modules van <?=$user->firstname?> <?=$user->lastname?></h2>
+            </div>
             <p>Selecteer de doelstellingen waarvoor de student zich inschrijft:</p>
             <form action="index.php?page=studenten" method="POST">
-
+                <?php
+                for($i = 0; $i <= 1; $i++){
+                    if($i==0){
+                        ?>
+                        <h4>Modules in de opleiding <?= $userDAO->getEducation($opleidingId)->name ?></h4>
+                        <?php
+                    }
+                    if($i==1) {
+                        $modules = $algemeneModules;
+                        ?>
+                        <h4>Algemene modules</h4>
+                        <?php
+                    }
+                ?>
                 <div class="row">
                     <ul class="collapsible" data-collapsible="expandable">
                         <?php
@@ -705,6 +723,9 @@ function showNavigation($name){
                         ?>
                     </ul>
                 </div>
+                <?php
+                }
+                ?>
                 <div class="row">
                     <button class="btn waves-effect waves-light message-submit" type="submit" name="action">Student opslaan
                         <i class="material-icons right">send</i>
