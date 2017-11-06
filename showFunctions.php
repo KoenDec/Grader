@@ -85,7 +85,7 @@ function showNavigation($name){
     <nav>
         <div class="nav-wrapper nav-color">
             <ul class="right hide-on-med-and-down">
-                <li><a class="dropdown-button" href="#!" data-activates="userDropdown"><?php echo $name ?><i class="material-icons right">arrow_drop_down</i></a></li>
+                <li><a class="dropdown-button" href="#!" data-activates="userDropdown"><?= $name ?><i class="material-icons right">arrow_drop_down</i></a></li>
                 <li><a href="#!" style="margin-right: 20px">Admin</a></li>
             </ul>
             <div class="left hide-on-med-and-down">
@@ -98,7 +98,7 @@ function showNavigation($name){
     <ul id="userDropdown" class="dropdown-content">
         <li><a href="index.php?page=account">Account</a></li>
         <li class="divider"></li>
-        <li id="logout"><a href="" data-id=<?php echo $GLOBALS['currentUser']->id?>>Afmelden</a></li>
+        <li id="logout"><a href="" data-id=<?= $GLOBALS['currentUser']->id?>>Afmelden</a></li>
     </ul>
 
 </header>
@@ -138,10 +138,10 @@ function showNavigation($name){
     ?>
     <h2>Mijn account</h2>
     <table class="striped">
-        <tr><td>Voornaam: <span><?php echo $user->firstname ?></span></td></tr>
-        <tr><td>Familienaam: <span><?php echo $user->lastname ?></span></td></tr>
-        <tr><td>Email: <span><?php echo $user->email ?></span></td></tr>
-        <tr><td>Lid sinds: <span><?php echo $user->accountCreatedTimestamp ?></span></td></tr>
+        <tr><td>Voornaam: <span><?= $user->firstname ?></span></td></tr>
+        <tr><td>Familienaam: <span><?= $user->lastname ?></span></td></tr>
+        <tr><td>Email: <span><?= $user->email ?></span></td></tr>
+        <tr><td>Lid sinds: <span><?= $user->accountCreatedTimestamp ?></span></td></tr>
     </table>
     <a class="waves-effect waves-light btn tooltipped openPopup" data-delay="50" data-tooltip="Account wijzigen"><i class="material-icons">edit</i></a>
 
@@ -153,19 +153,19 @@ function showNavigation($name){
         <form action="index.php?page=account" method="POST">
             <div class="row">
                 <div class="input-field">
-                    <input id="account-FirstName" name="account-FirstName" type="text">
+                    <input id="account-FirstName" name="account-FirstName" type="text" value="<?= $user->firstname ?>">
                     <label for="account-FirstName">Voornaam</label>
                 </div>
             </div>
             <div class="row">
                 <div class="input-field">
-                    <input id="account-LastName" name="account-LastName" type="text">
+                    <input id="account-LastName" name="account-LastName" type="text" value="<?= $user->lastname ?>">
                     <label for="account-LastName">Naam</label>
                 </div>
             </div>
             <div class="row">
                 <div class="input-field">
-                    <input id="student-email" name="student-email" type="text">
+                    <input id="student-email" name="student-email" type="text" value="<?= $user->email ?>">
                     <label for="student-email">Email</label>
                 </div>
             </div>

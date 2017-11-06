@@ -530,8 +530,29 @@ class UserDAO {
     }
 
     //////////////////////////////////////////////
-   //              DELETE-QUERIES              //
-  //////////////////////////////////////////////
+    //              UPDATE-QUERIES              //
+    //////////////////////////////////////////////
+
+    public static function updateUser($firstName, $lastName, $email, $userId) {
+        try {
+            $conn = graderdb::getConnection();
+
+            $sql = 'UPDATE users SET firstname=:firstName, lastname=:lastName, email=:email WHERE id = :userId';
+            $stmt = $conn->prepare($sql);
+            $stmt->bindParam(':firstName', $firstName);
+            $stmt->bindParam(':lastName', $lastName);
+            $stmt->bindParam(':email', $email);
+            $stmt->bindParam(':userId', $userId);
+            $stmt->execute();
+
+        } catch (PDOException $e) {
+            die($e->getMessage());
+        }
+    }
+
+    //////////////////////////////////////////////
+    //              DELETE-QUERIES              //
+    //////////////////////////////////////////////
 
   public static function removeLoginToken($token) {
     try {

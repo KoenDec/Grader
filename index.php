@@ -22,6 +22,10 @@ function checkGET()
     if (isset($_GET['page'])) {
         switch ($_GET['page']) {
             case "account":
+                if(isset($_POST["account-FirstName"])){
+                    var_dump($_POST);
+                    $userDAO->updateUser($_POST["account-FirstName"], $_POST["account-LastName"], $_POST["student-email"], $loggedInUserId);
+                }
                 showAccount($GLOBALS['currentUser']->email);
                 break;
 
