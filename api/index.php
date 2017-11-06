@@ -1,8 +1,12 @@
 <?php
 require_once('../graderdb.php');
 require_once('api.php');
+require_once('../Login.php');
 
 $userDAO = new UserDAO();
+$notFoundErr = json_encode('{"Status":"Geen user gevonden"}');
+$notLoggedInErr = json_encode('{"Status":"Niet ingelogd"}');
+$notAuthorized = json_encode('{"Status":"Onbevoegd"}');
 
 if ($_SERVER['REQUEST_METHOD'] == 'GET') {
   if ($_GET['url'] == 'auth') {
@@ -11,19 +15,46 @@ if ($_SERVER['REQUEST_METHOD'] == 'GET') {
     if ($userDAO->getToken(sha1($_COOKIE['GID']))) {
       $userid = $userDAO->getLoggedInUserId(sha1($_COOKIE['GID']));
       if (!ApiController::isStudent($userid)) {
-        $students = UserDAO::getAllStudents();
+        $students = $userDAO->getAllStudents();
         echo json_encode($students);
         http_response_code(200);
       } else {
-        echo json_encode('{"Status":"Onbevoegd"}');
+        echo $notAuthorized;
         http_response_code(401);
       }
     } else {
-      echo json_encode('{"Status":"Niet ingelogd"}');
+      echo $notLoggedInErr;
       http_response_code(401);
     }
-  } else if ($_GET['url'] == 'users') {
-
+  } else if ($_GET['url'] == 'studentInEducation') {
+    if ($userDAO->getToken(sha1($_COOKIE['GID']))) {
+      $userid = $userDAO->getLoggedInUserId(sha1($_COOKIE['GID']));
+      if (!ApiController::isStudent($userid)) {
+        $studentsInEdu = $userDAO->getAllStudentsInEducation($_GET['edu']);
+        echo json_encode($studentsInEdu);
+        http_response_code(200);
+      } else {
+        echo $notAuthorized;
+        http_response_code(401);
+      }
+    } else {
+      echo $notLoggedInErr;
+      http_response_code(401);
+    }
+  } else if ($_GET['url'] == 'currentUser') {
+    if (Login::isLoggedIn()) {
+      if (isset($_GET['id'])) {
+        $userid = $_GET['id'];
+        $currentUser = $userDAO->getUserById($userid);
+        echo json_encode($currentUser);
+      } else {
+        echo $notFoundErr;
+        http_response_code(405);
+      }
+    } else {
+      echo $notLoggedInErr;
+      http_response_code(401);
+    }
   }
 } else if ($_SERVER['REQUEST_METHOD'] == 'POST') {
   if ($_GET['url'] == 'auth') {
@@ -54,14 +85,14 @@ if ($_SERVER['REQUEST_METHOD'] == 'GET') {
     if (isset($_GET['token'])) {
       if ($userDAO->getToken(sha1($_GET['token']))) {
         $userDAO->removeLoginToken(sha1($_GET['token']));
-        echo '{ "Status": "Success" }';
+        echo '{ "Status": "Logged out" }';
         http_response_code(200);
       } else {
-        echo '{ "Error": "Invalid token" }';
+        echo '{ "Status": "Invalid token" }';
         http_response_code(400);
       }
     } else {
-      echo '{ "Error": "Malformed request" }';
+      echo '{ "Status": "Malformed request" }';
       http_response_code(400);
     }
   }
