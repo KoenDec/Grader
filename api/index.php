@@ -5,8 +5,8 @@ $userDAO = new UserDAO();
 
 if ($_SERVER['REQUEST_METHOD'] == 'GET') {
   if ($_GET['url'] == 'auth') {
-
-  } else if ($_GET['url'] == 'users') {
+    echo {'geegeges':'nice'}
+  } else if ($_GET['urll'] == 'users') {
 
   }
 } else if ($_SERVER['REQUEST_METHOD'] == 'POST') {
