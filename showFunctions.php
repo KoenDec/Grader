@@ -417,8 +417,15 @@ function showSubjectPage(){
             <label for="subject-search">Zoek Opleiding</label>
             <a class="waves-effect waves-light btn"><i class="material-icons">search</i></a>
         </div>
-        <div class="right-align col s6 subject-btn">
-            <a class="btn-floating btn-large waves-effect waves-light tooltipped" href="index.php?page=editOpleiding" data-delay="50" data-tooltip="Opleiding Toevoegen"><i class="material-icons">add</i></a>
+        <div class="addSubject" style="position: relative; height: 90px;">
+            <div class="fixed-action-btn horizontal" style="position: absolute; display: inline-block; right: 24px;">
+                <a class="btn-floating waves-effect waves-light btn-large tooltipped" data-position="top" data-delay="50" data-tooltip="Opleiding Toevoegen">
+                    <i class="large material-icons">add</i>
+                </a>
+                <ul>
+                    <li><a href="index.php?page=editOpleiding" class="btn-floating red tooltipped" data-position="top" data-delay="50" data-tooltip="Enkele opleiding toevoegen"><i class="material-icons">library_add</i></a></li>
+                    <li><a class="btn-floating yellow darken-1 tooltipped openPopup" data-delay="50" data-tooltip=".csv uploaden"><i class="material-icons">file_upload</i></a></li>
+                </ul>
         </div>
     </div>
     <div class="row">
@@ -441,6 +448,32 @@ function showSubjectPage(){
             }
             ?>
     </div>
+        <div class="popup centered hidden">
+            <i class="popup-exit small material-icons right">cancel</i>
+            <div class="row">
+                <h4>Opleiding toevoegen</h4>
+            </div>
+            <form action="index.php?page=opleidingen" method="POST">
+                <div class="row">
+                    <div class="file-field input-field">
+                        <div class="btn">
+                            <span>File</span>
+                            <input type="file" accept=".csv">
+                        </div>
+                        <div class="file-path-wrapper">
+                            <input class="file-path validate" type="text">
+                        </div>
+                    </div>
+                </div>
+
+                <div class="row">
+                    <button class="btn waves-effect waves-light popup-submit" type="submit" name="action">Opleiding toevoegen
+                        <i class="material-icons right">send</i>
+                    </button>
+                </div>
+
+            </form>
+        </div>
     <?php
 }
 
