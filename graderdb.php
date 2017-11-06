@@ -226,8 +226,6 @@ class UserDAO {
         return $students;
     }
 
-
-
     public static function getAllEducations(){
         try {
             $conn = graderdb::getConnection();
@@ -299,6 +297,30 @@ class UserDAO {
         return $teacher;
     }
 
+    public static function getModulesInOpleiding($opleidingId){
+        try {
+            $conn = graderdb::getConnection();
+
+            $sql = 'SELECT * FROM modules WHERE opleidingId = :opleidingId';
+            $stmt = $conn->prepare($sql);
+            $stmt->bindParam(':opleidingId',$opleidingId);
+
+            $stmt->execute();
+
+            $modulesTable = $stmt->fetchAll(PDO::FETCH_CLASS);
+        } catch (PDOException $e) {
+            die($e->getMessage());
+        }
+
+        if(isset($modulesTable[0])) {
+            $modules = $modulesTable;
+        } else {
+            die('No modules found!');
+        }
+
+        return $modules;
+    }
+
     public static function getModulesFromStudent($studentId){
         try{
             $conn = graderdb::getConnection();
@@ -327,6 +349,31 @@ class UserDAO {
             die('No modules found for student with id = ' . $studentId);
         }
         return $modules;
+    }
+
+    public static function getDoelstellingenInModule($moduleId){
+        try {
+            $conn = graderdb::getConnection();
+
+            $sql = 'SELECT * FROM doelstellingen WHERE moduleId = :moduleId';
+            $stmt = $conn->prepare($sql);
+            $stmt->bindParam(':moduleId',$moduleId);
+
+            $stmt->execute();
+
+            $doelstellingenTable = $stmt->fetchAll(PDO::FETCH_CLASS);
+        } catch (PDOException $e) {
+            die($e->getMessage());
+        }
+
+        if(isset($doelstellingenTable[0])) {
+            $doelstellingen = $doelstellingenTable;
+        } else {
+            //die('No doelstellingen found!');
+            $doelstellingen = null;
+        }
+
+        return $doelstellingen;
     }
 
     public static function getFollowedDoelstellingenInModule($moduleId, $studentId){

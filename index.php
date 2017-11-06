@@ -60,18 +60,21 @@ function checkGET()
             case "editStudentModules":
                 $opleidingId = $_POST["student-opleidingId"];
                 $userEmail = $_POST["student-email"];
+                $userId = "";
 
                 if(isset($_POST["student-email"])){
                     $user = $userDAO->getUser($_POST["student-email"]);
                     if(isset($user)) { // user bestaat al --> modules laden om aan te passen
+                        $userId = $user->id;
+                        // TODO update other fields
                     }
                     else { // nieuwe student aanmaken en toon modules uit gekozen opleiding
                         $userDAO->createUser($_POST["student-firstname"],$_POST["student-name"],$userEmail,"pw",$loggedInUserId); // TODO random wachtwoord genereren en emailen naar user
-                        $newUserId = $userDAO->getUser($userEmail)->id;
-                        $userDAO->makeUserStudent($newUserId);
+                        $userId = $userDAO->getUser($userEmail)->id;
+                        $userDAO->makeUserStudent($userId);
                     }
                 }
-                showStudentEditModulesPage();
+                showStudentEditModulesPage($opleidingId, $userId);
                 break;
 
             case "editOpleiding":
