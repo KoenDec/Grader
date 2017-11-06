@@ -233,7 +233,7 @@ function showReportsPage(){
 ?>
 
     <li>
-    <div class='valign-wrapper collapsible-header collapsible-module active'><i class='collapse-icon material-icons'>indeterminate_check_box</i>
+    <div class='valign-wrapper collapsible-header collapsible-module'><i class='collapse-icon material-icons'>add_box</i>
     <h4><?= $module->name ?></h4>
     </div>
     <div class='collapsible-body'>
