@@ -145,6 +145,8 @@ function showReportsPage(){
     $studentId = 6; // faisal
     $modules = $userDAO->getModulesFromStudent($studentId);
 
+    $dateNow = date('d/m/Y');
+
   if(!empty($_POST['student'])) {
     $selectedStudent = $_POST['student'];
   } else {
@@ -179,7 +181,7 @@ function showReportsPage(){
         </div>
 
         <div class="right-align">
-            <a class="waves-effect waves-light btn tooltipped" data-delay="50" data-tooltip="Aanpassen inschakelen"><i class="material-icons">edit</i></a>
+            <a class="waves-effect waves-light btn tooltipped edit-opslaan-rapport" data-editing="false" data-delay="50" data-tooltip="Aanpassen inschakelen"><i class="material-icons">edit</i></a>
         </div>
     </div>
     <ul class="popout collapsible courseCreator" data-collapsible="expandable">
@@ -195,10 +197,10 @@ function showReportsPage(){
     <div class='collapsible-body'>
         <table class="striped bordered">
             <tr>
-                <th>Doelstellingen</th>
+                <th class="doelstellingwidth">Doelstellingen</th>
                 <th>Resultaat</th>
                 <th>Datum (dd/mm/yyyy)</th>
-                <th>Opmerkingen</th>
+                <th class="opmerkingenwidth">Opmerkingen</th>
             </tr>
             <tr>
 
@@ -212,19 +214,36 @@ function showReportsPage(){
     $criteria = $userDAO->getCriteriaForDoelstelling($doelstelling->id);
             foreach($criteria as $criterium){
 ?>
-                <td style="padding-left: 30px" class="valign-wrapper"><i class="material-icons">navigate_next</i><?= $criterium->weergaveTitel ?></td>
+                <td style="padding-left: 30px" class="doelstellingwidth valign-wrapper"><i class="material-icons">navigate_next</i><?= $criterium->weergaveTitel ?></td>
                 <td contenteditable="false">
                   <div class="input-field">
                     <select disabled>
                       <option value="" disabled selected>Niets geselecteerd</option>
-                      <option value="1">Option 1</option>
-                      <option value="2">Option 2</option>
-                      <option value="3">Option 3</option>
+                      <option value="1">R</option>
+                      <option value="2">O</option>
+                      <option value="3">V</option>
+                      <option value="4">G</option>
                     </select>
                   </div>
+                <p>
+<?php
+                for($eerderResultaat = 0; $eerderResultaat < 5; $eerderResultaat++) {
+                    if($eerderResultaat > 0){
+                        echo ", ";
+                    }
+?>
+                    <span class="eerder-resultaat tooltipped" data-delay="50" data-tooltip="20/10/17">O</span>
+<?php
+                }
+?>
+                </p>
                 </td>
-                <td contenteditable="false">00/00/0000</td>
-                <td contenteditable="false">Opmerking</td>
+                <td class="pickDate"><?= $dateNow ?></td>
+                <td class="opmerkingenwidth" >
+                    <div class="input-field">
+                        <input disabled  id="opmerkingen" type="text">
+                        <label for="opmerkingen">Opmerkingen</label>
+                    </div></td>
                 </tr><tr>
 <?php
             }

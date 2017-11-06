@@ -98,7 +98,12 @@ h4, .button-collapse{
 
 .eerder-resultaat:hover{
     font-weight: bold;
-    color: #4db6ac
+    color: #4db6ac;
+    cursor: pointer;
+}
+
+.pickDate{
+    text-align: center;
 }
 
 .row .reports-btns, .row .student-btn, .row .subject-btn{

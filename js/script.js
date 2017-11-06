@@ -163,11 +163,13 @@ var handleReportEdit = function(){
     if($(this).data('editing') === false){
         $(this).find('i').text('save');
         $('select').prop('disabled', false).material_select();
+        $('input').prop('disabled', false);
         $(this).data('editing', true);
     }
     else{
         $(this).find('i').text('edit');
         $('select').prop('disabled', true).material_select();
+        $('input').prop('disabled', true);
         $(this).data('editing', false);
     }
 };
