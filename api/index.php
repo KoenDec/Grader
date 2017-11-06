@@ -1,20 +1,29 @@
 <?php
 require_once('../graderdb.php');
+require_once('api.php');
 
 $userDAO = new UserDAO();
 
 if ($_SERVER['REQUEST_METHOD'] == 'GET') {
   if ($_GET['url'] == 'auth') {
+
   } else if ($_GET['url'] == 'students') {
     if ($userDAO->getToken(sha1($_COOKIE['GID']))) {
-      $students = $userDAO->getAllStudents();
-      echo json_encode($students);
-      http_response_code(200);
+      $userid = $userDAO->getLoggedInUserId(sha1($_COOKIE['GID']));
+      if (!ApiController::isStudent($userid)) {
+        $students = UserDAO::getAllStudents();
+        echo json_encode($students);
+        http_response_code(200);
+      } else {
+        echo json_encode('{"Status":"Onbevoegd"}');
+        http_response_code(401);
+      }
     } else {
-      echo json_encode('{"Status":"Unauthorized"}');
+      echo json_encode('{"Status":"Niet ingelogd"}');
       http_response_code(401);
     }
-  } else if ($_GET['urll'] == 'users') {
+  } else if ($_GET['url'] == 'users') {
+
   }
 } else if ($_SERVER['REQUEST_METHOD'] == 'POST') {
   if ($_GET['url'] == 'auth') {
