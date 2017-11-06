@@ -5,6 +5,7 @@ $userDAO = new UserDAO();
 
 if ($_SERVER['REQUEST_METHOD'] == 'GET') {
   if ($_GET['url'] == 'auth') {
+<<<<<<< HEAD
 
   } else if ($_GET['url'] == 'students') {
     if ($userDAO->getToken(sha1($_COOKIE['GID']))) {
@@ -15,6 +16,11 @@ if ($_SERVER['REQUEST_METHOD'] == 'GET') {
       echo json_encode('{"Status":"Unauthorized"}');
       http_response_code(401);
     }
+=======
+    echo {'geegeges':'nice'}
+  } else if ($_GET['urll'] == 'users') {
+
+>>>>>>> e9b7d576f433b05144bf5d675a49d238f78ac9b5
   }
 } else if ($_SERVER['REQUEST_METHOD'] == 'POST') {
   if ($_GET['url'] == 'auth') {
