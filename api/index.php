@@ -6,8 +6,15 @@ $userDAO = new UserDAO();
 if ($_SERVER['REQUEST_METHOD'] == 'GET') {
   if ($_GET['url'] == 'auth') {
 
-  } else if ($_GET['url'] == 'users') {
-
+  } else if ($_GET['url'] == 'students') {
+    if ($userDAO->getToken(sha1($_COOKIE['GID']))) {
+      $students = $userDAO->getAllStudents();
+      echo json_encode($students);
+      http_response_code(200);
+    } else {
+      echo json_encode('{"Status":"Unauthorized"}');
+      http_response_code(401);
+    }
   }
 } else if ($_SERVER['REQUEST_METHOD'] == 'POST') {
   if ($_GET['url'] == 'auth') {
