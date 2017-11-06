@@ -187,6 +187,8 @@ function showReportsPage(){
     $studentId = 6; // faisal
     $modules = $userDAO->getModulesFromStudent($studentId);
 
+    $dateNow = date('d/m/Y');
+
   if(!empty($_POST['student'])) {
     $selectedStudent = $_POST['student'];
   } else {
@@ -210,20 +212,12 @@ function showReportsPage(){
         </div>
     </div>
     <div class="row selectedStudent">
-        <p>Studiemodules van: <span style="font-weight: bold">Faisal Nizami</span></p>
-    </div>
-    <div class="row">
-        <div class="modules-progress col s11">
-            <span><span>1</span>/4 modules geslaagd</span>
-            <div class="progress">
-                <div class="determinate" style="width: 25%"></div>
-            </div>
-        </div>
-
+        <p class="col s6">Studiemodules van: <span style="font-weight: bold">Faisal Nizami</span></p>
         <div class="right-align">
-            <a class="waves-effect waves-light btn tooltipped" data-delay="50" data-tooltip="Aanpassen inschakelen"><i class="material-icons">edit</i></a>
+            <a class="waves-effect waves-light btn tooltipped edit-opslaan-rapport" data-editing="false" data-delay="50" data-tooltip="Aanpassen inschakelen"><i class="material-icons">edit</i></a>
         </div>
     </div>
+
     <ul class="popout collapsible courseCreator" data-collapsible="expandable">
 <?php
     // todo get students results and comments from database
@@ -231,16 +225,17 @@ function showReportsPage(){
 ?>
 
     <li>
-    <div class='valign-wrapper collapsible-header collapsible-module active'><i class='collapse-icon material-icons'>indeterminate_check_box</i>
+    <div class='valign-wrapper collapsible-header collapsible-module'><i class='collapse-icon material-icons'>add_box</i>
     <h4><?= $module->name ?></h4>
     </div>
     <div class='collapsible-body'>
         <table class="striped bordered">
             <tr>
-                <th>Doelstellingen</th>
+                <th class="doelstellingwidth">Doelstellingen</th>
                 <th>Resultaat</th>
-                <th>Datum (dd/mm/yyyy)</th>
-                <th>Opmerkingen</th>
+                <th>Gemiddelde</th>
+                <th>Datum</th>
+                <th class="opmerkingenwidth">Opmerkingen</th>
             </tr>
             <tr>
 
@@ -248,25 +243,43 @@ function showReportsPage(){
     $doelstellingen = $userDAO->getFollowedDoelstellingenInModule($module->id, $studentId);
         foreach($doelstellingen as $doelstelling){
 ?>
-            <th style="border-top: 2px solid gray; border-bottom: 2px solid gray" colspan="4"><strong><?= $doelstelling->name ?></strong></th>
+            <th style="border-top: 2px solid gray; border-bottom: 2px solid gray" colspan="5"><strong><?= $doelstelling->name ?></strong></th>
             </tr><tr>
 <?php
     $criteria = $userDAO->getCriteriaForDoelstelling($doelstelling->id);
             foreach($criteria as $criterium){
 ?>
-                <td style="padding-left: 30px" class="valign-wrapper"><i class="material-icons">navigate_next</i><?= $criterium->weergaveTitel ?></td>
+                <td style="padding-left: 30px" class="doelstellingwidth valign-wrapper"><i class="material-icons">navigate_next</i><?= $criterium->weergaveTitel ?></td>
                 <td contenteditable="false">
                   <div class="input-field">
-                    <select disabled>
+                    <select class="hidden" disabled>
                       <option value="" disabled selected>Niets geselecteerd</option>
-                      <option value="1">Option 1</option>
-                      <option value="2">Option 2</option>
-                      <option value="3">Option 3</option>
+                      <option value="1">R</option>
+                      <option value="2">O</option>
+                      <option value="3">V</option>
+                      <option value="4">G</option>
                     </select>
                   </div>
+                <p>
+<?php
+                for($eerderResultaat = 0; $eerderResultaat < 5; $eerderResultaat++) {
+                    if($eerderResultaat > 0){
+                        echo ", ";
+                    }
+?>
+                    <span class="eerder-resultaat tooltipped" data-delay="50" data-tooltip="20/10/17">O</span>
+<?php
+                }
+?>
+                </p>
                 </td>
-                <td contenteditable="false">00/00/0000</td>
-                <td contenteditable="false">Opmerking</td>
+                <td class="avg">O</td>  <!--todo Actualy calculate avg score-->
+                <td class="pickDate"><?= $dateNow ?></td>
+                <td class="opmerkingenwidth" >
+                    <div class="input-field">
+                        <input disabled  id="opmerkingen" type="text">
+                        <label for="opmerkingen">Opmerkingen</label>
+                    </div></td>
                 </tr><tr>
 <?php
             }
@@ -276,34 +289,31 @@ function showReportsPage(){
             </tr>
         </table>
 
-        <p>Commentaar bij deze module: </p>
-        <p>Etiam quis accumsan leo, id gravida urna. Duis ac velit quis risus egestas ornare non eu tortor. Pellentesque habitant
-            morbi tristique senectus et netus et malesuada fames ac turpis egestas. Nullam molestie tincidunt diam, id suscipit
-            nisi cursus sit amet. Aliquam in nisi eget erat laoreet feugiat. Pellentesque non tellus augue. Fusce ante neque,
-            consectetur at tincidunt ac, iaculis quis ante. Suspendisse potenti. Nam tempus nisi eu erat facilisis tempus. Vestibulum
-            ultricies, diam vitae laoreet congue, ipsum elit tempor diam, nec gravida lacus mi nec ligula. Duis posuere lacinia magna a
-            venenatis. Ut feugiat a velit a malesuada. Ut odio sem, lacinia ac metus nec, sollicitudin efficitur erat.
-        </p>
+        <div class="row">
+            <div class="input-field col s12">
+                <textarea disabled id="moduleComment" class="materialize-textarea"></textarea>
+                <label for="moduleComment">Commentaar bij deze module: </label>
+            </div>
+        </div>
     </div>
     </li>
 <?php
     }
 ?>
     </ul>
-    <p>Algemeen commentaar:</p>
-    <p>Cras non urna tellus. Nunc eu aliquam sem, eget ultrices ligula. Pellentesque convallis odio nec neque egestas volutpat. Aliquam
-        venenatis augue quis est blandit pretium. Aliquam fringilla tortor at turpis venenatis hendrerit. Vestibulum auctor, est nec
-        elementum tempus, sem purus malesuada arcu, at molestie massa justo sed risus. Cras laoreet accumsan erat ac elementum. Fusce
-        tristique egestas orci, a vehicula lorem tristique blandit. Aenean et congue purus.</p>
-    <br />
-    <p>Commentaar klassenraad:</p>
-    <p>Suspendisse sem neque, consequat nec ultricies at, maximus sit amet ante. Nunc rhoncus gravida molestie. Vestibulum ante
-        ipsum primis in faucibus orci luctus et ultrices posuere cubilia Curae; Phasellus nibh eros, ornare eu mattis in, gravida
-        ac massa. Praesent placerat lacinia pulvinar. Aenean interdum metus ac neque aliquet, gravida pellentesque mauris congue.
-        Quisque commodo a libero non venenatis. Vestibulum ante ipsum primis in faucibus orci luctus et ultrices posuere cubilia Curae;
-        Mauris sit amet ante vitae nisl vulputate tempor. Donec feugiat orci lectus, bibendum condimentum neque ultrices et. Praesent
-        ac leo sit amet libero tempor dignissim. Aliquam vehicula augue vel ante ullamcorper ornare. Sed est turpis, luctus et neque et,
-        pellentesque finibus tellus. Class aptent taciti sociosqu ad litora torquent per conubia nostra, per inceptos himenaeos.</p>
+    <div class="row">
+        <div class="input-field col s12">
+            <textarea disabled id="generalComment" class="materialize-textarea"></textarea>
+            <label for="generalComment">Algemeen commentaar:</label>
+        </div>
+    </div>
+    <div class="row">
+        <div class="input-field col s12">
+            <textarea disabled id="klasraadComment" class="materialize-textarea"></textarea>
+            <label for="klasraadComment">Commentaar klassenraad:</label>
+        </div>
+    </div>
+
 <?php
 }
 
@@ -407,8 +417,15 @@ function showSubjectPage(){
             <label for="subject-search">Zoek Opleiding</label>
             <a class="waves-effect waves-light btn"><i class="material-icons">search</i></a>
         </div>
-        <div class="right-align col s6 subject-btn">
-            <a class="btn-floating btn-large waves-effect waves-light tooltipped" href="index.php?page=editOpleiding" data-delay="50" data-tooltip="Opleiding Toevoegen"><i class="material-icons">add</i></a>
+        <div class="addSubject" style="position: relative; height: 90px;">
+            <div class="fixed-action-btn horizontal" style="position: absolute; display: inline-block; right: 24px;">
+                <a class="btn-floating waves-effect waves-light btn-large tooltipped" data-position="top" data-delay="50" data-tooltip="Opleiding Toevoegen">
+                    <i class="large material-icons">add</i>
+                </a>
+                <ul>
+                    <li><a href="index.php?page=editOpleiding" class="btn-floating red tooltipped" data-position="top" data-delay="50" data-tooltip="Enkele opleiding toevoegen"><i class="material-icons">library_add</i></a></li>
+                    <li><a class="btn-floating yellow darken-1 tooltipped openPopup" data-delay="50" data-tooltip=".csv uploaden"><i class="material-icons">file_upload</i></a></li>
+                </ul>
         </div>
     </div>
     <div class="row">
@@ -431,6 +448,32 @@ function showSubjectPage(){
             }
             ?>
     </div>
+        <div class="popup centered hidden">
+            <i class="popup-exit small material-icons right">cancel</i>
+            <div class="row">
+                <h4>Opleiding toevoegen</h4>
+            </div>
+            <form action="index.php?page=opleidingen" method="POST">
+                <div class="row">
+                    <div class="file-field input-field">
+                        <div class="btn">
+                            <span>File</span>
+                            <input type="file" accept=".csv">
+                        </div>
+                        <div class="file-path-wrapper">
+                            <input class="file-path validate" type="text">
+                        </div>
+                    </div>
+                </div>
+
+                <div class="row">
+                    <button class="btn waves-effect waves-light popup-submit" type="submit" name="action">Opleiding toevoegen
+                        <i class="material-icons right">send</i>
+                    </button>
+                </div>
+
+            </form>
+        </div>
     <?php
 }
 
