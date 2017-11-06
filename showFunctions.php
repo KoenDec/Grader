@@ -212,20 +212,12 @@ function showReportsPage(){
         </div>
     </div>
     <div class="row selectedStudent">
-        <p>Studiemodules van: <span style="font-weight: bold">Faisal Nizami</span></p>
-    </div>
-    <div class="row">
-        <div class="modules-progress col s11">
-            <span><span>1</span>/4 modules geslaagd</span>
-            <div class="progress">
-                <div class="determinate" style="width: 25%"></div>
-            </div>
-        </div>
-
+        <p class="col s6">Studiemodules van: <span style="font-weight: bold">Faisal Nizami</span></p>
         <div class="right-align">
             <a class="waves-effect waves-light btn tooltipped edit-opslaan-rapport" data-editing="false" data-delay="50" data-tooltip="Aanpassen inschakelen"><i class="material-icons">edit</i></a>
         </div>
     </div>
+
     <ul class="popout collapsible courseCreator" data-collapsible="expandable">
 <?php
     // todo get students results and comments from database
@@ -241,7 +233,8 @@ function showReportsPage(){
             <tr>
                 <th class="doelstellingwidth">Doelstellingen</th>
                 <th>Resultaat</th>
-                <th>Datum (dd/mm/yyyy)</th>
+                <th>Gemiddelde</th>
+                <th>Datum</th>
                 <th class="opmerkingenwidth">Opmerkingen</th>
             </tr>
             <tr>
@@ -250,7 +243,7 @@ function showReportsPage(){
     $doelstellingen = $userDAO->getFollowedDoelstellingenInModule($module->id, $studentId);
         foreach($doelstellingen as $doelstelling){
 ?>
-            <th style="border-top: 2px solid gray; border-bottom: 2px solid gray" colspan="4"><strong><?= $doelstelling->name ?></strong></th>
+            <th style="border-top: 2px solid gray; border-bottom: 2px solid gray" colspan="5"><strong><?= $doelstelling->name ?></strong></th>
             </tr><tr>
 <?php
     $criteria = $userDAO->getCriteriaForDoelstelling($doelstelling->id);
@@ -259,7 +252,7 @@ function showReportsPage(){
                 <td style="padding-left: 30px" class="doelstellingwidth valign-wrapper"><i class="material-icons">navigate_next</i><?= $criterium->weergaveTitel ?></td>
                 <td contenteditable="false">
                   <div class="input-field">
-                    <select disabled>
+                    <select class="hidden" disabled>
                       <option value="" disabled selected>Niets geselecteerd</option>
                       <option value="1">R</option>
                       <option value="2">O</option>
@@ -280,6 +273,7 @@ function showReportsPage(){
 ?>
                 </p>
                 </td>
+                <td class="avg">O</td>  <!--todo Actualy calculate avg score-->
                 <td class="pickDate"><?= $dateNow ?></td>
                 <td class="opmerkingenwidth" >
                     <div class="input-field">
