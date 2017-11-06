@@ -22,10 +22,10 @@ $(document).ready(function () {
   });
 
   $('#logout').on('click', function() {
-    var userid = $(this).children('a').data('id');
+    var token = document.cookie.replace(/(?:(?:^|.*;\s*)GID\s*\=\s*([^;]*).*$)|^.*$/, "$1");
     $.ajax({
       type: 'DELETE',
-      url: 'api/auth?' + $.param({"userid":userid}),
+      url: 'api/auth?' + $.param({"token":token}),
       content: 'application/json',
       success: function(r) {
         console.log('Logged out',r);
