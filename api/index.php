@@ -35,19 +35,6 @@ if ($_SERVER['REQUEST_METHOD'] == 'GET') {
 
 } else if ($_SERVER['REQUEST_METHOD'] == 'DELETE') {
   if ($_GET['url'] == 'auth') {
-    /*if (isset($_GET['userid'])) {
-      if ($userDAO->getUserById($_GET['userid'])) {
-        $userDAO->removeAllTokensFromUser($_GET['userid']);
-        echo '{ "Status": "Success"}';
-        http_response_code(200);
-      } else {
-        echo '{ "Error": "Invalid userid" }';
-        http_response_code(400);
-      }
-    } else {
-      echo '{ "Error": "Malformed request", "Userid": "'.$_GET['userid'].'" }';
-      http_response_code(400);
-    }*/
     if (isset($_GET['token'])) {
       if ($userDAO->getToken(sha1($_GET['token']))) {
         $userDAO->removeLoginToken(sha1($_GET['token']));
