@@ -295,34 +295,31 @@ function showReportsPage(){
             </tr>
         </table>
 
-        <p>Commentaar bij deze module: </p>
-        <p>Etiam quis accumsan leo, id gravida urna. Duis ac velit quis risus egestas ornare non eu tortor. Pellentesque habitant
-            morbi tristique senectus et netus et malesuada fames ac turpis egestas. Nullam molestie tincidunt diam, id suscipit
-            nisi cursus sit amet. Aliquam in nisi eget erat laoreet feugiat. Pellentesque non tellus augue. Fusce ante neque,
-            consectetur at tincidunt ac, iaculis quis ante. Suspendisse potenti. Nam tempus nisi eu erat facilisis tempus. Vestibulum
-            ultricies, diam vitae laoreet congue, ipsum elit tempor diam, nec gravida lacus mi nec ligula. Duis posuere lacinia magna a
-            venenatis. Ut feugiat a velit a malesuada. Ut odio sem, lacinia ac metus nec, sollicitudin efficitur erat.
-        </p>
+        <div class="row">
+            <div class="input-field col s12">
+                <textarea disabled id="moduleComment" class="materialize-textarea"></textarea>
+                <label for="moduleComment">Commentaar bij deze module: </label>
+            </div>
+        </div>
     </div>
     </li>
 <?php
     }
 ?>
     </ul>
-    <p>Algemeen commentaar:</p>
-    <p>Cras non urna tellus. Nunc eu aliquam sem, eget ultrices ligula. Pellentesque convallis odio nec neque egestas volutpat. Aliquam
-        venenatis augue quis est blandit pretium. Aliquam fringilla tortor at turpis venenatis hendrerit. Vestibulum auctor, est nec
-        elementum tempus, sem purus malesuada arcu, at molestie massa justo sed risus. Cras laoreet accumsan erat ac elementum. Fusce
-        tristique egestas orci, a vehicula lorem tristique blandit. Aenean et congue purus.</p>
-    <br />
-    <p>Commentaar klassenraad:</p>
-    <p>Suspendisse sem neque, consequat nec ultricies at, maximus sit amet ante. Nunc rhoncus gravida molestie. Vestibulum ante
-        ipsum primis in faucibus orci luctus et ultrices posuere cubilia Curae; Phasellus nibh eros, ornare eu mattis in, gravida
-        ac massa. Praesent placerat lacinia pulvinar. Aenean interdum metus ac neque aliquet, gravida pellentesque mauris congue.
-        Quisque commodo a libero non venenatis. Vestibulum ante ipsum primis in faucibus orci luctus et ultrices posuere cubilia Curae;
-        Mauris sit amet ante vitae nisl vulputate tempor. Donec feugiat orci lectus, bibendum condimentum neque ultrices et. Praesent
-        ac leo sit amet libero tempor dignissim. Aliquam vehicula augue vel ante ullamcorper ornare. Sed est turpis, luctus et neque et,
-        pellentesque finibus tellus. Class aptent taciti sociosqu ad litora torquent per conubia nostra, per inceptos himenaeos.</p>
+    <div class="row">
+        <div class="input-field col s12">
+            <textarea disabled id="generalComment" class="materialize-textarea"></textarea>
+            <label for="generalComment">Algemeen commentaar:</label>
+        </div>
+    </div>
+    <div class="row">
+        <div class="input-field col s12">
+            <textarea disabled id="klasraadComment" class="materialize-textarea"></textarea>
+            <label for="klasraadComment">Commentaar klassenraad:</label>
+        </div>
+    </div>
+
 <?php
 }
 

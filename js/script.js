@@ -164,6 +164,7 @@ var handleReportEdit = function(){
         $(this).find('i').text('save');
         $('select').prop('disabled', false).material_select();
         $('input').prop('disabled', false);
+        $('textarea').prop('disabled', false);
         $(this).data('editing', true);
     }
     else{
