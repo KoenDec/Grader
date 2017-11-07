@@ -273,6 +273,29 @@ class UserDAO {
         return $messages;
     }
 
+    public static function getAllTeachers(){
+        try {
+            $conn = graderdb::getConnection();
+
+            $sql = 'SELECT * FROM users WHERE id IN (SELECT teacherId FROM teachers)';
+            $stmt = $conn->prepare($sql);
+
+            $stmt->execute();
+
+            $teachersTable = $stmt->fetchAll(PDO::FETCH_CLASS);
+        } catch (PDOException $e) {
+            die($e->getMessage());
+        }
+
+        if(isset($teachersTable[0])) {
+            $teachers = $teachersTable;
+        } else {
+            die('No teachers found!');
+        }
+
+        return $teachers;
+    }
+
     public static function getTeacherById($teacherId){
         try {
             $conn = graderdb::getConnection();

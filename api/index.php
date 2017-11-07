@@ -6,20 +6,20 @@ require_once('../Login.php');
 $userDAO = new UserDAO();
 $notFoundErr = json_encode('{"Status":"Geen user gevonden"}');
 $notLoggedInErr = json_encode('{"Status":"Niet ingelogd"}');
-$notAuthorized = json_encode('{"Status":"Onbevoegd"}');
+$notAuthorizedErr = json_encode('{"Status":"Onbevoegd"}');
 
 if ($_SERVER['REQUEST_METHOD'] == 'GET') {
   if ($_GET['url'] == 'auth') {
 
   } else if ($_GET['url'] == 'students') {
-    if ($userDAO->getToken(sha1($_COOKIE['GID']))) {
-      $userid = $userDAO->getLoggedInUserId(sha1($_COOKIE['GID']));
+    if (Login::isLoggedIn()) {
+      $userid = Login::isLoggedIn();
       if (!ApiController::isStudent($userid)) {
         $students = $userDAO->getAllStudents();
         echo json_encode($students);
         http_response_code(200);
       } else {
-        echo $notAuthorized;
+        echo $notAuthorizedErr;
         http_response_code(401);
       }
     } else {
@@ -27,14 +27,14 @@ if ($_SERVER['REQUEST_METHOD'] == 'GET') {
       http_response_code(401);
     }
   } else if ($_GET['url'] == 'studentInEducation') {
-    if ($userDAO->getToken(sha1($_COOKIE['GID']))) {
-      $userid = $userDAO->getLoggedInUserId(sha1($_COOKIE['GID']));
+    if (Login::isLoggedIn()) {
+      $userid = Login::isLoggedIn();
       if (!ApiController::isStudent($userid)) {
         $studentsInEdu = $userDAO->getAllStudentsInEducation($_GET['edu']);
         echo json_encode($studentsInEdu);
         http_response_code(200);
       } else {
-        echo $notAuthorized;
+        echo $notAuthorizedErr;
         http_response_code(401);
       }
     } else {
@@ -47,6 +47,23 @@ if ($_SERVER['REQUEST_METHOD'] == 'GET') {
         $userid = $_GET['id'];
         $currentUser = $userDAO->getUserById($userid);
         echo json_encode($currentUser);
+      } else {
+        echo $notFoundErr;
+        http_response_code(405);
+      }
+    } else {
+      echo $notLoggedInErr;
+      http_response_code(401);
+    }
+  } else if ($_GET['url'] == 'studentReport') {
+    if (Login::isLoggedIn()) {
+      if (isset($_GET['studentid'])) {
+        $currentUserId = Login::isLoggedIn();
+        if (ApiController::isTeacher($currentUserId)) {
+          // TODO show eval possibilities
+        } else {
+          // TODO show student's report
+        }
       } else {
         echo $notFoundErr;
         http_response_code(405);

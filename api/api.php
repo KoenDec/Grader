@@ -19,4 +19,17 @@ class ApiController
     return $isStudent;
   }
 
+  public static function isTeacher($userid) {
+    $isTeacher = false;
+
+    $teachers = $userDAO->getAllTeachers();
+    foreach ($teachers as $teacher) {
+      if ($teacher->id == $userid) {
+        $isTeacher = true;
+      }
+    }
+
+    return $isTeacher;
+  }
+
 }
