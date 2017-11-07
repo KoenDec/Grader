@@ -58,12 +58,14 @@ if ($_SERVER['REQUEST_METHOD'] == 'GET') {
   } else if ($_GET['url'] == 'studentReport') {
     if (Login::isLoggedIn()) {
       if (isset($_GET['studentid'])) {
-        $currentUserId = Login::isLoggedIn();
+        $report = ApiController::createReportObj($_GET['studentid']);
+        echo json_encode($report);
+        /*$currentUserId = Login::isLoggedIn();
         if (ApiController::isTeacher($currentUserId)) {
           // TODO show eval possibilities
         } else {
           // TODO show student's report
-        }
+        }*/
       } else {
         echo $notFoundErr;
         http_response_code(405);
