@@ -73,6 +73,45 @@ class UserDAO {
         return $user;
     }
 
+    public static function getUserRole($userId){
+        try {
+            $conn = graderdb::getConnection();
+
+            $sql1 = 'SELECT * FROM teachers WHERE teacherId = :userid';
+            $sql2 = 'SELECT * FROM admins WHERE adminId = :userid';
+            $sql3 = 'SELECT * FROM studenten WHERE studentId = :userid';
+
+            $stmt1 = $conn->prepare($sql1);
+            $stmt1->bindParam(':userid', $userId);
+            $stmt2 = $conn->prepare($sql2);
+            $stmt2->bindParam(':userid', $userId);
+            $stmt3 = $conn->prepare($sql3);
+            $stmt3->bindParam(':userid', $userId);
+
+            $stmt1->execute();
+            $stmt2->execute();
+            $stmt3->execute();
+
+            $teachersTable = $stmt1->fetchAll(PDO::FETCH_CLASS);
+            $studentsTable = $stmt3->fetchAll(PDO::FETCH_CLASS);
+            $adminsTable = $stmt2->fetchAll(PDO::FETCH_CLASS);
+        } catch (PDOException $e) {
+            die($e->getMessage());
+        }
+
+        if(isset($studentsTable[0])) {
+            return "STUDENT";
+        } else if(isset($teachersTable[0])){
+            return "LEERKRACHT";
+        } else if(isset($adminsTable[0])){
+            return "ADMIN";
+        } else {
+            die("user does not have a role yet");
+        }
+    }
+
+
+
     public static function getUserById($userid) {
         try {
             $conn = graderdb::getConnection();

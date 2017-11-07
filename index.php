@@ -8,17 +8,21 @@ $userDAO = new UserDAO();
 
 $currentUser;
 if (Login::isLoggedIn()) {
-  $currentUser = $userDAO->getUserById(Login::isLoggedIn());
-  showNavigation($currentUser->firstname . ' ' . $currentUser->lastname);
-  checkGET();
+    $currentUser = $userDAO->getUserById(Login::isLoggedIn());
+
+    checkGET();
 } else {
-  showLogin();
+    showLogin();
 }
 
 function checkGET()
 {
+    $currentUser = $GLOBALS['currentUser'];
     $loggedInUserId = Login::isLoggedIn();
     $userDAO = new userDAO();
+
+    showNavigation($currentUser->firstname . ' ' . $currentUser->lastname,$loggedInUserId);
+
     if (isset($_GET['page'])) {
         switch ($_GET['page']) {
             case "account":

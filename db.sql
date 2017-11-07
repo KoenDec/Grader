@@ -47,7 +47,7 @@ CREATE TABLE `studenten` (
 
 CREATE TABLE `opleidingen` (
   `id` int NOT NULL AUTO_INCREMENT PRIMARY KEY,
-  `name` varchar(50) NOT NULL,
+  `name` varchar(50) NOT NULL UNIQUE,
   `active` tinyint(1) NOT NULL DEFAULT '1',
   `creatorId` int,
   FOREIGN KEY(creatorId) REFERENCES admins(adminId)

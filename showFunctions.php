@@ -2,8 +2,6 @@
 
 require_once('graderdb.php');
 
-
-
 /**************************
  *   REUSABLE FUNCTIONS   *
  **************************/
@@ -42,12 +40,9 @@ function showEducationsCheckboxes($onlyGuiFunction){
     }
 }
 
-
-
 /**************************
  *     SPECIFIC PAGES     *
  **************************/
-
 
 function showLogin(){
     ?>
@@ -77,8 +72,9 @@ function showLogin(){
     <?php
 }
 
-function showNavigation($name){
-// todo Only show what is needed/allowed for the user
+function showNavigation($name,$loggedInUserId){
+$userDAO = new UserDAO();
+$userRole = $userDAO->getUserRole($loggedInUserId);
 ?>
 <header>
 
@@ -86,7 +82,7 @@ function showNavigation($name){
         <div class="nav-wrapper nav-color">
             <ul class="right hide-on-med-and-down">
                 <li><a class="dropdown-button" href="#!" data-activates="userDropdown"><?= $name ?><i class="material-icons right">arrow_drop_down</i></a></li>
-                <li><a href="#!" style="margin-right: 20px">Admin</a></li>
+                <li><a href="#!" style="margin-right: 20px"><?=$userRole?></a></li>
             </ul>
             <div class="left hide-on-med-and-down">
                 <div class="button-collapse show-on-large pointer" data-activates="slide-out"><i class="material-icons">menu</i></div>
@@ -107,10 +103,22 @@ function showNavigation($name){
     <img src="images/CLW_Logo.png" class="school-logo"/>
     <li><div class="divider"></div></li>
     <li><a class="waves-effect" href="index.php?page=rapporten">Rapporten</a></li>
-    <li><a class="waves-effect" href="index.php?page=studenten">Studenten</a></li>
-    <li><a class="waves-effect" href="index.php?page=opleidingen">Opleidingen</a></li>
+    <?php
+    if(!($userRole == "STUDENT")) {
+        ?>
+        <li><a class="waves-effect" href="index.php?page=studenten">Studenten</a></li>
+        <li><a class="waves-effect" href="index.php?page=opleidingen">Opleidingen</a></li>
+        <?php
+    }
+    ?>
     <li><a class="waves-effect" href="index.php?page=meldingen">Meldingen<span class="new badge">1</span></div></a></li>
-    <li><a class="waves-effect" href="index.php?page=afdrukken">Afdrukken</a></li>
+    <?php
+    if(!($userRole == "STUDENT")) {
+        ?>
+        <li><a class="waves-effect" href="index.php?page=afdrukken">Afdrukken</a></li>
+        <?php
+    }
+    ?>
 </ul>
 
 <main class="container"> <!-- don't mind this error, I do close the 'main' tag in the footer -->
