@@ -3,38 +3,38 @@
  */
 $(document).ready(function () {
 
-  $('#login').on('click', function(e) {
-    e.preventDefault();
-    $.ajax({
-      type: 'POST',
-      url: 'api/auth',
-      content: 'application/json',
-      data: '{"username": "'+$('#username').val()+'", "password": "'+$('#password').val()+'"}',
-      success: function(r) {
-        console.log('Logged in');
-        window.location.replace('index.php');
-      },
-      error: function(xhr,status,err) {
-        console.log(status);
-        $('#error').append('<p style="color:red;">Incorrect username or password.</p>')
-      }
+    $('#login').on('click', function(e) {
+        e.preventDefault();
+        $.ajax({
+            type: 'POST',
+            url: 'api/auth',
+            content: 'application/json',
+            data: '{"username": "'+$('#username').val()+'", "password": "'+$('#password').val()+'"}',
+            success: function(r) {
+                console.log('Logged in');
+                window.location.replace('index.php');
+            },
+            error: function(xhr,status,err) {
+                console.log(status);
+                $('#error').append('<p style="color:red;">Incorrect username or password.</p>')
+            }
+        });
     });
-  });
 
-  $('#logout').on('click', function() {
-    var token = document.cookie.replace(/(?:(?:^|.*;\s*)GID\s*\=\s*([^;]*).*$)|^.*$/, "$1");
-    $.ajax({
-      type: 'DELETE',
-      url: 'api/auth?' + $.param({"token":token}),
-      content: 'application/json',
-      success: function(r) {
-        console.log('Logged out',r);
-      },
-      error: function(r) {
-        console.log(r);
-      }
+    $('#logout').on('click', function() {
+        var token = document.cookie.replace(/(?:(?:^|.*;\s*)GID\s*\=\s*([^;]*).*$)|^.*$/, "$1");
+        $.ajax({
+            type: 'DELETE',
+            url: 'api/auth?' + $.param({"token":token}),
+            content: 'application/json',
+            success: function(r) {
+                console.log('Logged out',r);
+            },
+            error: function(r) {
+                console.log(r);
+            }
+        });
     });
-  });
 
     $(".button-collapse").sideNav({
         onOpen: function (el) {
@@ -71,21 +71,6 @@ $(document).ready(function () {
         changeCollapseIcon(this);
     });
 
-    $('.addModule').on('click', function(e){
-        e.preventDefault();
-        addModule();
-    });
-
-    $('.courseCreator').on('click', '.add-doelstelling-btn', function (e) {
-        e.stopPropagation();
-        addDoelstelling(this);
-    });
-
-    $('.courseCreator').on('click', '.del-module-btn', function(e){
-        e.stopPropagation();
-        $('.' + $(this).data('module')).remove();
-    });
-
     $('.courseCreator').on('click', '.add-criteria-btn', function(){
         addCriteria(this);
     });
@@ -99,38 +84,40 @@ $(document).ready(function () {
     });
 
     /*$('.opleiding-submit').on('click', function(e){
-        e.preventDefault();
-        createEditCourseJSON();
-    });*/
+     e.preventDefault();
+     createEditCourseJSON();
+     });*/
 
     $('.edit-opslaan-rapport').on('click', handleReportEdit);
 
     $("#report-search").on('keyup', function(){
-      $.ajax({
-        type: "POST",
-        url: "studentSearch.php",
-        dataType: 'json',
-        data:'keyword='+$(this).val(),
-        success: function(data){
-          if(data !== 'no students'){
-            $('.dropdown-content').html('');
-            $.each(data, function(i, student){
-              var studentName = student.firstname + " " + student.lastname;
-              $('.dropdown-content').append('<li data-email='+student.email+'>'+studentName+'</li>');
-            })
-            $('.autocomplete-content li').on('click', function(){
-              var student = $(this).text();
-              $('#report-search').val(student);
-              $('.dropdown-content').html('');
-              $('.selectedStudent span').text(student);
+        $.ajax({
+            type: "POST",
+            url: "studentSearch.php",
+            dataType: 'json',
+            data:'keyword='+$(this).val(),
+            success: function(data){
+                if(data !== 'no students'){
+                    $('.dropdown-content').html('');
+                    $.each(data, function(i, student){
+                        var studentName = student.firstname + " " + student.lastname;
+                        $('.dropdown-content').append('<li data-email='+student.email+'>'+studentName+'</li>');
+                    })
+                    $('.autocomplete-content li').on('click', function(){
+                        var student = $(this).text();
+                        $('#report-search').val(student);
+                        $('.dropdown-content').html('');
+                        $('.selectedStudent span').text(student);
 
-            });
-          }
-        }
-      });
+                    });
+                }
+            }
+        });
     });
 
+    $('.add-doelstelling-btn').on('click', addDoelstelling);
     $('#educationsCheckboxes').find('input').on('change', handleEducationsCheckboxes);
+    $('.addModule').on('click', submitModule);
 
 });
 
@@ -176,54 +163,25 @@ var handleReportEdit = function(){
     }
 };
 
-var addModule = function(){
-    moduleNr++;
-    $('.courseCreator').append(
-        "<li class='module-container module"+ moduleNr +"'>" +
-            "<div class='valign-wrapper collapsible-header collapsible-module'><i class='collapse-icon material-icons'>add_box</i>" +
-                "<div class='input-field module-input'>" +
-                    "<input name='module-name' data-doelstelling='module"+ moduleNr +"' type='text'>" +
-                    "<label for='module-name'>Doelstelling naam</label>" +
-                "</div>"+
-                "<div class='creator-btns'>"+
-                    "<a class='add-doelstelling-btn waves-effect waves-light btn' data-module='module"+ moduleNr +"'><i class='material-icons left'>add</i>Doelstelling toevoegen</a>"+
-                    "<a class='del-module-btn waves-effect waves-light btn red' data-module='module"+ moduleNr +"'><i id='module-del-icon' class='material-icons'>delete</i></a>"+
-                "</div>"+
-            "</div>" +
-            "<div class='collapsible-body'>" +
-                "<table class='striped bordered doelstelling-table'>"+
-                    "<p class='no-doelstellingen'>Geen doelstellingen</p>"+
-                "</table>"+
-            "</div>"+
-        "</li>"
-    );
-    $('.module'+ moduleNr + ' input').focus();
-
-};
-
-var addDoelstelling = function(el){
+var addDoelstelling = function(){
+    console.log("lol");
     doelstellingNr++;
-    var module =  $(el).data('module');
-    var colHead = $('.' + module + ' .collapsible-header');
-    if(!colHead.hasClass('active')){
-        colHead.trigger('click');
-    }
-    $('.'+ module + ' .no-doelstellingen').addClass('hidden');
+    $(' .no-doelstellingen').addClass('hidden');
 
-    $('.'+ module + ' .doelstelling-table').append(
-    "<div class='doelstelling-container doelstelling" + doelstellingNr + "'>"+
-    "<tr><th>" +
-    "<div class='row'>"+
+    $(' .doelstelling-table').append(
+        "<div class='doelstelling-container doelstelling" + doelstellingNr + "'>"+
+        "<tr><th>" +
+        "<div class='row'>"+
         "<div class='input-field doelstelling-input'>" +
-        "<input class='doelstelling-name' name='doelstelling-name' type='text'>" +
-        "<label for='doelstelling-name'>Doelstelling naam</label>" +
+        "<input class='doelstelling-name' name='doelstelling" + doelstellingNr + "-name' type='text'>" +
+        "<label for='doelstelling" + doelstellingNr + "-name'>Doelstelling naam</label>" +
         "</div>"+
         "<div class='creator-btns'>"+
         "<a class='add-criteria-btn waves-effect waves-light btn' data-doelstelling='doelstelling"+ doelstellingNr +"'><i class='material-icons left'>add</i>Criteria toevoegen</a>"+
         "<a class='del-doelstelling-btn waves-effect waves-light btn red' data-doelstelling='doelstelling"+ doelstellingNr +"'><i id='module-del-icon' class='material-icons'>delete</i></a>"+
         "</div>"+
-    "</div>"+
-    "</th></tr><div class='criteria-rows'></div></div>"
+        "</div>"+
+        "</th></tr><div class='criteria-rows'></div></div>"
     );
     $('.doelstelling' + doelstellingNr + ' input').focus();
 };
@@ -234,16 +192,16 @@ var addCriteria = function(el){
 
     $('.' + doelstelling + ' .criteria-rows').append(
         "<div class='criteria-container criteria" + criteriaNr + " criteria-row'>" +
-            "<div class='valign-wrapper row'>"+
-                "<i style='margin-right: 10px' class='material-icons'>navigate_next</i>"+
-                "<div class='input-field criteria-input'>" +
-                    "<input class='criteria-name' name='criteria-name' type='text'>" +
-                    "<label for='criteria-name'>Criteria naam</label>" +
-                "</div>"+
-                "<div class='creator-btns'>"+
-                    "<a class='del-criteria-btn waves-effect waves-light btn red' data-criteria='criteria"+ criteriaNr +"'><i id='module-del-icon' class='material-icons'>delete</i></a>"+
-                "</div>"+
-            "</div>"+
+        "<div class='valign-wrapper row'>"+
+        "<i style='margin-right: 10px' class='material-icons'>navigate_next</i>"+
+        "<div class='input-field criteria-input'>" +
+        "<input class='criteria-name' name='criterium" + criteriaNr + "-name' type='text'>" +
+        "<label for='criterium" + criteriaNr + "-name'>Criteria naam</label>" +
+        "</div>"+
+        "<div class='creator-btns'>"+
+        "<a class='del-criteria-btn waves-effect waves-light btn red' data-criteria='criteria"+ criteriaNr +"'><i id='module-del-icon' class='material-icons'>delete</i></a>"+
+        "</div>"+
+        "</div>"+
         "</div>"
     );
     $('.criteria' + criteriaNr + ' input').focus();
@@ -301,4 +259,17 @@ var handleEducationsCheckboxes = function(){
         var id = $(this).attr('id').substr(9);
         showOrHideStudents(id, show, trsStudents);
     }
+};
+
+var submitModule = function(e){
+    e.preventDefault();
+    var form = $(this).parent().parent();
+
+    var stopAddingModules = $(this).attr('data-stopAddingModules');
+    if(stopAddingModules == "true"){
+        form.attr('action', 'index.php?page=opleidingen');
+    } else {
+        form.attr('action','index.php?page=addModuleToOpleiding');
+    }
+    form.submit();
 };

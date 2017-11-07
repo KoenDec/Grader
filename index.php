@@ -41,10 +41,6 @@ function checkGET()
                 break;
 
             case "opleidingen":
-                if(isset($_POST["opleiding-name"]))
-                {
-                    $userDAO->createEducation($_POST["opleiding-name"], $loggedInUserId);
-                }
                 showSubjectPage();
                 break;
 
@@ -82,6 +78,15 @@ function checkGET()
 
             case "editOpleiding":
                 showOpleidingAddPage();
+                break;
+
+            case "addModuleToOpleiding":
+                var_dump($_POST);
+                if(isset($_POST["opleiding-name"]))
+                {
+                    $userDAO->createEducation($_POST["opleiding-name"], $loggedInUserId);
+                    showAddModuleToOpleidingPage($_POST["opleiding-name"]);
+                }
                 break;
         }
 

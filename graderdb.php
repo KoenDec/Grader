@@ -220,7 +220,8 @@ class UserDAO {
         if(isset($studentsTable[0])) {
             $students = $studentsTable;
         } else {
-            die('No students found!');
+            //die('No students found!');
+            $students = null;
         }
 
         return $students;
@@ -243,7 +244,8 @@ class UserDAO {
         if(isset($educationsTable[0])) {
             $educations = $educationsTable;
         } else {
-            die('No educations found!');
+            //die('No educations found!');
+            $educations = null;
         }
 
         return $educations;
@@ -267,7 +269,8 @@ class UserDAO {
         if(isset($educationsTable[0])) {
             $educations = $educationsTable[0];
         } else {
-            die('No education found with id '.$educationId);
+            //die('No education found with id '.$educationId);
+            $educations = null;
         }
 
         return $educations;

@@ -118,290 +118,290 @@ function showNavigation($name){
     }
 
     function showStart(){
-    // todo Add actual startpage text
-    ?>
-    <h1>Welkom bij ons Rapportsysteem</h1>
-    <p>
-        Nulla lobortis aliquam placerat. Quisque at justo maximus, commodo diam sit amet, feugiat arcu. Mauris non suscipit ex, vitae tincidunt magna.
-        Etiam neque sem, euismod ac odio vel, rhoncus interdum mauris. Morbi aliquet sollicitudin nisl, sit amet tempus lorem interdum sit amet.
-        Nam sagittis tempus mattis. Etiam mattis eros eget eros vulputate, quis vestibulum lorem convallis. Suspendisse quis sollicitudin enim.
-        Nulla metus dolor, venenatis ut lacus ut, dictum interdum ante. Sed suscipit mi at ante vulputate, quis maximus elit tempor.
-        Nullam elementum venenatis commodo. Etiam vel tristique massa. Etiam libero mauris, posuere sed massa nec, tristique vehicula lacus.
-        Donec lacinia, lorem et mattis tincidunt, lectus metus imperdiet mi, in tempor turpis lectus id lacus.
-    </p>
-    <?php
+        // todo Add actual startpage text
+        ?>
+        <h1>Welkom bij ons Rapportsysteem</h1>
+        <p>
+            Nulla lobortis aliquam placerat. Quisque at justo maximus, commodo diam sit amet, feugiat arcu. Mauris non suscipit ex, vitae tincidunt magna.
+            Etiam neque sem, euismod ac odio vel, rhoncus interdum mauris. Morbi aliquet sollicitudin nisl, sit amet tempus lorem interdum sit amet.
+            Nam sagittis tempus mattis. Etiam mattis eros eget eros vulputate, quis vestibulum lorem convallis. Suspendisse quis sollicitudin enim.
+            Nulla metus dolor, venenatis ut lacus ut, dictum interdum ante. Sed suscipit mi at ante vulputate, quis maximus elit tempor.
+            Nullam elementum venenatis commodo. Etiam vel tristique massa. Etiam libero mauris, posuere sed massa nec, tristique vehicula lacus.
+            Donec lacinia, lorem et mattis tincidunt, lectus metus imperdiet mi, in tempor turpis lectus id lacus.
+        </p>
+        <?php
     }
 
     function showAccount($email){
-    $userDAO = new UserDAO();
-    $user = $userDAO->getUser($email);
-    ?>
-    <h2>Mijn account</h2>
-    <table class="striped">
-        <tr><td>Voornaam: <span><?= $user->firstname ?></span></td></tr>
-        <tr><td>Familienaam: <span><?= $user->lastname ?></span></td></tr>
-        <tr><td>Email: <span><?= $user->email ?></span></td></tr>
-        <tr><td>Lid sinds: <span><?= $user->accountCreatedTimestamp ?></span></td></tr>
-    </table>
-    <a class="waves-effect waves-light btn tooltipped openPopup" data-delay="50" data-tooltip="Account wijzigen"><i class="material-icons">edit</i></a>
+        $userDAO = new UserDAO();
+        $user = $userDAO->getUser($email);
+        ?>
+        <h2>Mijn account</h2>
+        <table class="striped">
+            <tr><td>Voornaam: <span><?= $user->firstname ?></span></td></tr>
+            <tr><td>Familienaam: <span><?= $user->lastname ?></span></td></tr>
+            <tr><td>Email: <span><?= $user->email ?></span></td></tr>
+            <tr><td>Lid sinds: <span><?= $user->accountCreatedTimestamp ?></span></td></tr>
+        </table>
+        <a class="waves-effect waves-light btn tooltipped openPopup" data-delay="50" data-tooltip="Account wijzigen"><i class="material-icons">edit</i></a>
 
-    <div class="popup centered hidden">
-        <i class="popup-exit small material-icons right">cancel</i>
-        <div class="row">
-            <h4>Gegevens aanpassen</h4>
+        <div class="popup centered hidden">
+            <i class="popup-exit small material-icons right">cancel</i>
+            <div class="row">
+                <h4>Gegevens aanpassen</h4>
+            </div>
+            <form action="index.php?page=account" method="POST">
+                <div class="row">
+                    <div class="input-field">
+                        <input id="account-FirstName" name="account-FirstName" type="text" value="<?= $user->firstname ?>">
+                        <label for="account-FirstName">Voornaam</label>
+                    </div>
+                </div>
+                <div class="row">
+                    <div class="input-field">
+                        <input id="account-LastName" name="account-LastName" type="text" value="<?= $user->lastname ?>">
+                        <label for="account-LastName">Naam</label>
+                    </div>
+                </div>
+                <div class="row">
+                    <div class="input-field">
+                        <input id="student-email" name="student-email" type="text" value="<?= $user->email ?>">
+                        <label for="student-email">Email</label>
+                    </div>
+                </div>
+                <div class="row">
+                    <button class="btn waves-effect waves-light popup-submit" type="submit" name="action">Aanpassingen opslaan
+                        <i class="material-icons right">send</i>
+                    </button>
+                </div>
+
+            </form>
         </div>
-        <form action="index.php?page=account" method="POST">
-            <div class="row">
-                <div class="input-field">
-                    <input id="account-FirstName" name="account-FirstName" type="text" value="<?= $user->firstname ?>">
-                    <label for="account-FirstName">Voornaam</label>
-                </div>
-            </div>
-            <div class="row">
-                <div class="input-field">
-                    <input id="account-LastName" name="account-LastName" type="text" value="<?= $user->lastname ?>">
-                    <label for="account-LastName">Naam</label>
-                </div>
-            </div>
-            <div class="row">
-                <div class="input-field">
-                    <input id="student-email" name="student-email" type="text" value="<?= $user->email ?>">
-                    <label for="student-email">Email</label>
-                </div>
-            </div>
-            <div class="row">
-                <button class="btn waves-effect waves-light popup-submit" type="submit" name="action">Aanpassingen opslaan
-                    <i class="material-icons right">send</i>
-                </button>
-            </div>
-
-        </form>
-    </div>
-    </div>
-    <?php
+        </div>
+        <?php
     }
 
     function showReportsPage(){
-    $userDAO = new UserDAO();
-    // todo now only student 1's report (hardcoded) is shown, create functionality for other students
-    $studentId = 6; // faisal
-    $modules = $userDAO->getModulesFromStudent($studentId);
+        $userDAO = new UserDAO();
+        // todo now only student 1's report (hardcoded) is shown, create functionality for other students
+        $studentId = 6; // faisal
+        $modules = $userDAO->getModulesFromStudent($studentId);
 
-    $dateNow = date('d/m/Y');
+        $dateNow = date('d/m/Y');
 
-    if(!empty($_POST['student'])) {
-        $selectedStudent = $_POST['student'];
-    } else {
-        $selectedStudent = 'nothing';
-    }
-    // todo don't show edit report button for students, that'd be weird  ;) (aslo show ONLY his report)
-    ?>
-    <div class="row">
-        <h2>Rapporten</h2>
-    </div>
-    <div class="row">
-        <div class="student-search input-field col s6">
-            <input type="text" id="report-search" class="col s8 autocomplete" name="report-search" />
-            <label for="report-search">Zoek student</label>
-            <a class="waves-effect waves-light btn"><i class="material-icons">search</i></a>
-            <ul class="autocomplete-content dropdown-content"></ul>
+        if(!empty($_POST['student'])) {
+            $selectedStudent = $_POST['student'];
+        } else {
+            $selectedStudent = 'nothing';
+        }
+        // todo don't show edit report button for students, that'd be weird  ;) (aslo show ONLY his report)
+        ?>
+        <div class="row">
+            <h2>Rapporten</h2>
         </div>
-        <div class="right-align col s6 reports-btns">
-            <a class="waves-effect waves-light btn tooltipped" data-delay="50" data-tooltip="Rapport downloaden"><i class="material-icons">file_download</i></a>
-            <a class="waves-effect waves-light btn tooltipped" data-delay="50" data-tooltip="Rapport afdrukken"><i class="material-icons">print</i></a>
+        <div class="row">
+            <div class="student-search input-field col s6">
+                <input type="text" id="report-search" class="col s8 autocomplete" name="report-search" />
+                <label for="report-search">Zoek student</label>
+                <a class="waves-effect waves-light btn"><i class="material-icons">search</i></a>
+                <ul class="autocomplete-content dropdown-content"></ul>
+            </div>
+            <div class="right-align col s6 reports-btns">
+                <a class="waves-effect waves-light btn tooltipped" data-delay="50" data-tooltip="Rapport downloaden"><i class="material-icons">file_download</i></a>
+                <a class="waves-effect waves-light btn tooltipped" data-delay="50" data-tooltip="Rapport afdrukken"><i class="material-icons">print</i></a>
+            </div>
         </div>
-    </div>
-    <div class="row selectedStudent">
-        <p class="col s6">Studiemodules van: <span style="font-weight: bold">Faisal Nizami</span></p>
-        <div class="right-align">
-            <a class="waves-effect waves-light btn tooltipped edit-opslaan-rapport" data-editing="false" data-delay="50" data-tooltip="Aanpassen inschakelen"><i class="material-icons">edit</i></a>
+        <div class="row selectedStudent">
+            <p class="col s6">Studiemodules van: <span style="font-weight: bold">Faisal Nizami</span></p>
+            <div class="right-align">
+                <a class="waves-effect waves-light btn tooltipped edit-opslaan-rapport" data-editing="false" data-delay="50" data-tooltip="Aanpassen inschakelen"><i class="material-icons">edit</i></a>
+            </div>
         </div>
-    </div>
 
-    <ul class="popout collapsible courseCreator" data-collapsible="expandable">
-        <?php
-        // todo get students results and comments from database
-        foreach($modules as $module){
-            ?>
+        <ul class="popout collapsible courseCreator" data-collapsible="expandable">
+            <?php
+            // todo get students results and comments from database
+            foreach($modules as $module){
+                ?>
 
-            <li>
-                <div class='valign-wrapper collapsible-header collapsible-module'><i class='collapse-icon material-icons'>add_box</i>
-                    <h4><?= $module->name ?></h4>
-                </div>
-                <div class='collapsible-body'>
-                    <table class="striped bordered">
-                        <tr>
-                            <th class="doelstellingwidth">Doelstellingen</th>
-                            <th>Resultaat</th>
-                            <th>Gemiddelde</th>
-                            <th>Datum</th>
-                            <th class="opmerkingenwidth">Opmerkingen</th>
-                        </tr>
-                        <tr>
+                <li>
+                    <div class='valign-wrapper collapsible-header collapsible-module'><i class='collapse-icon material-icons'>add_box</i>
+                        <h4><?= $module->name ?></h4>
+                    </div>
+                    <div class='collapsible-body'>
+                        <table class="striped bordered">
+                            <tr>
+                                <th class="doelstellingwidth">Doelstellingen</th>
+                                <th>Resultaat</th>
+                                <th>Gemiddelde</th>
+                                <th>Datum</th>
+                                <th class="opmerkingenwidth">Opmerkingen</th>
+                            </tr>
+                            <tr>
 
-                            <?php
-                            $doelstellingen = $userDAO->getFollowedDoelstellingenInModule($module->id, $studentId);
-                            foreach($doelstellingen as $doelstelling){
-                            ?>
-                            <th style="border-top: 2px solid gray; border-bottom: 2px solid gray" colspan="5"><strong><?= $doelstelling->name ?></strong></th>
-                        </tr><tr>
-                            <?php
-                            $criteria = $userDAO->getCriteriaForDoelstelling($doelstelling->id);
-                            foreach($criteria as $criterium){
-                            ?>
-                            <td style="padding-left: 30px" class="doelstellingwidth valign-wrapper"><i class="material-icons">navigate_next</i><?= $criterium->weergaveTitel ?></td>
-                            <td contenteditable="false">
-                                <div class="input-field">
-                                    <select class="hidden" disabled>
-                                        <option value="" disabled selected>Niets geselecteerd</option>
-                                        <option value="1">R</option>
-                                        <option value="2">O</option>
-                                        <option value="3">V</option>
-                                        <option value="4">G</option>
-                                    </select>
-                                </div>
-                                <p>
-                                    <?php
-                                    for($eerderResultaat = 0; $eerderResultaat < 5; $eerderResultaat++) {
-                                        if($eerderResultaat > 0){
-                                            echo ", ";
+                                <?php
+                                $doelstellingen = $userDAO->getFollowedDoelstellingenInModule($module->id, $studentId);
+                                foreach($doelstellingen as $doelstelling){
+                                ?>
+                                <th style="border-top: 2px solid gray; border-bottom: 2px solid gray" colspan="5"><strong><?= $doelstelling->name ?></strong></th>
+                            </tr><tr>
+                                <?php
+                                $criteria = $userDAO->getCriteriaForDoelstelling($doelstelling->id);
+                                foreach($criteria as $criterium){
+                                ?>
+                                <td style="padding-left: 30px" class="doelstellingwidth valign-wrapper"><i class="material-icons">navigate_next</i><?= $criterium->weergaveTitel ?></td>
+                                <td contenteditable="false">
+                                    <div class="input-field">
+                                        <select class="hidden" disabled>
+                                            <option value="" disabled selected>Niets geselecteerd</option>
+                                            <option value="1">R</option>
+                                            <option value="2">O</option>
+                                            <option value="3">V</option>
+                                            <option value="4">G</option>
+                                        </select>
+                                    </div>
+                                    <p>
+                                        <?php
+                                        for($eerderResultaat = 0; $eerderResultaat < 5; $eerderResultaat++) {
+                                            if($eerderResultaat > 0){
+                                                echo ", ";
+                                            }
+                                            ?>
+                                            <span class="eerder-resultaat tooltipped" data-delay="50" data-tooltip="20/10/17">O</span>
+                                            <?php
                                         }
                                         ?>
-                                        <span class="eerder-resultaat tooltipped" data-delay="50" data-tooltip="20/10/17">O</span>
-                                        <?php
-                                    }
-                                    ?>
-                                </p>
-                            </td>
-                            <td class="avg">O</td>  <!--todo Actualy calculate avg score-->
-                            <td class="pickDate"><?= $dateNow ?></td>
-                            <td class="opmerkingenwidth" >
-                                <div class="input-field">
-                                    <input disabled  id="opmerkingen" type="text">
-                                    <label for="opmerkingen">Opmerkingen</label>
-                                </div></td>
-                        </tr><tr>
-                            <?php
-                            }
+                                    </p>
+                                </td>
+                                <td class="avg">O</td>  <!--todo Actualy calculate avg score-->
+                                <td class="pickDate"><?= $dateNow ?></td>
+                                <td class="opmerkingenwidth" >
+                                    <div class="input-field">
+                                        <input disabled  id="opmerkingen" type="text">
+                                        <label for="opmerkingen">Opmerkingen</label>
+                                    </div></td>
+                            </tr><tr>
+                                <?php
+                                }
 
-                            }
-                            ?>
-                        </tr>
-                    </table>
+                                }
+                                ?>
+                            </tr>
+                        </table>
 
-                    <div class="row">
-                        <div class="input-field col s12">
-                            <textarea disabled id="moduleComment" class="materialize-textarea"></textarea>
-                            <label for="moduleComment">Commentaar bij deze module: </label>
+                        <div class="row">
+                            <div class="input-field col s12">
+                                <textarea disabled id="moduleComment" class="materialize-textarea"></textarea>
+                                <label for="moduleComment">Commentaar bij deze module: </label>
+                            </div>
                         </div>
                     </div>
-                </div>
-            </li>
-            <?php
-        }
-        ?>
-    </ul>
-    <div class="row">
-        <div class="input-field col s12">
-            <textarea disabled id="generalComment" class="materialize-textarea"></textarea>
-            <label for="generalComment">Algemeen commentaar:</label>
+                </li>
+                <?php
+            }
+            ?>
+        </ul>
+        <div class="row">
+            <div class="input-field col s12">
+                <textarea disabled id="generalComment" class="materialize-textarea"></textarea>
+                <label for="generalComment">Algemeen commentaar:</label>
+            </div>
         </div>
-    </div>
-    <div class="row">
-        <div class="input-field col s12">
-            <textarea disabled id="klasraadComment" class="materialize-textarea"></textarea>
-            <label for="klasraadComment">Commentaar klassenraad:</label>
+        <div class="row">
+            <div class="input-field col s12">
+                <textarea disabled id="klasraadComment" class="materialize-textarea"></textarea>
+                <label for="klasraadComment">Commentaar klassenraad:</label>
+            </div>
         </div>
-    </div>
 
-    <?php
+        <?php
     }
 
     function showStudentsPage(){
-    $userDAO = new UserDAO();
+        $userDAO = new UserDAO();
 
-    ?>
-    <div class="row">
-        <h2>Studenten</h2>
-    </div>
-    <div class="row">
-        <div class="student-search input-field col s6">
-            <input type="text" id="student-search" class="col s8" name="student-search" />
-            <label for="student-search">Zoek student</label>
-            <a class="waves-effect waves-light btn"><i class="material-icons">search</i></a>
-        </div>
-        <div class="row">
-            <div class="addstudent" style="position: relative; height: 90px;">
-                <div class="fixed-action-btn horizontal" style="position: absolute; display: inline-block; right: 24px;">
-                    <a class="btn-floating waves-effect waves-light btn-large tooltipped" data-position="top" data-delay="50" data-tooltip="Student Toevoegen">
-                        <i class="large material-icons">add</i>
-                    </a>
-                    <ul>
-                        <li><a href="index.php?page=editStudent" class="btn-floating red tooltipped" data-position="top" data-delay="50" data-tooltip="Enkele student toevoegen"><i class="material-icons">person_add</i></a></li>
-                        <li><a class="btn-floating yellow darken-1 tooltipped openPopup" data-delay="50" data-tooltip=".csv uploaden"><i class="material-icons">file_upload</i></a></li>
-                    </ul>
-                </div>
-            </div>
-        </div>
-    </div>
-    <div class="row">
-        <?php
-        $educationIds = showEducationsCheckboxes(true);
         ?>
-        <table class="col s9 striped bordered">
-            <tr>
-                <th>Student</th>
-                <th>Acties</th>
-            </tr>
-            <?php
-            foreach($educationIds as $id){
-                $students = $userDAO->getAllStudentsInEducation($id);
-
-                foreach($students as $student){
-                    ?>
-                    <tr data-opleidingId=<?=$id?>>
-                        <td><?=$student->firstname?> <?=$student->lastname?> (<?=$student->email?>)</td>
-                        <td>
-                            <a class="waves-effect waves-light btn tooltipped" data-delay="50" data-tooltip="Rapport bekijken"><i class="material-icons right">import_contacts</i>Rapport</a>
-                            <a class="waves-effect waves-light btn tooltipped" data-delay="50" data-tooltip="Studiemodule aanpassen"><i class="material-icons">edit</i></a>
-                            <a class="waves-effect waves-light btn tooltipped red right" data-delay="50" data-tooltip="Delete Student"><i class="material-icons">delete</i></a>
-                        </td>
-                    </tr>
-                    <?php
-                }
-            }
-
-
-            ?>
-    </div>
-    <div class="popup centered hidden">
-        <i class="popup-exit small material-icons right">cancel</i>
         <div class="row">
-            <h4>Studenten toevoegen</h4>
+            <h2>Studenten</h2>
         </div>
-        <form action="index.php?page=studenten" method="POST">
+        <div class="row">
+            <div class="student-search input-field col s6">
+                <input type="text" id="student-search" class="col s8" name="student-search" />
+                <label for="student-search">Zoek student</label>
+                <a class="waves-effect waves-light btn"><i class="material-icons">search</i></a>
+            </div>
             <div class="row">
-                <div class="file-field input-field">
-                    <div class="btn">
-                        <span>File</span>
-                        <input type="file" accept=".csv">
-                    </div>
-                    <div class="file-path-wrapper">
-                        <input class="file-path validate" type="text">
+                <div class="addstudent" style="position: relative; height: 90px;">
+                    <div class="fixed-action-btn horizontal" style="position: absolute; display: inline-block; right: 24px;">
+                        <a class="btn-floating waves-effect waves-light btn-large tooltipped" data-position="top" data-delay="50" data-tooltip="Student Toevoegen">
+                            <i class="large material-icons">add</i>
+                        </a>
+                        <ul>
+                            <li><a href="index.php?page=editStudent" class="btn-floating red tooltipped" data-position="top" data-delay="50" data-tooltip="Enkele student toevoegen"><i class="material-icons">person_add</i></a></li>
+                            <li><a class="btn-floating yellow darken-1 tooltipped openPopup" data-delay="50" data-tooltip=".csv uploaden"><i class="material-icons">file_upload</i></a></li>
+                        </ul>
                     </div>
                 </div>
             </div>
+        </div>
+        <div class="row">
+            <?php
+            $educationIds = showEducationsCheckboxes(true);
+            ?>
+            <table class="col s9 striped bordered">
+                <tr>
+                    <th>Student</th>
+                    <th>Acties</th>
+                </tr>
+                <?php
+                foreach($educationIds as $id){
+                    $students = $userDAO->getAllStudentsInEducation($id);
 
+                    foreach($students as $student){
+                        ?>
+                        <tr data-opleidingId=<?=$id?>>
+                            <td><?=$student->firstname?> <?=$student->lastname?> (<?=$student->email?>)</td>
+                            <td>
+                                <a class="waves-effect waves-light btn tooltipped" data-delay="50" data-tooltip="Rapport bekijken"><i class="material-icons right">import_contacts</i>Rapport</a>
+                                <a class="waves-effect waves-light btn tooltipped" data-delay="50" data-tooltip="Studiemodule aanpassen"><i class="material-icons">edit</i></a>
+                                <a class="waves-effect waves-light btn tooltipped red right" data-delay="50" data-tooltip="Delete Student"><i class="material-icons">delete</i></a>
+                            </td>
+                        </tr>
+                        <?php
+                    }
+                }
+
+
+                ?>
+        </div>
+        <div class="popup centered hidden">
+            <i class="popup-exit small material-icons right">cancel</i>
             <div class="row">
-                <button class="btn waves-effect waves-light popup-submit" type="submit" name="action">Studenten toevoegen
-                    <i class="material-icons right">send</i>
-                </button>
+                <h4>Studenten toevoegen</h4>
             </div>
+            <form action="index.php?page=studenten" method="POST">
+                <div class="row">
+                    <div class="file-field input-field">
+                        <div class="btn">
+                            <span>File</span>
+                            <input type="file" accept=".csv">
+                        </div>
+                        <div class="file-path-wrapper">
+                            <input class="file-path validate" type="text">
+                        </div>
+                    </div>
+                </div>
 
-        </form>
-    </div>
-    </div>
-    <?php
+                <div class="row">
+                    <button class="btn waves-effect waves-light popup-submit" type="submit" name="action">Studenten toevoegen
+                        <i class="material-icons right">send</i>
+                    </button>
+                </div>
+
+            </form>
+        </div>
+        </div>
+        <?php
     }
 
     function showSubjectPage(){
@@ -682,48 +682,48 @@ function showNavigation($name){
                         <h4>Algemene modules</h4>
                         <?php
                     }
-                ?>
-                <div class="row">
-                    <ul class="collapsible" data-collapsible="expandable">
-                        <?php
+                    ?>
+                    <div class="row">
+                        <ul class="collapsible" data-collapsible="expandable">
+                            <?php
 
-                        foreach($modules as $module) {
-                            ?>
-                            <li>
-                                <div class="collapsible-header collapsible-module active"><i class="collapse-icon material-icons">indeterminate_check_box</i><?= $module->name ?></div>
-                                <div class="collapsible-body">
+                            foreach($modules as $module) {
+                                ?>
+                                <li>
+                                    <div class="collapsible-header collapsible-module active"><i class="collapse-icon material-icons">indeterminate_check_box</i><?= $module->name ?></div>
+                                    <div class="collapsible-body">
                             <span>
                                 <table class="striped bordered">
                                     <tr>
                                         <?php
                                         $doelstellingen = $userDAO->getDoelstellingenInModule($module->id);
                                         if($doelstellingen != null) foreach($doelstellingen as $doelstelling) {
-                                            ?>
-                                        <!-- TODO make checkboxes work -->
-                                            <th><input type="checkbox" label="doelstelling<?=$doelstelling->id?>-checkbox" /><label for="doelstelling<?=$doelstelling->id?>-checkbox"><?= $doelstelling->name ?></label></th>
-                                            <?php
-                                            $criteria = $userDAO->getCriteriaForDoelstelling($doelstelling->id);
-                                            foreach($criteria as $criterium) {
-                                                ?>
-                                                </tr><tr><td class="valign-wrapper"><i class="material-icons">navigate_next</i><?= $criterium->weergaveTitel?></td>
-                                                <?php
-                                            }
-                                            ?>
-                                            </tr><tr>
-                                            <?php
+                                        ?>
+                                        <!-- TODO make checkboxes work (submitting this) -->
+                                        <th><input type="checkbox" label="doelstelling<?=$doelstelling->id?>-checkbox" /><label for="doelstelling<?=$doelstelling->id?>-checkbox"><?= $doelstelling->name ?></label></th>
+                                        <?php
+                                        $criteria = $userDAO->getCriteriaForDoelstelling($doelstelling->id);
+                                        foreach($criteria as $criterium) {
+                                        ?>
+                                    </tr><tr><td class="valign-wrapper"><i class="material-icons">navigate_next</i><?= $criterium->weergaveTitel?></td>
+                                        <?php
+                                        }
+                                        ?>
+                                    </tr><tr>
+                                        <?php
                                         }
                                         ?>
                                     </tr>
                                 </table>
                             </span>
-                                </div>
-                            </li>
-                            <?php
-                        }
-                        ?>
-                    </ul>
-                </div>
-                <?php
+                                    </div>
+                                </li>
+                                <?php
+                            }
+                            ?>
+                        </ul>
+                    </div>
+                    <?php
                 }
                 ?>
                 <div class="row">
@@ -735,29 +735,58 @@ function showNavigation($name){
             <?php
         }
 
-        function showOpleidingAddPage(){
-        ?>
-        <div class="row">
-            <h2>Opleiding toevoegen</h2>
-        </div>
-        <form action="index.php?page=opleidingen" method="POST">
-            <div class="input-field">
-                <label for="opleiding-name">Naam opleiding</label>
-                <input id="opleiding-name" name="opleiding-name" type="text" required />
+        function showOpleidingAddPage()
+        {
+            ?>
+            <div class="row">
+                <h2>Opleiding toevoegen</h2>
             </div>
-    </div>
-    <div class="row">
-        <ul class="popout collapsible courseCreator" data-collapsible="expandable">
+            <form action="index.php?page=addModuleToOpleiding" method="POST">
+                <div class="input-field">
+                    <label for="opleiding-name">Naam opleiding</label>
+                    <input id="opleiding-name" name="opleiding-name" type="text" required/>
+                </div>
+                <div class="row">
+                    <button class="right btn waves-effect waves-light opleiding-submit" type="submit"><i class='material-icons right'>send</i>Opleiding opslaan en nieuwe module aanmaken</button>
+                </div>
+            </form>
+            <?php
+        }
 
-        </ul>
-    </div>
-    <div class="row addModule-row">
-        <button class="btn waves-effect waves-light addModule">Opleidingsspecifieke module toevoegen</button>
-    </div>
-    <div class="row">
-        <button class="right btn waves-effect waves-light opleiding-submit" type="submit"><i class='material-icons right'>send</i>Opleiding opslaan</button>
-    </div>
-    </form>
-    <?php
-    }
-    ?>
+        function showAddModuleToOpleidingPage($opleidingName) // TODO change parameter to opleidingId (or opleiding-object)
+        {
+            $userDAO = new UserDAO();
+            $opleidingen = $userDAO->getAllEducations();
+            ?>
+
+            <div class="row">
+                <h2>Nieuwe module aanmaken voor opleiding <?= $opleidingName ?></h2>
+            </div>
+            <form method="POST">
+                <div class="row courseCreator">
+                    <div class='row'>
+                        <div class='input-field module-input'>
+                            <input type="hidden" name="opleiding-name" value="<?=$opleidingName?>" />
+                            <label for='module-name'>Modulenaam</label>
+                            <input name='module-name' type='text' />
+                        </div>
+                        <div class='creator-btns'>
+                            <a class='add-doelstelling-btn waves-effect waves-light btn'><i class='material-icons left'>add</i>Doelstelling toevoegen</a>
+                        </div>
+                    </div>
+                    <div>
+                        <table class='striped bordered doelstelling-table'>
+                            <p class='no-doelstellingen'>Geen doelstellingen</p>
+                        </table>
+                    </div>
+                </div>
+                <div class="row">
+                    <button class="right btn waves-effect waves-light addModule" data-stopAddingModules="false" type="submit"><i class='material-icons right'>send</i>Opslaan en nieuwe module toevoegen</button>
+                </div>
+                <div class="row">
+                    <button class="right btn waves-effect waves-light addModule" data-stopAddingModules="true"><i class='material-icons right'>send</i>Opslaan en stoppen</button>
+                </div>
+            </form>
+            <?php
+        }
+        ?>
