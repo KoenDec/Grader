@@ -6,7 +6,7 @@
     </v-toolbar>
      <v-divider></v-divider>
      <v-list dense>
-       <v-list-tile v-for="item in navigation" @click="">
+       <v-list-tile v-for="item in navigation" @click="route(item)">
          <v-list-tile-content>
            <v-list-tile-title>{{ item }}</v-list-tile-title>
          </v-list-tile-content>
@@ -14,17 +14,13 @@
      </v-list>
    </v-navigation-drawer>
    <v-toolbar color="indigo" dark fixed app>
-      <v-ripple>
         <v-icon large color="white" @click.stop="drawer = !drawer">{{ drawer? 'close':'menu' }}</v-icon>
-      </v-ripple>
      <v-toolbar-title>Rapportensysteem</v-toolbar-title>
    </v-toolbar>
    <main>
      <v-content>
-       <v-container fluid fill-height>
-         <v-layout justify-center>
+       <v-container grid-list-md fluid>
           <router-view/>
-         </v-layout>
        </v-container>
      </v-content>
    </main>
@@ -43,7 +39,12 @@ export default {
       'Meldingen',
       'Afdrukken'
     ]
-  })
+  }),
+  methods: {
+    route (path) {
+      this.$router.push(path)
+    }
+  }
 }
 </script>
 
