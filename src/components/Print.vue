@@ -57,14 +57,18 @@ export default {
     }
   },
   computed: {
-    allSelect () {
-      if (this.opleiding.every(this.checkState)) {
-        return true
-      } else {
-        return false
+    allSelect: {
+      get: function () {
+        if (this.opleiding.every(this.checkState)) {
+          return true
+        } else {
+          return false
+        }
+      },
+      set: function (newValue) {
+        return newValue
       }
     }
-
   }
 }
 </script>
