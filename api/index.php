@@ -1,27 +1,21 @@
 <?php
 require_once('../graderdb.php');
-require_once('api.php');
+//require_once('api.php');
 require_once('../Login.php');
 
 $userDAO = new UserDAO();
-$notFoundErr = json_encode('{"Status":"Geen user gevonden"}');
-$notLoggedInErr = json_encode('{"Status":"Niet ingelogd"}');
-$notAuthorizedErr = json_encode('{"Status":"Onbevoegd"}');
+$notFoundErr = '{"Status":"Geen user gevonden"}';
+$notLoggedInErr = '{"Status":"Niet ingelogd"}';
+$notAuthorizedErr = '{"Status":"Onbevoegd"}';
 
 if ($_SERVER['REQUEST_METHOD'] == 'GET') {
   if ($_GET['url'] == 'auth') {
 
   } else if ($_GET['url'] == 'students') {
     if (Login::isLoggedIn()) {
-      $userid = Login::isLoggedIn();
-      if (!ApiController::isStudent($userid)) {
-        $students = $userDAO->getAllStudents();
-        echo json_encode($students);
-        http_response_code(200);
-      } else {
-        echo $notAuthorizedErr;
-        http_response_code(401);
-      }
+      $students = $userDAO->getAllStudents();
+      echo json_encode($students);
+      http_response_code(200);
     } else {
       echo $notLoggedInErr;
       http_response_code(401);
@@ -29,12 +23,18 @@ if ($_SERVER['REQUEST_METHOD'] == 'GET') {
   } else if ($_GET['url'] == 'studentInEducation') {
     if (Login::isLoggedIn()) {
       $userid = Login::isLoggedIn();
-      if (!ApiController::isStudent($userid)) {
-        $studentsInEdu = $userDAO->getAllStudentsInEducation($_GET['edu']);
-        echo json_encode($studentsInEdu);
-        http_response_code(200);
+      if (isset($_GET['edu'])) {
+        $edu = $_GET['edu'];
+        //if (!isStudent($userid)) {
+          $studentsInEdu = $userDAO->getAllStudentsInEducation($_GET['edu']);
+          echo json_encode($studentsInEdu);
+          http_response_code(200);
+        /*} else {
+          echo $notAuthorizedErr;
+          http_response_code(401);
+        }*/
       } else {
-        echo $notAuthorizedErr;
+        echo '{"Status":"No edu set"}';
         http_response_code(401);
       }
     } else {
@@ -57,15 +57,66 @@ if ($_SERVER['REQUEST_METHOD'] == 'GET') {
     }
   } else if ($_GET['url'] == 'studentReport') {
     if (Login::isLoggedIn()) {
-      if (isset($_GET['studentid'])) {
-        $report = ApiController::createReportObj($_GET['studentid']);
+      if (isset($_GET['id'])) {
+        $studentid = $_GET['id'];
+
+        $report = (object)[
+          'modules' => []
+        ];
+        $modules = $userDAO->getModulesFromStudent($studentid);
+        foreach($modules as $module) {
+          $modObj = (object)[
+            'id' => $module->id,
+            'modName' => $module->name,
+            'doelstellingen' => []
+          ];
+          array_push($report->modules, $modObj);
+        }
+
+        foreach($report->modules as $mod) {
+          $doelstellingen = $userDAO->getFollowedDoelstellingenInModule($mod->id, $studentid);
+          foreach ($doelstellingen as $doelstelling) {
+            $doelObj = (object)[
+              'id' => $doelstelling->id,
+              'doelName' => $doelstelling->name,
+              'criteria' => []
+            ];
+            array_push($mod->doelstellingen, $doelObj);
+          }
+        }
+        /*
+        foreach ($report->modules->doelstellingen as $doel) {
+          $criteria = $userDAO->getCriteriaForDoelstelling($doel->id);
+          foreach ($criteria as $criterium) {
+            $critObj = (object)[
+              'critName' => $criterium->weergaveTitel
+            ];
+            array_push($doelObj->criteria, $critObj);
+          }
+        }*/
+
         echo json_encode($report);
-        /*$currentUserId = Login::isLoggedIn();
-        if (ApiController::isTeacher($currentUserId)) {
+        http_response_code(200);
+        //$currentUserId = Login::isLoggedIn();
+        /*if (ApiController::isTeacher($currentUserId)) {
           // TODO show eval possibilities
         } else {
           // TODO show student's report
         }*/
+      } else {
+        echo $notFoundErr;
+        http_response_code(405);
+      }
+    } else {
+      echo $notLoggedInErr;
+      http_response_code(401);
+    }
+  } else if ($_GET['url'] == 'student') {
+    if (Login::isLoggedIn()) {
+      if (isset($_GET['id'])) {
+        $userid = $_GET['id'];
+        $student = $userDAO->getUserById($userid);
+        echo json_encode($student);
       } else {
         echo $notFoundErr;
         http_response_code(405);
@@ -119,5 +170,65 @@ if ($_SERVER['REQUEST_METHOD'] == 'GET') {
   http_response_code(405);
 }
 
+  ////////////////////////
+ /// HELPER FN //////////
+////////////////////////
+class ApiHelper
+{
+
+  function isStudent($userid) {
+    $isStudent = false;
+
+    $students = $userDAO->getAllStudents();
+    foreach ($students as $student) {
+      if ($student->id == $userid) {
+        $isStudent = true;
+        break;
+      }
+    }
+
+    return $isStudent;
+  }
+
+  function isTeacher($userid) {
+    $isTeacher = false;
+
+    $teachers = $userDAO->getAllTeachers();
+    foreach ($teachers as $teacher) {
+      if ($teacher->id == $userid) {
+        $isTeacher = true;
+      }
+    }
+
+    return $isTeacher;
+  }
+
+  public static function createReportObj($studentid) {
+    $modules = $userDAO->getModulesFromStudent($studentid);
+    foreach($modules as $module) {
+      $modArr = array();
+      echo $module->name;
+      $doelstellingen = $userDAO->getFollowedDoelstellingenInModule($module->id, $studentid);
+      foreach ($doelstellingen as $doelstelling) {
+        $doelstellingArr = array();
+        echo $doelstelling->name;
+        $criteria = $userDAO->getCriteriaForDoelstelling($doelstelling->id);
+        foreach ($criteria as $criterium) {
+          $critArr = array();
+          $critObj = new stdObject();
+          $critObj->id = $criterium->id;
+          $critObj->name = $criterium->weergaveTitel;
+          array_push($critArr,$critObj);
+        }
+        array_push($doelstellingArr, $critArr);
+      }
+      array_push($modArr, $doelstellingArr);
+    }
+
+    return $modarr;
+  }
+
+
+}
 
 ?>

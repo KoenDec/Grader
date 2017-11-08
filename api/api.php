@@ -31,7 +31,7 @@ class ApiController
 
     return $isTeacher;
   }
-
+/*
   public static function createReportObj($studentid) {
     $modules = $userDAO->getModulesFromStudent($studentid);
     foreach($modules as $module) {
@@ -55,6 +55,6 @@ class ApiController
     }
 
     return $modarr;
-  }
+  }*/
 
 }
