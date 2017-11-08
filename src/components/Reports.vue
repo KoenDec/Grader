@@ -13,7 +13,24 @@
         </v-flex>
         <v-flex>
           <v-btn large color="primary"><v-icon>vertical_align_bottom</v-icon></v-btn>
-          <v-btn large color="primary"><v-icon></v-icon></v-btn>
+          <v-btn large color="primary"><v-icon>local_printshop</v-icon></v-btn>
+        </v-flex>
+    </v-layout>
+    <v-layout row-wrap>
+        <v-flex xs12 offset-xs1 class="text-xs-left">
+          <h2 class="headline">Studiemodules van: {{ currentstudent.name }}</h2>
+        </v-flex>
+    </v-layout>
+    <v-layout row-wrap>
+        <v-flex xs10 offset-xs1 class="text-xs-left">
+          <v-expansion-panel>
+              <v-expansion-panel-content v-for="(item,i) in 5" :key="i">
+                <div slot="header">Item</div>
+                <v-card>
+                  <v-card-text class="grey lighten-3">Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat.</v-card-text>
+                </v-card>
+              </v-expansion-panel-content>
+            </v-expansion-panel>
         </v-flex>
     </v-layout>
   </main>
@@ -24,7 +41,12 @@ export default {
   name: 'Reports',
   data () {
     return {
+      currentstudent: { // TODO DUMMY OBJECT - will be converted by watched property
+        'name': 'Faisal Nizami'
+      },
+      currentreport: {
 
+      }
     }
   }
 }
