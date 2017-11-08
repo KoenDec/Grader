@@ -5,6 +5,8 @@ import Reports from '@/components/Reports'
 import Home from '@/components/Home'
 import Studenten from '@/components/Studenten'
 import Print from '@/components/Print'
+import checkboxes from '@/components/CheckboxContainer'
+Vue.component('checkboxes', checkboxes)
 
 Vue.use(Router)
 

@@ -7,11 +7,7 @@
       </v-flex>
   </v-layout>
   <v-layout row-wrap>
-    <v-flex xs offset-xs1>
-      <p style="color: #9e9e9e">Selecteer opleidingen</p>
-      <v-checkbox  v-bind:label="`Alles selecteren`" v-model="allSelect" @change="changeOpleidingCheckboxStates(allSelect)" light></v-checkbox>
-      <v-checkbox v-for="(item, i) in opleiding" v-bind:label="`Opleiding ${i}`" v-model="opleiding[i]" light></v-checkbox>
-    </v-flex>
+    <checkboxes></checkboxes>
 <!--
       <form class="col s7" action="#">
           <p>
@@ -45,6 +41,7 @@ export default {
   name: 'Print',
   data () {
     return {
+      allSelect: true,
       opleiding: [true, true, true, true, true]
     }
   },
@@ -54,19 +51,12 @@ export default {
     },
     checkState (val) {
       return val
-    }
-  },
-  computed: {
-    allSelect: {
-      get: function () {
-        if (this.opleiding.every(this.checkState)) {
-          return true
-        } else {
-          return false
-        }
-      },
-      set: function (newValue) {
-        return newValue
+    },
+    checkAll (val) {
+      if (this.opleiding.every(this.checkState)) {
+        this.allSelect = true
+      } else {
+        this.allSelect = false
       }
     }
   }
