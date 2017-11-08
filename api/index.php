@@ -61,39 +61,11 @@ if ($_SERVER['REQUEST_METHOD'] == 'GET') {
         $studentid = $_GET['id'];
 
         $report = (object)[
-          'modules' => []
+          'modules' => array()
         ];
-        $modules = $userDAO->getModulesFromStudent($studentid);
-        foreach($modules as $module) {
-          $modObj = (object)[
-            'id' => $module->id,
-            'modName' => $module->name,
-            'doelstellingen' => []
-          ];
-          array_push($report->modules, $modObj);
-        }
 
-        foreach($report->modules as $mod) {
-          $doelstellingen = $userDAO->getFollowedDoelstellingenInModule($mod->id, $studentid);
-          foreach ($doelstellingen as $doelstelling) {
-            $doelObj = (object)[
-              'id' => $doelstelling->id,
-              'doelName' => $doelstelling->name,
-              'criteria' => []
-            ];
-            array_push($mod->doelstellingen, $doelObj);
-          }
-        }
-        /*
-        foreach ($report->modules->doelstellingen as $doel) {
-          $criteria = $userDAO->getCriteriaForDoelstelling($doel->id);
-          foreach ($criteria as $criterium) {
-            $critObj = (object)[
-              'critName' => $criterium->weergaveTitel
-            ];
-            array_push($doelObj->criteria, $critObj);
-          }
-        }*/
+
+
 
         echo json_encode($report);
         http_response_code(200);
@@ -121,6 +93,15 @@ if ($_SERVER['REQUEST_METHOD'] == 'GET') {
         echo $notFoundErr;
         http_response_code(405);
       }
+    } else {
+      echo $notLoggedInErr;
+      http_response_code(401);
+    }
+  } else if ($_GET['url'] == 'opleidingen') {
+    if (Login::isLoggedIn()) {
+      $edus = $userDAO->getAllEducations();
+      echo json_encode($edus);
+      http_response_code(200);
     } else {
       echo $notLoggedInErr;
       http_response_code(401);
