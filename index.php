@@ -37,7 +37,11 @@ function checkGET()
                 break;
 
             case "rapporten":
-                showReportsPage();
+                var_dump($_POST);
+                showReportsPage(null);
+                if(isset($_POST["report-search"])){
+
+                }
                 break;
 
             case "studenten":

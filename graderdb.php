@@ -186,7 +186,11 @@ class UserDAO {
         try {
             $conn = graderdb::getConnection();
 
-            $sql = 'SELECT * FROM users WHERE ((firstname LIKE :query) OR (lastname LIKE :query)) AND (id IN (SELECT studentId FROM studenten))';
+            $sql = '    SELECT * FROM users WHERE ((firstname LIKE :query)
+								                    OR (lastname LIKE :query)
+								                    OR CONCAT(firstname, " ", lastname) LIKE :query
+								                    OR CONCAT(lastname, " ", firstname) LIKE :query
+							                  ) AND (id IN (SELECT studentId FROM studenten))';
 
             $stmt = $conn->prepare($sql);
             $query = '%'.$query.'%';

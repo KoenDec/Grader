@@ -91,25 +91,34 @@ $(document).ready(function () {
     $('.edit-opslaan-rapport').on('click', handleReportEdit);
 
     $("#report-search").on('keyup', function(){
+
+        var submitbutton = $(this).parent().find($("button"));
+        submitbutton.addClass("disabled");
+
+        var resultsDropdownlist = $('#studentSearchDropdown.dropdown-content');
+
         $.ajax({
             type: "POST",
             url: "studentSearch.php",
             dataType: 'json',
             data:'keyword='+$(this).val(),
             success: function(data){
-                if(data !== 'no students'){
-                    $('.dropdown-content').html('');
-                    $.each(data, function(i, student){
+                resultsDropdownlist.html('');
+                if(data !== 'no students') {
+                    $.each(data, function (i, student) {
                         var studentName = student.firstname + " " + student.lastname;
-                        $('.dropdown-content').append('<li data-email='+student.email+'>'+studentName+'</li>');
-                    })
-                    $('.autocomplete-content li').on('click', function(){
+                        resultsDropdownlist.append('<li data-email=' + student.email + '>' + studentName + '</li>');
+                    });
+                    $('.autocomplete-content li').on('click', function () {
                         var student = $(this).text();
                         $('#report-search').val(student);
-                        $('.dropdown-content').html('');
-                        $('.selectedStudent span').text(student);
-
+                        submitbutton.removeClass("disabled");
+                        resultsDropdownlist.html('');
                     });
+                } else if($(this).val() == ""){
+
+                } else {
+                    resultsDropdownlist.append('<li><em>No students found</em></li>');
                 }
             }
         });

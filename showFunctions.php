@@ -40,6 +40,19 @@ function showEducationsCheckboxes($onlyGuiFunction){
     }
 }
 
+function showStudentLiveSearchForm(){
+    ?>
+    <form method="POST">
+        <div class="student-search input-field col s6">
+            <input type="text" id="report-search" class="col s8 autocomplete" name="report-search" autocomplete="off" />
+            <label for="report-search">Zoek student</label>
+            <button type="submit" class="waves-effect waves-light btn disabled"><i class="material-icons">search</i></button>
+            <ul id="studentSearchDropdown" class="autocomplete-content dropdown-content"></ul>
+        </div>
+    </form>
+<?php
+}
+
 /**************************
  *     SPECIFIC PAGES     *
  **************************/
@@ -189,140 +202,152 @@ $userRole = $userDAO->getUserRole($loggedInUserId);
         <?php
     }
 
-    function showReportsPage(){
+    function showReportsPage($studentId){
         $userDAO = new UserDAO();
-        // todo now only student 1's report (hardcoded) is shown, create functionality for other students
-        $studentId = 6; // faisal
-        $modules = $userDAO->getModulesFromStudent($studentId);
 
+        if($studentId != null) {
+            $student = $userDAO->getUserById($studentId);
+            $modules = $userDAO->getModulesFromStudent($studentId);
+        }
         $dateNow = date('d/m/Y');
 
-        if(!empty($_POST['student'])) {
-            $selectedStudent = $_POST['student'];
-        } else {
-            $selectedStudent = 'nothing';
-        }
         // todo don't show edit report button for students, that'd be weird  ;) (aslo show ONLY his report)
         ?>
         <div class="row">
             <h2>Rapporten</h2>
         </div>
         <div class="row">
-            <div class="student-search input-field col s6">
-                <input type="text" id="report-search" class="col s8 autocomplete" name="report-search" />
-                <label for="report-search">Zoek student</label>
-                <a class="waves-effect waves-light btn"><i class="material-icons">search</i></a>
-                <ul class="autocomplete-content dropdown-content"></ul>
-            </div>
-            <div class="right-align col s6 reports-btns">
-                <a class="waves-effect waves-light btn tooltipped" data-delay="50" data-tooltip="Rapport downloaden"><i class="material-icons">file_download</i></a>
-                <a class="waves-effect waves-light btn tooltipped" data-delay="50" data-tooltip="Rapport afdrukken"><i class="material-icons">print</i></a>
-            </div>
-        </div>
-        <div class="row selectedStudent">
-            <p class="col s6">Studiemodules van: <span style="font-weight: bold">Faisal Nizami</span></p>
-            <div class="right-align">
-                <a class="waves-effect waves-light btn tooltipped edit-opslaan-rapport" data-editing="false" data-delay="50" data-tooltip="Aanpassen inschakelen"><i class="material-icons">edit</i></a>
-            </div>
-        </div>
-
-        <ul class="popout collapsible courseCreator" data-collapsible="expandable">
             <?php
-            // todo get students results and comments from database
-            foreach($modules as $module){
+            showStudentLiveSearchForm();
+            if($studentId != null) {
                 ?>
-
-                <li>
-                    <div class='valign-wrapper collapsible-header collapsible-module'><i class='collapse-icon material-icons'>add_box</i>
-                        <h4><?= $module->name ?></h4>
-                    </div>
-                    <div class='collapsible-body'>
-                        <table class="striped bordered">
-                            <tr>
-                                <th class="doelstellingwidth">Doelstellingen</th>
-                                <th>Resultaat</th>
-                                <th>Gemiddelde</th>
-                                <th>Datum</th>
-                                <th class="opmerkingenwidth">Opmerkingen</th>
-                            </tr>
-                            <tr>
-
-                                <?php
-                                $doelstellingen = $userDAO->getFollowedDoelstellingenInModule($module->id, $studentId);
-                                foreach($doelstellingen as $doelstelling){
-                                ?>
-                                <th style="border-top: 2px solid gray; border-bottom: 2px solid gray" colspan="5"><strong><?= $doelstelling->name ?></strong></th>
-                            </tr><tr>
-                                <?php
-                                $criteria = $userDAO->getCriteriaForDoelstelling($doelstelling->id);
-                                foreach($criteria as $criterium){
-                                ?>
-                                <td style="padding-left: 30px" class="doelstellingwidth valign-wrapper"><i class="material-icons">navigate_next</i><?= $criterium->weergaveTitel ?></td>
-                                <td contenteditable="false">
-                                    <div class="input-field">
-                                        <select class="hidden" disabled>
-                                            <option value="" disabled selected>Niets geselecteerd</option>
-                                            <option value="1">R</option>
-                                            <option value="2">O</option>
-                                            <option value="3">V</option>
-                                            <option value="4">G</option>
-                                        </select>
-                                    </div>
-                                    <p>
-                                        <?php
-                                        for($eerderResultaat = 0; $eerderResultaat < 5; $eerderResultaat++) {
-                                            if($eerderResultaat > 0){
-                                                echo ", ";
-                                            }
-                                            ?>
-                                            <span class="eerder-resultaat tooltipped" data-delay="50" data-tooltip="20/10/17">O</span>
-                                            <?php
-                                        }
-                                        ?>
-                                    </p>
-                                </td>
-                                <td class="avg">O</td>  <!--todo Actualy calculate avg score-->
-                                <td class="pickDate"><?= $dateNow ?></td>
-                                <td class="opmerkingenwidth" >
-                                    <div class="input-field">
-                                        <input disabled  id="opmerkingen" type="text">
-                                        <label for="opmerkingen">Opmerkingen</label>
-                                    </div></td>
-                            </tr><tr>
-                                <?php
-                                }
-
-                                }
-                                ?>
-                            </tr>
-                        </table>
-
-                        <div class="row">
-                            <div class="input-field col s12">
-                                <textarea disabled id="moduleComment" class="materialize-textarea"></textarea>
-                                <label for="moduleComment">Commentaar bij deze module: </label>
-                            </div>
-                        </div>
-                    </div>
-                </li>
+                <div class="right-align col s6 reports-btns">
+                    <a class="waves-effect waves-light btn tooltipped" data-delay="50"
+                       data-tooltip="Rapport downloaden"><i class="material-icons">file_download</i></a>
+                    <a class="waves-effect waves-light btn tooltipped" data-delay="50" data-tooltip="Rapport afdrukken"><i
+                            class="material-icons">print</i></a>
+                </div>
                 <?php
             }
             ?>
-        </ul>
-        <div class="row">
-            <div class="input-field col s12">
-                <textarea disabled id="generalComment" class="materialize-textarea"></textarea>
-                <label for="generalComment">Algemeen commentaar:</label>
-            </div>
         </div>
-        <div class="row">
-            <div class="input-field col s12">
-                <textarea disabled id="klasraadComment" class="materialize-textarea"></textarea>
-                <label for="klasraadComment">Commentaar klassenraad:</label>
-            </div>
-        </div>
-
         <?php
+        if($studentId != null) {
+            ?>
+            <div class="row selectedStudent">
+                <p class="col s6">Studiemodules van: <span style="font-weight: bold">Faisal Nizami</span></p>
+                <div class="right-align">
+                    <a class="waves-effect waves-light btn tooltipped edit-opslaan-rapport" data-editing="false"
+                       data-delay="50" data-tooltip="Aanpassen inschakelen"><i class="material-icons">edit</i></a>
+                </div>
+            </div>
+
+            <ul class="popout collapsible courseCreator" data-collapsible="expandable">
+                <?php
+                // todo get students results and comments from database
+                foreach ($modules as $module) {
+                    ?>
+
+                    <li>
+                        <div class='valign-wrapper collapsible-header collapsible-module'><i
+                                class='collapse-icon material-icons'>add_box</i>
+                            <h4><?= $module->name ?></h4>
+                        </div>
+                        <div class='collapsible-body'>
+                            <table class="striped bordered">
+                                <tr>
+                                    <th class="doelstellingwidth">Doelstellingen</th>
+                                    <th>Resultaat</th>
+                                    <th>Gemiddelde</th>
+                                    <th>Datum</th>
+                                    <th class="opmerkingenwidth">Opmerkingen</th>
+                                </tr>
+                                <tr>
+
+                                    <?php
+                                    $doelstellingen = $userDAO->getFollowedDoelstellingenInModule($module->id, $studentId);
+                                    foreach ($doelstellingen as $doelstelling){
+                                    ?>
+                                    <th style="border-top: 2px solid gray; border-bottom: 2px solid gray" colspan="5">
+                                        <strong><?= $doelstelling->name ?></strong></th>
+                                </tr>
+                                <tr>
+                                    <?php
+                                    $criteria = $userDAO->getCriteriaForDoelstelling($doelstelling->id);
+                                    foreach ($criteria as $criterium){
+                                    ?>
+                                    <td style="padding-left: 30px" class="doelstellingwidth valign-wrapper"><i
+                                            class="material-icons">navigate_next</i><?= $criterium->weergaveTitel ?>
+                                    </td>
+                                    <td contenteditable="false">
+                                        <div class="input-field">
+                                            <select class="hidden" disabled>
+                                                <option value="" disabled selected>Niets geselecteerd</option>
+                                                <option value="1">R</option>
+                                                <option value="2">O</option>
+                                                <option value="3">V</option>
+                                                <option value="4">G</option>
+                                            </select>
+                                        </div>
+                                        <p>
+                                            <?php
+                                            for ($eerderResultaat = 0; $eerderResultaat < 5; $eerderResultaat++) {
+                                                if ($eerderResultaat > 0) {
+                                                    echo ", ";
+                                                }
+                                                ?>
+                                                <span class="eerder-resultaat tooltipped" data-delay="50"
+                                                      data-tooltip="20/10/17">O</span>
+                                                <?php
+                                            }
+                                            ?>
+                                        </p>
+                                    </td>
+                                    <td class="avg">O</td>  <!--todo Actualy calculate avg score-->
+                                    <td class="pickDate"><?= $dateNow ?></td>
+                                    <td class="opmerkingenwidth">
+                                        <div class="input-field">
+                                            <input disabled id="opmerkingen" type="text">
+                                            <label for="opmerkingen">Opmerkingen</label>
+                                        </div>
+                                    </td>
+                                </tr>
+                                <tr>
+                                    <?php
+                                    }
+
+                                    }
+                                    ?>
+                                </tr>
+                            </table>
+
+                            <div class="row">
+                                <div class="input-field col s12">
+                                    <textarea disabled id="moduleComment" class="materialize-textarea"></textarea>
+                                    <label for="moduleComment">Commentaar bij deze module: </label>
+                                </div>
+                            </div>
+                        </div>
+                    </li>
+                    <?php
+                }
+                ?>
+            </ul>
+            <div class="row">
+                <div class="input-field col s12">
+                    <textarea disabled id="generalComment" class="materialize-textarea"></textarea>
+                    <label for="generalComment">Algemeen commentaar:</label>
+                </div>
+            </div>
+            <div class="row">
+                <div class="input-field col s12">
+                    <textarea disabled id="klasraadComment" class="materialize-textarea"></textarea>
+                    <label for="klasraadComment">Commentaar klassenraad:</label>
+                </div>
+            </div>
+
+            <?php
+        }
     }
 
     function showStudentsPage(){
@@ -333,11 +358,9 @@ $userRole = $userDAO->getUserRole($loggedInUserId);
             <h2>Studenten</h2>
         </div>
         <div class="row">
-            <div class="student-search input-field col s6">
-                <input type="text" id="student-search" class="col s8" name="student-search" />
-                <label for="student-search">Zoek student</label>
-                <a class="waves-effect waves-light btn"><i class="material-icons">search</i></a>
-            </div>
+            <?php
+            showStudentLiveSearchForm();
+            ?>
             <div class="row">
                 <div class="addstudent" style="position: relative; height: 90px;">
                     <div class="fixed-action-btn horizontal" style="position: absolute; display: inline-block; right: 24px;">
