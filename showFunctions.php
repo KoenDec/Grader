@@ -44,6 +44,7 @@ function showStudentLiveSearchForm(){
     ?>
     <form method="POST">
         <div class="student-search input-field col s6">
+            <input type="hidden" id="foundStudentId" name="student-id" />
             <input type="text" id="report-search" class="col s8 autocomplete" name="report-search" autocomplete="off" />
             <label for="report-search">Zoek student</label>
             <button type="submit" class="waves-effect waves-light btn disabled"><i class="material-icons">search</i></button>
@@ -235,7 +236,7 @@ $userRole = $userDAO->getUserRole($loggedInUserId);
         if($studentId != null) {
             ?>
             <div class="row selectedStudent">
-                <p class="col s6">Studiemodules van: <span style="font-weight: bold">Faisal Nizami</span></p>
+                <p class="col s6">Studiemodules van: <span style="font-weight: bold"><?= $student->firstname ?> <?= $student->lastname ?></span></p>
                 <div class="right-align">
                     <a class="waves-effect waves-light btn tooltipped edit-opslaan-rapport" data-editing="false"
                        data-delay="50" data-tooltip="Aanpassen inschakelen"><i class="material-icons">edit</i></a>

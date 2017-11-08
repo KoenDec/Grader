@@ -107,10 +107,11 @@ $(document).ready(function () {
                 if(data !== 'no students') {
                     $.each(data, function (i, student) {
                         var studentName = student.firstname + " " + student.lastname;
-                        resultsDropdownlist.append('<li data-email=' + student.email + '>' + studentName + '</li>');
+                        resultsDropdownlist.append('<li data-email="' + student.email + '" data-studentId="' + student.id + '">' + studentName + '</li>');
                     });
                     $('.autocomplete-content li').on('click', function () {
                         var student = $(this).text();
+                        $("#foundStudentId").val($(this).attr("data-studentId"));
                         $('#report-search').val(student);
                         submitbutton.removeClass("disabled");
                         resultsDropdownlist.html('');
