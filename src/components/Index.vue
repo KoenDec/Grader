@@ -22,7 +22,7 @@
    <main>
      <v-content>
        <v-container fluid fill-height>
-         <v-layout justify-center>
+         <v-layout>
           <router-view/>
          </v-layout>
        </v-container>

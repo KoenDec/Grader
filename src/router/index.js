@@ -4,6 +4,7 @@ import Index from '@/components/Index'
 import Reports from '@/components/Reports'
 import Home from '@/components/Home'
 import Studenten from '@/components/Studenten'
+import Print from '@/components/Print'
 
 Vue.use(Router)
 
@@ -23,6 +24,11 @@ export default new Router({
           path: '/studenten',
           name: 'studenten',
           component: Studenten
+        },
+        {
+          path: '/afdrukken',
+          name: 'afdrukken',
+          component: Print
         },
         {
           path: '/',
