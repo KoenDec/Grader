@@ -121,7 +121,6 @@ $(document).ready(function () {
 
 });
 
-var moduleNr = 0;
 var doelstellingNr = 0;
 var criteriaNr = 0;
 

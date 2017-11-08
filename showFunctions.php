@@ -761,20 +761,18 @@ $userRole = $userDAO->getUserRole($loggedInUserId);
             <?php
         }
 
-        function showAddModuleToOpleidingPage($opleidingName) // TODO change parameter to opleidingId (or opleiding-object)
+        function showAddModuleToOpleidingPage($opleiding)
         {
-            $userDAO = new UserDAO();
-            $opleidingen = $userDAO->getAllEducations();
             ?>
 
             <div class="row">
-                <h2>Nieuwe module aanmaken voor opleiding <?= $opleidingName ?></h2>
+                <h2>Nieuwe module aanmaken voor opleiding <?= $opleiding->name ?></h2>
             </div>
             <form method="POST">
                 <div class="row courseCreator">
                     <div class='row'>
                         <div class='input-field module-input'>
-                            <input type="hidden" name="opleiding-name" value="<?=$opleidingName?>" />
+                            <input type="hidden" name="opleiding-id" value="<?=$opleiding->id?>" />
                             <label for='module-name'>Modulenaam</label>
                             <input name='module-name' type='text' />
                         </div>

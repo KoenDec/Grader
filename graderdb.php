@@ -186,7 +186,7 @@ class UserDAO {
         try {
             $conn = graderdb::getConnection();
 
-            $sql = 'SELECT * FROM users WHERE firstname LIKE :query OR lastname LIKE :query';
+            $sql = 'SELECT * FROM users WHERE ((firstname LIKE :query) OR (lastname LIKE :query)) AND (id IN (SELECT studentId FROM studenten))';
 
             $stmt = $conn->prepare($sql);
             $query = '%'.$query.'%';
@@ -306,13 +306,38 @@ class UserDAO {
         }
 
         if(isset($educationsTable[0])) {
-            $educations = $educationsTable[0];
+            $education = $educationsTable[0];
         } else {
             //die('No education found with id '.$educationId);
-            $educations = null;
+            $education = null;
         }
 
-        return $educations;
+        return $education;
+    }
+
+    public static function getEducationByName($educationName){
+        try {
+            $conn = graderdb::getConnection();
+
+            $sql = 'SELECT * FROM opleidingen WHERE name = :educationName';
+            $stmt = $conn->prepare($sql);
+            $stmt->bindParam(':educationName',$educationName);
+
+            $stmt->execute();
+
+            $educationsTable = $stmt->fetchAll(PDO::FETCH_CLASS);
+        } catch (PDOException $e) {
+            die($e->getMessage());
+        }
+
+        if(isset($educationsTable[0])) {
+            $education = $educationsTable[0];
+        } else {
+            //die('No education found with id '.$educationId);
+            $education = null;
+        }
+
+        return $education;
     }
 
     public static function getAllMessages(){

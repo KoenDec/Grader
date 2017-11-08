@@ -86,10 +86,16 @@ function checkGET()
 
             case "addModuleToOpleiding":
                 var_dump($_POST);
-                if(isset($_POST["opleiding-name"]))
+                if(isset($_POST["module-name"])){
+                    $userDAO->createModule($_POST["module-name"],$_POST["opleiding-id"],$loggedInUserId);
+                    showAddModuleToOpleidingPage($userDAO->getEducation($_POST["opleiding-id"]));
+                }
+                else if(isset($_POST["opleiding-name"]))
                 {
-                    $userDAO->createEducation($_POST["opleiding-name"], $loggedInUserId);
-                    showAddModuleToOpleidingPage($_POST["opleiding-name"]);
+                    $opleidingNaam = $_POST["opleiding-name"];
+                    $userDAO->createEducation($opleidingNaam, $loggedInUserId);
+                    $opleiding = $userDAO->getEducationByName($opleidingNaam);
+                    showAddModuleToOpleidingPage($opleiding);
                 }
                 break;
         }
