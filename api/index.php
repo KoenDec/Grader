@@ -47,9 +47,9 @@ if ($_SERVER['REQUEST_METHOD'] == 'GET') {
     }
   } else if ($_GET['url'] == 'currentUser') {
     if (Login::isLoggedIn()) {
-      if (isset($_GET['id'])) {
-        $userid = $_GET['id'];
-        $currentUser = $userDAO->getUserById($userid);
+      if (isset($_GET['token'])) {
+        $userid = $userDAO->getLoggedInUserId($_GET['token']);
+        $currentUser =
         echo json_encode($currentUser);
       } else {
         echo $notFoundErr;
@@ -178,7 +178,11 @@ if ($_SERVER['REQUEST_METHOD'] == 'GET') {
     }
   }
 } else if ($_SERVER['REQUEST_METHOD'] == 'OPTIONS') {
+
+  echo null;
+
   http_response_code(200);
+
 } else {
   http_response_code(405);
 }
