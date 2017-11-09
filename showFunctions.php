@@ -215,7 +215,6 @@ $userRole = $userDAO->getUserRole($loggedInUserId);
             $rapportmodules = $userDAO->getRapportmodules($rapport->id);
 
             $scores = $userDAO->getRapportscores($rapport->id);
-            var_dump($scores);
 
         }
         $dateNow = date('d/m/Y');
@@ -285,7 +284,16 @@ $userRole = $userDAO->getUserRole($loggedInUserId);
                                     <?php
                                     $doelstellingen = $userDAO->getDoelstellingenInDoelstellingscategorie($doelstellingscategorie->id);
                                     foreach ($doelstellingen as $doelstelling){
-                                        $score = $userDAO->getScore($rapport->id, $doelstelling->id);
+
+                                    $ratingObj = $userDAO->getRating($rapport->id, $doelstelling->id);
+                                    $score = null;
+                                    $opmerking = null;
+                                    if($ratingObj != null) {
+                                        var_dump($ratingObj);
+                                        echo "ratingobj is not null";
+                                        $score = $ratingObj->score;
+                                        $opmerking = $ratingObj->opmerking;
+                                    }
 
                                     ?>
                                     <td style="padding-left: 30px" class="doelstellingwidth valign-wrapper"><i
@@ -323,7 +331,7 @@ $userRole = $userDAO->getUserRole($loggedInUserId);
                                     <td class="pickDate"><?= $dateNow ?></td>
                                     <td class="opmerkingenwidth">
                                         <div class="input-field">
-                                            <input disabled id="opmerkingen" type="text" value="<?= '' ?>" /> <!-- TODO opmerking weergeven -->
+                                            <input disabled id="opmerkingen" type="text" value="<?= $opmerking ?>" />
                                             <label for="opmerkingen">Opmerkingen</label>
                                         </div>
                                     </td>

@@ -95,11 +95,19 @@ if ($_SERVER['REQUEST_METHOD'] == 'GET') {
                   $doelstellingen = $userDAO->getDoelstellingenInDoelstellingscategorie($doelstellingscategorie->id);
 
                   foreach($doelstellingen as $doelstelling) {
-                      $score = $userDAO->getScore($rapport->id, $doelstelling->id);
+                      $ratingObj = $userDAO->getRating($rapport->id, $doelstelling->id);
+                      $score = null;
+                      $opmerking = null;
+                      if($ratingObj != null) {
+                          $score = $ratingObj->score;
+                          $opmerking = $ratingObj->opmerking;
+                      }
+
                       $doelstellingObjToPush = (object)[
                           'id' => $doelstelling->id,
                           'name' => utf8_encode($doelstelling->weergaveTitel),
-                          'score' => $score
+                          'score' => $score,
+                          'opmerking' => $opmerking
                       ];
 
                       array_push($doelstellingscategorieObjToPush->doelstellingen, $doelstellingObjToPush);

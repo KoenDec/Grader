@@ -648,11 +648,11 @@ class UserDAO {
         return $scores;
     }
 
-    public static function getScore($rapportId, $doelstellingId){
+    public static function getRating($rapportId, $doelstellingId){
         try {
             $conn = graderdb::getConnection();
 
-            $sql = 'SELECT score FROM rapporten_scores WHERE rapportId = :rapportId AND doelstellingId = :doelstellingId';
+            $sql = 'SELECT * FROM rapporten_scores WHERE rapportId = :rapportId AND doelstellingId = :doelstellingId';
             $stmt = $conn->prepare($sql);
             $stmt->bindParam(':rapportId',$rapportId);
             $stmt->bindParam(':doelstellingId',$doelstellingId);
@@ -665,13 +665,13 @@ class UserDAO {
         }
 
         if(isset($doelstellingenTable[0])) {
-            $score = $doelstellingenTable[0]->score;
+            $rating = $doelstellingenTable[0];
         } else {
             //die('No score found for doelstelling with id '.$doelstellingId.' in rapport with id '.$rapportId.'!');
-            $score = null;
+            $rating = null;
         }
 
-        return $score;
+        return $rating;
     }
 
      //////////////////////////////////////////////
