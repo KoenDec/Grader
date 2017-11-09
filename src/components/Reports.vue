@@ -33,6 +33,7 @@
             </v-expansion-panel>
         </v-flex>
     </v-layout>
+    {{Opleidingen}}
   </main>
 </template>
 
@@ -51,7 +52,22 @@ export default {
   },
   methods: {
     logSomething () {
-      alert('hi')
+      this.$http.post('http://localhost/Grader/api/auth',
+        {
+          username: 'thomas.de.nil@student.howest.be',
+          password: 'Student'
+        })
+      .then(function (response) {
+        console.log(response)
+      })
+      .catch(function (error) {
+        console.log(error)
+      })
+    }
+  },
+  computed: {
+    Opleidingen () {
+
     }
   }
 }
