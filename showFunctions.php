@@ -266,7 +266,7 @@ $userRole = $userDAO->getUserRole($loggedInUserId);
                                 <tr>
 
                                     <?php
-                                    $doelstellingen = $userDAO->getFollowedDoelstellingenInModule($module->id, $studentId);
+                                    $doelstellingen = $userDAO->getFollowedDoelstellingscategoriesInModule($module->id, $studentId);
                                     foreach ($doelstellingen as $doelstelling){
                                     ?>
                                     <th style="border-top: 2px solid gray; border-bottom: 2px solid gray" colspan="5">
@@ -274,7 +274,7 @@ $userRole = $userDAO->getUserRole($loggedInUserId);
                                 </tr>
                                 <tr>
                                     <?php
-                                    $criteria = $userDAO->getCriteriaForDoelstelling($doelstelling->id);
+                                    $criteria = $userDAO->getDoelstellingenInDoelstellingscategorie($doelstelling->id);
                                     foreach ($criteria as $criterium){
                                     ?>
                                     <td style="padding-left: 30px" class="doelstellingwidth valign-wrapper"><i
@@ -728,13 +728,13 @@ $userRole = $userDAO->getUserRole($loggedInUserId);
                                 <table class="striped bordered">
                                     <tr>
                                         <?php
-                                        $doelstellingen = $userDAO->getDoelstellingenInModule($module->id);
+                                        $doelstellingen = $userDAO->getDoelstellingscategoriesInModule($module->id);
                                         if($doelstellingen != null) foreach($doelstellingen as $doelstelling) {
                                         ?>
                                         <!-- TODO make checkboxes work (submitting this) -->
                                         <th><input type="checkbox" label="doelstelling<?=$doelstelling->id?>-checkbox" /><label for="doelstelling<?=$doelstelling->id?>-checkbox"><?= $doelstelling->name ?></label></th>
                                         <?php
-                                        $criteria = $userDAO->getCriteriaForDoelstelling($doelstelling->id);
+                                        $criteria = $userDAO->getDoelstellingenInDoelstellingscategorie($doelstelling->id);
                                         foreach($criteria as $criterium) {
                                         ?>
                                     </tr><tr><td class="valign-wrapper"><i class="material-icons">navigate_next</i><?= $criterium->weergaveTitel?></td>

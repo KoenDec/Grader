@@ -31,7 +31,7 @@ INSERT INTO modules(name, opleidingId, creatorId) VALUES
     ('Vak Engels', null, 3),
     ('Haarverzorging', 2, 3);
 
-INSERT INTO doelstellingen(name, moduleId, teacherId, creatorId) VALUES
+INSERT INTO doelstellingscategories(name, moduleId, teacherId, creatorId) VALUES
 	('Veiligheid, hygiëne en milieubewustzijn', 1, 4, 3),
 	('Houdingen noodzakelijk voor de uitoefening van het beroep', 1, 4, 3),
    	('Functionele vaardigheden voor de uitoefening van het beroep', 1, 4, 3),
@@ -58,7 +58,7 @@ INSERT INTO doelstellingen(name, moduleId, teacherId, creatorId) VALUES
     ('Ruimt de werpost na een haarverzorging op en maakt deze schoon', 6, 4, 3),
     ('Te integreren kennis', 6, 4, 3);
        
-INSERT INTO studenten_doelstellingen(studentId, doelstellingId, opleidingId) VALUES
+INSERT INTO studenten_doelstellingscategories(studentId, doelstellingscategorieId, opleidingId) VALUES
 	-- REAL DATA
     (6,1,null),
     (6,2,null),
@@ -103,7 +103,7 @@ INSERT INTO studenten_doelstellingen(studentId, doelstellingId, opleidingId) VAL
     (10,8,1),
     (8,8,2);
     
-INSERT INTO evaluatiecriteria(doelstellingId,weergaveTitel,creatorId) VALUES
+INSERT INTO doelstellingen(doelstellingscategorieId,weergaveTitel,creatorId) VALUES
 	(1,'Kan ergonomisch werken',3),
 	(1,'Kan economisch werken',3),
 	(1,'Kan handelen volgens de regels van de voedselveiligheid',3),
@@ -194,7 +194,7 @@ INSERT INTO rapporten(studentId, feedback) VALUES
 	(6, 'Goed gewerkt, proficiat.'),
     (7, 'Niet goed gewerkt, niet proficiat.');
     
-INSERT INTO rapporten_scores(rapportId,evaluatiecriteriumId,score) VALUES
+INSERT INTO rapporten_scores(rapportId,doelstellingId,score) VALUES
 	(1, 1, 'G'),
 	(1, 2, 'G'),
 	(1, 3, 'G'),

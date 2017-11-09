@@ -62,7 +62,7 @@ CREATE TABLE `modules` (
   FOREIGN KEY(creatorId) REFERENCES admins(adminId)
 );
 
-CREATE TABLE `doelstellingen` (
+CREATE TABLE `doelstellingscategories` (
   `id` int NOT NULL AUTO_INCREMENT PRIMARY KEY,
   `name` varchar(100) NOT NULL,
   `moduleId` int NOT NULL,
@@ -73,34 +73,34 @@ CREATE TABLE `doelstellingen` (
   FOREIGN KEY(creatorId) REFERENCES admins(adminId)
 );
 
-create table `studenten_doelstellingen` (
-  `doelstellingId` int NOT NULL,
+create table `studenten_doelstellingscategories` (
+  `doelstellingscategorieId` int NOT NULL,
   `studentId` int NOT NULL,
   `opleidingId` int DEFAULT NULL,
   `status` enum('Volgt','Beëindigd') NOT NULL DEFAULT 'Volgt',
-  CONSTRAINT PK_studenten_doelstellingen PRIMARY KEY (doelstellingId, studentId),
-  FOREIGN KEY(doelstellingId) REFERENCES doelstellingen(id),
+  CONSTRAINT PK_studenten_doelstellingen PRIMARY KEY (doelstellingscategorieId, studentId),
+  FOREIGN KEY(doelstellingscategorieId) REFERENCES doelstellingscategories(id),
   FOREIGN KEY(opleidingId) REFERENCES opleidingen(id),
   FOREIGN KEY(studentId) REFERENCES studenten(studentId)
   
 	-- TODO DODO
     --
     -- opleidingId in werkfiches can be null because some werkfiches are general and are used in all opleidingen.
-    -- opleidingId in studenten_doelstellingen is default null because the opleidingId is already mentioned in werkfiches.
+    -- opleidingId in studenten_doelstellingscategories is default null because the opleidingId is already mentioned in werkfiches.
     -- SO
-    -- if you add a record in studenten_doelstellingen and for the werkfiche that that module belongs to the oplidingId is null
-    -- a constraint should oblige you to fill out the opleidingId in studenten_doelstellingen.
+    -- if you add a record in studenten_doelstellingscategories and for the werkfiche that that module belongs to the oplidingId is null
+    -- a constraint should oblige you to fill out the opleidingId in studenten_doelstellingscategories.
     -- (if dat is possible in mysql)
   
 );
 
-CREATE TABLE `evaluatiecriteria` (
+CREATE TABLE `doelstellingen` (
   `id` int NOT NULL AUTO_INCREMENT PRIMARY KEY,
-  `doelstellingId` int NOT NULL,
+  `doelstellingscategorieId` int NOT NULL,
   `weergaveTitel` varchar(200) NOT NULL,
   `inGebruik` tinyint(1) NOT NULL DEFAULT 1,
   `creatorId` int,
-  FOREIGN KEY(doelstellingId) REFERENCES doelstellingen(id),
+  FOREIGN KEY(doelstellingscategorieId) REFERENCES doelstellingscategories(id),
   FOREIGN KEY(creatorId) REFERENCES admins(adminId)
 );
 
@@ -113,11 +113,11 @@ CREATE TABLE `rapporten` (
 
 CREATE TABLE `rapporten_scores` (
   `rapportId` int NOT NULL,
-  `evaluatiecriteriumId` int NOT NULL,
+  `doelstellingId` int NOT NULL,
   `score` enum('ZG', 'G', 'V', 'OV', 'RO', 'A') NOT NULL,
-  CONSTRAINT PK_rapporten_scores PRIMARY KEY (rapportId, evaluatiecriteriumId),
+  CONSTRAINT PK_rapporten_scores PRIMARY KEY (rapportId, doelstellingId),
   FOREIGN KEY(rapportId) REFERENCES rapporten(id),
-  FOREIGN KEY(evaluatiecriteriumId) REFERENCES evaluatiecriteria(id)
+  FOREIGN KEY(doelstellingId) REFERENCES doelstellingen(id)
 );
 
 CREATE TABLE `meldingen` (
