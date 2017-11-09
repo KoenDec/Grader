@@ -3,6 +3,8 @@ require_once('../graderdb.php');
 //require_once('api.php');
 require_once('../Login.php');
 
+header('Access-Control-Allow-Origin: *');
+
 $userDAO = new UserDAO();
 $notFoundErr = '{"Status":"Geen user gevonden"}';
 $notLoggedInErr = '{"Status":"Niet ingelogd"}';
@@ -59,15 +61,41 @@ if ($_SERVER['REQUEST_METHOD'] == 'GET') {
     if (Login::isLoggedIn()) {
       if (isset($_GET['id'])) {
         $studentid = $_GET['id'];
-
         $report = (object)[
           'modules' => array()
         ];
 
+        $modules = $userDAO->getModulesFromStudent($studentid);
+        foreach ($modules as $mod) {
+          $modObj = new Module();
+          $modObj->modName = $mod->name;
 
+          echo "\n";
+          echo json_encode($modObj);
 
+          $doelstellingen = $userDAO->getDoelstellingenInModule($mod->id);
+          foreach ($doelstellingen as $doel) {
+            $doelObj = new Doel();
+            $doelObj->doelName = $doel->name;
 
-        echo json_encode($report);
+            echo "\n\t";
+            echo json_encode($doelObj);
+
+            $criteria = $userDAO->getCriteriaForDoelstelling($doel->id);
+            foreach ($criteria as $crit) {
+              $critObj = new Crit();
+              $critObj->critName = $crit->weergaveTitel;
+
+              echo "\n\t\t";
+              echo json_encode($critObj);
+              //array_push($doelObj->criteria, $critObj);
+            }
+            //array_push($modObj->doelstellingen, $doelObj);
+          }
+          array_push($report->modules, $modObj);
+        }
+
+        //echo json_encode($report);
         http_response_code(200);
         //$currentUserId = Login::isLoggedIn();
         /*if (ApiController::isTeacher($currentUserId)) {
@@ -154,62 +182,16 @@ if ($_SERVER['REQUEST_METHOD'] == 'GET') {
   ////////////////////////
  /// HELPER FN //////////
 ////////////////////////
-class ApiHelper
-{
-
-  function isStudent($userid) {
-    $isStudent = false;
-
-    $students = $userDAO->getAllStudents();
-    foreach ($students as $student) {
-      if ($student->id == $userid) {
-        $isStudent = true;
-        break;
-      }
-    }
-
-    return $isStudent;
-  }
-
-  function isTeacher($userid) {
-    $isTeacher = false;
-
-    $teachers = $userDAO->getAllTeachers();
-    foreach ($teachers as $teacher) {
-      if ($teacher->id == $userid) {
-        $isTeacher = true;
-      }
-    }
-
-    return $isTeacher;
-  }
-
-  public static function createReportObj($studentid) {
-    $modules = $userDAO->getModulesFromStudent($studentid);
-    foreach($modules as $module) {
-      $modArr = array();
-      echo $module->name;
-      $doelstellingen = $userDAO->getFollowedDoelstellingenInModule($module->id, $studentid);
-      foreach ($doelstellingen as $doelstelling) {
-        $doelstellingArr = array();
-        echo $doelstelling->name;
-        $criteria = $userDAO->getCriteriaForDoelstelling($doelstelling->id);
-        foreach ($criteria as $criterium) {
-          $critArr = array();
-          $critObj = new stdObject();
-          $critObj->id = $criterium->id;
-          $critObj->name = $criterium->weergaveTitel;
-          array_push($critArr,$critObj);
-        }
-        array_push($doelstellingArr, $critArr);
-      }
-      array_push($modArr, $doelstellingArr);
-    }
-
-    return $modarr;
-  }
-
-
+class Module {
+  public $modName = '';
+  public $doelstellingen = [];
+}
+class Doel {
+  public $doelName = '';
+  public $criteria = [];
+}
+class Crit {
+  public $critName = '';
 }
 
 ?>
