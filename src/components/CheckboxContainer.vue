@@ -1,5 +1,5 @@
 <template>
-  <v-flex xs offset-xs1>
+  <v-flex xs12 offset-xs1>
     <v-checkbox  v-bind:label="`Alles selecteren`" v-model="allSelect" @change="changeOpleidingCheckboxStates(allSelect)" light></v-checkbox>
     <v-checkbox class="ml-4" v-for="(item, i) in opleiding" v-bind:label="`Opleiding ${i}`" @change="checkAll(opleiding[i])" v-model="opleiding[i]" light></v-checkbox>
   </v-flex>

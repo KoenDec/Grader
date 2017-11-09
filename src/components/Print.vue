@@ -7,7 +7,9 @@
       </v-flex>
   </v-layout>
   <v-layout row-wrap>
+  <v-flex xs2>
     <checkboxes></checkboxes>
+  </v-flex>
 <!--
       <form class="col s7" action="#">
           <p>
