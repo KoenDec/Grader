@@ -1,13 +1,15 @@
 <template>
   <v-flex xs offset-xs1>
     <v-checkbox  v-bind:label="`Alles selecteren`" v-model="allSelect" @change="changeOpleidingCheckboxStates(allSelect)" light></v-checkbox>
-    <v-checkbox class="ml-4" v-for="(item, i) in opleiding" v-bind:label="`Opleiding ${i}`" @change="checkAll(opleiding[i])" v-model="opleiding[i]" light></v-checkbox>
+    <v-checkbox class="ml-4" v-for="(item, i) in opleiding" v-bind:label="`Opleiding ${listobject}`" @change="checkAll(opleiding[i])" v-model="opleiding[i]" light></v-checkbox>
+    {{listobject}}
   </v-flex>
 </template>
 
 <script>
 export default {
   name: 'Print',
+  props: ['listobject'],
   data () {
     return {
       allSelect: true,
