@@ -266,19 +266,19 @@ $userRole = $userDAO->getUserRole($loggedInUserId);
                                 <tr>
 
                                     <?php
-                                    $doelstellingen = $userDAO->getFollowedDoelstellingscategoriesInModule($module->id, $studentId);
-                                    foreach ($doelstellingen as $doelstelling){
+                                    $doelstellingscategories = $userDAO->getFollowedDoelstellingscategoriesInModule($module->id, $studentId);
+                                    foreach ($doelstellingscategories as $doelstellingscategorie){
                                     ?>
                                     <th style="border-top: 2px solid gray; border-bottom: 2px solid gray" colspan="5">
-                                        <strong><?= $doelstelling->name ?></strong></th>
+                                        <strong><?= $doelstellingscategorie->name ?></strong></th>
                                 </tr>
                                 <tr>
                                     <?php
-                                    $criteria = $userDAO->getDoelstellingenInDoelstellingscategorie($doelstelling->id);
-                                    foreach ($criteria as $criterium){
+                                    $doelstellingen = $userDAO->getDoelstellingenInDoelstellingscategorie($doelstellingscategorie->id);
+                                    foreach ($doelstellingen as $doelstelling){
                                     ?>
                                     <td style="padding-left: 30px" class="doelstellingwidth valign-wrapper"><i
-                                            class="material-icons">navigate_next</i><?= $criterium->weergaveTitel ?>
+                                            class="material-icons">navigate_next</i><?= $doelstelling->weergaveTitel ?>
                                     </td>
                                     <td contenteditable="false">
                                         <div class="input-field">
@@ -292,6 +292,7 @@ $userRole = $userDAO->getUserRole($loggedInUserId);
                                         </div>
                                         <p>
                                             <?php
+                                            // TODO real data
                                             for ($eerderResultaat = 0; $eerderResultaat < 5; $eerderResultaat++) {
                                                 if ($eerderResultaat > 0) {
                                                     echo ", ";
@@ -666,8 +667,8 @@ $userRole = $userDAO->getUserRole($loggedInUserId);
                     </div>
                 </div>
                 <div class="row ">
-                    <label>Selecteer een opleiding</label>
-                    <select name="student-opleidingId" required>
+                    <label for="student-opleidingIdSelect">Selecteer een opleiding</label>
+                    <select name="student-opleidingId" id="student-opleidingIdSelect" required>
                         <option value="" disabled selected>Geen selectie</option>
                         <?php
                         foreach($opleidingen as $opleiding){
@@ -724,20 +725,19 @@ $userRole = $userDAO->getUserRole($loggedInUserId);
                                 <li>
                                     <div class="collapsible-header collapsible-module active"><i class="collapse-icon material-icons">indeterminate_check_box</i><?= $module->name ?></div>
                                     <div class="collapsible-body">
-                            <span>
                                 <table class="striped bordered">
                                     <tr>
                                         <?php
-                                        $doelstellingen = $userDAO->getDoelstellingscategoriesInModule($module->id);
-                                        if($doelstellingen != null) foreach($doelstellingen as $doelstelling) {
+                                        $doelstellingscategories = $userDAO->getDoelstellingscategoriesInModule($module->id);
+                                        if($doelstellingscategories != null) foreach($doelstellingscategories as $doelstellingscategorie) {
                                         ?>
                                         <!-- TODO make checkboxes work (submitting this) -->
-                                        <th><input type="checkbox" label="doelstelling<?=$doelstelling->id?>-checkbox" /><label for="doelstelling<?=$doelstelling->id?>-checkbox"><?= $doelstelling->name ?></label></th>
+                                        <th><input type="checkbox" name="doelstelling<?=$doelstellingscategorie->id?>-checkbox" /><label for="doelstelling<?=$doelstellingscategorie->id?>-checkbox"><?= $doelstellingscategorie->name ?></label></th>
                                         <?php
-                                        $criteria = $userDAO->getDoelstellingenInDoelstellingscategorie($doelstelling->id);
-                                        foreach($criteria as $criterium) {
+                                        $doelstellingen = $userDAO->getDoelstellingenInDoelstellingscategorie($doelstellingscategorie->id);
+                                        foreach($doelstellingen as $doelstelling) {
                                         ?>
-                                    </tr><tr><td class="valign-wrapper"><i class="material-icons">navigate_next</i><?= $criterium->weergaveTitel?></td>
+                                    </tr><tr><td class="valign-wrapper"><i class="material-icons">navigate_next</i><?= $doelstelling->weergaveTitel?></td>
                                         <?php
                                         }
                                         ?>
@@ -747,7 +747,6 @@ $userRole = $userDAO->getUserRole($loggedInUserId);
                                         ?>
                                     </tr>
                                 </table>
-                            </span>
                                     </div>
                                 </li>
                                 <?php
@@ -797,16 +796,16 @@ $userRole = $userDAO->getUserRole($loggedInUserId);
                     <div class='row'>
                         <div class='input-field module-input'>
                             <input type="hidden" name="opleiding-id" value="<?=$opleiding->id?>" />
-                            <label for='module-name'>Modulenaam</label>
-                            <input name='module-name' type='text' />
+                            <label for='module-name-input'>Modulenaam</label>
+                            <input name='module-name' id='module-name-input' type='text' />
                         </div>
                         <div class='creator-btns'>
-                            <a class='add-doelstelling-btn waves-effect waves-light btn'><i class='material-icons left'>add</i>Doelstelling toevoegen</a>
+                            <a class="add-doelstellingscat-btn waves-effect waves-light btn"><i class='material-icons left'>add</i>Doelstellingscategorie toevoegen</a>
                         </div>
                     </div>
                     <div>
                         <table class='striped bordered doelstelling-table'>
-                            <p class='no-doelstellingen'>Geen doelstellingen</p>
+                            <tr class='no-doelstellingen'>Geen doelstellingen</tr>
                         </table>
                     </div>
                 </div>

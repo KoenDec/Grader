@@ -110,8 +110,6 @@ class UserDAO {
         }
     }
 
-
-
     public static function getUserById($userid) {
         try {
             $conn = graderdb::getConnection();
@@ -245,10 +243,10 @@ class UserDAO {
             $sql = 'SELECT DISTINCT u.* FROM users u
 		              JOIN studenten s on u.id = s.studentId
 	                  JOIN studenten_doelstellingscategories sd ON s.studentId = sd.studentId
-	                  JOIN doelstellingscategories d ON sm.doelstellingscategorieId = d.id
+	                  JOIN doelstellingscategories d ON sd.doelstellingscategorieId = d.id
                       JOIN modules m ON d.moduleId = m.id
                       WHERE sd.status = \'volgt\'
-			            AND w.opleidingId = :educationId OR sd.opleidingId = :educationId';
+			            AND m.opleidingId = :educationId OR sd.opleidingId = :educationId';
 
             $stmt = $conn->prepare($sql);
             $stmt->bindParam(':educationId',$educationId);
