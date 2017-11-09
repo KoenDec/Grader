@@ -13,7 +13,7 @@
         </v-flex>
         <v-flex>
           <v-btn large color="primary"><v-icon>vertical_align_bottom</v-icon></v-btn>
-          <v-btn large color="primary"><v-icon>local_printshop</v-icon></v-btn>
+          <v-btn @click="logSomething" large color="primary"><v-icon>local_printshop</v-icon></v-btn>
         </v-flex>
     </v-layout>
     <v-layout row-wrap>
@@ -25,7 +25,7 @@
         <v-flex xs10 offset-xs1 class="text-xs-left">
           <v-expansion-panel>
               <v-expansion-panel-content v-for="(item,i) in 5" :key="i">
-                <div slot="header">Item</div>
+                <div slot="header">Item {{i}}</div>
                 <v-card>
                   <v-card-text class="grey lighten-3">Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat.</v-card-text>
                 </v-card>
@@ -47,6 +47,11 @@ export default {
       currentreport: {
 
       }
+    }
+  },
+  methods: {
+    logSomething () {
+      alert('hi')
     }
   }
 }
