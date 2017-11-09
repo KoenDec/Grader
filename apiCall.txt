@@ -1,0 +1,30 @@
+# Login 
+type POST
+url  api/auth
+data {"username":"","password":""}
+
+# Logout
+type DELETE
+url  api/auth?token=
+
+# Get all students
+type GET
+url  api/students
+
+# Get students in an education
+type GET
+url  api/studentsInEducation?edu=
+edu = opleidingid
+
+# Get the currentUser
+type GET
+url  api/currentUser?token=
+
+# Get a student
+type GET
+url  api/student?id=
+id = student id
+
+#Get opleidingen
+type GET
+url  api/opleidingen

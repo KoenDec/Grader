@@ -4,6 +4,7 @@ require_once('../graderdb.php');
 require_once('../Login.php');
 
 header('Access-Control-Allow-Origin: *');
+header('Access-Control-Allow-Methods: GET,PUT,POST,DELETE,OPTIONS');
 
 $userDAO = new UserDAO();
 $notFoundErr = '{"Status":"Geen user gevonden"}';
@@ -22,7 +23,7 @@ if ($_SERVER['REQUEST_METHOD'] == 'GET') {
       echo $notLoggedInErr;
       http_response_code(401);
     }
-  } else if ($_GET['url'] == 'studentInEducation') {
+  } else if ($_GET['url'] == 'studentsInEducation') {
     if (Login::isLoggedIn()) {
       $userid = Login::isLoggedIn();
       if (isset($_GET['edu'])) {
