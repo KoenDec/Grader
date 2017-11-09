@@ -17,7 +17,11 @@
         <v-icon large color="white" @click.stop="drawer = !drawer">{{ drawer? 'close':'menu' }}</v-icon>
      <v-toolbar-title>Rapportensysteem</v-toolbar-title>
      <v-spacer></v-spacer>
-     <v-menu>
+     <v-menu
+      origin="center center"
+      transition="scale-transition"
+      auto
+      >
         <v-toolbar-title slot="activator">
           <span>USERNAME</span>
           <v-icon dark>arrow_drop_down</v-icon>

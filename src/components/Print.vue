@@ -48,12 +48,6 @@
     <v-btn color="primary" class="ma-1 left" dark><v-icon dark>print</v-icon></v-btn>
     <v-btn color="primary" class="ma-1 left" dark><v-icon dark>get_app</v-icon></v-btn>
   </v-flex>
-<!--
-
-      <div class="right-align col s2 reports-btns">
-          <a class="waves-effect waves-light btn tooltipped" style="margin-bottom: 5px" data-delay="50" data-tooltip="Rapporten downloaden"><i class="material-icons">file_download</i></a>
-          <a class="waves-effect waves-light btn tooltipped" style="margin-bottom: 5px" data-delay="50" data-tooltip="Rapporten afdrukken"><i class="material-icons">print</i></a>
-      </div>-->
     </v-layout>
 </main>
 </template>

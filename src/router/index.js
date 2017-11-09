@@ -6,6 +6,7 @@ import Home from '@/components/Home'
 import Studenten from '@/components/Studenten'
 import Print from '@/components/Print'
 import checkboxes from '@/components/CheckboxContainer'
+import Subjects from '@/components/Subjects'
 Vue.component('checkboxes', checkboxes)
 
 Vue.use(Router)
@@ -31,6 +32,11 @@ export default new Router({
           path: '/afdrukken',
           name: 'afdrukken',
           component: Print
+        },
+        {
+          path: '/opleidingen',
+          name: 'opleidingen',
+          component: Subjects
         },
         {
           path: '/',
