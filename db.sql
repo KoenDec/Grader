@@ -104,6 +104,16 @@ CREATE TABLE `doelstellingen` (
   FOREIGN KEY(creatorId) REFERENCES admins(adminId)
 );
 
+CREATE TABLE `evaluatiecriteria` (
+`id` int NOT NULL AUTO_INCREMENT PRIMARY KEY,
+  `doelstellingId` int NOT NULL,
+  `weergaveTitel` varchar(200) NOT NULL,
+  `inGebruik` tinyint(1) NOT NULL DEFAULT 1,
+  `creatorId` int,
+  FOREIGN KEY(doelstellingId) REFERENCES doelstellingen(id),
+  FOREIGN KEY(creatorId) REFERENCES admins(adminId)
+);
+
 CREATE TABLE `rapporten` (
   `id` int NOT NULL AUTO_INCREMENT PRIMARY KEY,
   `studentId` int NOT NULL,

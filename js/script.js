@@ -10,13 +10,13 @@ $(document).ready(function () {
             url: 'api/auth',
             content: 'application/json',
             data: '{"username": "'+$('#username').val()+'", "password": "'+$('#password').val()+'"}',
-            success: function(r) {
+            success: function() {
                 console.log('Logged in');
                 window.location.replace('index.php');
             },
-            error: function(xhr,status,err) {
+            error: function(xhr,status) {
                 console.log(status);
-                $('#error').append('<p style="color:red;">Incorrect username or password.</p>')
+                $('#error').append('<p style="color:red;">Incorrect username or password.</p>');
             }
         });
     });
@@ -37,13 +37,13 @@ $(document).ready(function () {
     });
 
     $(".button-collapse").sideNav({
-        onOpen: function (el) {
+        onOpen: function() {
             $('main').css('padding-left', '300px');
             $('header').css('padding-left', '300px');
             $('body').css('overflow', 'visible');
             $('.button-collapse i').html('close');
         },
-        onClose: function (el) {
+        onClose: function() {
             $('main').css('padding-left', '0');
             $('header').css('padding-left', '0');
             $('.button-collapse i').html('menu');
@@ -71,16 +71,16 @@ $(document).ready(function () {
         changeCollapseIcon(this);
     });
 
-    $('.courseCreator').on('click', '.add-criteria-btn', function(){
-        addCriteria(this);
+    $('.courseCreator').on('click', '.add-doelstelling-btn', function(){
+        addDoelstelling(this);
+    });
+
+    $('.courseCreator').on('click', '.del-doelstellingscat-btn', function(){
+        $('.' + $(this).data('doelstellingscat')).remove();
     });
 
     $('.courseCreator').on('click', '.del-doelstelling-btn', function(){
         $('.' + $(this).data('doelstelling')).remove();
-    });
-
-    $('.courseCreator').on('click', '.del-criteria-btn', function(){
-        $('.' + $(this).data('criteria')).remove();
     });
 
     /*$('.opleiding-submit').on('click', function(e){
@@ -125,14 +125,14 @@ $(document).ready(function () {
         });
     });
 
-    $('.add-doelstelling-btn').on('click', addDoelstelling);
+    $('.add-doelstellingscat-btn').on('click', addDoelstellingscat);
     $('#educationsCheckboxes').find('input').on('change', handleEducationsCheckboxes);
     $('.addModule').on('click', submitModule);
 
 });
 
+var doelstellingscatNr = 0;
 var doelstellingNr = 0;
-var criteriaNr = 0;
 
 var popup = function(){
     $('.popup').removeClass('hidden');
@@ -172,78 +172,78 @@ var handleReportEdit = function(){
     }
 };
 
-var addDoelstelling = function(){
-    console.log("lol");
-    doelstellingNr++;
+var addDoelstellingscat = function(){
+    console.log("test");
+    doelstellingscatNr++;
     $(' .no-doelstellingen').addClass('hidden');
 
     $(' .doelstelling-table').append(
-        "<div class='doelstelling-container doelstelling" + doelstellingNr + "'>"+
+        "<div class='doelstellingscat-container doelstellingscat" + doelstellingscatNr + "'>"+
         "<tr><th>" +
         "<div class='row'>"+
-        "<div class='input-field doelstelling-input'>" +
-        "<input class='doelstelling-name' name='doelstelling" + doelstellingNr + "-name' type='text'>" +
-        "<label for='doelstelling" + doelstellingNr + "-name'>Doelstelling naam</label>" +
+        "<div class='input-field doelstellingscat-input'>" +
+        "<input class='doelstellingscat-name' name='doelstellingscat" + doelstellingscatNr + "-name' type='text'>" +
+        "<label for='doelstellingscat" + doelstellingscatNr + "-name'>Doelstellingscategorie naam</label>" +
         "</div>"+
         "<div class='creator-btns'>"+
-        "<a class='add-criteria-btn waves-effect waves-light btn' data-doelstelling='doelstelling"+ doelstellingNr +"'><i class='material-icons left'>add</i>Criteria toevoegen</a>"+
-        "<a class='del-doelstelling-btn waves-effect waves-light btn red' data-doelstelling='doelstelling"+ doelstellingNr +"'><i id='module-del-icon' class='material-icons'>delete</i></a>"+
+        "<a class='add-doelstelling-btn waves-effect waves-light btn' data-doelstellingscat='doelstellingscat"+ doelstellingscatNr +"'><i class='material-icons left'>add</i>Doelstelling toevoegen</a>"+
+        "<a class='del-doelstellingscat-btn waves-effect waves-light btn red' data-doelstellingscat='doelstellingscat"+ doelstellingscatNr +"'><i id='module-del-icon' class='material-icons'>delete</i></a>"+
         "</div>"+
         "</div>"+
-        "</th></tr><div class='criteria-rows'></div></div>"
+        "</th></tr><div class='doelstellingen-rows'></div></div>"
     );
-    $('.doelstelling' + doelstellingNr + ' input').focus();
+    $('.doelstellingscat' + doelstellingscatNr + ' input').focus();
 };
 
-var addCriteria = function(el){
-    criteriaNr++;
-    var doelstelling = $(el).data('doelstelling');
+var addDoelstelling = function(doelstellingscat){
+    doelstellingNr++;
+    console.log($(doelstellingscat));
+    var doelstellingsCategorie = $(doelstellingscat).data('doelstellingscat');
 
-    $('.' + doelstelling + ' .criteria-rows').append(
-        "<div class='criteria-container criteria" + criteriaNr + " criteria-row'>" +
+    $('.' + doelstellingsCategorie + ' .doelstellingen-rows').append(
+        "<div class='doelstellingen-container doelstellingen" + doelstellingNr + " doelstelling-row'>" +
         "<div class='valign-wrapper row'>"+
         "<i style='margin-right: 10px' class='material-icons'>navigate_next</i>"+
-        "<div class='input-field criteria-input'>" +
-        "<input class='criteria-name' name='criterium" + criteriaNr + "-name' type='text'>" +
-        "<label for='criterium" + criteriaNr + "-name'>Criteria naam</label>" +
+        "<div class='input-field doelstelling-input'>" +
+        "<input class='doelstelling-name' name='criterium" + doelstellingNr + "-name' type='text'>" +
+        "<label for='criterium" + doelstellingNr + "-name'>Doelstelling naam</label>" +
         "</div>"+
         "<div class='creator-btns'>"+
-        "<a class='del-criteria-btn waves-effect waves-light btn red' data-criteria='criteria"+ criteriaNr +"'><i id='module-del-icon' class='material-icons'>delete</i></a>"+
+        "<a class='del-doelstelling-btn waves-effect waves-light btn red' data-doelstelling='doelstelling"+ doelstellingNr +"'><i id='module-del-icon' class='material-icons'>delete</i></a>"+
         "</div>"+
         "</div>"+
         "</div>"
     );
-    $('.criteria' + criteriaNr + ' input').focus();
+    $('.doelstelling' + doelstellingNr + ' input').focus();
 };
 
 var createEditCourseJSON = function(){
     var final = [];
+    var doelstellingscategories = [];
     var doelstellingen = [];
-    var criteria = [];
-    var doelstellingName;
+    var doelstellingscatName;
     var moduleName;
 
     var CourseName = $('#opleiding-name').val();
     final.push({CourseName: CourseName});
     $('.module-container').each(function(){
-        doelstellingen = [];
-        $(this).find('.doelstelling-container').each(function(){
-            criteria = [];
-            $(this).find('.criteria-container').each(function(){
-                criteria.push($(this).find('.criteria-name').val());
+        doelstellingscategories = [];
+        $(this).find('.doelstellingscat-container').each(function(){
+            doelstellingen = [];
+            $(this).find('.doelstellingen-container').each(function(){
+                doelstellingen.push($(this).find('.doelstelling-name').val());
             });
-            doelstellingName =$(this).find('.doelstelling-name').val();
-            doelstellingen.push({doelstelling: [doelstellingName, criteria]});
+            doelstellingscatName =$(this).find('.doelstellingscat-name').val();
+            doelstellingscategories.push({doelstellingscategorie: [doelstellingscatName, doelstellingen]});
         });
         moduleName = $(this).find('.module-name').val();
-        final.push({module: [moduleName,doelstellingen]});
+        final.push({module: [moduleName,doelstellingscategories]});
     });
     var myJsonString = JSON.stringify(final);
     console.log(myJsonString);
 };
 
 var handleEducationsCheckboxes = function(){
-    console.log("test");
     var showOrHideStudents = function(educationId, show, trsStudents){
         for (var i = 0; i < trsStudents.length - 1; i++) {
             var cur = $(trsStudents[i + 1]);
