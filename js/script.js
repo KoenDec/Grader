@@ -29,6 +29,7 @@ $(document).ready(function () {
             content: 'application/json',
             success: function(r) {
                 console.log('Logged out',r);
+                window.location.replace('index.php');
             },
             error: function(r) {
                 console.log(r);
