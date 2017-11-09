@@ -227,26 +227,49 @@ INSERT INTO evaluatiecriteria(doelstellingId, weergaveTitel, creatorId) VALUES
     (9, 'afval zoals PMD, papier, karton, glas, GFT, restafval, gebroken servies,  … correct sorteren', 3),
     (10, 'storingen of afwijkingen aan toestellen in de vaatwasruimte melden', 3);
     
-INSERT INTO rapporten(studentId, feedback) VALUES
-	(6, 'Goed gewerkt, proficiat.'),
-    (7, 'Niet goed gewerkt, niet proficiat.');
+INSERT INTO rapporten(studentId, commentaarAlgemeen, commentaarKlassenraad) VALUES
+	(6, 'Faisal voldoet aan de voorwaarden van het voltijds engagement door bijkomende lessen Nederlands te volgen.',
+		'Je bent een aangename leerling met een grote inzet. \n\n Proficiat! Prettige vakantie!'),
+    (7, null, 'Geen evaluatie mogelijk wegens afwezigheden.');
     
-INSERT INTO rapporten_scores(rapportId,doelstellingId,score) VALUES
-	(1, 1, 'G'),
-	(1, 2, 'G'),
-	(1, 3, 'G'),
-	(1, 4, 'G'),
-	(1, 5, 'G'),
-	(1, 6, 'G'),
-	(1, 7, 'G'),
-	(1, 8, 'G'),
-	(1, 9, 'G'),
-	(1, 10, 'G'),
-	(1, 18, 'G'),
-	(1, 19, 'G'),
-	(1, 20, 'G'),
-	(1, 21, 'G'),
-	(1, 22, 'G');
+INSERT INTO rapporten_scores(rapportId,doelstellingId,score, opmerking) VALUES
+	(1, 45, 'G', 'NT2 niv1 breakthrough (Alfa)'),
+	(1, 46, 'G', null),
+	(1, 47, 'V', null),
+	(1, 48, 'V', null),
+	(1, 49, 'OV', null),
+	(1, 50, 'V', null),
+	(1, 51, 'OV', null),
+	(1, 52, 'V', null),
+	(1, 53, 'V', null),
+	(1, 54, 'ZG', null),
+	(1, 55, 'G', null),
+	(1, 56, 'V', null),
+	(1, 61, 'NVT', "niet van toepassing"),
+	(1, 62, 'NVT', "niet van toepassing"),
+	(1, 63, 'NVT', "niet van toepassing"),
+	(1, 64, 'NVT', "niet van toepassing"),
+	(1, 65, 'NVT', "niet van toepassing"),
+	(1, 66, 'V', "biljetten/munten"),
+	(1, 67, 'NVT', "niet van toepassing"),
+	(1, 68, 'NVT', "niet van toepassing"),
+	(1, 69, 'G', null),
+	(1, 70, 'V', null),
+	(1, 71, 'V', null),
+	(1, 72, 'G', null),
+	(1, 73, 'G', null),
+	(1, 74, 'G', null),
+	(1, 75, 'G', null),
+	(1, 76, 'G', null),
+	(1, 77, 'NVT', "niet van toepassing"),
+	(1, 78, 'NVT', "niet van toepassing"),
+	(1, 79, 'ZG', null),
+	(1, 80, 'ZG', null),
+	(1, 81, 'ZG', null),
+	(1, 82, 'V', null),
+	(1, 83, 'G', null),
+	(1, 84, 'ZG', null),
+	(1, 85, 'G', null);
     
 INSERT INTO meldingen(teacherId, titel, tekst) VALUES
 	(4, "welkom", "het CLW heet iedereen welkom"),

@@ -43,6 +43,9 @@ function checkGET()
                     showReportsPage(null);
                 }
                 break;
+            case "werkfiches":
+                showWerkfichesPage();
+                break;
 
             case "studenten":
                 showStudentsPage();

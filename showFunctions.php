@@ -117,6 +117,7 @@ $userRole = $userDAO->getUserRole($loggedInUserId);
     <img src="images/CLW_Logo.png" class="school-logo"/>
     <li><div class="divider"></div></li>
     <li><a class="waves-effect" href="index.php?page=rapporten">Rapporten</a></li>
+    <li><a class="waves-effect" href="index.php?page=werkfiches">Werkfiches</a></li>
     <?php
     if(!($userRole == "STUDENT")) {
         ?>
@@ -208,7 +209,14 @@ $userRole = $userDAO->getUserRole($loggedInUserId);
 
         if($studentId != null) {
             $student = $userDAO->getUserById($studentId);
-            $modules = $userDAO->getModulesFromStudent($studentId);
+            $rapporten = $userDAO->getRapporten($student->id);
+            $rapport = $rapporten[0]; // todo extra pagina hiertussensteken met overzicht van eerdere rapporten, nu eerste rapport hardcoded
+
+            $rapportmodules = $userDAO->getRapportmodules($rapport->id);
+
+            $scores = $userDAO->getRapportscores($rapport->id);
+            var_dump($scores);
+
         }
         $dateNow = date('d/m/Y');
 
@@ -245,8 +253,10 @@ $userRole = $userDAO->getUserRole($loggedInUserId);
 
             <ul class="popout collapsible courseCreator" data-collapsible="expandable">
                 <?php
+
                 // todo get students results and comments from database
-                foreach ($modules as $module) {
+                foreach ($rapportmodules as $rapportmodule) {
+                    $module = $userDAO->getModule($rapportmodule->moduleId);
                     ?>
 
                     <li>
@@ -259,7 +269,6 @@ $userRole = $userDAO->getUserRole($loggedInUserId);
                                 <tr>
                                     <th class="doelstellingwidth">Doelstellingen</th>
                                     <th>Resultaat</th>
-                                    <th>Gemiddelde</th>
                                     <th>Datum</th>
                                     <th class="opmerkingenwidth">Opmerkingen</th>
                                 </tr>
@@ -269,13 +278,15 @@ $userRole = $userDAO->getUserRole($loggedInUserId);
                                     $doelstellingscategories = $userDAO->getFollowedDoelstellingscategoriesInModule($module->id, $studentId);
                                     foreach ($doelstellingscategories as $doelstellingscategorie){
                                     ?>
-                                    <th style="border-top: 2px solid gray; border-bottom: 2px solid gray" colspan="5">
+                                    <th style="border-top: 2px solid gray; border-bottom: 2px solid gray" colspan="4">
                                         <strong><?= $doelstellingscategorie->name ?></strong></th>
                                 </tr>
                                 <tr>
                                     <?php
                                     $doelstellingen = $userDAO->getDoelstellingenInDoelstellingscategorie($doelstellingscategorie->id);
                                     foreach ($doelstellingen as $doelstelling){
+                                        $score = $userDAO->getScore($rapport->id, $doelstelling->id);
+
                                     ?>
                                     <td style="padding-left: 30px" class="doelstellingwidth valign-wrapper"><i
                                             class="material-icons">navigate_next</i><?= $doelstelling->weergaveTitel ?>
@@ -283,16 +294,19 @@ $userRole = $userDAO->getUserRole($loggedInUserId);
                                     <td contenteditable="false">
                                         <div class="input-field">
                                             <select class="hidden" disabled>
-                                                <option value="" disabled selected>Niets geselecteerd</option>
-                                                <option value="1">R</option>
-                                                <option value="2">O</option>
-                                                <option value="3">V</option>
-                                                <option value="4">G</option>
+                                                <option value="" disabled <?php if($score == null) echo 'selected' ?>>Nog niet gequoteerd</option>
+                                                <option value="RO" <?php if($score == "RO") echo 'selected' ?>>Ruim onvoldoende</option>
+                                                <option value="O" <?php if($score == "O") echo 'selected' ?>>Onvoldoende</option>
+                                                <option value="V" <?php if($score == "V") echo 'selected' ?>>Voldoende</option>
+                                                <option value="G" <?php if($score == "G") echo 'selected' ?>>Goed</option>
+                                                <option value="ZG" <?php if($score == "ZG") echo 'selected' ?>>Zeer goed</option>
+                                                <option value="NVT" <?php if($score == "NVT") echo 'selected' ?>>Niet van toepassing</option>
+                                                <option value="A" <?php if($score == "A") echo 'selected' ?>>Afwezig</option>
                                             </select>
                                         </div>
-                                        <p>
+                                        <!--<p>
                                             <?php
-                                            // TODO real data
+                                            // TODO real data and move to evaluatiefiches
                                             for ($eerderResultaat = 0; $eerderResultaat < 5; $eerderResultaat++) {
                                                 if ($eerderResultaat > 0) {
                                                     echo ", ";
@@ -305,11 +319,11 @@ $userRole = $userDAO->getUserRole($loggedInUserId);
                                             ?>
                                         </p>
                                     </td>
-                                    <td class="avg">O</td>  <!--todo Actualy calculate avg score-->
+                                        <td class="avg">0--></td>  <!--todo Actualy calculate avg score-->
                                     <td class="pickDate"><?= $dateNow ?></td>
                                     <td class="opmerkingenwidth">
                                         <div class="input-field">
-                                            <input disabled id="opmerkingen" type="text">
+                                            <input disabled id="opmerkingen" type="text" value="<?= '' ?>" /> <!-- TODO opmerking weergeven -->
                                             <label for="opmerkingen">Opmerkingen</label>
                                         </div>
                                     </td>
@@ -325,8 +339,8 @@ $userRole = $userDAO->getUserRole($loggedInUserId);
 
                             <div class="row">
                                 <div class="input-field col s12">
-                                    <textarea disabled id="moduleComment" class="materialize-textarea"></textarea>
                                     <label for="moduleComment">Commentaar bij deze module: </label>
+                                    <textarea disabled id="moduleComment" class="materialize-textarea"><?= $rapportmodule->commentaar ?></textarea>
                                 </div>
                             </div>
                         </div>
@@ -337,19 +351,23 @@ $userRole = $userDAO->getUserRole($loggedInUserId);
             </ul>
             <div class="row">
                 <div class="input-field col s12">
-                    <textarea disabled id="generalComment" class="materialize-textarea"></textarea>
+                    <textarea disabled id="generalComment" class="materialize-textarea"><?= $rapport->commentaarAlgemeen?></textarea>
                     <label for="generalComment">Algemeen commentaar:</label>
                 </div>
             </div>
             <div class="row">
                 <div class="input-field col s12">
-                    <textarea disabled id="klasraadComment" class="materialize-textarea"></textarea>
+                    <textarea disabled id="klasraadComment" class="materialize-textarea"><?= $rapport->commentaarKlassenraad?></textarea>
                     <label for="klasraadComment">Commentaar klassenraad:</label>
                 </div>
             </div>
 
             <?php
         }
+    }
+
+    function showWerkfichesPage(){
+
     }
 
     function showStudentsPage(){

@@ -117,14 +117,16 @@ CREATE TABLE `evaluatiecriteria` (
 CREATE TABLE `rapporten` (
   `id` int NOT NULL AUTO_INCREMENT PRIMARY KEY,
   `studentId` int NOT NULL,
-  `feedback` text,
+  `commentaarKlassenraad` text,
+  `commentaarAlgemeen` text,
   FOREIGN KEY(studentId) REFERENCES studenten(studentId)
 );
 
 CREATE TABLE `rapporten_scores` (
   `rapportId` int NOT NULL,
   `doelstellingId` int NOT NULL,
-  `score` enum('ZG', 'G', 'V', 'OV', 'RO', 'A') NOT NULL,
+  `score` enum('ZG', 'G', 'V', 'OV', 'RO', 'A', 'NVT') NOT NULL,
+  `opmerking` text,
   CONSTRAINT PK_rapporten_scores PRIMARY KEY (rapportId, doelstellingId),
   FOREIGN KEY(rapportId) REFERENCES rapporten(id),
   FOREIGN KEY(doelstellingId) REFERENCES doelstellingen(id)

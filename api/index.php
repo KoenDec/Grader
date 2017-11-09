@@ -58,16 +58,60 @@ if ($_SERVER['REQUEST_METHOD'] == 'GET') {
   } else if ($_GET['url'] == 'studentReport') {
     if (Login::isLoggedIn()) {
       if (isset($_GET['id'])) {
-        $studentid = $_GET['id'];
-
-        $report = (object)[
-          'modules' => array()
-        ];
+        $studentId = $_GET['id'];
 
 
+          $rapport = $userDAO->getRapporten($studentId)[0]; // TODO students have more than 1 rapport (old rapporten are not deleted)
+          $modules = $userDAO->getRapportmodules($rapport->id);
 
+          $report = (object)[
+              'id' => $rapport->id,
+              'modules' => array(),
+              'commentaarAlgemeen' => utf8_encode($rapport->commentaarAlgemeen),
+              'commentaarKlassenraad' => utf8_encode($rapport->commentaarKlassenraad)
+          ];
+
+          foreach($modules as $rapportmodule){
+              $module = $userDAO->getModule($rapportmodule->moduleId);
+
+              $moduleObjToPush = (object)[
+                  'id' => $module->id,
+                  'naam' => $module->name,
+                  'doelstellingscategories' => array(),
+                  'commentaar' => utf8_encode($rapportmodule->commentaar)
+              ];
+
+              $doelstellingscategories = $userDAO->getFollowedDoelstellingscategoriesInModule($module->id,$studentId);
+
+              foreach($doelstellingscategories as $doelstellingscategorie){
+
+                  $doelstellingscategorieObjToPush = (object)[
+                      'id' => $doelstellingscategorie->id,
+                      'name' => utf8_encode($doelstellingscategorie->name),
+                      'doelstellingen' => array()
+                  ];
+
+                  $doelstellingen = $userDAO->getDoelstellingenInDoelstellingscategorie($doelstellingscategorie->id);
+
+                  foreach($doelstellingen as $doelstelling) {
+                      $score = $userDAO->getScore($rapport->id, $doelstelling->id);
+                      $doelstellingObjToPush = (object)[
+                          'id' => $doelstelling->id,
+                          'name' => utf8_encode($doelstelling->weergaveTitel),
+                          'score' => $score
+                      ];
+
+                      array_push($doelstellingscategorieObjToPush->doelstellingen, $doelstellingObjToPush);
+                  }
+
+                  array_push($moduleObjToPush->doelstellingscategories, $doelstellingscategorieObjToPush);
+              }
+
+              array_push($report->modules, $moduleObjToPush);
+          }
 
         echo json_encode($report);
+
         http_response_code(200);
         //$currentUserId = Login::isLoggedIn();
         /*if (ApiController::isTeacher($currentUserId)) {

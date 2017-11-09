@@ -439,7 +439,34 @@ class UserDAO {
         return $modules;
     }
 
-    public static function getModulesFromStudent($studentId){ // TODO refactor away this method
+    public static function getModule($moduleId){
+        try {
+            $conn = graderdb::getConnection();
+
+            $sql = 'SELECT * FROM modules WHERE id = :moduleId';
+            $stmt = $conn->prepare($sql);
+            $stmt->bindParam(':moduleId',$moduleId);
+
+            $stmt->execute();
+
+            $modulesTable = $stmt->fetchAll(PDO::FETCH_CLASS);
+        } catch (PDOException $e) {
+            die($e->getMessage());
+        }
+
+        if(isset($modulesTable[0])) {
+            $module = $modulesTable[0];
+        } else {
+            //die('No module found with id '.$moduleId.'!');
+            $module = null;
+        }
+
+        return $module;
+    }
+
+    // TODO: method is for werkfiches, not for rapporten
+    /*
+    public static function getModulesFromStudent($studentId){
         try{
             $conn = graderdb::getConnection();
 
@@ -467,7 +494,7 @@ class UserDAO {
             die('No modules found for student with id = ' . $studentId);
         }
         return $modules;
-    }
+    }*/
 
     public static function getDoelstellingscategoriesInModule($moduleId){
         try {
@@ -546,6 +573,105 @@ class UserDAO {
         }
 
         return $doelstellingen;
+    }
+
+    public static function getRapporten($studentId){
+        try{
+            $conn = graderdb::getConnection();
+
+            $sql = 'SELECT * from rapporten WHERE studentId = :studentId';
+            $stmt = $conn->prepare($sql);
+            $stmt->bindParam(':studentId',$studentId);
+
+            $stmt->execute();
+
+            $rapportenTable = $stmt->fetchAll(PDO::FETCH_CLASS);
+        } catch (PDOException $e) {
+            die($e->getMessage());
+        }
+
+        if(isset($rapportenTable[0])) {
+            $rapporten = $rapportenTable;
+        } else {
+            //die('No rapporten found for student with id = ' . $studentId);
+            $rapporten = null;
+        }
+
+        return $rapporten;
+    }
+
+    public static function getRapportmodules($rapportId){
+            try{
+                $conn = graderdb::getConnection();
+
+                $sql = 'SELECT * from rapporten_modules WHERE rapportId = :rapportId';
+                $stmt = $conn->prepare($sql);
+                $stmt->bindParam(':rapportId',$rapportId);
+
+                $stmt->execute();
+
+                $modulesTable = $stmt->fetchAll(PDO::FETCH_CLASS);
+            } catch (PDOException $e) {
+                die($e->getMessage());
+            }
+
+            if(isset($modulesTable[0])) {
+                $modules = $modulesTable;
+            } else {
+                //die('No modules found in rapport with id = ' . $rapportId);
+                $modules = null;
+            }
+            return $modules;
+    }
+
+    public static function getRapportscores($rapportId){
+        try{
+            $conn = graderdb::getConnection();
+
+            $sql = 'SELECT * from rapporten_scores WHERE rapportId = :rapportId';
+            $stmt = $conn->prepare($sql);
+            $stmt->bindParam(':rapportId',$rapportId);
+
+            $stmt->execute();
+
+            $scoresTable = $stmt->fetchAll(PDO::FETCH_CLASS);
+        } catch (PDOException $e) {
+            die($e->getMessage());
+        }
+
+        if(isset($scoresTable[0])) {
+            $scores = $scoresTable;
+        } else {
+            //die('No scores found in rapport with id = ' . $rapportId);
+            $scores = null;
+        }
+        return $scores;
+    }
+
+    public static function getScore($rapportId, $doelstellingId){
+        try {
+            $conn = graderdb::getConnection();
+
+            $sql = 'SELECT score FROM rapporten_scores WHERE rapportId = :rapportId AND doelstellingId = :doelstellingId';
+            $stmt = $conn->prepare($sql);
+            $stmt->bindParam(':rapportId',$rapportId);
+            $stmt->bindParam(':doelstellingId',$doelstellingId);
+
+            $stmt->execute();
+
+            $doelstellingenTable = $stmt->fetchAll(PDO::FETCH_CLASS);
+        } catch (PDOException $e) {
+            die($e->getMessage());
+        }
+
+        if(isset($doelstellingenTable[0])) {
+            $score = $doelstellingenTable[0]->score;
+        } else {
+            //die('No score found for doelstelling with id '.$doelstellingId.' in rapport with id '.$rapportId.'!');
+            $score = null;
+        }
+
+        return $score;
     }
 
      //////////////////////////////////////////////
