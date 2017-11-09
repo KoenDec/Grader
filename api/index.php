@@ -43,8 +43,9 @@ if ($_SERVER['REQUEST_METHOD'] == 'GET') {
     }
   } else if ($_GET['url'] == 'currentUser') {
     if (Login::isLoggedIn()) {
-      if (isset($_GET['id'])) {
-        $userid = $_GET['id'];
+      if (isset($_GET['token'])) {
+        $token = $_GET['token'];
+        $userid = $userDAO->getLoggedInUserId(sha1($token));
         $currentUser = $userDAO->getUserById($userid);
         echo json_encode($currentUser);
       } else {
@@ -60,21 +61,10 @@ if ($_SERVER['REQUEST_METHOD'] == 'GET') {
       if (isset($_GET['id'])) {
         $studentid = $_GET['id'];
 
-        $report = (object)[
-          'modules' => array()
-        ];
 
 
-
-
-        echo json_encode($report);
+        echo json_encode($modules);
         http_response_code(200);
-        //$currentUserId = Login::isLoggedIn();
-        /*if (ApiController::isTeacher($currentUserId)) {
-          // TODO show eval possibilities
-        } else {
-          // TODO show student's report
-        }*/
       } else {
         echo $notFoundErr;
         http_response_code(405);
@@ -150,10 +140,3 @@ if ($_SERVER['REQUEST_METHOD'] == 'GET') {
 } else {
   http_response_code(405);
 }
-
-  ////////////////////////
- /// HELPER FN //////////
-////////////////////////
-
-
-?>
