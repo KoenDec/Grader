@@ -5,6 +5,7 @@ require_once('../Login.php');
 
 header('Access-Control-Allow-Origin: *');
 header('Access-Control-Allow-Methods: GET,PUT,POST,DELETE,OPTIONS');
+header('Access-Control-Allow-Headers: Content-Type,Authorization,Accept,X-Requested-With');
 
 $userDAO = new UserDAO();
 $notFoundErr = '{"Status":"Geen user gevonden"}';
