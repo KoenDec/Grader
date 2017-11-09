@@ -53,7 +53,6 @@ export default {
       'Rapporten',
       'Studenten',
       'Opleidingen',
-      'Meldingen',
       'Afdrukken'
     ]
   }),
