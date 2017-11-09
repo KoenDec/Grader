@@ -3,10 +3,6 @@ require_once('../graderdb.php');
 //require_once('api.php');
 require_once('../Login.php');
 
-header('Access-Control-Allow-Origin: *');
-header('Access-Control-Allow-Methods: GET,PUT,POST,DELETE,OPTIONS');
-header('Access-Control-Allow-Headers: Content-Type,Authorization,Accept,X-Requested-With');
-
 $userDAO = new UserDAO();
 $notFoundErr = '{"Status":"Geen user gevonden"}';
 $notLoggedInErr = '{"Status":"Niet ingelogd"}';
@@ -24,7 +20,7 @@ if ($_SERVER['REQUEST_METHOD'] == 'GET') {
       echo $notLoggedInErr;
       http_response_code(401);
     }
-  } else if ($_GET['url'] == 'studentsInEducation') {
+  } else if ($_GET['url'] == 'studentInEducation') {
     if (Login::isLoggedIn()) {
       $userid = Login::isLoggedIn();
       if (isset($_GET['edu'])) {
@@ -47,9 +43,9 @@ if ($_SERVER['REQUEST_METHOD'] == 'GET') {
     }
   } else if ($_GET['url'] == 'currentUser') {
     if (Login::isLoggedIn()) {
-      if (isset($_GET['token'])) {
-        $userid = $userDAO->getLoggedInUserId($_GET['token']);
-        $currentUser =
+      if (isset($_GET['id'])) {
+        $userid = $_GET['id'];
+        $currentUser = $userDAO->getUserById($userid);
         echo json_encode($currentUser);
       } else {
         echo $notFoundErr;
@@ -63,41 +59,15 @@ if ($_SERVER['REQUEST_METHOD'] == 'GET') {
     if (Login::isLoggedIn()) {
       if (isset($_GET['id'])) {
         $studentid = $_GET['id'];
+
         $report = (object)[
           'modules' => array()
         ];
 
-        $modules = $userDAO->getModulesFromStudent($studentid);
-        foreach ($modules as $mod) {
-          $modObj = new Module();
-          $modObj->modName = $mod->name;
 
-          echo "\n";
-          echo json_encode($modObj);
 
-          $doelstellingen = $userDAO->getDoelstellingenInModule($mod->id);
-          foreach ($doelstellingen as $doel) {
-            $doelObj = new Doel();
-            $doelObj->doelName = $doel->name;
 
-            echo "\n\t";
-            echo json_encode($doelObj);
-
-            $criteria = $userDAO->getCriteriaForDoelstelling($doel->id);
-            foreach ($criteria as $crit) {
-              $critObj = new Crit();
-              $critObj->critName = $crit->weergaveTitel;
-
-              echo "\n\t\t";
-              echo json_encode($critObj);
-              //array_push($doelObj->criteria, $critObj);
-            }
-            //array_push($modObj->doelstellingen, $doelObj);
-          }
-          array_push($report->modules, $modObj);
-        }
-
-        //echo json_encode($report);
+        echo json_encode($report);
         http_response_code(200);
         //$currentUserId = Login::isLoggedIn();
         /*if (ApiController::isTeacher($currentUserId)) {
@@ -177,12 +147,6 @@ if ($_SERVER['REQUEST_METHOD'] == 'GET') {
       http_response_code(400);
     }
   }
-} else if ($_SERVER['REQUEST_METHOD'] == 'OPTIONS') {
-
-  echo null;
-
-  http_response_code(200);
-
 } else {
   http_response_code(405);
 }
@@ -190,16 +154,6 @@ if ($_SERVER['REQUEST_METHOD'] == 'GET') {
   ////////////////////////
  /// HELPER FN //////////
 ////////////////////////
-class Module {
-  public $modName = '';
-  public $doelstellingen = [];
-}
-class Doel {
-  public $doelName = '';
-  public $criteria = [];
-}
-class Crit {
-  public $critName = '';
-}
+
 
 ?>
