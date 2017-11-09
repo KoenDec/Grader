@@ -40,8 +40,13 @@
         </td>
         <td class="text-xs-left">{{ props.item.student }}</td>
         <td class="text-xs-left">{{ props.item.opleiding }}</td>
+        <td><v-btn color="primary" class="ma-1 right" dark>rapport<v-icon dark right>import_contacts</v-icon></v-btn></td>
       </template>
     </v-data-table>
+  </v-flex>
+  <v-flex xs2>
+    <v-btn color="primary" class="ma-1 left" dark><v-icon dark>print</v-icon></v-btn>
+    <v-btn color="primary" class="ma-1 left" dark><v-icon dark>get_app</v-icon></v-btn>
   </v-flex>
 <!--
 
@@ -62,23 +67,27 @@ export default {
       selected: [],
       headers: [
         { text: 'Student', align: 'left', value: 'student' },
-        { text: 'Opleiding', align: 'left', value: 'opleiding' }
+        { text: 'Opleiding', align: 'left', value: 'opleiding' },
+        { text: '', value: 'rapportid' }
       ],
       items: [
         {
           value: false,
           student: 'MuslimParents Suicidebomber',
-          opleiding: 'Drank'
+          opleiding: 'Drank',
+          rapportid: 1
         },
         {
           value: false,
           student: 'Pleblord gayParentsFaggot',
-          opleiding: 'sletten'
+          opleiding: 'sletten',
+          rapportid: 2
         },
         {
           value: false,
           student: 'Dickbutt Quak',
-          opleiding: 'Drank'
+          opleiding: 'Drank',
+          rapportid: 3
         }
       ],
       opleidingen: ['drank', 'sletten', 'kapper']

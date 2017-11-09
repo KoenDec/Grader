@@ -12,8 +12,8 @@
             </v-toolbar>
         </v-flex>
         <v-flex>
-          <v-btn large color="primary"><v-icon>vertical_align_bottom</v-icon></v-btn>
-          <v-btn @click="logSomething" large color="primary"><v-icon>local_printshop</v-icon></v-btn>
+          <v-btn large color="primary"><v-icon>get_app</v-icon></v-btn>
+          <v-btn @click="logSomething" large color="primary"><v-icon>print</v-icon></v-btn>
         </v-flex>
     </v-layout>
     <v-layout row-wrap>

@@ -16,6 +16,19 @@
    <v-toolbar color="indigo" dark fixed app>
         <v-icon large color="white" @click.stop="drawer = !drawer">{{ drawer? 'close':'menu' }}</v-icon>
      <v-toolbar-title>Rapportensysteem</v-toolbar-title>
+     <v-spacer></v-spacer>
+     <v-menu>
+        <v-toolbar-title slot="activator">
+          <span>USERNAME</span>
+          <v-icon dark>arrow_drop_down</v-icon>
+        </v-toolbar-title>
+        <v-list>
+          <v-list-tile v-for="(item, i) in 2" :key="item" @click="">
+            <v-list-tile-title v-text="item"></v-list-tile-title>
+          </v-list-tile>
+        </v-list>
+      </v-menu>
+      <v-toolbar-title flat>ADMIN</v-toolbar-title>
    </v-toolbar>
    <main>
      <v-content class="pt-1">
