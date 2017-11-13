@@ -11,7 +11,7 @@
               <v-text-field  prepend-icon="search" hide-details single-line></v-text-field>
             </v-toolbar>
         </v-flex>
-        <v-flex xs1 offset-xs4>
+        <v-flex xs1 offset-xs4 class="mr-5">
         </v-flex>
         <v-speed-dial
           hover
@@ -32,6 +32,7 @@
             dark
             small
             color="yellow"
+            @click.stop="addSubjectFile = true"
           >
             <v-icon>file_upload</v-icon>
           </v-btn>
@@ -46,7 +47,7 @@
         </v-speed-dial>
     </v-layout>
     <v-layout row-wrap>
-      <v-flex class="mt-5" offset-xs2 xs8>
+      <v-flex class="mt-5" offset-xs1 xs10>
         <v-data-table
           v-bind:headers="headers"
           :items="items"
@@ -62,6 +63,24 @@
           </template>
         </v-data-table>
       </v-flex>
+
+      <v-dialog v-model="addSubjectFile">
+        <v-card>
+          <v-card-title><span class="headline">Opleiding toevoegen</span></v-card-title>
+          <v-card-text>
+            <v-container grid-list-md>
+              <v-layout wrap>
+                <v-flex xs12>
+                  <fileInput v-model="filename" @formData="formData"></fileInput>
+                </v-flex>
+              </v-layout>
+            </v-container>
+          </v-card-text>
+          <v-card-actions>
+              <v-btn color="primary" flat @click.stop="addSubjectFile=false">Close</v-btn>
+          </v-card-actions>
+        </v-card>
+      </v-dialog>
     </v-layout>
   </main>
 </template>
@@ -71,6 +90,9 @@ export default {
   name: 'Subjects',
   data () {
     return {
+      filename: '',
+      formData: [],
+      addSubjectFile: false,
       headers: [
         { text: 'Opleiding', align: 'left', value: 'opleiding' },
         { text: 'Acties', value: 'actionbtns' }
@@ -91,7 +113,13 @@ export default {
           opleiding: 'Kapper',
           actionbtns: 3
         }
-      ]
+      ],
+      methods: {
+        uploadFiles () {
+          const form = this.formData
+          console.log(form)
+        }
+      }
     }
   }
 }
