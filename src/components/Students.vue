@@ -1,0 +1,116 @@
+<template>
+  <div>
+      <v-layout row wrap>
+          <v-flex xs12 offset-xs1 class="text-xs-left">
+            <h1 class="display-3">Studenten</h1>
+          </v-flex>
+      </v-layout>
+      <v-layout row wrap>
+          <v-flex xs4 offset-xs1>
+              <v-toolbar>
+                <v-text-field  prepend-icon="search" hide-details single-line></v-text-field>
+              </v-toolbar>
+          </v-flex>
+          <v-flex xs1 offset-xs4 class="mr-5">
+          </v-flex>
+          <v-speed-dial
+            hover
+            direction="left"
+          >
+            <v-btn
+              slot="activator"
+              color="blue darken-2"
+              dark
+              fab
+              hover
+              class="left"
+            >
+              <v-icon>add</v-icon>
+            </v-btn>
+            <v-btn
+              fab
+              dark
+              small
+              color="yellow"
+              @click.stop="addSubjectFile = true"
+            >
+              <v-icon>file_upload</v-icon>
+            </v-btn>
+            <v-btn
+              fab
+              dark
+              small
+              color="red"
+            >
+              <v-icon>person_add</v-icon>
+            </v-btn>
+          </v-speed-dial>
+      </v-layout>
+      <v-layout row wrap>
+          <v-flex class="mt-4" offset-xs1 xs2>
+            <checkboxes :listobject="opleidingen"></checkboxes>
+          </v-flex>
+          <v-flex class="mt-4" xs8>
+            <v-data-table
+            v-bind:headers="headers"
+            :items="items"
+            hide-actions
+            class="elevation-1"
+            >
+              <template slot="items" scope="props">
+                <td class="text-xs-left">{{ props.item.student }}</td>
+                <td class="text-xs-left">{{ props.item.opleiding }}</td>
+                <td>
+                  <v-btn color="error" class="ma-1 right" dark><v-icon dark>delete</v-icon></v-btn>
+                  <v-btn color="primary" class="ma-1 right" slot="activator" dark><v-icon dark>edit</v-icon></v-btn>
+                  <v-btn color="primary" class="ma-1 right" dark>rapport<v-icon dark right>import_contacts</v-icon></v-btn>
+                </td>
+              </template>
+            </v-data-table>
+          </v-flex>
+      </v-layout>
+  </div>
+</template>
+
+<script>
+export default {
+  name: 'Studenten',
+  data () {
+    return {
+      search: '',
+      selected: [],
+      headers: [
+        { text: 'Student', align: 'left', value: 'student' },
+        { text: 'Opleiding', align: 'left', value: 'opleiding' },
+        { text: '', value: 'rapportid' }
+      ],
+      items: [
+        {
+          value: false,
+          student: 'MuslimParents Suicidebomber',
+          opleiding: 'Drank',
+          rapportid: 1
+        },
+        {
+          value: false,
+          student: 'Pleblord gayParentsFaggot',
+          opleiding: 'sletten',
+          rapportid: 2
+        },
+        {
+          value: false,
+          student: 'Dickbutt Quak',
+          opleiding: 'Drank',
+          rapportid: 3
+        }
+      ],
+      opleidingen: ['drank', 'sletten', 'kapper']
+    }
+  }
+}
+</script>
+
+<!-- Add "scoped" attribute to limit CSS to this component only -->
+<style scoped>
+
+</style>

@@ -3,7 +3,7 @@ import Router from 'vue-router'
 import Index from '@/components/Index'
 import Reports from '@/components/Reports'
 import Home from '@/components/Home'
-import Studenten from '@/components/Studenten'
+import Students from '@/components/Students'
 import Print from '@/components/Print'
 import checkboxes from '@/components/CheckboxContainer'
 import Subjects from '@/components/Subjects'
@@ -28,7 +28,7 @@ export default new Router({
         {
           path: '/studenten',
           name: 'studenten',
-          component: Studenten
+          component: Students
         },
         {
           path: '/afdrukken',
