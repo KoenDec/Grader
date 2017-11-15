@@ -231,7 +231,12 @@ INSERT INTO rapporten(studentId, commentaarAlgemeen, commentaarKlassenraad) VALU
 	(6, 'Faisal voldoet aan de voorwaarden van het voltijds engagement door bijkomende lessen Nederlands te volgen.',
 		'Je bent een aangename leerling met een grote inzet. \n\n Proficiat! Prettige vakantie!'),
     (7, null, 'Geen evaluatie mogelijk wegens afwezigheden.');
-    
+
+INSERT INTO rapporten_modules(rapportId, moduleId, commentaar) VALUES
+	(1, 3, null),
+    (1, 4, "Jij bent een echte doorzetter! Je kennis van de Nederlandse taal gaat erop vooruit. Het is leuk om jou in de klas te hebben. Fijne vakantie, Faisal!"),
+    (1, 1, "Zeer goede inzet, je hebt jouw eerste module behaald. \n Proficiat!");
+
 INSERT INTO rapporten_scores(rapportId,doelstellingId,score, opmerking) VALUES
 	(1, 45, 'G', 'NT2 niv1 breakthrough (Alfa)'),
 	(1, 46, 'G', null),

@@ -174,7 +174,6 @@ var handleReportEdit = function(){
 };
 
 var addDoelstellingscat = function(){
-    console.log("test");
     doelstellingscatNr++;
     $(' .no-doelstellingen').addClass('hidden');
 
@@ -198,7 +197,6 @@ var addDoelstellingscat = function(){
 
 var addDoelstelling = function(doelstellingscat){
     doelstellingNr++;
-    console.log($(doelstellingscat));
     var doelstellingsCategorie = $(doelstellingscat).data('doelstellingscat');
 
     $('.' + doelstellingsCategorie + ' .doelstellingen-rows').append(

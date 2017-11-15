@@ -122,6 +122,15 @@ CREATE TABLE `rapporten` (
   FOREIGN KEY(studentId) REFERENCES studenten(studentId)
 );
 
+CREATE TABLE `rapporten_modules` (
+  `rapportId` int NOT NULL,
+  `moduleId` int NOT NULL,
+  `commentaar` text,
+  CONSTRAINT PK_rapporten_modules PRIMARY KEY (rapportId, moduleId),
+  FOREIGN KEY(moduleId) REFERENCES modules(id),
+  FOREIGN KEY(rapportId) REFERENCES rapporten(id)
+);
+
 CREATE TABLE `rapporten_scores` (
   `rapportId` int NOT NULL,
   `doelstellingId` int NOT NULL,

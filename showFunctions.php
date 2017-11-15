@@ -289,8 +289,6 @@ $userRole = $userDAO->getUserRole($loggedInUserId);
                                     $score = null;
                                     $opmerking = null;
                                     if($ratingObj != null) {
-                                        var_dump($ratingObj);
-                                        echo "ratingobj is not null";
                                         $score = $ratingObj->score;
                                         $opmerking = $ratingObj->opmerking;
                                     }
@@ -301,15 +299,15 @@ $userRole = $userDAO->getUserRole($loggedInUserId);
                                     </td>
                                     <td contenteditable="false">
                                         <div class="input-field">
-                                            <select class="hidden" disabled>
-                                                <option value="" disabled <?php if($score == null) echo 'selected' ?>>Nog niet gequoteerd</option>
-                                                <option value="RO" <?php if($score == "RO") echo 'selected' ?>>Ruim onvoldoende</option>
-                                                <option value="O" <?php if($score == "O") echo 'selected' ?>>Onvoldoende</option>
-                                                <option value="V" <?php if($score == "V") echo 'selected' ?>>Voldoende</option>
-                                                <option value="G" <?php if($score == "G") echo 'selected' ?>>Goed</option>
-                                                <option value="ZG" <?php if($score == "ZG") echo 'selected' ?>>Zeer goed</option>
-                                                <option value="NVT" <?php if($score == "NVT") echo 'selected' ?>>Niet van toepassing</option>
-                                                <option value="A" <?php if($score == "A") echo 'selected' ?>>Afwezig</option>
+                                            <select disabled>
+                                                <option value="" disabled <?= ($score == null)? 'selected':'' ?>>Nog niet gequoteerd</option>
+                                                <option value="RO" <?= ($score == "RO")? 'selected':'' ?>>Ruim onvoldoende</option>
+                                                <option value="O" <?= ($score == "O")? 'selected':'' ?>>Onvoldoende</option>
+                                                <option value="V" <?= ($score == "V")? 'selected':'' ?>>Voldoende</option>
+                                                <option value="G" <?= ($score == "G")? 'selected':'' ?>>Goed</option>
+                                                <option value="ZG" <?= ($score == "ZG")? 'selected':'' ?>>Zeer goed</option>
+                                                <option value="NVT" <?= ($score == "NVT")? 'selected':'' ?>>Niet van toepassing</option>
+                                                <option value="A" <?= ($score == "A")? 'selected':'' ?>>Afwezig</option>
                                             </select>
                                         </div>
                                         <!--<p>
