@@ -28,3 +28,8 @@ id = student id
 #Get opleidingen
 type GET
 url  api/opleidingen
+
+#Get rapport of student
+type GET
+url  api/studentReport?id=
+id = studentid
