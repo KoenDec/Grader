@@ -63,10 +63,9 @@
           </template>
         </v-data-table>
       </v-flex>
-
       <v-dialog v-model="addSubjectFile">
         <v-card>
-          <v-card-title><span class="headline">Opleiding toevoegen</span></v-card-title>
+          <v-card-title><span class="headline">Opleidingen toevoegen</span></v-card-title>
           <v-card-text>
             <v-container grid-list-md>
               <v-layout wrap>

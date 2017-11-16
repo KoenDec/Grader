@@ -32,7 +32,7 @@
               dark
               small
               color="yellow"
-              @click.stop="addSubjectFile = true"
+              @click.stop="addStudentsFile = true"
             >
               <v-icon>file_upload</v-icon>
             </v-btn>
@@ -68,6 +68,23 @@
               </template>
             </v-data-table>
           </v-flex>
+          <v-dialog v-model="addStudentsFile">
+            <v-card>
+              <v-card-title><span class="headline">Studenten toevoegen</span></v-card-title>
+              <v-card-text>
+                <v-container grid-list-md>
+                  <v-layout wrap>
+                    <v-flex xs12>
+                      <fileInput v-model="filename" @formData="formData"></fileInput>
+                    </v-flex>
+                  </v-layout>
+                </v-container>
+              </v-card-text>
+              <v-card-actions>
+                  <v-btn color="primary" flat @click.stop="addStudentsFile=false">Close</v-btn>
+              </v-card-actions>
+            </v-card>
+          </v-dialog>
       </v-layout>
   </div>
 </template>
@@ -77,6 +94,9 @@ export default {
   name: 'Studenten',
   data () {
     return {
+      filename: '',
+      formData: [],
+      addStudentsFile: false,
       search: '',
       selected: [],
       headers: [
@@ -104,7 +124,13 @@ export default {
           rapportid: 3
         }
       ],
-      opleidingen: ['drank', 'sletten', 'kapper']
+      opleidingen: ['drank', 'sletten', 'kapper'],
+      methods: {
+        uploadFiles () {
+          const form = this.formData
+          console.log(form)
+        }
+      }
     }
   }
 }
