@@ -80,7 +80,7 @@ if ($_SERVER['REQUEST_METHOD'] == 'GET') {
                   'commentaar' => utf8_encode($rapportmodule->commentaar)
               ];
 
-              $doelstellingscategories = $userDAO->getFollowedDoelstellingscategoriesInModule($module->id,$studentId);
+              $doelstellingscategories = $userDAO->getDoelstellingscategoriesInModule($module->id);
 
               foreach($doelstellingscategories as $doelstellingscategorie){
 
@@ -103,7 +103,7 @@ if ($_SERVER['REQUEST_METHOD'] == 'GET') {
 
                       $doelstellingObjToPush = (object)[
                           'id' => $doelstelling->id,
-                          'name' => utf8_encode($doelstelling->weergaveTitel),
+                          'name' => utf8_encode($doelstelling->name),
                           'score' => $score,
                           'opmerking' => $opmerking
                       ];

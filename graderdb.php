@@ -242,11 +242,10 @@ class UserDAO {
 
             $sql = 'SELECT DISTINCT u.* FROM users u
 		              JOIN studenten s on u.id = s.studentId
-	                  JOIN studenten_doelstellingscategories sd ON s.studentId = sd.studentId
-	                  JOIN doelstellingscategories d ON sd.doelstellingscategorieId = d.id
-                      JOIN modules m ON d.moduleId = m.id
-                      WHERE sd.status = \'volgt\'
-			            AND m.opleidingId = :educationId OR sd.opleidingId = :educationId';
+	                  JOIN studenten_modules sm ON s.studentId = sm.studentId
+                      JOIN modules m ON sm.moduleId = m.id
+                      WHERE sm.status = \'volgt\'
+			            AND m.opleidingId = :educationId OR sm.opleidingId = :educationId';
 
             $stmt = $conn->prepare($sql);
             $stmt->bindParam(':educationId',$educationId);
@@ -471,10 +470,9 @@ class UserDAO {
             $conn = graderdb::getConnection();
 
             $sql = 'SELECT DISTINCT m.* FROM users u JOIN studenten s ON u.id = s.studentId
-                      JOIN studenten_doelstellingscategories sd ON s.studentId = sd.studentId
-                      JOIN doelstellingscategories d ON d.id = sd.doelstellingscategorieId
-                      JOIN modules m ON d.moduleId = m.id
-                      -- JOIN opleidingen o ON sd.opleidingId = o.id -- geeft de algemene modules, niet specifiek aan de opleiding
+                      JOIN studenten_modules sm ON s.studentId = sm.studentId
+                      JOIN modules m ON sm.moduleId = m.id
+                      -- JOIN opleidingen o ON sm.opleidingId = o.id -- geeft de algemene modules, niet specifiek aan de opleiding
                       -- JOIN opleidingen o ON m.opleidingId = o.id -- geeft de opleidingsspecifieke modules
                       WHERE sd.status = \'volgt\'
 	                    AND s.studentId = :studentId';
@@ -520,33 +518,31 @@ class UserDAO {
         return $doelstellingscategorieen;
     }
 
-    public static function getFollowedDoelstellingscategoriesInModule($moduleId, $studentId){
+    public static function getFollowedModules($studentId){
         try{
             $conn = graderdb::getConnection();
 
-            $sql = 'SELECT d.* FROM studenten_doelstellingscategories sd
-                      JOIN doelstellingscategories d ON sd.doelstellingscategorieId = d.id
-                      JOIN modules m on d.moduleId = m.id
-                      WHERE studentId = :studentId AND moduleId = :moduleId
+            $sql = 'SELECT m.* FROM studenten_modules sm
+                      JOIN modules m on sm.moduleId = m.id
+                      WHERE studentId = :studentId
                         AND status=\'volgt\'';
             $stmt = $conn->prepare($sql);
             $stmt->bindParam(':studentId',$studentId);
-            $stmt->bindParam(':moduleId',$moduleId);
 
             $stmt->execute();
 
-            $doelstellingscategorieTable = $stmt->fetchAll(PDO::FETCH_CLASS);
+            $modulesTable = $stmt->fetchAll(PDO::FETCH_CLASS);
         } catch (PDOException $e) {
             die($e->getMessage());
         }
 
-        if(isset($doelstellingscategorieTable[0])) {
-            $doelstellingscategorieen = $doelstellingscategorieTable;
+        if(isset($modulesTable[0])) {
+            $modules = $modulesTable;
         } else {
-            die('No doelstellingscategorieën found for student with id = ' . $studentId . ' in module with id ' . $moduleId);
+            die('No modules found for student with id = ' . $studentId);
         }
 
-        return $doelstellingscategorieen;
+        return $modules;
     }
 
     public static function getDoelstellingenInDoelstellingscategorie($doelstellingscategorieId){
