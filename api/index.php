@@ -1,6 +1,5 @@
 <?php
 require_once('../graderdb.php');
-//require_once('api.php');
 require_once('../Login.php');
 
 $userDAO = new UserDAO();
@@ -175,6 +174,25 @@ if ($_SERVER['REQUEST_METHOD'] == 'GET') {
     } else {
       http_response_code(401);
     }
+  } else if ($_GET['url'] == 'updateUser') {
+    $postBody = file_get_contents('php://input');
+    $postBody = json_decode($postBody);
+
+    $firstname = $postBody->firstname;
+    $lastname = $postBody->lastname;
+    $email = $postBody->email;
+
+    $id = Login::isLoggedIn();
+    if (Login::isLoggedIn()) {
+      $userDAO->updateUser($firstname, $lastname, $email , $id);
+      echo '{"Status":"User updated"}';
+      http_response_code(200);
+    } else {
+      echo $notLoggedInErr;
+      http_response_code(401);
+    }
+  } else if ($_GET['createModule']) {
+    
   }
 
 } else if ($_SERVER['REQUEST_METHOD'] == 'DELETE') {
