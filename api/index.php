@@ -61,8 +61,7 @@ if ($_SERVER['REQUEST_METHOD'] == 'GET') {
       if (isset($_GET['id'])) {
         $studentId = $_GET['id'];
 
-
-          $rapport = $userDAO->getRapporten($studentId)[0]; // TODO students have more than 1 rapport (old rapporten are not deleted)
+          $rapport = $userDAO->getRapporten($studentId)[0]; // TODO students have more than 1 report (old reports are not deleted)
           $modules = $userDAO->getRapportmodules($rapport->id);
 
           $report = (object)[

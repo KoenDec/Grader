@@ -1,6 +1,6 @@
 DROP DATABASE `graderDB`;
 
-CREATE DATABASE `graderDB`;
+CREATE DATABASE `graderDB` CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci;
 
 USE `graderDB`;
 
