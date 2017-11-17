@@ -24,6 +24,7 @@
               fab
               hover
               class="left"
+              @click="logIt"
             >
               <v-icon>add</v-icon>
             </v-btn>
@@ -58,7 +59,7 @@
             class="elevation-1"
             >
               <template slot="items" scope="props">
-                <td class="text-xs-left">{{ props.item.student }}</td>
+                <td class="text-xs-left">{{ props.item.firstname + ' ' + props.item.lastname  }}</td>
                 <td class="text-xs-left">{{ props.item.opleiding }}</td>
                 <td>
                   <v-btn color="error" class="ma-1 right" dark><v-icon dark>delete</v-icon></v-btn>
@@ -104,34 +105,29 @@ export default {
         { text: 'Opleiding', align: 'left', value: 'opleiding' },
         { text: '', value: 'rapportid' }
       ],
-      items: [
-        {
-          value: false,
-          student: 'MuslimParents Suicidebomber',
-          opleiding: 'Drank',
-          rapportid: 1
-        },
-        {
-          value: false,
-          student: 'Pleblord gayParentsFaggot',
-          opleiding: 'sletten',
-          rapportid: 2
-        },
-        {
-          value: false,
-          student: 'Dickbutt Quak',
-          opleiding: 'Drank',
-          rapportid: 3
-        }
-      ],
-      opleidingen: ['drank', 'sletten', 'kapper'],
-      methods: {
-        uploadFiles () {
-          const form = this.formData
-          console.log(form)
-        }
-      }
+      items: [],
+      opleidingen: ['drank', 'sletten', 'kapper']
     }
+  },
+  methods: {
+    uploadFiles () {
+      const form = this.formData
+      console.log(form)
+    },
+    logIt () {
+      console.log(this)
+    }
+  },
+  created () {
+    var self = this
+    this.$http.get('http://146.185.183.217/api/students')
+      .then(function (response) {
+        self.items = response.data
+        console.log(self.items)
+      })
+      .catch(function (error) {
+        console.log(error)
+      })
   }
 }
 </script>
