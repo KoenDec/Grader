@@ -1,5 +1,5 @@
 <?php
-require_once('../graderdb.php');
+require_once('../php/graderdb.php');
 
 class ApiController
 {

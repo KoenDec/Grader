@@ -236,6 +236,38 @@ class UserDAO {
         return $students;
     }
 
+    public static function getAllActiveStudentsWithEducation(){
+        try {
+            $conn = graderdb::getConnection();
+
+            $sql = 'SELECT DISTINCT u.id, u.email, u.firstname, u.lastname, o.id as opleidingId, o.name as opleidingName from studenten s
+                    JOIN users u ON s.studentId = u.id
+		            JOIN studenten_modules sm ON sm.studentId = s.studentId
+                    JOIN modules m ON sm.moduleId = m.id
+                    LEFT JOIN opleidingen o ON m.opleidingId = o.id OR sm.opleidingId = o.id
+                    WHERE s.stillStudent = TRUE
+                      AND sm.status = \'volgt\'
+                      AND u.status = \'ACTIVE\'';
+
+            $stmt = $conn->prepare($sql);
+
+            $stmt->execute();
+
+            $studentsTable = $stmt->fetchAll(PDO::FETCH_CLASS);
+        } catch (PDOException $e) {
+            die($e->getMessage());
+        }
+
+        if(isset($studentsTable[0])) {
+            $students = $studentsTable;
+        } else {
+            //die('No students found!');
+            $students = null;
+        }
+
+        return $students;
+    }
+
     public static function getAllStudentsInEducation($educationId){
         try {
             $conn = graderdb::getConnection();
@@ -564,11 +596,37 @@ class UserDAO {
         if(isset($doelstellingenTable[0])) {
             $doelstellingen = $doelstellingenTable;
         } else {
-            //die('No criteria found for doelstellingscategorie with id = ' . $doelstellingscategorieId);
+            //die('No doelstellingen found for doelstellingscategorie with id = ' . $doelstellingscategorieId);
             $doelstellingen = null;
         }
 
         return $doelstellingen;
+    }
+
+    public static function getCriteriaInDoelstelling($doelstellingId){
+        try{
+            $conn = graderdb::getConnection();
+
+            $sql = 'SELECT * from evaluatiecriteria
+                    WHERE doelstellingId = :doelstellingId';
+            $stmt = $conn->prepare($sql);
+            $stmt->bindParam(':doelstellingId',$doelstellingId);
+
+            $stmt->execute();
+
+            $criteriaTable = $stmt->fetchAll(PDO::FETCH_CLASS);
+        } catch (PDOException $e) {
+            die($e->getMessage());
+        }
+
+        if(isset($criteriaTable[0])) {
+            $criteria = $criteriaTable;
+        } else {
+            //die('No criteria found for doelstelling with id = ' . $doelstellingId);
+            $criteria = null;
+        }
+
+        return $criteria;
     }
 
     public static function getRapporten($studentId){
@@ -751,6 +809,13 @@ class UserDAO {
         die($e->getMessage());
       }
 
+    }
+
+    public static function saveRating($rapportId, $doelstellingId){
+        // TODO berekenen
+        // avg(rating 'aspecten' (OK/NOK)) = rating evaluatiecriterium (RO/OV/V/G/Afwezig/Voldaan)
+        // avg(rating evaluatiecriteria) = rating doelstelling
+        // leerkracht kan dit met 1 stap aanpassen (bv als het gemiddelde OV is maar de leerkracht vindt het ok kan deze hier V van maken, of omgekeerd)
     }
 
     //////////////////////////////////////////////

@@ -1,6 +1,6 @@
 <?php
-require_once('../graderdb.php');
-require_once('../Login.php');
+require_once('../php/graderdb.php');
+require_once('../php/Login.php');
 
 $userDAO = new UserDAO();
 $notFoundErr = '{"Status":"Geen user gevonden"}';
