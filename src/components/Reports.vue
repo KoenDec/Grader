@@ -47,16 +47,19 @@ export default {
       },
       currentreport: {
 
+      },
+      usercredentials: {
+        username: 'thomas.de.nil@student.howest.be',
+        password: 'Student'
+      },
+      headers: {
+        'Content-Type': 'text/plain'
       }
     }
   },
   methods: {
     logSomething () {
-      this.$http.post('http://localhost/Grader/api/auth',
-        {
-          username: 'thomas.de.nil@student.howest.be',
-          password: 'Student'
-        })
+      this.$http.post('http://localhost/Grader/api/auth', this.usercredentials)
       .then(function (response) {
         console.log(response)
       })
