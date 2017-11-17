@@ -1,6 +1,6 @@
 <?php
-require_once('../php/graderdb.php');
-require_once('../php/Login.php');
+require_once('../graderdb.php');
+require_once('../Login.php');
 
 header("Access-Control-Allow-Origin: *");
 header("Access-Control-Allow-Headers: Origin,Content-Type");
@@ -156,6 +156,10 @@ if ($_SERVER['REQUEST_METHOD'] == 'GET') {
       echo $notLoggedInErr;
       http_response_code(401);
     }*/
+  } else if ($_GET['url'] == 'studentenMetOpleiding') {
+    $obj = $userDAO->getAllActiveStudentsWithEducation();
+    echo json_encode($obj);
+    http_response_code(200);
   }
 } else if ($_SERVER['REQUEST_METHOD'] == 'POST') {
   if ($_GET['url'] == 'auth') {
@@ -166,7 +170,8 @@ if ($_SERVER['REQUEST_METHOD'] == 'GET') {
     $password = $postBody->password;
 
     if ($userDAO->getUser($username)) {
-      if ($password == $userDAO->getUserPw($username)->password) {// TODO hash PW!
+      $password_hash = $userDAO->getUserPw($username)->password;
+      if (password_verify($password, $password_hash)) {//$password == $userDAO->getUserPw($username)->password) {// TODO hash PW!
         $cstrong = True;
         $token = bin2hex(openssl_random_pseudo_bytes(64, $cstrong));
         $user_id = $userDAO->getUser($username)->id;
@@ -223,7 +228,6 @@ if ($_SERVER['REQUEST_METHOD'] == 'GET') {
       http_response_code(401);
     }
   } else if ($_GET['url'] == 'updatePw') {
-
     $postBody = file_get_contents('php://input');
     $postBody = json_decode($postBody);
 
@@ -231,8 +235,7 @@ if ($_SERVER['REQUEST_METHOD'] == 'GET') {
     $newpw = $postBody->pw;
 
     $password_hash = password_hash($newpw, PASSWORD_BCRYPT);
-    echo $password_hash;
-    $userDAO->updatePw($userid, $password_hash);
+    $userDAO->updatePassword($userid, $password_hash);
     echo '{"Status":"pw updated"}';
     http_response_code(200);
   }
