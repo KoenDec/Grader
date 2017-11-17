@@ -64,7 +64,7 @@ CREATE TABLE `modules` (
 
 CREATE TABLE `doelstellingscategories` (
   `id` int NOT NULL AUTO_INCREMENT PRIMARY KEY,
-  `name` varchar(100) CHARACTER SET utf8 COLLATE utf8_unicode_ci NOT NULL,
+  `name` varchar(100) NOT NULL,
   `moduleId` int NOT NULL,
   `teacherId` int NOT NULL,
   `creatorId` int,
@@ -73,10 +73,31 @@ CREATE TABLE `doelstellingscategories` (
   FOREIGN KEY(creatorId) REFERENCES admins(adminId)
 );
 
+create table `studenten_doelstellingscategories` (
+  `doelstellingscategorieId` int NOT NULL,
+  `studentId` int NOT NULL,
+  `opleidingId` int DEFAULT NULL,
+  `status` enum('Volgt','Beëindigd') NOT NULL DEFAULT 'Volgt',
+  CONSTRAINT PK_studenten_doelstellingen PRIMARY KEY (doelstellingscategorieId, studentId),
+  FOREIGN KEY(doelstellingscategorieId) REFERENCES doelstellingscategories(id),
+  FOREIGN KEY(opleidingId) REFERENCES opleidingen(id),
+  FOREIGN KEY(studentId) REFERENCES studenten(studentId)
+  
+	-- TODO DODO
+    --
+    -- opleidingId in werkfiches can be null because some werkfiches are general and are used in all opleidingen.
+    -- opleidingId in studenten_doelstellingscategories is default null because the opleidingId is already mentioned in werkfiches.
+    -- SO
+    -- if you add a record in studenten_doelstellingscategories and for the werkfiche that that module belongs to the oplidingId is null
+    -- a constraint should oblige you to fill out the opleidingId in studenten_doelstellingscategories.
+    -- (if dat is possible in mysql)
+  
+);
+
 CREATE TABLE `doelstellingen` (
   `id` int NOT NULL AUTO_INCREMENT PRIMARY KEY,
   `doelstellingscategorieId` int NOT NULL,
-  `name` varchar(200) NOT NULL,
+  `weergaveTitel` varchar(200) NOT NULL,
   `inGebruik` tinyint(1) NOT NULL DEFAULT 1,
   `creatorId` int,
   FOREIGN KEY(doelstellingscategorieId) REFERENCES doelstellingscategories(id),
@@ -84,44 +105,13 @@ CREATE TABLE `doelstellingen` (
 );
 
 CREATE TABLE `evaluatiecriteria` (
-  `id` int NOT NULL AUTO_INCREMENT PRIMARY KEY,
+`id` int NOT NULL AUTO_INCREMENT PRIMARY KEY,
   `doelstellingId` int NOT NULL,
-  `name` varchar(200) NOT NULL,
-  `gewicht` int NOT NULL DEFAULT 1,
+  `weergaveTitel` varchar(200) NOT NULL,
   `inGebruik` tinyint(1) NOT NULL DEFAULT 1,
   `creatorId` int,
   FOREIGN KEY(doelstellingId) REFERENCES doelstellingen(id),
   FOREIGN KEY(creatorId) REFERENCES admins(adminId)
-);
-
-CREATE TABLE `aspecten` (
-  `id`int NOT NULL AUTO_INCREMENT PRIMARY KEY,
-  `evaluatiecriteriumId` int NOT NULL,
-  `name` varchar(200) NOT NULL,
-  `inGebruik` tinyint(1) NOT NULL DEFAULT 1,
-  `creatorId` int,
-  FOREIGN KEY(evaluatiecriteriumId) REFERENCES evaluatiecriteria(id),
-  FOREIGN KEY(creatorId) REFERENCES admins(adminId)
-);
-
-create table `studenten_modules` (
-  `moduleId` int NOT NULL,
-  `studentId` int NOT NULL,
-  `opleidingId` int DEFAULT NULL,
-  `status` enum('Volgt','Beëindigd') NOT NULL DEFAULT 'Volgt',
-  CONSTRAINT PK_studenten_modules PRIMARY KEY (moduleId, studentId),
-  FOREIGN KEY(moduleId) REFERENCES modules(id),
-  FOREIGN KEY(opleidingId) REFERENCES opleidingen(id),
-  FOREIGN KEY(studentId) REFERENCES studenten(studentId)
-  
-  -- TODO DODO
-  --
-  -- opleidingId in modules CAN BE NULL because some modules are general and are used in alle opleidingen.
-  -- opleidingId in studenten_modules is default null because the opleidingId is already mentioned in modules.
-  -- SO!!
-  -- if you add a record in studenten_modules and for the module that that doelstellingscategorie belongs to the opleidingId is null,
-  -- a constraint should oblige you to fill out the opleidingId in studenten_doelstellingscategories.
-  -- (if dat is possible in mysql)
 );
 
 CREATE TABLE `rapporten` (

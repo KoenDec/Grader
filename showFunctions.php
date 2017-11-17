@@ -274,7 +274,7 @@ $userRole = $userDAO->getUserRole($loggedInUserId);
                                 <tr>
 
                                     <?php
-                                    $doelstellingscategories = $userDAO->getFollowedDoelstellingscategoriesInModule($module->id, $studentId);
+                                    $doelstellingscategories = $userDAO->getDoelstellingscategoriesInModule($module->id);
                                     foreach ($doelstellingscategories as $doelstellingscategorie){
                                     ?>
                                     <th style="border-top: 2px solid gray; border-bottom: 2px solid gray" colspan="4">
@@ -295,7 +295,7 @@ $userRole = $userDAO->getUserRole($loggedInUserId);
 
                                     ?>
                                     <td style="padding-left: 30px" class="doelstellingwidth valign-wrapper"><i
-                                            class="material-icons">navigate_next</i><?= $doelstelling->weergaveTitel ?>
+                                            class="material-icons">navigate_next</i><?= $doelstelling->name ?>
                                     </td>
                                     <td contenteditable="false">
                                         <div class="input-field">
@@ -761,7 +761,7 @@ $userRole = $userDAO->getUserRole($loggedInUserId);
                                         $doelstellingen = $userDAO->getDoelstellingenInDoelstellingscategorie($doelstellingscategorie->id);
                                         foreach($doelstellingen as $doelstelling) {
                                         ?>
-                                    </tr><tr><td class="valign-wrapper"><i class="material-icons">navigate_next</i><?= $doelstelling->weergaveTitel?></td>
+                                    </tr><tr><td class="valign-wrapper"><i class="material-icons">navigate_next</i><?= $doelstelling->name?></td>
                                         <?php
                                         }
                                         ?>

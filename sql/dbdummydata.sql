@@ -1,17 +1,17 @@
 use graderDB;
 
 INSERT INTO users(email, firstname, lastname, password, language, status) VALUES
-	('kenny.depecker@student.howest.be', 'Kenny', 'Depecker', 'Student', 'NL', 'ACTIVE'), -- 1
-	('koen.declerck@student.howest.be', 'Koen', 'Declerck', 'Student', 'NL', 'ACTIVE'), -- 2
-	('riwan.carpentier@student.howest.be', 'Riwan', 'Carpentier', 'Student', 'NL', 'ACTIVE'), -- 3
-	('teacher1@hotmail.com', 'Teacher', 'Dummy', 'Teacher', 'NL', 'ACTIVE'), -- 4
-	('teacher2@hotmail.com', 'Teacher', 'Dummy', 'Teacher', 'NL', 'ACTIVE'), -- 5
-	('student1@hotmail.com', 'Faisal', 'Nizami', 'Student', 'NL', 'ACTIVE'), -- 6
-	('student2@hotmail.com', 'Tatjana', 'Eekchout', 'Student', 'NL', 'ACTIVE'), -- 7
-	('student3@hotmail.com', 'Student', 'Dummy', 'Student', 'NL', 'ACTIVE'), -- 8
-	('student4@hotmail.com', 'Student', 'Dummy', 'Student', 'NL', 'ACTIVE'), -- 9
-	('student5@hotmail.com', 'Student', 'Dummy', 'Student', 'NL', 'ACTIVE'), -- 10
-	('thomas.de.nil@student.howest.be', 'Thomas', 'De Nil', 'Student', 'NL', 'ACTIVE'); -- 11
+	('kenny.depecker@student.howest.be', 'Kenny', 'Depecker', 'Student', 'NL', 'ACTIVE'),
+	('koen.declerck@student.howest.be', 'Koen', 'Declerck', 'Student', 'NL', 'ACTIVE'),
+	('riwan.carpentier@student.howest.be', 'Riwan', 'Carpentier', 'Student', 'NL', 'ACTIVE'),
+	('teacher1@hotmail.com', 'Teacher', 'Dummy', 'Teacher', 'NL', 'ACTIVE'),
+	('teacher2@hotmail.com', 'Teacher', 'Dummy', 'Teacher', 'NL', 'ACTIVE'),
+	('student1@hotmail.com', 'Faisal', 'Nizami', 'Student', 'NL', 'ACTIVE'),
+	('student2@hotmail.com', 'Tatjana', 'Eekchout', 'Student', 'NL', 'ACTIVE'),
+	('student3@hotmail.com', 'Student', 'Dummy', 'Student', 'NL', 'ACTIVE'),
+	('student4@hotmail.com', 'Student', 'Dummy', 'Student', 'NL', 'ACTIVE'),
+	('student5@hotmail.com', 'Student', 'Dummy', 'Student', 'NL', 'ACTIVE'),
+	('thomas.de.nil@student.howest.be', 'Thomas', 'De Nil', 'Student', 'NL', 'ACTIVE');
     
 INSERT INTO admins(adminId) VALUES (1),(2),(3), (11);
 
@@ -21,8 +21,7 @@ INSERT INTO studenten(studentId) VALUES(6), (7), (8), (9), (10);
 
 INSERT INTO opleidingen(name, creatorId) VALUES
 	('Keukenmedewerker', 3),
-    ('Kapper', 3),
-    ('Tegelzetter', 3);
+    ('Kapper', 3);
 
 INSERT INTO modules(name, opleidingId, creatorId) VALUES
     ('Initiatie keuken', 1, 3),
@@ -30,8 +29,7 @@ INSERT INTO modules(name, opleidingId, creatorId) VALUES
 	('Taalgebonden vaardigheden', null, 3),
     ('Algemene vorming', null, 3),
     ('Vak Engels', null, 3),
-    ('Haarverzorging', 2, 3),
-    ('Basistechnieken tegelzetten',3, 3);
+    ('Haarverzorging', 2, 3);
 
 INSERT INTO doelstellingscategories(name, moduleId, teacherId, creatorId) VALUES
 	('Veiligheid, hygiëne en milieubewustzijn', 1, 4, 3),
@@ -58,10 +56,54 @@ INSERT INTO doelstellingscategories(name, moduleId, teacherId, creatorId) VALUES
     ('Bereidt de werkpost i.f.v. een haarverzorging voor', 6, 4, 3),
     ('Past shampoos en specifieke haarverzorging toe', 6, 4, 3),
     ('Ruimt de werpost na een haarverzorging op en maakt deze schoon', 6, 4, 3),
-    ('Te integreren kennis', 6, 4, 3),
-    ('Basistechnieken van tegelzetten uitvoeren', 7, 4, 3);
+    ('Te integreren kennis', 6, 4, 3);
+       
+INSERT INTO studenten_doelstellingscategories(studentId, doelstellingscategorieId, opleidingId) VALUES
+	-- REAL DATA
+    (6,1,null),
+    (6,2,null),
+    (6,3,null),
+    (6,4,null),
+    (6,5,null),
+    (6,6,null),
+    (6,7,null),
+    (6,8,1),
+    (6,9,1),
+    (6,10,1),
+    (6,12,1),
+    (6,13,1),
+    (6,14,1),
+    (6,15,1),
+    (6,16,1),
+    (6,17,1),
+    (7,11,2),
+    (7,12,2),
+    (7,13,2),
+    (7,14,2),
+    (7,15,2),
+    (7,16,2),
+    (7,17,2),
+    (7,18,2),
+    (7,19,2),
+    (7,20,2),
+    (7,21,2),
+    (7,22,2),
+    (7,23,2),
+    (7,24,2),
+    (7,25,2),
     
-INSERT INTO doelstellingen(doelstellingscategorieId,name,creatorId) VALUES
+    -- RANDOM DATA: student 3 (id 8) volgt kapper, 4 en 5 (ids 9 en 10) volgen kok.
+	(9,5,1),
+    (9,6,1),
+    (9,7,1),
+    (10,3,1),
+    (10,4,1),
+    (10,5,1),
+    (9,8,1),
+    (10,8,1),
+    (8,8,2);
+    
+INSERT INTO doelstellingen(doelstellingscategorieId,weergaveTitel,creatorId) VALUES
 	(1,'Kan ergonomisch werken',3),
 	(1,'Kan economisch werken',3),
 	(1,'Kan handelen volgens de regels van de voedselveiligheid',3),
@@ -146,16 +188,9 @@ INSERT INTO doelstellingen(doelstellingscategorieId,name,creatorId) VALUES
     (17, 'Kritische zin', 3),
     (17, 'Respect voor leefmilieu en historisch - cultureel erfgoed', 3),
     (17, 'Samenwerking', 3),
-    (17, 'Inleving in socioculturele diversiteit', 3),
-    (26, 'Ondergrond evalueren', 3),
-    (26, 'Niet te betegelen elementen beschermen', 3),
-    (26, 'Oppervlakte schoonmaken', 3),
-    (26, 'Oppervlakte voorbehandelen', 3),
-    (26, 'Tegels selecteren', 3),
-    (26, 'Species aanmaken', 3),
-    (26, 'Tegels plaatsen', 3);
+    (17, 'Inleving in socioculturele diversiteit', 3);
     
-INSERT INTO evaluatiecriteria(doelstellingId, name, creatorId) VALUES
+INSERT INTO evaluatiecriteria(doelstellingId, weergaveTitel, creatorId) VALUES
 	(1, 'correcte werkhouding toepassen bij het bij het reinigen van groenten en fruit', 3),
     (1, 'de juiste hef-en tiltechnieken toepassen bij het verplaatsen van (kratten met) groenten en fruit', 3),
     (1, 'een correcte werkhouding toepassen bij het uitvoeren van de vaat', 3),
@@ -190,103 +225,19 @@ INSERT INTO evaluatiecriteria(doelstellingId, name, creatorId) VALUES
     (8, 'messen op een veilige manier reinigen', 3),
     (8, 'de vaatwasmachine  reinigen volgens de voorschriften op de  de veiligheidsinstructiekaart', 3),
     (9, 'afval zoals PMD, papier, karton, glas, GFT, restafval, gebroken servies,  … correct sorteren', 3),
-    (10, 'storingen of afwijkingen aan toestellen in de vaatwasruimte melden', 3),
-    (86, 'vlakheid van de muur', 3), 
-    (86, 'vlakheid van de vloer', 3),
-    (87, 'vloer beschermen', 3),
-    (87, 'aansluiting met plafond of andere muur beschermen', 3),
-    (87, 'aansluiting ramen en deuren beschermen', 3),
-    (88, 'verwijderen van restvuil', 3),
-    (88, 'ondergrond stofvrij maken', 3),
-    (89, 'Primer of hechtingslaag kunnen aanbrengen', 3),
-    (90, 'Juiste type tegels (wand of vloertegels) bepalen', 3),
-    (90, 'Fouten kunnen opmerken (breuken, productiefouten', 3),
-    (91, 'Tegellijm voor vloertegels', 3),
-    (91, 'Tegellijm voor wandtegels', 3),
-    (92, 'Noodzakelijke lijnen aftekenen (loodlijnen en aanzetlijnen) voor wandtegels', 3),
-    (92, 'Noodzakelijke lijnen aftekenen (loodlijnen en aanzetlijnen) voor vloertegels', 3);
+    (10, 'storingen of afwijkingen aan toestellen in de vaatwasruimte melden', 3);
     
-INSERT INTO aspecten(evaluatiecriteriumId, name, creatorId) VALUES
-    (36, 'controleert en beoordeelt de vlakheid van de muur', 3), 
-    (36, 'controleert en beoordeelt de loodrechtheid van de muur', 3), 
-    (36, 'controleert en beoordeelt de staat van de muur (gebreken, beschadigingen, vochtplekken, ...)', 3), 
-    (37, 'controleert en beoordeelt de vlakheid va nde vloer', 3), 
-    (37, 'controleert en beoordeelt de loodrechtheid van de vloer', 3), 
-    (37, 'controleert en beoordeelt de staat van de vloer (gebreken, beschadigingen, vochtplekken, ...)', 3),
-    (38, 'beschermt de vloer waar nodig met karton of papier', 3),
-    (38, 'beschermen van bad of douchebak', 3),
-    (39, 'plakt overgangen (muur-plafond of vloer-muur- af met plakband', 3),
-    (39, 'plaatst waar nodig beschermfolie', 3),
-    (40, 'plakt overgangen (ramen en deuren) af met plakband', 3),
-    (40, 'plaatst waar nodig beschermfolie', 3),
-    (41, 'verwijdert alle afval uit de ruimte', 3),
-    (41, 'verwijdert rest- of overtollig materiaal van het te betegelen oppervlakte (bezetsel-, chaperesten)', 3),
-    (42, 'veegt het te betegelen vloeroppervlakte schoon', 3),
-    (42, 'veegt het te betegelen wandoppervlakte schoon', 3),
-    (42, 'stofzuigt indien nodig de te betegelen oppervlakte', 3),
-    (43, 'leest de productinfo', 3),
-    (43, 'maakt het product gebruiksklaar volgens voorschrift van de producent', 3),
-    (43, 'brengt het product op de voorgeschreven wijze aan', 3),
-    (43, 'respecteert de juiste wachttijd', 3),
-    (44, 'herkent het doel van de tegel (wand- of vloertegel)', 3),
-    (45, 'controleert de tegels op producteigenschap (serienummer, kleur, ...)', 3),
-    (45, 'productiefouten in tegels kunnen opmerken (spatten, haarscheurtjes, ...)', 3),
-    (45, 'kleurverschillen tussen tegels kunnen vaststellen', 3),
-    (46, 'schat de noodzakelijke hoeveelheid aan te maken lijm/specie in', 3),
-    (46, 'juiste verhouding kunnen bepalen', 3),
-    (46, 'lijm aanmaken volgens de voorschriften van de producent', 3),
-    (46, 'mengtijden respecteren', 3),
-    (47, 'schat de noodzakelijk aan te maken hoeveelheid lijm in', 3),
-    (47, 'juiste verhouding kunnen bepalen', 3),
-    (47, 'lijm aanmaken volgens de voorschriften van de producent', 3),
-    (47, 'mengtijden respecteren', 3),
-    (48, 'bepaalt en tekent de startlijn af op de wand', 3),
-    (48, 'bepaalt de passtukken aan de zijkanten (breedte uitzetten van het tegelwerk', 3),
-    (48, 'plaatst de loodlijnen op de wand', 3),
-    (48, 'brengt de lijm aan volgens de grootte van de tegel en rij', 3),
-    (48, 'plaatst de tegel op de loodlijn', 3),
-    (48, 'drukt de tegel voldoende aan', 3),
-    (48, 'plaatst de kruisjes (voegafstandhouders)', 3),
-    (48, 'controleert de vlakheid van de overgangen tussen de tegels', 3),
-    (48, 'meet de passtukken op', 3),
-    (48, 'plaatst de passtukken', 3),
-    (49, 'verdeelt de te betegelen ruimte (lengte- en breedteverdeling', 3),
-    (49, 'tekent de eerste lijn af op de vloer', 3),
-    (49, 'brengt de lijm aan volgens de grootte van de tegel en rij', 3),
-    (49, 'plaatst de tegel op de verdeellijn', 3),
-    (49, 'drukt de tegel voldoende aan', 3),
-    (49, 'plaatst de kruisjes (voegafstandhouders)', 3),
-    (49, 'controleert de vlakheid van de overgangen tussen de tegels', 3),
-    (49, 'meet de passtukken op', 3),
-    (49, 'plaatst de passtukken', 3);
-
-INSERT INTO studenten_modules(studentId, moduleId, opleidingId) VALUES
-	-- REAL DATA
-    (6,1,null),
-    (6,3,1),
-    (6,4,1),
-    (7,4,2),
-    (7,5,2),
-    (7,6,null),
-    
-    -- RANDOM DATA: student 3 (id 8) volgt kapper, 4 en 5 (ids 9 en 10) volgen kok.
-	(9,1,null),
-    (10,1,null),
-    (9,3,1),
-    (10,3,1),
-    (8,3,2);
-
 INSERT INTO rapporten(studentId, commentaarAlgemeen, commentaarKlassenraad) VALUES
 	(6, 'Faisal voldoet aan de voorwaarden van het voltijds engagement door bijkomende lessen Nederlands te volgen.',
 		'Je bent een aangename leerling met een grote inzet. \n\n Proficiat! Prettige vakantie!'),
     (7, null, 'Geen evaluatie mogelijk wegens afwezigheden.');
 
-INSERT INTO rapporten_modules(rapportId, moduleId, commentaar) VALUES -- ? TODO ? merge table with studenten_modules ?
+INSERT INTO rapporten_modules(rapportId, moduleId, commentaar) VALUES
 	(1, 3, null),
     (1, 4, "Jij bent een echte doorzetter! Je kennis van de Nederlandse taal gaat erop vooruit. Het is leuk om jou in de klas te hebben. Fijne vakantie, Faisal!"),
     (1, 1, "Zeer goede inzet, je hebt jouw eerste module behaald. \n Proficiat!");
 
-INSERT INTO rapporten_scores(rapportId, doelstellingId, score, opmerking) VALUES
+INSERT INTO rapporten_scores(rapportId,doelstellingId,score, opmerking) VALUES
 	(1, 45, 'G', 'NT2 niv1 breakthrough (Alfa)'),
 	(1, 46, 'G', null),
 	(1, 47, 'V', null),
