@@ -9,7 +9,6 @@ import axios from 'axios'
 import('../node_modules/vuetify/dist/vuetify.min.css')
 Vue.use(Vuetify)
 Vue.prototype.$http = axios
-
 Vue.config.productionTip = false
 
 /* eslint-disable no-new */
