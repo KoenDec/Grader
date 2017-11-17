@@ -37,14 +37,16 @@
             >
               <v-icon>file_upload</v-icon>
             </v-btn>
-            <v-btn
-              fab
-              dark
-              small
-              color="red"
-            >
-              <v-icon>person_add</v-icon>
-            </v-btn>
+            <router-link to="AddStudent" style="text-decoration: none">
+              <v-btn
+                fab
+                dark
+                small
+                color="red"
+              >
+                 <v-icon>person_add</v-icon>
+              </v-btn>
+            </router-link>
           </v-speed-dial>
       </v-layout>
       <v-layout row wrap>
@@ -105,6 +107,7 @@ export default {
         { text: 'Opleiding', align: 'left', value: 'opleiding' },
         { text: '', value: 'rapportid' }
       ],
+<<<<<<< HEAD
       items: [],
       opleidingen: ['drank', 'sletten', 'kapper']
     }
@@ -116,6 +119,38 @@ export default {
     },
     logIt () {
       console.log(this)
+=======
+      items: [
+        {
+          value: false,
+          student: 'MuslimParents Suicidebomber',
+          opleiding: 'Drank',
+          rapportid: 1
+        },
+        {
+          value: false,
+          student: 'Pleblord gayParentsFaggot',
+          opleiding: 'sletten',
+          rapportid: 2
+        },
+        {
+          value: false,
+          student: 'Dickbutt Quak',
+          opleiding: 'Drank',
+          rapportid: 3
+        }
+      ],
+      opleidingen: ['drank', 'sletten', 'kapper'],
+      methods: {
+        uploadFiles () {
+          const form = this.formData
+          console.log(form)
+        },
+        route (path) {
+          this.$router.push(path)
+        }
+      }
+>>>>>>> 1c9f8ea455fdd945b76493456e0b1abf6298ecd5
     }
   },
   created () {
