@@ -804,8 +804,9 @@ class UserDAO {
 
         $sql = 'UPDATE users SET password = :password WHERE id = :userId';
         $stmt = $conn->prepare($sql);
-        $stmt->bindParam(':userId', $userId);
         $stmt->bindParam(':password', $password);
+        $stmt->bindParam(':userId', $userid);
+
         $stmt->execute();
       } catch (PDOException $e) {
         die($e->getMessage());
