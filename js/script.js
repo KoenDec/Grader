@@ -100,7 +100,7 @@ $(document).ready(function () {
 
         $.ajax({
             type: "POST",
-            url: "studentSearch.php",
+            url: "php/studentSearch.php",
             dataType: 'json',
             data:'keyword='+$(this).val(),
             success: function(data){
