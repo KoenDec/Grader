@@ -53,7 +53,7 @@ class UserDAO {
         try {
             $conn = graderdb::getConnection();
 
-            $sql = 'SELECT * FROM users WHERE email = :username';
+            $sql = 'SELECT id,email,firstname,lastname,accountCreatedTimestamp FROM users WHERE email = :username';
             $stmt = $conn->prepare($sql);
             $stmt->bindParam(':username', $username);
             $stmt->execute();
@@ -114,7 +114,7 @@ class UserDAO {
         try {
             $conn = graderdb::getConnection();
 
-            $sql = 'SELECT * FROM users WHERE id = :userid';
+            $sql = 'SELECT id,email,firstname,lastname,accountCreatedTimestamp FROM users WHERE id = :userid';
             $stmt = $conn->prepare($sql);
             $stmt->bindParam(':userid', $userid);
             $stmt->execute();
@@ -728,6 +728,30 @@ class UserDAO {
         return $rating;
     }
 
+    public static function getUserPw($username) {
+      try {
+          $conn = graderdb::getConnection();
+
+          $sql = 'SELECT * FROM users WHERE email = :username';
+          $stmt = $conn->prepare($sql);
+          $stmt->bindParam(':username', $username);
+          $stmt->execute();
+
+          $usersTable = $stmt->fetchAll(PDO::FETCH_CLASS);
+      } catch (PDOException $e) {
+          die($e->getMessage());
+      }
+
+      if(isset($usersTable[0])) {
+          $user = $usersTable[0];
+      } else {
+          //die('No user with username = ' . $username);
+          $user = null;
+      }
+
+      return $user;
+    }
+
      //////////////////////////////////////////////
     //              INSERT-QUERIES              //
    //////////////////////////////////////////////
@@ -837,6 +861,22 @@ class UserDAO {
         } catch (PDOException $e) {
             die($e->getMessage());
         }
+    }
+
+    public static function updatePassword($userid, $password) {
+      try {
+        $conn = graderdb::getConnection();
+
+        $sql = 'UPDATE users SET password = :password WHERE id = :userId';
+        $stmt = $conn->prepare($sql);
+        $stmt->bindParam(':password', $password);
+        $stmt->bindParam(':userId', $userid);
+
+        $stmt->execute();
+      } catch (PDOException $e) {
+        die($e->getMessage());
+      }
+
     }
 
     //////////////////////////////////////////////

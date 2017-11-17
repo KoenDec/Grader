@@ -1,4 +1,4 @@
-# Login 
+# Login
 type POST
 url  api/auth
 data {"username":"","password":""}
@@ -33,3 +33,13 @@ url  api/opleidingen
 type GET
 url  api/studentReport?id=
 id = studentid
+
+#insert score for criterium
+type POST
+url  api/evaluateCrit
+data {"critToEval":"","score":""}
+
+#update user
+type POST
+url  api/updateUser
+data {"firstname":"","lastname":"","email":""}

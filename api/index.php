@@ -192,7 +192,23 @@ if ($_SERVER['REQUEST_METHOD'] == 'GET') {
       http_response_code(401);
     }
   } else if ($_GET['createModule']) {
-    
+
+  } else if ($_GET['evaluateCrit']) {
+    $postBody = file_get_contents('php://input');
+    $postBody = json_decode($postBody);
+
+    $critToEval = $postBody->critToEval;
+    $score = $postBody->score;
+
+    if (Login::isLoggedIn()) {
+      // check if teacher
+      // $userDAO->evaluateCrit($critToEval,$score);
+      echo '{"Status":"Succesfull evaluated"}';
+      http_response_code(200);
+    } else {
+      echo $notLoggedInErr;
+      http_response_code(401);
+    }
   }
 
 } else if ($_SERVER['REQUEST_METHOD'] == 'DELETE') {
