@@ -802,7 +802,7 @@ class UserDAO {
       try {
         $conn = graderdb::getConnection();
 
-        $sql = 'UPDATE users SET password = :password WHERE id = :userId';
+        $sql = 'UPDATE users SET password=:password WHERE id = :userId';
         $stmt = $conn->prepare($sql);
         $stmt->bindParam(':password', $password);
         $stmt->bindParam(':userId', $userid);
