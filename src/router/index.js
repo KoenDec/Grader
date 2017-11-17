@@ -4,6 +4,7 @@ import Index from '@/components/Index'
 import Reports from '@/components/Reports'
 import Home from '@/components/Home'
 import Students from '@/components/Students'
+import AddStudent from '@/components/AddStudent'
 import Print from '@/components/Print'
 import checkboxes from '@/components/CheckboxContainer'
 import Subjects from '@/components/Subjects'
@@ -39,6 +40,11 @@ export default new Router({
           path: '/opleidingen',
           name: 'opleidingen',
           component: Subjects
+        },
+        {
+          path: '/addstudent',
+          name: 'addstudent',
+          component: AddStudent
         },
         {
           path: '/',

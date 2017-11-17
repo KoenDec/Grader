@@ -36,14 +36,16 @@
             >
               <v-icon>file_upload</v-icon>
             </v-btn>
-            <v-btn
-              fab
-              dark
-              small
-              color="red"
-            >
-              <v-icon>person_add</v-icon>
-            </v-btn>
+            <router-link to="AddStudent" style="text-decoration: none">
+              <v-btn
+                fab
+                dark
+                small
+                color="red"
+              >
+                 <v-icon>person_add</v-icon>
+              </v-btn>
+            </router-link>
           </v-speed-dial>
       </v-layout>
       <v-layout row wrap>
@@ -129,6 +131,9 @@ export default {
         uploadFiles () {
           const form = this.formData
           console.log(form)
+        },
+        route (path) {
+          this.$router.push(path)
         }
       }
     }

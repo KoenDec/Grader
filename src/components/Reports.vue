@@ -52,7 +52,7 @@ export default {
   },
   methods: {
     logSomething () {
-      this.$http.post('http://localhost/Grader/api/auth',
+      this.$http.post('http://146.185.183.217/api/auth',
         {
           username: 'thomas.de.nil@student.howest.be',
           password: 'Student'
