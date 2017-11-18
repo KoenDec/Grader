@@ -6,7 +6,7 @@
         </v-flex>
     </v-layout>
     <v-layout row wrap>
-      <v-flex>
+      <v-flex xs10 offset-xs1>
         <v-stepper v-model="e1">
           <v-stepper-header>
             <v-stepper-step step="1" :complete="e1 > 1">Details</v-stepper-step>
@@ -17,9 +17,15 @@
             <v-stepper-content step="1">
               <v-form v-model="valid" ref="form" lazy-validation>
                 <v-text-field
-                  label="Name"
+                  label="Naam"
                   v-model="name"
                   :rules="nameRules"
+                  required
+                ></v-text-field>
+                <v-text-field
+                  label="Voornaam"
+                  v-model="firstname"
+                  :rules="firstnameRules"
                   required
                 ></v-text-field>
                 <v-text-field
@@ -29,25 +35,34 @@
                   required
                 ></v-text-field>
                 <v-select
-                  label="Item"
+                  label="Opleiding"
                   v-model="select"
-                  :items="items"
-                  :rules="[v => !!v || 'Item is required']"
+                  :items="opleidingenDropdown"
+                  :rules="[v => !!v || 'Een opleiding moet geselecteerd worden']"
                   required
                 ></v-select>
-                <v-btn
-                  @click=""
-                  :disabled="!valid"
-                >
-                  submit
-                </v-btn>
-                <v-btn @click="clear">clear</v-btn>
+                <v-btn color="primary" :disabled="!valid" @click="submit">Continue</v-btn>
+                <v-btn flat>Cancel</v-btn>
               </v-form>
-              <v-btn color="primary" @click.native="e1 = 2">Continue</v-btn>
-              <v-btn flat>Cancel</v-btn>
             </v-stepper-content>
             <v-stepper-content step="2">
-              <v-card color="grey lighten-1" class="mb-5" height="200px"></v-card>
+              <v-flex v-for="(opleiding, o) in opleidingen">
+                <h3>Modules in de opleiding {{opleiding.opleidingNaam}}</h3>
+                <v-divider></v-divider>
+                  <v-expansion-panel popout expand>
+                    <v-flex xs12 v-for="(mod, m) in opleiding.modules">
+                      <v-expansion-panel-content>
+                        <div slot="header">
+                          <v-checkbox v-bind:label="mod" light></v-checkbox>
+                        </div>
+                        <v-card>
+                          <v-card-text class="grey lighten-3">Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat.</v-card-text>
+                        </v-card>
+                      </v-expansion-panel-content>
+                      <v-divider></v-divider>
+                    </v-flex>
+                  </v-expansion-panel>
+              </v-flex>
               <v-btn color="primary" @click.native="e1 = 3">Continue</v-btn>
               <v-btn flat>Cancel</v-btn>
             </v-stepper-content>
@@ -63,28 +78,45 @@ export default {
   name: 'Home',
   data () {
     return {
+      e1: 0,
       valid: true,
       name: '',
       nameRules: [
-        (v) => !!v || 'Name is required'
+        (v) => !!v || 'Naam moet ingevuld worden'
+      ],
+      firstname: '',
+      firstnameRules: [
+        (v) => !!v || 'Voornaam moet ingevuld worden'
       ],
       email: '',
       emailRules: [
-        (v) => !!v || 'E-mail is required',
-        (v) => /^\w+([.-]?\w+)*@\w+([.-]?\w+)*(\.\w{2,3})+$/.test(v) || 'E-mail must be valid'
+        (v) => !!v || 'E-mail moet ingevuld worden',
+        (v) => /^\w+([.-]?\w+)*@\w+([.-]?\w+)*(\.\w{2,3})+$/.test(v) || 'E-mail moet geldig zijn'
       ],
       select: null,
-      items: [
-        'Item 1',
-        'Item 2',
-        'Item 3',
-        'Item 4'
+      opleidingenDropdown: [
+        'Drank',
+        'Sletten',
+        'Kapper'
       ],
-      checkbox: false,
-      methods: {
-        clear () {
-          this.$refs.form.reset()
+      opleidingen: [
+        {
+          opleidingNaam: 'Drank',
+          modules: ['Drinken', 'Slapen'],
+          opleidingid: 0
+        },
+        {
+          opleidingNaam: 'Kapper',
+          modules: ['Knippen', 'Kleuren'],
+          opleidingid: 1
         }
+      ]
+    }
+  },
+  methods: {
+    submit () {
+      if (this.$refs.form.validate()) {
+        this.e1 = 2
       }
     }
   }
