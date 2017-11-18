@@ -629,6 +629,32 @@ class UserDAO {
         return $criteria;
     }
 
+    public static function getBeoordelingsaspectenInEvaluatiecriterium($evaluatiecriteriumId){
+        try{
+            $conn = graderdb::getConnection();
+
+            $sql = 'SELECT * from aspecten
+                    WHERE evaluatiecriteriumId = :evaluatiecriteriumId';
+            $stmt = $conn->prepare($sql);
+            $stmt->bindParam(':evaluatiecriteriumId',$evaluatiecriteriumId);
+
+            $stmt->execute();
+
+            $aspectenTable = $stmt->fetchAll(PDO::FETCH_CLASS);
+        } catch (PDOException $e) {
+            die($e->getMessage());
+        }
+
+        if(isset($aspectenTable[0])) {
+            $aspecten = $aspectenTable;
+        } else {
+            //die('No aspecten found for evaluatiecriterium with id = ' . $evaluatiecriteriumId);
+            $aspecten = null;
+        }
+
+        return $aspecten;
+    }
+
     public static function getRapporten($studentId){
         try{
             $conn = graderdb::getConnection();

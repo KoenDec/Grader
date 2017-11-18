@@ -446,6 +446,8 @@ $userRole = $userDAO->getUserRole($loggedInUserId);
                 <tr>
                     <th class="doelstellingwidth">Doelstellingen</th>
                     <th class="evaluatiecriteriawidth">Evaluatiecriteria</th>
+                    <th>OK / NOK</th>
+                    <th>Voorlopig resultaat</th>
                 </tr>
                 <tr>
 
@@ -462,17 +464,49 @@ $userRole = $userDAO->getUserRole($loggedInUserId);
                         $doelstellingen = $userDAO->getDoelstellingenInDoelstellingscategorie($doelstellingscategorie->id);
                         foreach ($doelstellingen as $doelstelling){
                                 $evaluatiecriteria = $userDAO->getCriteriaInDoelstelling($doelstelling->id);
-                            ?>
-                    <td style="padding-left: 30px" class="doelstellingwidth valign-wrapper" rowspan="<?= count($evaluatiecriteria) ?>"><i
-                            class="material-icons">navigate_next</i><?= $doelstelling->name ?>
+                        ?>
+                    <td class="doelstellingwidth valign-wrapper" colspan="2" rowspan="<?= count($evaluatiecriteria) ?>"><?= $doelstelling->name ?>
                     </td>
                     <?php
+                    $i = 0;
                             foreach($evaluatiecriteria as $evaluatiecriterium){
-                                ?>
-                                <td><?= $evaluatiecriterium->name ?></td>
-                                </tr><tr>
-                                <?php
-                            }
+                    if ($i != 0){
+                    ?>
+                </tr>
+                <tr>
+                    <td></td><!-- gefoefel omdat materialize blijkbaar niet graag rowspant -->
+                    <?php
+                    }
+
+                    $aspecten = $userDAO->getBeoordelingsaspectenInEvaluatiecriterium($evaluatiecriterium->id);
+                    ?>
+                    <td><strong><?= $evaluatiecriterium->name ?></strong></td>
+                    <td></td>
+                    <td rowspan="<?= count($aspecten) + 1 ?>">Voldoende</td>
+                    <!-- TODO berekenen uit goed/niet goed's van de aspecten -->
+
+                    <?php
+                    foreach ($aspecten as $aspect){
+                    ?>
+                </tr>
+                <tr>
+                    <td></td>
+                    <td><i
+                            class="material-icons">navigate_next</i><?= $aspect->name ?>
+                    </td>
+                    <td>
+                        <div class="input-field">
+                            <select>
+                                <option value="" disabled selected>Nog niet gequoteerd</option>
+                                <option value="OK">OK</option>
+                                <option value="NOK">NOK</option>
+                            </select>
+                        </div>
+                    </td><!-- TODO inputvelden -->
+                    <?php
+                    $i = $i + 1;
+                    }
+                    }
                     ?>
                 </tr>
                 <tr>
