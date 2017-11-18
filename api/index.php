@@ -1,6 +1,10 @@
 <?php
-require_once('../php/graderdb.php');
-require_once('../php/Login.php');
+require_once('../graderdb.php');
+require_once('../Login.php');
+
+header("Access-Control-Allow-Origin: *");
+header("Access-Control-Allow-Headers: Origin,Content-Type");
+
 
 $userDAO = new UserDAO();
 $notFoundErr = '{"Status":"Geen user gevonden"}';
@@ -11,14 +15,14 @@ if ($_SERVER['REQUEST_METHOD'] == 'GET') {
   if ($_GET['url'] == 'auth') {
 
   } else if ($_GET['url'] == 'students') {
-    if (Login::isLoggedIn()) {
+    //if (Login::isLoggedIn()) {
       $students = $userDAO->getAllStudents();
       echo json_encode($students);
       http_response_code(200);
-    } else {
+    /*} else {
       echo $notLoggedInErr;
       http_response_code(401);
-    }
+    }*/
   } else if ($_GET['url'] == 'studentInEducation') {
     if (Login::isLoggedIn()) {
       $userid = Login::isLoggedIn();
@@ -41,7 +45,7 @@ if ($_SERVER['REQUEST_METHOD'] == 'GET') {
       http_response_code(401);
     }
   } else if ($_GET['url'] == 'currentUser') {
-    if (Login::isLoggedIn()) {
+    //if (Login::isLoggedIn()) {
       if (isset($_GET['token'])) {
         $token = $_GET['token'];
         $userid = $userDAO->getLoggedInUserId(sha1($token));
@@ -51,16 +55,17 @@ if ($_SERVER['REQUEST_METHOD'] == 'GET') {
         echo $notFoundErr;
         http_response_code(405);
       }
-    } else {
+    /*} else {
       echo $notLoggedInErr;
       http_response_code(401);
-    }
+    }*/
   } else if ($_GET['url'] == 'studentReport') {
-    if (Login::isLoggedIn()) {
+    //if (Login::isLoggedIn()) {
       if (isset($_GET['id'])) {
         $studentId = $_GET['id'];
 
-          $rapport = $userDAO->getRapporten($studentId)[0]; // TODO students have more than 1 report (old reports are not deleted)
+
+          $rapport = $userDAO->getRapporten($studentId)[0]; // TODO students have more than 1 rapport (old rapporten are not deleted)
           $modules = $userDAO->getRapportmodules($rapport->id);
 
           $report = (object)[
@@ -80,7 +85,7 @@ if ($_SERVER['REQUEST_METHOD'] == 'GET') {
                   'commentaar' => utf8_encode($rapportmodule->commentaar)
               ];
 
-              $doelstellingscategories = $userDAO->getDoelstellingscategoriesInModule($module->id);
+              $doelstellingscategories = $userDAO->getFollowedDoelstellingscategoriesInModule($module->id,$studentId);
 
               foreach($doelstellingscategories as $doelstellingscategorie){
 
@@ -103,7 +108,7 @@ if ($_SERVER['REQUEST_METHOD'] == 'GET') {
 
                       $doelstellingObjToPush = (object)[
                           'id' => $doelstelling->id,
-                          'name' => utf8_encode($doelstelling->name),
+                          'name' => utf8_encode($doelstelling->weergaveTitel),
                           'score' => $score,
                           'opmerking' => $opmerking
                       ];
@@ -124,12 +129,12 @@ if ($_SERVER['REQUEST_METHOD'] == 'GET') {
         echo $notFoundErr;
         http_response_code(405);
       }
-    } else {
+    /*} else {
       echo $notLoggedInErr;
       http_response_code(401);
-    }
+    }*/
   } else if ($_GET['url'] == 'student') {
-    if (Login::isLoggedIn()) {
+    //if (Login::isLoggedIn()) {
       if (isset($_GET['id'])) {
         $userid = $_GET['id'];
         $student = $userDAO->getUserById($userid);
@@ -138,19 +143,23 @@ if ($_SERVER['REQUEST_METHOD'] == 'GET') {
         echo $notFoundErr;
         http_response_code(405);
       }
-    } else {
+    /*} else {
       echo $notLoggedInErr;
       http_response_code(401);
-    }
+    }*/
   } else if ($_GET['url'] == 'opleidingen') {
-    if (Login::isLoggedIn()) {
+    //if (Login::isLoggedIn()) {
       $edus = $userDAO->getAllEducations();
       echo json_encode($edus);
       http_response_code(200);
-    } else {
+    /*} else {
       echo $notLoggedInErr;
       http_response_code(401);
-    }
+    }*/
+  } else if ($_GET['url'] == 'studentenMetOpleiding') {
+    $obj = $userDAO->getAllActiveStudentsWithEducation();
+    echo json_encode($obj);
+    http_response_code(200);
   }
 } else if ($_SERVER['REQUEST_METHOD'] == 'POST') {
   if ($_GET['url'] == 'auth') {
@@ -161,17 +170,26 @@ if ($_SERVER['REQUEST_METHOD'] == 'GET') {
     $password = $postBody->password;
 
     if ($userDAO->getUser($username)) {
-      if ($password == $userDAO->getUser($username)->password) {// TODO hash PW!
+      $password_hash = $userDAO->getUserPw($username)->password;
+      if (password_verify($password, $password_hash)) {//$password == $userDAO->getUserPw($username)->password) {// TODO hash PW!
         $cstrong = True;
         $token = bin2hex(openssl_random_pseudo_bytes(64, $cstrong));
         $user_id = $userDAO->getUser($username)->id;
         $userDAO->insertNewLoginToken($user_id, sha1($token));
-        setcookie("GID", $token, time() + 60 * 60 * 24 * 7, '/', NULL, NULL, false);
-        setcookie("GID_", '1', time() + 60 * 60 * 24 * 3, '/', NULL, NULL, TRUE);
+        //setcookie("GID", $token, time() + 60 * 60 * 24 * 7, '/'/*, NULL, NULL, false*/);
+        //setcookie("GID_", '1', time() + 60 * 60 * 24 * 3, '/', NULL, NULL, TRUE);
+        $cookieObj = (object)[
+          'GID' => $token,
+          'GID_' => '1'
+        ];
+        echo json_encode($cookieObj);
+        http_response_code(200);
       } else {
+        echo '{"Status":"Wrong pw"}';
         http_response_code(401);
       }
     } else {
+      echo '{"Status":"Wrong username"}';
       http_response_code(401);
     }
   } else if ($_GET['url'] == 'updateUser') {
@@ -191,9 +209,9 @@ if ($_SERVER['REQUEST_METHOD'] == 'GET') {
       echo $notLoggedInErr;
       http_response_code(401);
     }
-  } else if ($_GET['createModule']) {
+  } else if ($_GET['url'] == 'createModule') {
 
-  } else if ($_GET['evaluateCrit']) {
+  } else if ($_GET['url'] == 'evaluateCrit') {
     $postBody = file_get_contents('php://input');
     $postBody = json_decode($postBody);
 
@@ -209,8 +227,18 @@ if ($_SERVER['REQUEST_METHOD'] == 'GET') {
       echo $notLoggedInErr;
       http_response_code(401);
     }
-  }
+  } else if ($_GET['url'] == 'updatePw') {
+    $postBody = file_get_contents('php://input');
+    $postBody = json_decode($postBody);
 
+    $userid = $postBody->userid;
+    $newpw = $postBody->pw;
+
+    $password_hash = password_hash($newpw, PASSWORD_BCRYPT);
+    $userDAO->updatePassword($userid, $password_hash);
+    echo '{"Status":"pw updated"}';
+    http_response_code(200);
+  }
 } else if ($_SERVER['REQUEST_METHOD'] == 'DELETE') {
   if ($_GET['url'] == 'auth') {
     if (isset($_GET['token'])) {
@@ -227,6 +255,9 @@ if ($_SERVER['REQUEST_METHOD'] == 'GET') {
       http_response_code(400);
     }
   }
+} else if ($_SERVER['REQUEST_METHOD'] == 'OPTIONS') {
+  echo '{"Status":"options allowed"}';
+  http_response_code(200);
 } else {
   http_response_code(405);
 }
