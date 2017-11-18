@@ -1,7 +1,7 @@
 <template>
   <v-flex xs12 offset-xs1>
     <v-checkbox  v-bind:label="`Alles selecteren`" v-model="allSelect" @change="changeOpleidingCheckboxStates(allSelect)" light></v-checkbox>
-    <v-checkbox class="ml-4" v-for="(item, i) in listobject" v-bind:label="`Opleiding ${listobject[i]}`" @change="checkAll(opleiding[i])" v-model="opleiding[i]" light></v-checkbox>
+    <v-checkbox class="ml-4" v-for="(item, i) in opleidingen" :key="i" v-bind:label="`${opleidingen[i].opleiding}`" @change="checkAll()" v-model="opleidingen[i].value" light></v-checkbox>
   </v-flex>
 </template>
 
@@ -11,23 +11,40 @@ export default {
   props: ['listobject'],
   data () {
     return {
-      allSelect: true,
-      opleiding: [true, true, true, true, true]
+      allSelect: true
     }
   },
   methods: {
     changeOpleidingCheckboxStates (val) {
-      this.opleiding = [val, val, val, val, val]
-    },
-    checkState (val) {
-      return val
-    },
-    checkAll (val) {
-      if (this.opleiding.every(this.checkState)) {
-        this.allSelect = true
-      } else {
-        this.allSelect = false
+      // this.opleiding = [val, val, val, val, val]
+      for (var i = 0; i < this.listobject.length; i++) {
+        this.opleidingen[i].value = val
       }
+    },
+    checkAll () {
+      for (var i = 0; i < this.opleidingen.length; i++) {
+        if (this.opleidingen[i].value === false) {
+          this.allSelect = false
+          return
+        } else {
+          this.allSelect = true
+        }
+      }
+    }
+  },
+  created () {
+    for (var i = 0; i < this._props.listobject.length; i++) {
+      this.opleidingen.push(true)
+    }
+    console.log(this)
+  },
+  computed: {
+    opleidingen: function () {
+      var data = []
+      for (var i = 0; i < this._props.listobject.length; i++) {
+        data.push({'opleiding': this._props.listobject[i].name, 'value': true})
+      }
+      return data
     }
   }
 }

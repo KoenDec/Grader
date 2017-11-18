@@ -12,7 +12,7 @@
             </v-toolbar>
         </v-flex>
         <v-flex>
-          <v-btn large color="primary"><v-icon>get_app</v-icon></v-btn>
+          <v-btn @click="getSomething" large color="primary"><v-icon>get_app</v-icon></v-btn>
           <v-btn @click="logSomething" large color="primary"><v-icon>print</v-icon></v-btn>
         </v-flex>
     </v-layout>
@@ -47,16 +47,31 @@ export default {
       },
       currentreport: {
 
+      },
+      usercredentials: {
+        username: 'thomas.de.nil@student.howest.be',
+        password: 'Student'
+      },
+      headers: {
+        'Content-Type': 'text/plain'
       }
     }
   },
   methods: {
     logSomething () {
-      this.$http.post('http://146.185.183.217/api/auth',
-        {
-          username: 'thomas.de.nil@student.howest.be',
-          password: 'Student'
-        })
+      this.$http.post('http://146.185.183.217/api/auth', this.usercredentials)
+      .then(function (response) {
+        console.log(response.data)
+        var d = new Date()
+        document.cookie = 'GID=' + response.data.GID + '; expires=' + d.getTime() * 60 * 60 * 24 * 7
+        document.cookie = 'GID_=' + response.data.GID_ + '; expires=' + d.getTime() * 60 * 60 * 24 * 3
+      })
+      .catch(function (error) {
+        console.log(error)
+      })
+    },
+    getSomething () {
+      this.$http.get('http://146.185.183.217/api/students')
       .then(function (response) {
         console.log(response)
       })

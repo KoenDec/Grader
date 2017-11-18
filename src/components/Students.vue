@@ -24,6 +24,7 @@
               fab
               hover
               class="left"
+              @click="logIt"
             >
               <v-icon>add</v-icon>
             </v-btn>
@@ -59,9 +60,9 @@
             hide-actions
             class="elevation-1"
             >
-              <template slot="items" scope="props">
-                <td class="text-xs-left">{{ props.item.student }}</td>
-                <td class="text-xs-left">{{ props.item.opleiding }}</td>
+              <template slot="items" slot-scope="props">
+                <td class="text-xs-left">{{ props.item.firstname + ' ' + props.item.lastname  }}</td>
+                <td class="text-xs-left">{{ props.item.opleidingName }}</td>
                 <td>
                   <v-btn color="error" class="ma-1 right" dark><v-icon dark>delete</v-icon></v-btn>
                   <v-btn color="primary" class="ma-1 right" slot="activator" dark><v-icon dark>edit</v-icon></v-btn>
@@ -133,7 +134,29 @@ export default {
     uploadFiles () {
       const form = this.formData
       console.log(form)
+    },
+    logIt () {
+      console.log(this)
     }
+  },
+  created () {
+    var self = this
+    this.$http.get('http://146.185.183.217/api/studentenMetOpleiding')
+      .then(function (response) {
+        self.items = response.data
+        console.log(self.items)
+      })
+      .catch(function (error) {
+        console.log(error)
+      })
+    this.$http.get('http://146.185.183.217/api/opleidingen')
+        .then(function (response) {
+          self.opleidingen = response.data
+          console.log(self.opleidingen)
+        })
+        .catch(function (error) {
+          console.log(error)
+        })
   }
 }
 </script>
