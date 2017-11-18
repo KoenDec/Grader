@@ -112,13 +112,13 @@ export default {
           opleiding: 'Kapper',
           actionbtns: 3
         }
-      ],
-      methods: {
-        uploadFiles () {
-          const form = this.formData
-          console.log(form)
-        }
-      }
+      ]
+    }
+  },
+  methods: {
+    uploadFiles () {
+      const form = this.formData
+      console.log(form)
     }
   }
 }

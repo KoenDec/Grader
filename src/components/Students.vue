@@ -126,16 +126,13 @@ export default {
           rapportid: 3
         }
       ],
-      opleidingen: ['drank', 'sletten', 'kapper'],
-      methods: {
-        uploadFiles () {
-          const form = this.formData
-          console.log(form)
-        },
-        route (path) {
-          this.$router.push(path)
-        }
-      }
+      opleidingen: ['drank', 'sletten', 'kapper']
+    }
+  },
+  methods: {
+    uploadFiles () {
+      const form = this.formData
+      console.log(form)
     }
   }
 }
