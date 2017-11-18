@@ -11,12 +11,12 @@ export default {
   props: ['listobject'],
   data () {
     return {
-      allSelect: true
+      allSelect: true,
+      opleidingen: []
     }
   },
   methods: {
     changeOpleidingCheckboxStates (val) {
-      // this.opleiding = [val, val, val, val, val]
       for (var i = 0; i < this.listobject.length; i++) {
         this.opleidingen[i].value = val
       }
@@ -34,18 +34,17 @@ export default {
   },
   created () {
     for (var i = 0; i < this._props.listobject.length; i++) {
-      this.opleidingen.push(true)
+      this.opleidingen.push({'opleiding': this._props.listobject[i].name, 'value': true})
     }
-    console.log(this)
   },
   computed: {
-    opleidingen: function () {
+    /* opleidingen: function () {
       var data = []
       for (var i = 0; i < this._props.listobject.length; i++) {
         data.push({'opleiding': this._props.listobject[i].name, 'value': true})
       }
       return data
-    }
+    } */
   }
 }
 </script>

@@ -51,7 +51,7 @@
       </v-layout>
       <v-layout row wrap>
           <v-flex class="mt-4" offset-xs1 xs2>
-            <checkboxes :listobject="opleidingen"></checkboxes>
+            <checkboxes :listobject="opleidingen" v-if="receivedData"></checkboxes>
           </v-flex>
           <v-flex class="mt-4" xs8>
             <v-data-table
@@ -101,6 +101,7 @@ export default {
       formData: [],
       addStudentsFile: false,
       search: '',
+      receivedData: false,
       selected: [],
       headers: [
         { text: 'Student', align: 'left', value: 'student' },
@@ -134,6 +135,7 @@ export default {
         .then(function (response) {
           self.opleidingen = response.data
           console.log(self.opleidingen)
+          self.receivedData = true
         })
         .catch(function (error) {
           console.log(error)
