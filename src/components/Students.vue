@@ -60,9 +60,9 @@
             hide-actions
             class="elevation-1"
             >
-              <template slot="items" scope="props">
+              <template slot="items" slot-scope="props">
                 <td class="text-xs-left">{{ props.item.firstname + ' ' + props.item.lastname  }}</td>
-                <td class="text-xs-left">{{ props.item.opleiding }}</td>
+                <td class="text-xs-left">{{ props.item.opleidingName }}</td>
                 <td>
                   <v-btn color="error" class="ma-1 right" dark><v-icon dark>delete</v-icon></v-btn>
                   <v-btn color="primary" class="ma-1 right" slot="activator" dark><v-icon dark>edit</v-icon></v-btn>
@@ -107,9 +107,8 @@ export default {
         { text: 'Opleiding', align: 'left', value: 'opleiding' },
         { text: '', value: 'rapportid' }
       ],
-<<<<<<< HEAD
       items: [],
-      opleidingen: ['drank', 'sletten', 'kapper']
+      opleidingen: []
     }
   },
   methods: {
@@ -119,43 +118,11 @@ export default {
     },
     logIt () {
       console.log(this)
-=======
-      items: [
-        {
-          value: false,
-          student: 'MuslimParents Suicidebomber',
-          opleiding: 'Drank',
-          rapportid: 1
-        },
-        {
-          value: false,
-          student: 'Pleblord gayParentsFaggot',
-          opleiding: 'sletten',
-          rapportid: 2
-        },
-        {
-          value: false,
-          student: 'Dickbutt Quak',
-          opleiding: 'Drank',
-          rapportid: 3
-        }
-      ],
-      opleidingen: ['drank', 'sletten', 'kapper'],
-      methods: {
-        uploadFiles () {
-          const form = this.formData
-          console.log(form)
-        },
-        route (path) {
-          this.$router.push(path)
-        }
-      }
->>>>>>> 1c9f8ea455fdd945b76493456e0b1abf6298ecd5
     }
   },
   created () {
     var self = this
-    this.$http.get('http://146.185.183.217/api/students')
+    this.$http.get('http://146.185.183.217/api/studentenMetOpleiding')
       .then(function (response) {
         self.items = response.data
         console.log(self.items)
@@ -163,6 +130,14 @@ export default {
       .catch(function (error) {
         console.log(error)
       })
+    this.$http.get('http://146.185.183.217/api/opleidingen')
+        .then(function (response) {
+          self.opleidingen = response.data
+          console.log(self.opleidingen)
+        })
+        .catch(function (error) {
+          console.log(error)
+        })
   }
 }
 </script>

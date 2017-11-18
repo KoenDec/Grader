@@ -59,7 +59,6 @@ export default {
   },
   methods: {
     logSomething () {
-<<<<<<< HEAD
       this.$http.post('http://146.185.183.217/api/auth', this.usercredentials)
       .then(function (response) {
         console.log(response.data)
@@ -73,13 +72,6 @@ export default {
     },
     getSomething () {
       this.$http.get('http://146.185.183.217/api/students')
-=======
-      this.$http.post('http://146.185.183.217/api/auth',
-        {
-          username: 'thomas.de.nil@student.howest.be',
-          password: 'Student'
-        })
->>>>>>> 1c9f8ea455fdd945b76493456e0b1abf6298ecd5
       .then(function (response) {
         console.log(response)
       })
