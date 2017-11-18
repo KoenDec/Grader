@@ -230,24 +230,26 @@ $userRole = $userDAO->getUserRole($loggedInUserId);
         <?php
     }
 
-    function showReportsPage($studentId)
+    function showReportsPage($studentId, $rapportId)
     {
         $userDAO = new UserDAO();
 
-        if ($studentId != null) {
-            $student = $userDAO->getUserById($studentId);
-            $rapporten = $userDAO->getRapporten($student->id);
-            $rapport = $rapporten[0]; // todo extra pagina hiertussensteken met overzicht van eerdere rapporten, nu eerste rapport hardcoded
+        $dateNow = date('d/m/Y');
+        if($rapportId != null){
+            $rapport = $userDAO->getRapport($rapportId); // todo extra pagina hiertussensteken met overzicht van eerdere rapporten, nu eerste rapport hardcoded
 
             $rapportmodules = $userDAO->getRapportmodules($rapport->id);
-
+            if($studentId != null) $student = $userDAO->getUserById($studentId);
         }
-        $dateNow = date('d/m/Y');
+        else if ($studentId != null) {
+            $student = $userDAO->getUserById($studentId);
+            $rapporten = $userDAO->getRapporten($student->id);
+        }
 
         // todo don't show edit report button for students, that'd be weird  ;) (aslo show ONLY his report)
         ?>
         <div class="row">
-            <h2>Rapporten</h2>
+            <h2>Rapporten <?= (isset($student)) ? "van ".$student->firstname." ".$student->lastname : "" ?></h2>
         </div>
         <div class="row">
             <?php
@@ -268,144 +270,172 @@ $userRole = $userDAO->getUserRole($loggedInUserId);
         if ($studentId != null) {
             ?>
             <div class="row selectedStudent">
-                <p class="col s6">Studiemodules van: <span
-                        style="font-weight: bold"><?= $student->firstname ?> <?= $student->lastname ?></span></p>
+                <!--<p class="col s6">Studiemodules van: <span
+                        style="font-weight: bold"><?= $student->firstname ?> <?= $student->lastname ?></span></p>-->
                 <div class="right-align">
                     <a class="waves-effect waves-light btn tooltipped edit-opslaan-rapport" data-editing="false"
                        data-delay="50" data-tooltip="Aanpassen inschakelen"><i class="material-icons">edit</i></a>
                 </div>
             </div>
+            <?php
+            if(isset($rapport)) {
+                ?>
+                <ul class="popout collapsible courseCreator" data-collapsible="expandable">
+                    <?php
+                    foreach ($rapportmodules as $rapportmodule) {
+                        $module = $userDAO->getModule($rapportmodule->moduleId);
+                        ?>
 
-            <ul class="popout collapsible courseCreator" data-collapsible="expandable">
-                <?php
-                foreach ($rapportmodules as $rapportmodule) {
-                    $module = $userDAO->getModule($rapportmodule->moduleId);
-                    ?>
+                        <li>
+                            <div class='valign-wrapper collapsible-header collapsible-module'><i
+                                    class='collapse-icon material-icons'>add_box</i>
+                                <h4><?= $module->name ?></h4>
+                            </div>
+                            <div class='collapsible-body'>
+                                <table class="striped bordered">
+                                    <tr>
+                                        <th class="doelstellingwidth">Doelstellingen</th>
+                                        <th>Resultaat</th>
+                                        <th>Datum</th>
+                                        <th class="opmerkingenwidth">Opmerkingen</th>
+                                    </tr>
+                                    <tr>
 
-                    <li>
-                        <div class='valign-wrapper collapsible-header collapsible-module'><i
-                                class='collapse-icon material-icons'>add_box</i>
-                            <h4><?= $module->name ?></h4>
-                        </div>
-                        <div class='collapsible-body'>
-                            <table class="striped bordered">
-                                <tr>
-                                    <th class="doelstellingwidth">Doelstellingen</th>
-                                    <th>Resultaat</th>
-                                    <th>Datum</th>
-                                    <th class="opmerkingenwidth">Opmerkingen</th>
-                                </tr>
-                                <tr>
+                                        <?php
+                                        $doelstellingscategories = $userDAO->getDoelstellingscategoriesInModule($module->id);
+                                        foreach ($doelstellingscategories as $doelstellingscategorie){
+                                        ?>
+                                        <th style="border-top: 2px solid gray; border-bottom: 2px solid gray"
+                                            colspan="4">
+                                            <strong><?= $doelstellingscategorie->name ?></strong></th>
+                                    </tr>
+                                    <tr>
+                                        <?php
+                                        $doelstellingen = $userDAO->getDoelstellingenInDoelstellingscategorie($doelstellingscategorie->id);
+                                        foreach ($doelstellingen as $doelstelling){
 
-                                    <?php
-                                    $doelstellingscategories = $userDAO->getDoelstellingscategoriesInModule($module->id);
-                                    foreach ($doelstellingscategories as $doelstellingscategorie){
-                                    ?>
-                                    <th style="border-top: 2px solid gray; border-bottom: 2px solid gray" colspan="4">
-                                        <strong><?= $doelstellingscategorie->name ?></strong></th>
-                                </tr>
-                                <tr>
-                                    <?php
-                                    $doelstellingen = $userDAO->getDoelstellingenInDoelstellingscategorie($doelstellingscategorie->id);
-                                    foreach ($doelstellingen as $doelstelling){
+                                        $ratingObj = $userDAO->getRating($rapport->id, $doelstelling->id);
+                                        $score = null;
+                                        $opmerking = null;
+                                        if ($ratingObj != null) {
+                                            $score = $ratingObj->score;
+                                            $opmerking = $ratingObj->opmerking;
+                                        }
 
-                                    $ratingObj = $userDAO->getRating($rapport->id, $doelstelling->id);
-                                    $score = null;
-                                    $opmerking = null;
-                                    if ($ratingObj != null) {
-                                        $score = $ratingObj->score;
-                                        $opmerking = $ratingObj->opmerking;
-                                    }
-
-                                    ?>
-                                    <td style="padding-left: 30px" class="doelstellingwidth valign-wrapper"><i
-                                            class="material-icons">navigate_next</i><?= $doelstelling->name ?>
-                                    </td>
-                                    <td contenteditable="false">
-                                        <div class="input-field">
-                                            <select disabled>
-                                                <option value="" disabled <?= ($score == null) ? 'selected' : '' ?>>Nog
-                                                    niet gequoteerd
-                                                </option>
-                                                <option value="RO" <?= ($score == "RO") ? 'selected' : '' ?>>Ruim
-                                                    onvoldoende
-                                                </option>
-                                                <option value="O" <?= ($score == "O") ? 'selected' : '' ?>>Onvoldoende
-                                                </option>
-                                                <option value="V" <?= ($score == "V") ? 'selected' : '' ?>>Voldoende
-                                                </option>
-                                                <option value="G" <?= ($score == "G") ? 'selected' : '' ?>>Goed</option>
-                                                <option value="ZG" <?= ($score == "ZG") ? 'selected' : '' ?>>Zeer goed
-                                                </option>
-                                                <option value="NVT" <?= ($score == "NVT") ? 'selected' : '' ?>>Niet van
-                                                    toepassing
-                                                </option>
-                                                <option value="A" <?= ($score == "A") ? 'selected' : '' ?>>Afwezig
-                                                </option>
-                                            </select>
-                                        </div>
-                                        <!--<p>
+                                        ?>
+                                        <td style="padding-left: 30px" class="doelstellingwidth valign-wrapper"><i
+                                                class="material-icons">navigate_next</i><?= $doelstelling->name ?>
+                                        </td>
+                                        <td contenteditable="false">
+                                            <div class="input-field">
+                                                <select disabled>
+                                                    <option value="" disabled <?= ($score == null) ? 'selected' : '' ?>>
+                                                        Nog
+                                                        niet gequoteerd
+                                                    </option>
+                                                    <option value="RO" <?= ($score == "RO") ? 'selected' : '' ?>>Ruim
+                                                        onvoldoende
+                                                    </option>
+                                                    <option value="O" <?= ($score == "O") ? 'selected' : '' ?>>
+                                                        Onvoldoende
+                                                    </option>
+                                                    <option value="V" <?= ($score == "V") ? 'selected' : '' ?>>Voldoende
+                                                    </option>
+                                                    <option value="G" <?= ($score == "G") ? 'selected' : '' ?>>Goed
+                                                    </option>
+                                                    <option value="ZG" <?= ($score == "ZG") ? 'selected' : '' ?>>Zeer
+                                                        goed
+                                                    </option>
+                                                    <option value="NVT" <?= ($score == "NVT") ? 'selected' : '' ?>>Niet
+                                                        van
+                                                        toepassing
+                                                    </option>
+                                                    <option value="A" <?= ($score == "A") ? 'selected' : '' ?>>Afwezig
+                                                    </option>
+                                                </select>
+                                            </div>
+                                            <!--<p>
                                             <?php
-                                        // TODO real data and move to evaluatiefiches
-                                        for ($eerderResultaat = 0; $eerderResultaat < 5; $eerderResultaat++) {
-                                            if ($eerderResultaat > 0) {
-                                                echo ", ";
-                                            }
-                                            ?>
+                                            // TODO real data and move to evaluatiefiches
+                                            for ($eerderResultaat = 0; $eerderResultaat < 5; $eerderResultaat++) {
+                                                if ($eerderResultaat > 0) {
+                                                    echo ", ";
+                                                }
+                                                ?>
                                                 <span class="eerder-resultaat tooltipped" data-delay="50"
                                                       data-tooltip="20/10/17">O</span>
                                                 <?php
-                                        }
-                                        ?>
+                                            }
+                                            ?>
                                         </p>
                                     </td>
                                         <td class="avg">0--></td>  <!--todo Actualy calculate avg score-->
-                                    <td class="pickDate"><?= $dateNow ?></td>
-                                    <td class="opmerkingenwidth">
-                                        <div class="input-field">
-                                            <input disabled id="opmerkingen" type="text" value="<?= $opmerking ?>"/>
-                                            <label for="opmerkingen">Opmerkingen</label>
-                                        </div>
-                                    </td>
-                                </tr>
-                                <tr>
-                                    <?php
-                                    }
+                                        <td class="pickDate"><?= $dateNow ?></td>
+                                        <td class="opmerkingenwidth">
+                                            <div class="input-field">
+                                                <input disabled id="opmerkingen" type="text" value="<?= $opmerking ?>"/>
+                                                <label for="opmerkingen">Opmerkingen</label>
+                                            </div>
+                                        </td>
+                                    </tr>
+                                    <tr>
+                                        <?php
+                                        }
 
-                                    }
-                                    ?>
-                                </tr>
-                            </table>
+                                        }
+                                        ?>
+                                    </tr>
+                                </table>
 
-                            <div class="row">
-                                <div class="input-field col s12">
-                                    <label for="moduleComment">Commentaar bij deze module: </label>
+                                <div class="row">
+                                    <div class="input-field col s12">
+                                        <label for="moduleComment">Commentaar bij deze module: </label>
                                     <textarea disabled id="moduleComment"
                                               class="materialize-textarea"><?= $rapportmodule->commentaar ?></textarea>
+                                    </div>
                                 </div>
                             </div>
-                        </div>
-                    </li>
-                    <?php
-                }
-                ?>
-            </ul>
-            <div class="row">
-                <div class="input-field col s12">
+                        </li>
+                        <?php
+                    }
+                    ?>
+                </ul>
+
+                <div class="row">
+                    <div class="input-field col s12">
                     <textarea disabled id="generalComment"
                               class="materialize-textarea"><?= $rapport->commentaarAlgemeen ?></textarea>
-                    <label for="generalComment">Algemeen commentaar:</label>
+                        <label for="generalComment">Algemeen commentaar:</label>
+                    </div>
                 </div>
-            </div>
-            <div class="row">
-                <div class="input-field col s12">
+                <div class="row">
+                    <div class="input-field col s12">
                     <textarea disabled id="klasraadComment"
                               class="materialize-textarea"><?= $rapport->commentaarKlassenraad ?></textarea>
-                    <label for="klasraadComment">Commentaar klassenraad:</label>
+                        <label for="klasraadComment">Commentaar klassenraad:</label>
+                    </div>
                 </div>
-            </div>
 
-            <?php
+                <?php
+            }
+            else if(isset($rapporten)){
+                ?>
+
+                <div class="input-field">
+                    <select>
+                        <option value="" disabled selected>Geen rapport geselecteerd</option>
+                        <?php
+                        foreach($rapporten as $rapport){
+                            ?>
+                            <option value="<?= $rapport->id ?>" ><?= $rapport->name ?></option>
+                            <?php
+                        }
+                        ?>
+
+                    </select>
+                </div>
+                <?php
+            }
         }
     }
 
@@ -454,22 +484,22 @@ $userRole = $userDAO->getUserRole($loggedInUserId);
                     <?php
                     $doelstellingscategories = $userDAO->getDoelstellingscategoriesInModule($module->id);
                     foreach ($doelstellingscategories as $doelstellingscategorie){
-                        ?>
+                    ?>
                     <th style="border-top: 2px solid gray; border-bottom: 2px solid gray" colspan="4">
                         <strong><?= $doelstellingscategorie->name ?></strong>
                     </th>
                 </tr>
                 <tr>
-                        <?php
-                        $doelstellingen = $userDAO->getDoelstellingenInDoelstellingscategorie($doelstellingscategorie->id);
-                        foreach ($doelstellingen as $doelstelling){
-                                $evaluatiecriteria = $userDAO->getCriteriaInDoelstelling($doelstelling->id);
-                        ?>
+                    <?php
+                    $doelstellingen = $userDAO->getDoelstellingenInDoelstellingscategorie($doelstellingscategorie->id);
+                    foreach ($doelstellingen as $doelstelling){
+                    $evaluatiecriteria = $userDAO->getCriteriaInDoelstelling($doelstelling->id);
+                    ?>
                     <td class="doelstellingwidth valign-wrapper" colspan="2" rowspan="<?= count($evaluatiecriteria) ?>"><?= $doelstelling->name ?>
                     </td>
                     <?php
                     $i = 0;
-                            foreach($evaluatiecriteria as $evaluatiecriterium){
+                    foreach($evaluatiecriteria as $evaluatiecriterium){
                     if ($i != 0){
                     ?>
                 </tr>
@@ -510,8 +540,8 @@ $userRole = $userDAO->getUserRole($loggedInUserId);
                     ?>
                 </tr>
                 <tr>
-                        <?php
-                        }
+                    <?php
+                    }
                     }
                     ?>
                 </tr>

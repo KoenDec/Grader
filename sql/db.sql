@@ -124,9 +124,11 @@ create table `studenten_modules` (
   -- (if dat is possible in mysql)
 );
 
+
 CREATE TABLE `rapporten` (
   `id` int NOT NULL AUTO_INCREMENT PRIMARY KEY,
   `studentId` int NOT NULL,
+  `name` varchar(200) NOT NULL,
   `commentaarKlassenraad` text,
   `commentaarAlgemeen` text,
   FOREIGN KEY(studentId) REFERENCES studenten(studentId)

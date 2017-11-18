@@ -1,6 +1,6 @@
 <?php
-require_once('../graderdb.php');
-require_once('../Login.php');
+require_once('../php/graderdb.php');
+require_once('../php/Login.php');
 
 header("Access-Control-Allow-Origin: *");
 header("Access-Control-Allow-Headers: Origin,Content-Type");
@@ -85,7 +85,7 @@ if ($_SERVER['REQUEST_METHOD'] == 'GET') {
                   'commentaar' => utf8_encode($rapportmodule->commentaar)
               ];
 
-              $doelstellingscategories = $userDAO->getFollowedDoelstellingscategoriesInModule($module->id,$studentId);
+              $doelstellingscategories = $userDAO->getDoelstellingscategoriesInModule($module->id);
 
               foreach($doelstellingscategories as $doelstellingscategorie){
 
@@ -108,7 +108,7 @@ if ($_SERVER['REQUEST_METHOD'] == 'GET') {
 
                       $doelstellingObjToPush = (object)[
                           'id' => $doelstelling->id,
-                          'name' => utf8_encode($doelstelling->weergaveTitel),
+                          'name' => utf8_encode($doelstelling->name),
                           'score' => $score,
                           'opmerking' => $opmerking
                       ];

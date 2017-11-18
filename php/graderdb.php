@@ -655,6 +655,31 @@ class UserDAO {
         return $aspecten;
     }
 
+    public static function getRapport($rapportId){
+        try{
+            $conn = graderdb::getConnection();
+
+            $sql = 'SELECT * from rapporten WHERE id = :rapportId';
+            $stmt = $conn->prepare($sql);
+            $stmt->bindParam(':rapportId',$rapportId);
+
+            $stmt->execute();
+
+            $rapportTable = $stmt->fetchAll(PDO::FETCH_CLASS);
+        } catch (PDOException $e) {
+            die($e->getMessage());
+        }
+
+        if(isset($rapportTable[0])) {
+            $rapport = $rapportTable[0];
+        } else {
+            //die('No rapporten found for student with id = ' . $studentId);
+            $rapport = null;
+        }
+
+        return $rapport;
+    }
+
     public static function getRapporten($studentId){
         try{
             $conn = graderdb::getConnection();

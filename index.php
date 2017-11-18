@@ -37,10 +37,14 @@ function checkGET()
                 break;
 
             case "rapporten":
+                if(isset($_POST["rapport-id"]))
+                {
+                    showReportsPage(null, $_POST["rapport-id"]);
+                }
                 if(isset($_POST["student-id"])){
-                    showReportsPage($_POST["student-id"]);
+                    showReportsPage($_POST["student-id"], null);
                 } else {
-                    showReportsPage(null);
+                    showReportsPage(null, null);
                 }
                 break;
             case "werkfiches":

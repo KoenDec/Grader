@@ -3,7 +3,7 @@ use graderDB;
 INSERT INTO users(email, firstname, lastname, password, language, status) VALUES
 	('kenny.depecker@student.howest.be', 'Kenny', 'Depecker', 'Student', 'NL', 'ACTIVE'), -- 1
 	('koen.declerck@student.howest.be', 'Koen', 'Declerck', 'Student', 'NL', 'ACTIVE'), -- 2
-	('riwan.carpentier@student.howest.be', 'Riwan', 'Carpentier', 'Student', 'NL', 'ACTIVE'), -- 3
+	('riwan.carpentier@student.howest.be', 'Riwan', 'Carpentier', '$2y$10$TOVnkl/zFUzGeKIJccvdquNWiT2tFFf1Dd/HayZj8ouyUOZJtIqx.', 'NL', 'ACTIVE'), -- 3
 	('teacher1@hotmail.com', 'Teacher', 'Dummy', 'Teacher', 'NL', 'ACTIVE'), -- 4
 	('teacher2@hotmail.com', 'Teacher', 'Dummy', 'Teacher', 'NL', 'ACTIVE'), -- 5
 	('student1@hotmail.com', 'Faisal', 'Nizami', 'Student', 'NL', 'ACTIVE'), -- 6
@@ -12,7 +12,6 @@ INSERT INTO users(email, firstname, lastname, password, language, status) VALUES
 	('student4@hotmail.com', 'Student', 'Dummy', 'Student', 'NL', 'ACTIVE'), -- 9
 	('student5@hotmail.com', 'Student', 'Dummy', 'Student', 'NL', 'ACTIVE'), -- 10
 	('thomas.de.nil@student.howest.be', 'Thomas', 'De Nil', 'Student', 'NL', 'ACTIVE'); -- 11
-    ('studentbouw@hotmail.com', 'Student', 'Student', 'Dummy bouw', 'NL', 'ACTIVE'); -- 12
     
 INSERT INTO admins(adminId) VALUES (1),(2),(3), (11);
 
@@ -278,10 +277,10 @@ INSERT INTO studenten_modules(studentId, moduleId, opleidingId) VALUES
     (8,3,2);
     
 
-INSERT INTO rapporten(studentId, commentaarAlgemeen, commentaarKlassenraad) VALUES
-	(6, 'Faisal voldoet aan de voorwaarden van het voltijds engagement door bijkomende lessen Nederlands te volgen.',
+INSERT INTO rapporten(studentId, name, commentaarAlgemeen, commentaarKlassenraad) VALUES
+	(6, '2016-2017 TRIMESTER 3', 'Faisal voldoet aan de voorwaarden van het voltijds engagement door bijkomende lessen Nederlands te volgen.',
 		'Je bent een aangename leerling met een grote inzet. \n\n Proficiat! Prettige vakantie!'),
-    (7, null, 'Geen evaluatie mogelijk wegens afwezigheden.');
+    (7, '2016-2017 TRIMESTER 3', null, 'Geen evaluatie mogelijk wegens afwezigheden.');
 
 INSERT INTO rapporten_modules(rapportId, moduleId, commentaar) VALUES -- ? TODO ? merge table with studenten_modules ?
 	(1, 3, null),
