@@ -117,14 +117,13 @@ export default {
       self.$http.get('http://146.185.183.217/api/modulesVoorOpleiding?opleiding=' + id)
         .then(function (response) {
           self.modules = response.data
-          console.log(self.modules)
           for (var i = 0; i < self.modules.length; i++) {
-            console.log(self.modules[i])
+            var something = self.modules
+            var index = i
             self.$http.get('http://146.185.183.217/api/categorieenInModules?module=' + self.modules[i].id)
                 .then(function (response) {
-                  console.log(response.data)
-                  var categorie = response.data
-                  self.modules[i].push(categorie)
+                  var category = response.data
+                  something[index]['categories'] = category
                 })
                 .catch(function (error) {
                   console.log(error)
