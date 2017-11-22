@@ -16,7 +16,7 @@
           <v-stepper-items>
             <v-stepper-content step="1">
               <v-form v-model="valid" ref="form" lazy-validation>
-                <v-text-field
+                <!--<v-text-field
                   label="Naam"
                   v-model="name"
                   :rules="nameRules"
@@ -33,8 +33,9 @@
                   v-model="email"
                   :rules="emailRules"
                   required
-                ></v-text-field>
+                ></v-text-field>-->
                 <v-select
+                  v-if="receivedData"
                   label="Opleiding"
                   v-model="select"
                   :items="opleidingenDropdown"
@@ -45,11 +46,11 @@
               </v-form>
             </v-stepper-content>
             <v-stepper-content step="2">
-              <v-flex v-for="(opleiding, o) in opleidingen">
-                <h3>Modules in de opleiding {{opleiding.opleidingNaam}}</h3>
-                <v-divider></v-divider>
+              <v-flex v-if="receivedModules" v-for="module in modules">
+                <h3>Modules in de opleiding {{ module.name }}</h3>
+                <!-- <v-divider></v-divider>
                   <v-expansion-panel popout expand>
-                    <v-flex xs12 v-for="(mod, m) in opleiding.modules">
+                    <v-flex xs12 v-for="">
                       <v-expansion-panel-content>
                         <div slot="header">
                           <v-checkbox v-bind:label="mod" light></v-checkbox>
@@ -60,7 +61,7 @@
                       </v-expansion-panel-content>
                       <v-divider></v-divider>
                     </v-flex>
-                  </v-expansion-panel>
+                  </v-expansion-panel> -->
               </v-flex>
               <v-btn color="primary" @click.native="e1 = 3">voltooien</v-btn>
               <v-btn flat  @click.native="e1 = 1">Vorige</v-btn>
@@ -93,31 +94,51 @@ export default {
         (v) => /^\w+([.-]?\w+)*@\w+([.-]?\w+)*(\.\w{2,3})+$/.test(v) || 'E-mail moet geldig zijn'
       ],
       select: null,
-      opleidingenDropdown: [
-        'Drank',
-        'Sletten',
-        'Kapper'
-      ],
-      opleidingen: [
-        {
-          opleidingNaam: 'Drank',
-          modules: ['Drinken', 'Slapen'],
-          opleidingid: 0
-        },
-        {
-          opleidingNaam: 'Kapper',
-          modules: ['Knippen', 'Kleuren'],
-          opleidingid: 1
-        }
-      ]
+      receivedData: false,
+      opleidingen: [],
+      opleidingenDropdown: [],
+      receivedModules: false,
+      modules: []
     }
   },
   methods: {
     submit () {
       if (this.$refs.form.validate()) {
+        var select = this.select
+        var result = this.opleidingen.filter(function (obj) {
+          return obj.name === select
+        })
+        this.callForModules(result[0].id)
         this.e1 = 2
       }
+    },
+    callForModules (id) {
+      this.$http.get('http://146.185.183.217/api/modulesVoorOpleiding?opleiding=1')
+        .then(function (response) {
+          self.modules = response.data
+          console.log(self.modules)
+          self.receivedModules = true
+        })
+        .catch(function (error) {
+          console.log(error)
+        })
     }
+  },
+  created () {
+    var self = this
+    this.$http.get('http://146.185.183.217/api/opleidingen')
+      .then(function (response) {
+        self.opleidingen = response.data
+        console.log(self.opleidingen)
+        for (var i = 0; i < self.opleidingen.length; i++) {
+          self.opleidingenDropdown.push(self.opleidingen[i].name)
+        }
+        console.log('dropdown: ' + self.opleidingenDropdown)
+        self.receivedData = true
+      })
+        .catch(function (error) {
+          console.log(error)
+        })
   }
 }
 </script>
