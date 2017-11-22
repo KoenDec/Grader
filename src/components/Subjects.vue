@@ -55,7 +55,7 @@
           class="elevation-1"
         >
           <template slot="items" scope="props">
-            <td class="text-xs-left">{{ props.item.opleiding }}</td>
+            <td class="text-xs-left">{{ props.item.name }}</td>
             <td class="text-xs-right">
               <v-btn color="error" class="ma-1 right" dark><v-icon dark>delete</v-icon></v-btn>
               <v-btn color="primary" class="ma-1 right" slot="activator" dark><v-icon dark>edit</v-icon></v-btn>
@@ -94,25 +94,10 @@ export default {
       addSubjectFile: false,
       headers: [
         { text: 'Opleiding', align: 'left', value: 'opleiding' },
-        { text: 'Acties', value: 'actionbtns' }
+        { text: '', value: 'actionbtns' }
       ],
-      items: [
-        {
-          value: false,
-          opleiding: 'Sletten',
-          actionbtns: 1
-        },
-        {
-          value: false,
-          opleiding: 'Drank',
-          actionbtns: 2
-        },
-        {
-          value: false,
-          opleiding: 'Kapper',
-          actionbtns: 3
-        }
-      ]
+      receivedData: false,
+      items: []
     }
   },
   methods: {
@@ -120,6 +105,18 @@ export default {
       const form = this.formData
       console.log(form)
     }
+  },
+  created () {
+    var self = this
+    this.$http.get('http://146.185.183.217/api/opleidingen')
+        .then(function (response) {
+          self.items = response.data
+          console.log(self.items)
+          self.receivedData = true
+        })
+        .catch(function (error) {
+          console.log(error)
+        })
   }
 }
 </script>
