@@ -96,7 +96,6 @@ export default {
         { text: 'Opleiding', align: 'left', value: 'opleiding' },
         { text: '', value: 'actionbtns' }
       ],
-      receivedData: false,
       items: []
     }
   },
@@ -112,7 +111,6 @@ export default {
         .then(function (response) {
           self.items = response.data
           console.log(self.items)
-          self.receivedData = true
         })
         .catch(function (error) {
           console.log(error)

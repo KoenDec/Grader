@@ -60,7 +60,7 @@
             class="elevation-1"
             >
               <template slot="items" slot-scope="props">
-                <tr>
+                <tr v-if="!filters.includes(props.item.opleidingName)">
                 <td class="text-xs-left">{{ props.item.firstname + ' ' + props.item.lastname  }}</td>
                 <td class="text-xs-left">{{ props.item.opleidingName }}</td>
                 <td>
@@ -120,7 +120,17 @@ export default {
       console.log(form)
     },
     applyFilters (payload) {
-      this.filters = payload
+      var self = this
+      payload.forEach(function (filter) {
+        if (self.filters.includes(filter.opleiding)) {
+          if (filter.value === true) {
+            const index = self.filters.indexOf(filter.opleiding)
+            self.filters.splice(index, 1)
+          }
+        } else if (filter.value === false) {
+          self.filters.push(filter.opleiding)
+        }
+      })
     }
   },
   created () {

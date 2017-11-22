@@ -20,6 +20,7 @@ export default {
       for (var i = 0; i < this.listobject.length; i++) {
         this.opleidingen[i].value = val
       }
+      this.$emit('update-filters', this.opleidingen)
     },
     checkAll () {
       this.$emit('update-filters', this.opleidingen)
@@ -39,13 +40,7 @@ export default {
     }
   },
   computed: {
-    /* opleidingen: function () {
-      var data = []
-      for (var i = 0; i < this._props.listobject.length; i++) {
-        data.push({'opleiding': this._props.listobject[i].name, 'value': true})
-      }
-      return data
-    } */
+
   }
 }
 </script>
