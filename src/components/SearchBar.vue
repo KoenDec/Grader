@@ -2,7 +2,7 @@
  <v-flex xs12 sm6 class="ma-0">
     <v-select
                   v-bind:items="list"
-                  :item-text="list.firstname"
+                  :item-text="item.firstname"
                   :item-value="list.id"
                   v-model="selecteditem"
                   :label="`Zoek een ${labeltext}`"
