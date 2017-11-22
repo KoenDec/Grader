@@ -1,14 +1,14 @@
 <template>
  <v-flex xs12 sm6 class="ma-0">
     <v-select
-                  v-bind:items="list"
-                  :item-text="item.firstname"
-                  :item-value="list.id"
+                  :items="searchable_data"
+                  :item-text="`${item_concat_key}`"
+                  :item-value="`${item_value}`"
                   v-model="selecteditem"
                   :label="`Zoek een ${labeltext}`"
                   no-data-text="Er werd niets gevonden"
                   autocomplete
-                  @input="selectStudent()"
+                  @input="selectItem()"
                 ></v-select>
 </v-flex>
 </template>
@@ -16,15 +16,15 @@
 <script>
 export default {
   name: 'SearchBar',
-  props: ['list', 'concat_keys', 'labeltext'],
+  props: ['list', 'concat_keys', 'labeltext', 'item_concat_key', 'item_value'],
   data () {
     return {
       selecteditem: ''
     }
   },
   methods: {
-    selectStudent: function () {
-      // this.$emit('select-student', this.opleidingen)
+    selectItem: function () {
+      this.$emit('select-student', this.selecteditem)
     }
   },
   computed: {
@@ -32,6 +32,8 @@ export default {
       var self = this
       var array = []
       self.list.forEach(function (item) {
+        var object = {}
+        object[self.item_concat_key] = 'vuile slet'
         var string = ''
         self.concat_keys.forEach(function (key, i) {
           console.log('int' + i)
@@ -40,10 +42,15 @@ export default {
             string += ' '
           }
         })
-        array.push(string)
+        object[self.item_concat_key] = string
+        object[self.item_value] = item.id
+        array.push(object)
       })
       return array
     }
+  },
+  created () {
+    console.log(this.list)
   }
 }
 </script>
