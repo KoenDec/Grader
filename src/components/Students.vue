@@ -7,9 +7,7 @@
       </v-layout>
       <v-layout row wrap>
           <v-flex xs4 offset-xs1>
-              <v-toolbar>
-                <v-text-field  prepend-icon="search" hide-details single-line></v-text-field>
-              </v-toolbar>
+            <searchbar :list="items" :concat_keys="keys"></searchbar>
           </v-flex>
           <v-flex xs1 offset-xs4 class="mr-5">
           </v-flex>
@@ -105,6 +103,7 @@ export default {
       receivedData: false,
       selected: [],
       filters: [],
+      keys: ['firstname', 'lastname'],
       headers: [
         { text: 'Student', align: 'left', value: 'student' },
         { text: 'Opleiding', align: 'left', value: 'opleiding' },

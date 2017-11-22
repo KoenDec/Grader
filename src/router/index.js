@@ -9,8 +9,10 @@ import Print from '@/components/Print'
 import checkboxes from '@/components/CheckboxContainer'
 import Subjects from '@/components/Subjects'
 import fileInput from '@/components/file-input'
+import SearchBar from '@/components/SearchBar'
 Vue.component('fileInput', fileInput)
 Vue.component('checkboxes', checkboxes)
+Vue.component('searchbar', SearchBar)
 
 Vue.use(Router)
 
