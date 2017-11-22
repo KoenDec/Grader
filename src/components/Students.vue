@@ -6,7 +6,7 @@
           </v-flex>
       </v-layout>
       <v-layout row wrap>
-          <v-flex xs4 offset-xs1>
+          <v-flex xs4 offset-xs1 ref="results">
             <searchbar :list="items" :concat_keys="keys" :labeltext="zoeklabel"></searchbar>
           </v-flex>
           <v-flex xs1 offset-xs4 class="mr-5">
@@ -152,6 +152,11 @@ export default {
         .catch(function (error) {
           console.log(error)
         })
+  },
+  mounted () {
+    var sheet = document.createElement('style')
+    sheet.innerHTML = 'div.menu__content--autocomplete {top:165px !important;}'
+    document.body.appendChild(sheet)
   }
 }
 </script>
