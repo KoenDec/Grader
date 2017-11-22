@@ -43,3 +43,19 @@ data {"critToEval":"","score":""}
 type POST
 url  api/updateUser
 data {"firstname":"","lastname":"","email":""}
+
+#Get modules in opleiding
+type GET
+url  api/modulesVoorOpleiding?opleiding=?
+
+#Get categorieen in module
+type GET
+url  api/categorieenInModules?module=?
+
+#Get doelstellingen in categorie
+type GET
+url  api/doelstellingenInCategorie?categorie=?
+
+#Get criteria in doelstelling
+type GET
+url  api/criteriaInDoelstelling?doelstelling=?

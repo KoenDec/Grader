@@ -168,6 +168,42 @@ if ($_SERVER['REQUEST_METHOD'] == 'GET') {
       echo $notLoggedInErr;
       http_response_code(401);
     }*/
+  } else if ($_GET['url'] == 'categorieenInModules') {
+    //if (Login::isLoggedIn()) {
+      if (isset($_GET['module'])) {
+        $modid = $_GET['module'];
+        $categorieen = $userDAO->getDoelstellingscategoriesInModule($modid);
+        echo json_encode($categorieen);
+        http_response_code(200);
+      }
+    /*} else {
+      echo $notLoggedInErr;
+      http_response_code(401);
+    }*/
+  } else if ($_GET['url'] == 'doelstellingenInCategorie') {
+    //if (Login::isLoggedIn()) {
+      if (isset($_GET['categorie'])) {
+        $categorieId = $_GET['categorie'];
+        $doelstellingen = $userDAO->getDoelstellingenInDoelstellingscategorie($categorieId);
+        echo json_encode($doelstellingen);
+        http_response_code(200);
+      }
+    /*} else {
+      echo $notLoggedInErr;
+      http_response_code(401);
+    }*/
+  } else if ($_GET['url'] == 'criteriaInDoelstelling') {
+    //if (Login::isLoggedIn()) {
+      if (isset($_GET['doelstelling'])) {
+        $doelid = $_GET['doelstelling'];
+        $criteria = $userDAO->getCriteriaInDoelstelling($doelid);
+        echo json_encode($criteria);
+        http_response_code(200);
+      }
+    /*} else {
+      echo $notLoggedInErr;
+      http_response_code(401);
+    }*/
   } else if ($_GET['url'] == 'studentenMetOpleiding') {
     $obj = $userDAO->getAllActiveStudentsWithEducation();
     echo json_encode($obj);
