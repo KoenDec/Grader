@@ -104,7 +104,7 @@ export default {
       selected: [],
       filters: [],
       keys: ['firstname', 'lastname'],
-      zoeklabel: 'Zoek een student',
+      zoeklabel: 'student',
       headers: [
         { text: 'Student', align: 'left', value: 'student' },
         { text: 'Opleiding', align: 'left', value: 'opleiding' },
