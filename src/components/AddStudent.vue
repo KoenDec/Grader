@@ -113,7 +113,7 @@ export default {
       }
     },
     callForModules (id) {
-      this.$http.get('http://146.185.183.217/api/modulesVoorOpleiding?opleiding=1')
+      this.$http.get('http://146.185.183.217/api/modulesVoorOpleiding?opleiding=' + id)
         .then(function (response) {
           self.modules = response.data
           console.log(self.modules)
