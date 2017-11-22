@@ -47,8 +47,8 @@
             </v-stepper-content>
             <v-stepper-content step="2">
               <v-flex v-if="receivedModules" v-for="module in modules">
-                <h3>Modules in de opleiding {{ module.name }}</h3>
-                <!-- <v-divider></v-divider>
+                <h3>Module: {{ module.name }}</h3>
+                <v-divider></v-divider>
                   <v-expansion-panel popout expand>
                     <v-flex xs12 v-for="">
                       <v-expansion-panel-content>
@@ -61,7 +61,7 @@
                       </v-expansion-panel-content>
                       <v-divider></v-divider>
                     </v-flex>
-                  </v-expansion-panel> -->
+                  </v-expansion-panel>
               </v-flex>
               <v-btn color="primary" @click.native="e1 = 3">voltooien</v-btn>
               <v-btn flat  @click.native="e1 = 1">Vorige</v-btn>
