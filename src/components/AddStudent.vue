@@ -47,14 +47,14 @@
             </v-stepper-content>
             <v-stepper-content step="2">
               <v-flex v-if="receivedModules" v-for="module in modules">
-                <h3>Module: {{ module.name }}</h3>
+                <h3>Module: {{ module.name}}</h3>
                 <v-divider></v-divider>
                   <v-expansion-panel popout expand>
-                    <v-flex xs12 v-for="">
+                    <v-flex xs12 v-for="cat in module.categories">
                       <v-expansion-panel-content>
-                        <!--<div slot="header">
-                          <v-checkbox v-bind:label="mod" light></v-checkbox>
-                        </div>-->
+                        <div slot="header">
+                          <v-checkbox v-bind:label="cat.name" light></v-checkbox>
+                        </div>
                         <v-card>
                           <v-card-text class="grey lighten-3">Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat.</v-card-text>
                         </v-card>
@@ -98,6 +98,7 @@ export default {
       opleidingen: [],
       opleidingenDropdown: [],
       receivedModules: false,
+      receivedCategories: false,
       modules: []
     }
   },
@@ -123,13 +124,14 @@ export default {
             self.$http.get('http://146.185.183.217/api/categorieenInModules?module=' + self.modules[i].id)
                 .then(function (response) {
                   var category = response.data
-                  something[index]['categories'] = category
+                  something[index]['categories'] = category // ss
                 })
                 .catch(function (error) {
                   console.log(error)
                 })
           }
           self.receivedModules = true
+          console.log(self.modules)
         })
         .catch(function (error) {
           console.log(error)
