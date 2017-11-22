@@ -22,6 +22,7 @@ export default {
       }
     },
     checkAll () {
+      this.$emit('update-filters', this.opleidingen)
       for (var i = 0; i < this.opleidingen.length; i++) {
         if (this.opleidingen[i].value === false) {
           this.allSelect = false
