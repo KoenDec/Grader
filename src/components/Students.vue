@@ -6,8 +6,8 @@
           </v-flex>
       </v-layout>
       <v-layout row wrap>
-          <v-flex xs4 offset-xs1 ref="results">
-            <searchbar :list="items" :concat_keys="keys" :labeltext="zoeklabel" :item_concat_key="item_name" :item_value="item_value"></searchbar>
+          <v-flex xs4 offset-xs1 ref="results" @>
+            <searchbar @select-student="applySelection" :list="items" :concat_keys="keys" :labeltext="zoeklabel" :item_concat_key="item_name" :item_value="item_value"></searchbar>
           </v-flex>
           <v-flex xs1 offset-xs4 class="mr-5">
           </v-flex>
@@ -58,7 +58,7 @@
             class="elevation-1"
             >
               <template slot="items" slot-scope="props">
-                <tr v-if="!filters.includes(props.item.opleidingName)">
+                <tr v-if="!filters.includes(props.item.opleidingName) && selectedid === props.item.id || selectedid === ''">
                 <td class="text-xs-left">{{ props.item.firstname + ' ' + props.item.lastname  }}</td>
                 <td class="text-xs-left">{{ props.item.opleidingName }}</td>
                 <td>
@@ -101,7 +101,7 @@ export default {
       addStudentsFile: false,
       search: '',
       receivedData: false,
-      selected: [],
+      selectedid: '',
       filters: [],
       keys: ['firstname', 'lastname'],
       item_name: 'fullname',
@@ -133,6 +133,9 @@ export default {
           self.filters.push(filter.opleiding)
         }
       })
+    },
+    applySelection (payload) {
+      this.selectedid = payload
     }
   },
   created () {

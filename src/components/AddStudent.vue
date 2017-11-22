@@ -131,7 +131,6 @@ export default {
                 })
           }
           self.receivedModules = true
-          console.log(self.modules)
         })
         .catch(function (error) {
           console.log(error)

@@ -9,6 +9,7 @@
                   no-data-text="Er werd niets gevonden"
                   autocomplete
                   @input="selectItem()"
+                  @update:searchInput="checkSelected"
                 ></v-select>
 </v-flex>
 </template>
@@ -25,6 +26,9 @@ export default {
   methods: {
     selectItem: function () {
       this.$emit('select-student', this.selecteditem)
+    },
+    checkSelected: function (payload) {
+      this.selecteditem = ''
     }
   },
   computed: {
