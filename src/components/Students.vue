@@ -108,27 +108,8 @@ export default {
         { text: 'Opleiding', align: 'left', value: 'opleiding' },
         { text: '', value: 'rapportid' }
       ],
-      items: [
-        {
-          value: false,
-          student: 'MuslimParents Suicidebomber',
-          opleiding: 'Drank',
-          rapportid: 1
-        },
-        {
-          value: false,
-          student: 'Pleblord gayParentsFaggot',
-          opleiding: 'sletten',
-          rapportid: 2
-        },
-        {
-          value: false,
-          student: 'Dickbutt Quak',
-          opleiding: 'Drank',
-          rapportid: 3
-        }
-      ],
-      opleidingen: ['drank', 'sletten', 'kapper']
+      items: [],
+      opleidingen: []
     }
   },
   methods: {
