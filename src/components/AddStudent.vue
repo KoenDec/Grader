@@ -41,8 +41,7 @@
                   :rules="[v => !!v || 'Een opleiding moet geselecteerd worden']"
                   required
                 ></v-select>
-                <v-btn color="primary" :disabled="!valid" @click="submit">Continue</v-btn>
-                <v-btn flat>Cancel</v-btn>
+                <v-btn color="primary" :disabled="!valid" @click="submit">Volgende</v-btn>
               </v-form>
             </v-stepper-content>
             <v-stepper-content step="2">
@@ -63,8 +62,8 @@
                     </v-flex>
                   </v-expansion-panel>
               </v-flex>
-              <v-btn color="primary" @click.native="e1 = 3">Continue</v-btn>
-              <v-btn flat>Cancel</v-btn>
+              <v-btn color="primary" @click.native="e1 = 3">voltooien</v-btn>
+              <v-btn flat  @click.native="e1 = 1">Vorige</v-btn>
             </v-stepper-content>
           </v-stepper-items>
         </v-stepper>
