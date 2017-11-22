@@ -7,7 +7,7 @@
       </v-layout>
       <v-layout row wrap>
           <v-flex xs4 offset-xs1>
-            <searchbar :list="items" :concat_keys="keys"></searchbar>
+            <searchbar :list="items" :concat_keys="keys" :labeltext="zoeklabel"></searchbar>
           </v-flex>
           <v-flex xs1 offset-xs4 class="mr-5">
           </v-flex>
@@ -104,6 +104,7 @@ export default {
       selected: [],
       filters: [],
       keys: ['firstname', 'lastname'],
+      zoeklabel: 'Zoek een student',
       headers: [
         { text: 'Student', align: 'left', value: 'student' },
         { text: 'Opleiding', align: 'left', value: 'opleiding' },
