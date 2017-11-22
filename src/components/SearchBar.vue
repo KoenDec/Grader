@@ -2,7 +2,7 @@
     <v-select
                   v-bind:items="searchable_data"
                   v-model="selecteditem"
-                  v-bind:label="`${labeltext}`"
+                  v-bind:label="`Zoek een ${labeltext}`"
                   autocomplete
                 ></v-select>
 
