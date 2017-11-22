@@ -120,11 +120,13 @@ export default {
           console.log(self.modules)
           for (var i = 0; i < self.modules.length; i++) {
             console.log(self.modules[i])
+            var something = self.modules
             self.$http.get('http://146.185.183.217/api/categorieenInModules?module=' + self.modules[i].id)
                 .then(function (response) {
-                  console.log(response.data)
+                  console.log('categorien')
+                  console.log(something)
                   var categorie = response.data
-                  self.modules[i].push(categorie)
+                  something['categorien'] = categorie
                 })
                 .catch(function (error) {
                   console.log(error)

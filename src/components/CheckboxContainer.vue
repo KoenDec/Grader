@@ -7,7 +7,7 @@
 
 <script>
 export default {
-  name: 'Print',
+  name: 'CheckboxContainer',
   props: ['listobject'],
   data () {
     return {
