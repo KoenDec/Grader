@@ -156,6 +156,18 @@ if ($_SERVER['REQUEST_METHOD'] == 'GET') {
       echo $notLoggedInErr;
       http_response_code(401);
     }*/
+  } else if ($_GET['url'] == 'modulesVoorOpleiding') {
+    //if (Login::isLoggedIn()) {
+      if (isset($_GET['opleiding'])) {
+        $opleidingid = $_GET['opleiding'];
+        $modules = $userDAO->getModulesInOpleiding($opleidingid);
+        echo json_encode($modules);
+        http_response_code(200);
+      }
+    /*} else {
+      echo $notLoggedInErr;
+      http_response_code(401);
+    }*/
   } else if ($_GET['url'] == 'studentenMetOpleiding') {
     $obj = $userDAO->getAllActiveStudentsWithEducation();
     echo json_encode($obj);
