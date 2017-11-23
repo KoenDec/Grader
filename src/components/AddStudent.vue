@@ -16,7 +16,7 @@
           <v-stepper-items>
             <v-stepper-content step="1">
               <v-form v-model="valid" ref="form" lazy-validation>
-                <!--<v-text-field
+                <v-text-field
                   label="Naam"
                   v-model="name"
                   :rules="nameRules"
@@ -33,7 +33,7 @@
                   v-model="email"
                   :rules="emailRules"
                   required
-                ></v-text-field>-->
+                ></v-text-field>
                 <v-select
                   v-if="receivedData"
                   label="Opleiding"
@@ -50,13 +50,21 @@
                 <h3>Module: {{ module.name}}</h3>
                 <v-divider></v-divider>
                   <v-expansion-panel popout expand>
-                   <v-flex xs12 v-for="cat in module.categorieen">
-                      <v-expansion-panel-content>
+                   <v-flex xs12 v-for="categorie in module.categorieen" :key="categorie.id">
+                      <v-expansion-panel-content class="pt-0 pb-0">
                         <div slot="header">
-                          <v-checkbox v-bind:label="cat.name" light></v-checkbox>
+                          <h5><v-icon class="mr-2">label_outline</v-icon>{{categorie.name}}</h5>
                         </div>
                         <v-card>
-                          <v-card-text class="grey lighten-3">Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat.</v-card-text>
+                          <v-card-text class="grey lighten-3">
+                            <v-flex xs12 v-for="doelstelling in categorie.doelstellingen" :key="doelstelling.id">
+                              <p>
+                                <v-icon>navigate_next</v-icon>
+                                {{doelstelling.name}}
+                              </p>
+                              <v-divider></v-divider>
+                            </v-flex>
+                          </v-card-text>
                         </v-card>
                       </v-expansion-panel-content>
                       <v-divider></v-divider>
