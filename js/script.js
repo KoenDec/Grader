@@ -130,7 +130,7 @@ $(document).ready(function () {
     $('#educationsCheckboxes').find('input').on('change', handleEducationsCheckboxes);
     $('.addModule').on('click', submitModule);
 
-    printReport(1);
+    //printReport(1);
 
 });
 
