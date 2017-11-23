@@ -6,7 +6,7 @@
     </v-toolbar>
      <v-divider></v-divider>
      <v-list dense>
-       <v-list-tile v-for="item in navigation" @click="route(item)">
+       <v-list-tile v-for="item in navigation" :key="item" @click="route(item)">
          <v-list-tile-content>
            <v-list-tile-title>{{ item }}</v-list-tile-title>
          </v-list-tile-content>

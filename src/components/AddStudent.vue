@@ -46,11 +46,11 @@
               </v-form>
             </v-stepper-content>
             <v-stepper-content step="2">
-              <v-flex v-if="receivedModules" v-for="module in modules">
+              <v-flex v-for="module in modules.modules" :key="module.id">
                 <h3>Module: {{ module.name}}</h3>
                 <v-divider></v-divider>
                   <v-expansion-panel popout expand>
-                    <v-flex xs12 v-for="cat in module.categories">
+                   <v-flex xs12 v-for="cat in module.categorieen">
                       <v-expansion-panel-content>
                         <div slot="header">
                           <v-checkbox v-bind:label="cat.name" light></v-checkbox>
@@ -97,8 +97,6 @@ export default {
       receivedData: false,
       opleidingen: [],
       opleidingenDropdown: [],
-      receivedModules: false,
-      receivedCategories: false,
       modules: []
     }
   },
@@ -115,22 +113,10 @@ export default {
     },
     callForModules (id) {
       var self = this
-      self.$http.get('http://146.185.183.217/api/modulesVoorOpleiding?opleiding=' + id)
+      self.$http.get('http://146.185.183.217/api/fullOpleiding?opleiding=' + id)
         .then(function (response) {
           self.modules = response.data
-          for (var i = 0; i < self.modules.length; i++) {
-            var something = self.modules
-            var index = i
-            self.$http.get('http://146.185.183.217/api/categorieenInModules?module=' + self.modules[i].id)
-                .then(function (response) {
-                  var category = response.data
-                  something[index]['categories'] = category // ss
-                })
-                .catch(function (error) {
-                  console.log(error)
-                })
-          }
-          self.receivedModules = true
+          console.log(self.modules)
         })
         .catch(function (error) {
           console.log(error)

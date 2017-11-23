@@ -54,7 +54,7 @@
           hide-actions
           class="elevation-1"
         >
-          <template slot="items" scope="props">
+          <template slot="items" slot-scope="props">
             <td class="text-xs-left">{{ props.item.name }}</td>
             <td class="text-xs-right">
               <v-btn color="error" class="ma-1 right" dark><v-icon dark>delete</v-icon></v-btn>
