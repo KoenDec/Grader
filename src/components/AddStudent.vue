@@ -39,6 +39,8 @@
                   label="Opleiding"
                   v-model="select"
                   :items="opleidingenDropdown"
+                  item-text="opleiding"
+                  item-value="opleiding"
                   :rules="[v => !!v || 'Een opleiding moet geselecteerd worden']"
                   required
                 ></v-select>
@@ -101,7 +103,7 @@ export default {
         (v) => !!v || 'E-mail moet ingevuld worden',
         (v) => /^\w+([.-]?\w+)*@\w+([.-]?\w+)*(\.\w{2,3})+$/.test(v) || 'E-mail moet geldig zijn'
       ],
-      select: null,
+      select: {opleiding: ''},
       receivedData: false,
       opleidingen: [],
       opleidingenDropdown: [],
@@ -133,6 +135,27 @@ export default {
   },
   created () {
     var self = this
+    if (this.$route.query.id) {
+      var studentId = this.$route.query.id
+      this.$http.get('http://146.185.183.217/api/student?id=' + studentId)
+        .then(function (response) {
+          console.log(response.data)
+          self.firstname = response.data.firstname
+          self.name = response.data.lastname
+          self.email = response.data.email
+        })
+        .catch(function (error) {
+          console.log(error)
+        })
+      this.$http.get('http://146.185.183.217/api/studentReport?id=' + studentId)
+      .then(function (response) {
+        console.log(response.data)
+      })
+      .catch(function (error) {
+        console.log(error)
+      })
+    }
+
     this.$http.get('http://146.185.183.217/api/opleidingen')
       .then(function (response) {
         self.opleidingen = response.data
