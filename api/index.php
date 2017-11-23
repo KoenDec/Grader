@@ -156,6 +156,51 @@ if ($_SERVER['REQUEST_METHOD'] == 'GET') {
       echo $notLoggedInErr;
       http_response_code(401);
     }*/
+  } else if ($_GET['url'] == 'fullOpleiding') {
+    if (isset($_GET['opleiding'])) {
+      $opleidingid = $_GET['opleiding'];
+
+      $opleiding = (object)[
+        'modules' => array()
+      ];
+
+      $modules = $userDAO->getModulesInOpleiding($opleidingid);
+      foreach ($modules as $module) {
+
+        $modObj = (object)[
+          'id' => $module->id,
+          'name' => $module->name,
+          'categorieen' => array()
+        ];
+
+        $categorieen = $userDAO->getDoelstellingscategoriesInModule($module->id);
+        foreach ($categorieen as $categorie) {
+          $catObj = (object)[
+            'id' => $categorie->id,
+            'name' => $categorie->name,
+            'doelstellingen' => array()
+          ];
+
+          $doelstellingen = $userDAO->getDoelstellingenInDoelstellingscategorie($categorie->id);
+
+          foreach($doelstellingen as $doelstelling) {
+              $doelObj = (object)[
+                  'id' => $doelstelling->id,
+                  'name' => $doelstelling->name
+              ];
+
+              array_push($catObj->doelstellingen, $doelObj);
+          }
+          array_push($modObj->categorieen, $catObj);
+        }
+        array_push($opleiding->modules, $modObj);
+      }
+      echo json_encode($opleiding);
+      http_response_code(200);
+    } else {
+      echo '{"Status":"Opleiding niet gevonden"}';
+      http_response_code(403);
+    }
   } else if ($_GET['url'] == 'modulesVoorOpleiding') {
     //if (Login::isLoggedIn()) {
       if (isset($_GET['opleiding'])) {
@@ -207,6 +252,12 @@ if ($_SERVER['REQUEST_METHOD'] == 'GET') {
   } else if ($_GET['url'] == 'studentenMetOpleiding') {
     $obj = $userDAO->getAllActiveStudentsWithEducation();
     echo json_encode($obj);
+    http_response_code(200);
+  } else if ($_GET['url'] == 'evalFicheVoorLeerkracht') {
+    if (isset($_GET['leerkracht'])) {
+      $teachId = $_GET['leerkracht'];
+
+    }
     http_response_code(200);
   }
 } else if ($_SERVER['REQUEST_METHOD'] == 'POST') {
