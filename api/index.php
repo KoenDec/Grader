@@ -70,6 +70,8 @@ if ($_SERVER['REQUEST_METHOD'] == 'GET') {
 
           $report = (object)[
               'id' => $rapport->id,
+              'name' => $rapport->name,
+              'klas' => $rapport->class,
               'modules' => array(),
               'commentaarAlgemeen' => utf8_encode($rapport->commentaarAlgemeen),
               'commentaarKlassenraad' => utf8_encode($rapport->commentaarKlassenraad)
