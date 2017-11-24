@@ -59,3 +59,7 @@ url  api/doelstellingenInCategorie?categorie=?
 #Get criteria in doelstelling
 type GET
 url  api/criteriaInDoelstelling?doelstelling=?
+
+#Get volledige opleiding
+type GET
+url api/fullOpleiding?opleiding=?

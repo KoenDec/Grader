@@ -139,8 +139,11 @@ if ($_SERVER['REQUEST_METHOD'] == 'GET') {
     //if (Login::isLoggedIn()) {
       if (isset($_GET['id'])) {
         $userid = $_GET['id'];
-        $student = $userDAO->getUserById($userid);
-        echo json_encode($student);
+        $obj = (object)[
+          'student' => $userDAO->getUserById($userid),
+          'opleiding' => $userDAO->getEducationFromStudent($userid)
+        ];
+        echo json_encode($obj);
       } else {
         echo $notFoundErr;
         http_response_code(405);
