@@ -140,20 +140,15 @@ export default {
       this.$http.get('http://146.185.183.217/api/student?id=' + studentId)
         .then(function (response) {
           console.log(response.data)
-          self.firstname = response.data.firstname
-          self.name = response.data.lastname
-          self.email = response.data.email
+          self.firstname = response.data.student.firstname
+          self.name = response.data.student.lastname
+          self.email = response.data.student.email
+          self.select.opleiding = response.data.opleiding.name
+          console.log(self.select)
         })
         .catch(function (error) {
           console.log(error)
         })
-      this.$http.get('http://146.185.183.217/api/studentReport?id=' + studentId)
-      .then(function (response) {
-        console.log(response.data)
-      })
-      .catch(function (error) {
-        console.log(error)
-      })
     }
 
     this.$http.get('http://146.185.183.217/api/opleidingen')
