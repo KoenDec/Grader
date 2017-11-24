@@ -7,9 +7,9 @@ header("Access-Control-Allow-Headers: Origin,Content-Type");
 
 
 $userDAO = new UserDAO();
-$notFoundErr = '{"Status":"Geen user gevonden"}';
-$notLoggedInErr = '{"Status":"Niet ingelogd"}';
-$notAuthorizedErr = '{"Status":"Onbevoegd"}';
+$notFoundErr = '{"Error":"Geen user gevonden"}';
+$notLoggedInErr = '{"Error":"Niet ingelogd"}';
+$notAuthorizedErr = '{"Error":"Onbevoegd"}';
 
 if ($_SERVER['REQUEST_METHOD'] == 'GET') {
   if ($_GET['url'] == 'auth') {
@@ -289,11 +289,11 @@ if ($_SERVER['REQUEST_METHOD'] == 'GET') {
         echo json_encode($cookieObj);
         http_response_code(200);
       } else {
-        echo '{"Status":"Wrong pw"}';
+        echo '{"Error":"Wrong pw"}';
         http_response_code(401);
       }
     } else {
-      echo '{"Status":"Wrong username"}';
+      echo '{"Error":"Wrong username"}';
       http_response_code(401);
     }
   } else if ($_GET['url'] == 'updateUser') {
@@ -338,10 +338,39 @@ if ($_SERVER['REQUEST_METHOD'] == 'GET') {
     $userid = $postBody->userid;
     $newpw = $postBody->pw;
 
-    $password_hash = password_hash($newpw, PASSWORD_BCRYPT);
-    $userDAO->updatePassword($userid, $password_hash);
-    echo '{"Status":"pw updated"}';
-    http_response_code(200);
+    if ($userid == $userDAO->getUserById($userid)->id) {
+      $password_hash = password_hash($newpw, PASSWORD_BCRYPT);
+      $userDAO->updatePassword($userid, $password_hash);
+      echo '{"Status":"pw updated"}';
+      http_response_code(200);
+    } else {
+      echo '{"Error":"Not updated"}';
+      http_response_code(403);
+    }
+  } else if ($_GET['url'] == 'resetPassword') {
+    $postBody = file_get_contents('php://input');
+    $postBody = json_decode($postBody);
+
+    $username = $postBody->username;
+    $password = $postBody->password;
+    $confirmedPw = $postBody->confirm;
+
+    $user = $userDAO->getUser($username);
+
+    if ($user->username != null) {
+      if ($password == $confirmedPw) {
+        $userDAO->updatePassword($user->id, $confirmedPw);
+        echo '{"Success":"Paswoord is gereset"}';
+        http_response_code(200);
+      } else {
+        echo '{"Error":"Passwords do not match"}';
+        http_response_code(403);
+      }
+    } else {
+      echo '{"Error":"Gebruiker bestaat niet"}';
+      http_response_code(403);
+    }
+
   }
 } else if ($_SERVER['REQUEST_METHOD'] == 'DELETE') {
   if ($_GET['url'] == 'auth') {
@@ -351,11 +380,11 @@ if ($_SERVER['REQUEST_METHOD'] == 'GET') {
         echo '{ "Status": "Logged out" }';
         http_response_code(200);
       } else {
-        echo '{ "Status": "Invalid token" }';
+        echo '{ "Error": "Invalid token" }';
         http_response_code(400);
       }
     } else {
-      echo '{ "Status": "Malformed request" }';
+      echo '{ "Error": "Malformed request" }';
       http_response_code(400);
     }
   }

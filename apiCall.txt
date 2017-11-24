@@ -63,3 +63,8 @@ url  api/criteriaInDoelstelling?doelstelling=?
 #Get volledige opleiding
 type GET
 url api/fullOpleiding?opleiding=?
+
+#Reset user password
+type POST
+url  api/resetPassword
+data {"username":???,"password":newpw,"confirm":repeatedpw}
