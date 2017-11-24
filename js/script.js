@@ -285,10 +285,9 @@ var submitModule = function(e){
 };
 
 var printReport = function(reportId){
+    var doc = new jsPDF();
 
     var printFirstPage = function(reportName, klas, studentName){
-        var doc = new jsPDF();
-
         doc.setLineWidth(1);
         doc.rect(40, 20, 120, 30);
 
@@ -317,8 +316,6 @@ var printReport = function(reportId){
         doc.text(80, 281, "Fonteinstraat 30");
         doc.text(80, 287, "8020 Oostkamp");
 
-        doc.output("dataurlnewwindow");
-
     };
 
     $.ajax({
@@ -328,7 +325,11 @@ var printReport = function(reportId){
             reportData = JSON.parse(reportData);
             console.log(reportData.modules);
             console.log(reportData["name"]);
+
             printFirstPage(reportData.name, reportData.klas, "Faisal Nizami"); // TODO set student's name in returned json from api
+
+            doc.output("dataurlnewwindow");
+
         },
         'error' : function(request,error) {
             alert("Request: "+JSON.stringify(request));
