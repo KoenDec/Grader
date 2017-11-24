@@ -57,8 +57,10 @@ CREATE TABLE `modules` (
   `id` int NOT NULL AUTO_INCREMENT PRIMARY KEY,
   `name` varchar(50) NOT NULL,
   `opleidingId` int,
+  `teacherId` int NOT NULL,
   `creatorId` int,
   FOREIGN KEY(opleidingId) REFERENCES opleidingen(id),
+  FOREIGN KEY(teacherId) REFERENCES teachers(teacherId),
   FOREIGN KEY(creatorId) REFERENCES admins(adminId)
 );
 
@@ -66,10 +68,8 @@ CREATE TABLE `doelstellingscategories` (
   `id` int NOT NULL AUTO_INCREMENT PRIMARY KEY,
   `name` varchar(100) CHARACTER SET utf8 COLLATE utf8_unicode_ci NOT NULL,
   `moduleId` int NOT NULL,
-  `teacherId` int NOT NULL,
   `creatorId` int,
   FOREIGN KEY(moduleId) REFERENCES modules(id),
-  FOREIGN KEY(teacherId) REFERENCES teachers(teacherId),
   FOREIGN KEY(creatorId) REFERENCES admins(adminId)
 );
 
@@ -129,6 +129,7 @@ CREATE TABLE `rapporten` (
   `id` int NOT NULL AUTO_INCREMENT PRIMARY KEY,
   `studentId` int NOT NULL,
   `name` varchar(200) NOT NULL,
+  `class` varchar(50) NOT NULL,
   `commentaarKlassenraad` text,
   `commentaarAlgemeen` text,
   FOREIGN KEY(studentId) REFERENCES studenten(studentId)

@@ -130,6 +130,8 @@ $(document).ready(function () {
     $('#educationsCheckboxes').find('input').on('change', handleEducationsCheckboxes);
     $('.addModule').on('click', submitModule);
 
+    //printReport(1);
+
 });
 
 var doelstellingscatNr = 0;
@@ -280,4 +282,57 @@ var submitModule = function(e){
         form.attr('action','index.php?page=addModuleToOpleiding');
     }
     form.submit();
+};
+
+var printReport = function(reportId){
+    var doc = new jsPDF();
+
+    var printFirstPage = function(reportName, klas, studentName){
+        doc.setLineWidth(1);
+        doc.rect(40, 20, 120, 30);
+
+        doc.addImage(imgClwLogo, 'JPEG', 25, 80, 50, 62);
+        doc.addImage(imgKtaLogo, 'JPEG', 74, 80, 50, 62);
+        doc.addImage(imgDeZwaanLogo, 'JPEG', 125, 80, 50, 65);
+
+        doc.setFontSize(16);
+
+        doc.setFontType("bold");
+
+        doc.text(90, 26, "Rapport");
+        doc.text(82, 33, studentName); // TODO bereken cijfertjes uit lengte van tekst zodat tekst gecentreerd is
+        doc.text(93, 40, klas); // TODO ^^^^
+
+        doc.setFontType("normal");
+
+        doc.text(70, 47, "Schooljaar: " + reportName); // TODO ^^^^
+
+        doc.setFontType("bold");
+
+        doc.text(55, 275, "KTA- Centrum voor Leren en Werken");
+
+        doc.setFontType("normal");
+
+        doc.text(80, 281, "Fonteinstraat 30");
+        doc.text(80, 287, "8020 Oostkamp");
+
+    };
+
+    $.ajax({
+        'url' : "api/studentReport?id=6" + $.param({"id":reportId}),
+        'type' : 'GET',
+        'success' : function(reportData) {
+            reportData = JSON.parse(reportData);
+            console.log(reportData.modules);
+            console.log(reportData["name"]);
+
+            printFirstPage(reportData.name, reportData.klas, "Faisal Nizami"); // TODO set student's name in returned json from api
+
+            doc.output("dataurlnewwindow");
+
+        },
+        'error' : function(request,error) {
+            alert("Request: "+JSON.stringify(request));
+        }
+    });
 };

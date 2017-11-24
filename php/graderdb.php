@@ -236,6 +236,38 @@ class UserDAO {
         return $students;
     }
 
+    public static function getEducationFromStudent($studentId){
+        try {
+            $conn = graderdb::getConnection();
+
+            $sql = 'SELECT DISTINCT o.id, o.name from studenten s
+		            JOIN studenten_modules sm ON sm.studentId = s.studentId
+                    JOIN modules m ON sm.moduleId = m.id
+                    LEFT JOIN opleidingen o ON m.opleidingId = o.id OR sm.opleidingId = o.id
+                    WHERE s.studentId = :studentId
+					  AND s.stillStudent = TRUE
+                      AND sm.status = \'volgt\'';
+
+            $stmt = $conn->prepare($sql);
+            $stmt->bindParam(':studentId',$studentId);
+
+            $stmt->execute();
+
+            $educationsTable = $stmt->fetchAll(PDO::FETCH_CLASS);
+        } catch (PDOException $e) {
+            die($e->getMessage());
+        }
+
+        if(isset($educationsTable[0])) {
+            $education = $educationsTable[0];
+        } else {
+            //die('Student has no education!');
+            $education = null;
+        }
+
+        return $education;
+    }
+
     public static function getAllActiveStudentsWithEducation(){
         try {
             $conn = graderdb::getConnection();
@@ -655,31 +687,6 @@ class UserDAO {
         return $aspecten;
     }
 
-    public static function getRapport($rapportId){
-        try{
-            $conn = graderdb::getConnection();
-
-            $sql = 'SELECT * from rapporten WHERE id = :rapportId';
-            $stmt = $conn->prepare($sql);
-            $stmt->bindParam(':rapportId',$rapportId);
-
-            $stmt->execute();
-
-            $rapportTable = $stmt->fetchAll(PDO::FETCH_CLASS);
-        } catch (PDOException $e) {
-            die($e->getMessage());
-        }
-
-        if(isset($rapportTable[0])) {
-            $rapport = $rapportTable[0];
-        } else {
-            //die('No rapporten found for student with id = ' . $studentId);
-            $rapport = null;
-        }
-
-        return $rapport;
-    }
-
     public static function getRapporten($studentId){
         try{
             $conn = graderdb::getConnection();
@@ -703,6 +710,31 @@ class UserDAO {
         }
 
         return $rapporten;
+    }
+
+    public static function getRapport($rapportId){
+        try{
+            $conn = graderdb::getConnection();
+
+            $sql = 'SELECT * from rapporten WHERE id = :rapportId';
+            $stmt = $conn->prepare($sql);
+            $stmt->bindParam(':rapportId',$rapportId);
+
+            $stmt->execute();
+
+            $rapportTable = $stmt->fetchAll(PDO::FETCH_CLASS);
+        } catch (PDOException $e) {
+            die($e->getMessage());
+        }
+
+        if(isset($rapportTable[0])) {
+            $rapport = $rapportTable[0];
+        } else {
+            //die('No rapporten found for student with id = ' . $studentId);
+            $rapport = null;
+        }
+
+        return $rapport;
     }
 
     public static function getRapportmodules($rapportId){
