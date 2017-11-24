@@ -137,8 +137,11 @@ if ($_SERVER['REQUEST_METHOD'] == 'GET') {
     //if (Login::isLoggedIn()) {
       if (isset($_GET['id'])) {
         $userid = $_GET['id'];
-        $student = $userDAO->getUserById($userid);
-        echo json_encode($student);
+        $obj = (object)[
+          'student' => $userDAO->getUserById($userid),
+          'opleiding' => $userDAO->getEducationFromStudent($userid)
+        ];
+        echo json_encode($obj);
       } else {
         echo $notFoundErr;
         http_response_code(405);
@@ -275,7 +278,7 @@ if ($_SERVER['REQUEST_METHOD'] == 'GET') {
         $token = bin2hex(openssl_random_pseudo_bytes(64, $cstrong));
         $user_id = $userDAO->getUser($username)->id;
         $userDAO->insertNewLoginToken($user_id, sha1($token));
-        //setcookie("GID", $token, time() + 60 * 60 * 24 * 7, '/'/*, NULL, NULL, false*/);
+        setcookie("GID", $token, time() + 60 * 60 * 24 * 7, '/'/*, NULL, NULL, false*/);
         //setcookie("GID_", '1', time() + 60 * 60 * 24 * 3, '/', NULL, NULL, TRUE);
         $cookieObj = (object)[
           'GID' => $token,
