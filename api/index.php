@@ -277,7 +277,7 @@ if ($_SERVER['REQUEST_METHOD'] == 'GET') {
         $token = bin2hex(openssl_random_pseudo_bytes(64, $cstrong));
         $user_id = $userDAO->getUser($username)->id;
         $userDAO->insertNewLoginToken($user_id, sha1($token));
-        //setcookie("GID", $token, time() + 60 * 60 * 24 * 7, '/'/*, NULL, NULL, false*/);
+        setcookie("GID", $token, time() + 60 * 60 * 24 * 7, '/'/*, NULL, NULL, false*/);
         //setcookie("GID_", '1', time() + 60 * 60 * 24 * 3, '/', NULL, NULL, TRUE);
         $cookieObj = (object)[
           'GID' => $token,
