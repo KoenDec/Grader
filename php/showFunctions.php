@@ -236,12 +236,10 @@ $userRole = $userDAO->getUserRole($loggedInUserId);
 
         $dateNow = date('d/m/Y');
         if($rapportId != null){
-            $rapport = $userDAO->getRapport($rapportId); // todo extra pagina hiertussensteken met overzicht van eerdere rapporten, nu eerste rapport hardcoded
-
+            $rapport = $userDAO->getRapport($rapportId);
             $rapportmodules = $userDAO->getRapportmodules($rapport->id);
-            if($studentId != null) $student = $userDAO->getUserById($studentId);
         }
-        else if ($studentId != null) {
+        if ($studentId != null) {
             $student = $userDAO->getUserById($studentId);
             $rapporten = $userDAO->getRapporten($student->id);
         }
@@ -249,11 +247,14 @@ $userRole = $userDAO->getUserRole($loggedInUserId);
         // todo don't show edit report button for students, that'd be weird  ;) (aslo show ONLY his report)
         ?>
         <div class="row">
+            <?= (($studentId != null)? showStudentLiveSearchForm()."</div><div class='row'>" : "")?>
             <h2>Rapporten <?= (isset($student)) ? "van ".$student->firstname." ".$student->lastname : "" ?></h2>
         </div>
         <div class="row">
             <?php
-            showStudentLiveSearchForm();
+            (($studentId == null)? showStudentLiveSearchForm() : "");
+
+            if($rapporten == null)
             if ($studentId != null) {
                 ?>
                 <div class="right-align col s6 reports-btns">
@@ -273,8 +274,11 @@ $userRole = $userDAO->getUserRole($loggedInUserId);
                 <!--<p class="col s6">Studiemodules van: <span
                         style="font-weight: bold"><?= $student->firstname ?> <?= $student->lastname ?></span></p>-->
                 <div class="right-align">
-                    <a class="waves-effect waves-light btn tooltipped edit-opslaan-rapport" data-editing="false"
+                    <?php
+                    if($rapportId != null) {
+                    ?><a class="waves-effect waves-light btn tooltipped edit-opslaan-rapport" data-editing="false"
                        data-delay="50" data-tooltip="Aanpassen inschakelen"><i class="material-icons">edit</i></a>
+                        <?php } ?>
                 </div>
             </div>
             <?php
@@ -422,7 +426,8 @@ $userRole = $userDAO->getUserRole($loggedInUserId);
                 ?>
 
                 <div class="input-field">
-                    <select>
+                    <form method="POST">
+                    <select name="rapport-id">
                         <option value="" disabled selected>Geen rapport geselecteerd</option>
                         <?php
                         foreach($rapporten as $rapport){
@@ -433,6 +438,9 @@ $userRole = $userDAO->getUserRole($loggedInUserId);
                         ?>
 
                     </select>
+                        <input type="hidden" name="student-id" value="<?= $studentId ?>" />
+                        <button type="submit">Bekijk rapport</button>
+                        </form>
                 </div>
                 <?php
             }
