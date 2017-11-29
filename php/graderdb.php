@@ -527,19 +527,16 @@ class UserDAO {
         return $module;
     }
 
-    // TODO: method is for werkfiches, not for rapporten
-    /*
     public static function getModulesFromStudent($studentId){
         try{
             $conn = graderdb::getConnection();
 
-            $sql = 'SELECT DISTINCT m.* FROM users u JOIN studenten s ON u.id = s.studentId
-                      JOIN studenten_modules sm ON s.studentId = sm.studentId
+            $sql = 'SELECT DISTINCT m.* FROM studenten_modules sm
                       JOIN modules m ON sm.moduleId = m.id
                       -- JOIN opleidingen o ON sm.opleidingId = o.id -- geeft de algemene modules, niet specifiek aan de opleiding
                       -- JOIN opleidingen o ON m.opleidingId = o.id -- geeft de opleidingsspecifieke modules
-                      WHERE sd.status = \'volgt\'
-	                    AND s.studentId = :studentId';
+                      WHERE sm.status = \'volgt\'
+	                    AND sm.studentId = :studentId';
             $stmt = $conn->prepare($sql);
             $stmt->bindParam(':studentId',$studentId);
 
@@ -556,7 +553,7 @@ class UserDAO {
             die('No modules found for student with id = ' . $studentId);
         }
         return $modules;
-    }*/
+    }
 
     public static function getDoelstellingscategoriesInModule($moduleId){
         try {
