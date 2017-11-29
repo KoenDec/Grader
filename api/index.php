@@ -264,6 +264,67 @@ if ($_SERVER['REQUEST_METHOD'] == 'GET') {
 
     }
     http_response_code(200);
+  } else if ($_GET['url'] == 'evaluatieVoorStudent') {
+    if (isset($_GET['id'])) {
+      $studentid = $_GET['id'];
+      $evalForStudent = (object)[
+        'modules' => array()
+      ];
+      $modsOfStudent = $userDAO->getModulesFromStudent($studentid);
+      foreach ($modsOfStudent as $module) {
+        $modObj = (object)[
+          'id' => $module->id,
+          'name' => $module->name,
+          'categorieen' => array()
+        ];
+
+        $categorieen = $userDAO->getDoelstellingscategoriesInModule($module->id);
+        foreach ($categorieen as $categorie) {
+          $catObj = (object)[
+            'id' => $categorie->id,
+            'name' => $categorie->name,
+            'doelstellingen' => array()
+          ];
+
+          $doelstellingen = $userDAO->getDoelstellingenInDoelstellingscategorie($categorie->id);
+
+          foreach($doelstellingen as $doelstelling) {
+              $doelObj = (object)[
+                  'id' => $doelstelling->id,
+                  'name' => $doelstelling->name
+                  'criteria' => array()
+              ];
+
+              $criteria = $userDAO->getCriteriaInDoelstelling($doelstelling->id);
+              foreach($criteria as $criterium) {
+                $critObj = (object)[
+                  'id' => $criterium->id,
+                  'name' => $criterium->name,
+                  'aspecten' => array()
+                ];
+
+                $aspecten = $userDAO->getBeoordelingsaspectenInEvaluatiecriterium($criterium->id);
+                foreach($aspecten as $aspect) {
+                  $aspectObj = (object)[
+                    'id' => $aspect->id,
+                    'name' => $aspect->name,
+                  ];
+
+                  array_push($critObj->aspecten, $aspectObj);
+                }
+                array_push($doelObj->criteria, $critObj);
+              }
+              array_push($catObj->doelstellingen, $doelObj);
+          }
+          array_push($modObj->categorieen, $catObj);
+        }
+        array_push($evalForStudent->modules, $modObj);
+      }
+      echo json_encode($evalForStudent);
+      http_response_code(200);
+    }
+    echo '{"Error":"No studentid found"}';
+    http_response_code(403);
   }
 } else if ($_SERVER['REQUEST_METHOD'] == 'POST') {
   if ($_GET['url'] == 'auth') {
