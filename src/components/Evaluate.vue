@@ -33,17 +33,27 @@
                 ></v-select>
             </v-flex>
         </v-layout>
-        <v-layout row wrap class="text-xs-left">
+        <v-layout v-if="moduleSelected" row wrap class="text-xs-left">
             <v-flex offset-xs1>
                 <div>
-                    <v-btn color="primary"><v-icon>add</v-icon>Nieuwe Evaluatiefiche</v-btn>
+                    <v-btn color="primary"><v-icon>repeat</v-icon>Vorige Evaluatiefiches</v-btn>
+                    <v-btn @click="newEval" color="primary"><v-icon>add</v-icon>Nieuwe Evaluatiefiche</v-btn>
                 </div>
             </v-flex>
         </v-layout>
-        <v-layout row wrap>
+        <v-layout v-if="newEvalTable" row wrap>
             <table>
                 <tr>
-                    <th></th>
+                    <th rowspan="2">
+                    <v-flex>
+                        <v-text-field
+                                name="EvalFicheName"
+                                label="Naam evaluatiefiche"
+                        ></v-text-field>
+                    </v-flex></th>
+                </tr>
+                <tr>
+
                 </tr>
             </table>
         </v-layout>
@@ -62,12 +72,19 @@
           ],
           modulesDropdown: [],
           modules: [],
-          selectedModule: []
+          selectedModule: [],
+          evalFiches: [],
+          moduleSelected: false,
+          newEvalTable: false
         }
       },
       methods: {
         selectItem: function () {
           this.breadcrumbs[1].text = this.selectedModule
+          this.moduleSelected = true
+        },
+        newEval: function () {
+          this.newEvalTable = true
         }
       },
       created () {
