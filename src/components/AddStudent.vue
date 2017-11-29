@@ -75,8 +75,8 @@
                     </v-flex>
                   </v-expansion-panel>
               </v-flex>
-              <v-btn color="primary" @click.native="e1 = 3">voltooien</v-btn>
               <v-btn flat  @click.native="e1 = 1">Vorige</v-btn>
+              <v-btn color="primary" @click.native="e1 = 3">voltooien</v-btn>
             </v-stepper-content>
               <v-stepper-content step="3">
                 <h5>Student {{firstname}} {{name}} {{pageUse[1]}}:</h5>
