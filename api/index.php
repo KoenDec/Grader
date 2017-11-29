@@ -63,7 +63,7 @@ if ($_SERVER['REQUEST_METHOD'] == 'GET') {
     //if (Login::isLoggedIn()) {
       if (isset($_GET['id'])) {
         $rapportid = $_GET['id'];
-        
+
           $rapport = $userDAO->getRapport($rapportid);
           $modules = $userDAO->getRapportmodules($rapport->id);
 
