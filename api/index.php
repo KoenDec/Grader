@@ -62,10 +62,9 @@ if ($_SERVER['REQUEST_METHOD'] == 'GET') {
   } else if ($_GET['url'] == 'studentReport') {
     //if (Login::isLoggedIn()) {
       if (isset($_GET['id'])) {
-        $studentId = $_GET['id'];
-
-
-          $rapport = $userDAO->getRapporten($studentId)[0]; // TODO students have more than 1 rapport (old rapporten are not deleted)
+        $rapportid = $_GET['id'];
+        
+          $rapport = $userDAO->getRapport($rapportid);
           $modules = $userDAO->getRapportmodules($rapport->id);
 
           $report = (object)[
@@ -291,7 +290,7 @@ if ($_SERVER['REQUEST_METHOD'] == 'GET') {
           foreach($doelstellingen as $doelstelling) {
               $doelObj = (object)[
                   'id' => $doelstelling->id,
-                  'name' => $doelstelling->name
+                  'name' => $doelstelling->name,
                   'criteria' => array()
               ];
 
