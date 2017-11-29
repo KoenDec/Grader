@@ -336,9 +336,10 @@ if ($_SERVER['REQUEST_METHOD'] == 'GET') {
       }
       echo json_encode($evalForStudent);
       http_response_code(200);
+    } else {
+      echo '{"Error":"No studentid found"}';
+      http_response_code(403);
     }
-    echo '{"Error":"No studentid found"}';
-    http_response_code(403);
   }
 } else if ($_SERVER['REQUEST_METHOD'] == 'POST') {
   if ($_GET['url'] == 'auth') {
