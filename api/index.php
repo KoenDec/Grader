@@ -87,8 +87,8 @@ if ($_SERVER['REQUEST_METHOD'] == 'GET') {
               'name' => $rapport->name,
               'klas' => $rapport->class,
               'modules' => array(),
-              'commentaarAlgemeen' => utf8_encode($rapport->commentaarAlgemeen),
-              'commentaarKlassenraad' => utf8_encode($rapport->commentaarKlassenraad)
+              'commentaarAlgemeen' => $rapport->commentaarAlgemeen,
+              'commentaarKlassenraad' => $rapport->commentaarKlassenraad
           ];
 
           foreach($modules as $rapportmodule){
@@ -98,7 +98,7 @@ if ($_SERVER['REQUEST_METHOD'] == 'GET') {
                   'id' => $module->id,
                   'naam' => $module->name,
                   'doelstellingscategories' => array(),
-                  'commentaar' => utf8_encode($rapportmodule->commentaar)
+                  'commentaar' => $rapportmodule->commentaar
               ];
 
               $doelstellingscategories = $userDAO->getDoelstellingscategoriesInModule($module->id);
@@ -107,7 +107,7 @@ if ($_SERVER['REQUEST_METHOD'] == 'GET') {
 
                   $doelstellingscategorieObjToPush = (object)[
                       'id' => $doelstellingscategorie->id,
-                      'name' => utf8_encode($doelstellingscategorie->name),
+                      'name' => $doelstellingscategorie->name,
                       'doelstellingen' => array()
                   ];
 
@@ -124,7 +124,7 @@ if ($_SERVER['REQUEST_METHOD'] == 'GET') {
 
                       $doelstellingObjToPush = (object)[
                           'id' => $doelstelling->id,
-                          'name' => utf8_encode($doelstelling->name),
+                          'name' => $doelstelling->name,
                           'score' => $score,
                           'opmerking' => $opmerking
                       ];
