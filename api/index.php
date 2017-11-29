@@ -77,9 +77,9 @@ if ($_SERVER['REQUEST_METHOD'] == 'GET') {
   } else if ($_GET['url'] == 'studentReport') {
     //if (Login::isLoggedIn()) {
       if (isset($_GET['id'])) {
-        $rapportid = $_GET['id'];
-          
-          $rapport = $userDAO->getRapport($rapportid);
+        $rapportId = $_GET['id'];
+
+          $rapport = $userDAO->getRapport($rapportId);
           $modules = $userDAO->getRapportmodules($rapport->id);
 
           $report = (object)[
