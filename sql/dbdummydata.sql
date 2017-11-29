@@ -40,13 +40,13 @@ INSERT INTO modules(name, opleidingId, teacherId, creatorId) VALUES
     ('Klantencontact', 4, 13, 3);
 
 INSERT INTO doelstellingscategories(name, moduleId, creatorId) VALUES
-	('Veiligheid, hygiëne en milieubewustzijn', 1, 3), -- 1
-	('Houdingen noodzakelijk voor de uitoefening van het beroep', 1, 3),
-   	('Functionele vaardigheden voor de uitoefening van het beroep', 1, 3),
+	('Veilig, hygiënisch en milieubewust werken conform welzijn op het werk en de geldende regelgevingen', 1, 3), -- 1
+	('Noodzakelijke houdingen voor de uitoefening van het beroep aannemen', 1, 3),
+   	('Functionele vaardigheden voor de uitoefening van het beroep toepassen', 1, 3),
    	('Eigen werkzaamheden organiseren', 1, 3),
-   	('Voorbereidende werkzaamheden', 1, 3), -- 5
-   	('Elementaire technieken', 1, 3),
-   	('Vaat volgens procedures uitvoeren', 1, 3),
+   	('Volgens bedrijfseigen procedures voorbereidende werkzaamheden (mise en place) uitvoeren', 1, 3), -- 5
+   	('Volgens bedrijfseigen procedures elementaire technieken toepassen', 1, 3),
+   	('Volgens bedrijfseigen procedures de vaat uitvoeren', 1, 3),
     ('Functionele taalvaardigheid / NT2', 3, 3),
     ('Vaardigheden (specifiek taalgebonden)', 3, 3),
     ('ATTITUDES (specifiek taalgebonden)', 3, 3), -- 10
@@ -80,50 +80,50 @@ INSERT INTO doelstellingscategories(name, moduleId, creatorId) VALUES
     ('Diefstalpreventie volgens bedrijfseigen procedures toepassen', 9, 3);
     
 INSERT INTO doelstellingen(doelstellingscategorieId,name,creatorId) VALUES
-	(1,'Kan ergonomisch werken',3), -- 1
-	(1,'Kan economisch werken',3),
-	(1,'Kan handelen volgens de regels van de voedselveiligheid',3),
-	(1,'Kan voorschriften en instructies inzake veiligheid, hygiëne of milieu toepassen',3),
-	(1,'Kan persoonlijke beschermingsmiddelen gebruiken',3), -- 5
-	(1,'Kan de werkplek en directe omgeving onderhouden/schoonhouden',3),
-	(1,'Kan producten, apparaten, machines en arbeidsmiddelen volgens voorschriften gebruiken',3),
-	(1,'Kan apparaten, machines en arbeidsmiddelen volgens de voorschriften reinigen',3),
-	(1,'Kan afval en restproducten sorteren',3),
-	(1,'Kan storingen en afwijkingen melden',3), -- 10
-	(2,'Kan klantgericht werken',3),
-	(2,'Kan samenwerken',3),
-	(2,'Kan zin voor verantwoordelijkheid tonen',3),
-	(2,'Kan nauwkeurig werken',3),
-	(2,'Kan doorzettingsvermogen tonen',3), -- 15
-	(2,'Kan met tijd- en werkdruk omgaan',3),
-	(2,'Kan de opgelegde taken uitvoeren',3),
-	(3,'Kan informatie selecteren en verwerken',3),
-	(3,'Kan dimensies meten en berekenen',3),
-	(3,'Kan gewichtseenheden en inhoudsmaten omrekenen',3), -- 20
-	(3,'Kan verhoudingen respecteren',3),
-	(3,'Kan verbale en non-verbale communicatie toepassen',3),
-	(4,'Kan eigen werkzaamheden voorbereiden',3),
-	(4,'Kan eigen werkzaamheden uitvoeren',3),
-	(4,'Kan eigen werkzaamheden evalueren',3), -- 25
-	(4,'Kan eigen werkzaamheden bijsturen',3),
-	(5,'Kan ingrediënten klaarzetten',3),
-	(5,'Kan vooraadtekorten melden',3),
-	(5,'Kan groenten reinigen',3),
-	(5,'Kan fruit reinigen',3), -- 30
-	(5,'Kan groenten versnijden',3),
-	(5,'Kan fruit versnijden',3),
+	(1,'Ergonomisch werken',3), -- 1
+	(1,'Economisch werken',3),
+	(1,'Volgens de regels van de voedselveiligheid handelen',3),
+	(1,'Voorschriften en instructies inzake veiligheid, hygiëne of milieu toepassen',3),
+	(1,'Persoonlijke beschermingsmiddelen gebruiken',3), -- 5
+	(1,'Werkplek en directe omgeving onderhouden/schoonhouden',3),
+	(1,'Producten, apparatuur, machines en arbeidsmiddelen volgens voorschriften gebruiken',3),
+	(1,'Apparatuur, machines en arbeidsmiddelen volgens de voorschriften reinigen',3),
+	(1,'Afval en restproducten beperken en volgens wettelijke voorschriften sorteren',3),
+	(1,'Storingen of afwijkingen aan producten, apparatuur, machines of arbeidsmiddelen melden',3), -- 10
+	(2,'Klantgericht werken',3),
+	(2,'Zin voor samenwerking tonen',3),
+	(2,'Zin voor verantwoordelijkheid tonen',3),
+	(2,'Nauwkeurig werken',3),
+	(2,'Doorzettingsvermogen tonen',3), -- 15
+	(2,'Met tijds- en werkdruk omgaan',3),
+	(2,'Opgelegde taken uitvoeren',3),
+	(3,'Informatie selecteren en verwerken',3),
+	(3,'Dimensies meten en berekenen',3),
+	(3,'Gewichtseenheden en inhoudsmaten omrekenen',3), -- 20
+	(3,'Verhoudingen respecteren',3),
+	(3,'Verbale en non-verbale communicatie toepassen',3),
+	(4,'Eigen werkzaamheden voorbereiden',3),
+	(4,'Eigen werkzaamheden uitvoeren',3),
+	(4,'Eigen werkzaamheden evalueren',3), -- 25
+	(4,'Eigen werkzaamheden bijsturen',3),
+	(5,'Ingrediënten klaarzetten',3),
+	(5,'Vooraadtekorten melden',3),
+	(5,'Groenten en fruit reinigen',3),
+	(5,'Groenten en fruit in functie van vorm en grootte snijden',3), -- 30
 	(5,'Kan ingrediënten verpakken, etiketteren en bewaren',3),
-	(6,'Kan groenten stoven',3),
-	(6,'Kan fruit stoven',3), -- 35
-	(6,'Kan groenten koken',3),
-	(6,'Kan fruit pocheren',3),
-	(6,'Kan maaltijdcomponenten portioneren',3),
-	(6,'Kan elementaire dresseertechnieken toepassen',3),
-	(7,'Kan etensresten verwijderen',3), -- 40
-	(7,'Kan serviesgoed en bestek sorteren',3),
-	(7,'Kan manueel afwassen en afdrogen',3),
-	(7,'Kan machinaal afwassen en afdrogen',3),
-	(7,'Kan gewassen stukken controleren en opbergen',3),
+	(6,'Groenten voor het bereiden van salades en basissoepen stoven en koken',3),
+	(6,'Maaltijdcomponenten portioneren',3),
+	(6,'Elementaire dresseertechnieken toepassen',3),
+	(7,'Etensresten verwijderen',3), -- 35
+	(7,'Serviesgoed en bestek sorteren',3),
+	(7,'Manueel of machinaal afwassen en afdrogen',3),
+	(7,'Buffet en banket aanvullen',3),
+	(6,'##########################',3),
+	(5,'##########################',3), -- 40
+	(5,'##########################',3),
+	(7,'##########################',3),
+	(6,'##########################',3),
+	(6,'##########################',3),
     (8, 'Kijk- en luistervaardigheid', 3), -- 45
     (8, 'Leesvaardigheid', 3),
     (8, 'Spreekvaardigheid', 3),
@@ -232,7 +232,7 @@ INSERT INTO doelstellingen(doelstellingscategorieId,name,creatorId) VALUES
     (38, 'Beveiligingssystemen aanbrengen', 3), -- 150
     (38, 'Klantengedrag observeren', 3),
     (38, 'Verdacht gedrag herkennen', 3),
-    (38, 'Richtlijnen bij verdacht gedrag naleven');
+    (38, 'Richtlijnen bij verdacht gedrag naleven', 3);
     
 INSERT INTO evaluatiecriteria(doelstellingId, name, creatorId) VALUES
 	(1, 'correcte werkhouding toepassen bij het bij het reinigen van groenten en fruit', 3), -- 1

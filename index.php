@@ -37,7 +37,6 @@ function checkGET()
                 break;
 
             case "rapporten":
-                var_dump($_POST);
                 if(isset($_POST["rapport-id"]) && isset($_POST["student-id"])) {
                     showReportsPage($_POST["student-id"], $_POST["rapport-id"]);
                 }
@@ -51,7 +50,6 @@ function checkGET()
                 }
                 break;
             case "werkfiches":
-                var_dump($_POST);
                 if(isset($_POST["student-id"]) && isset($_POST["module-id"])) {
                     showWerkfichesPage($_POST["student-id"],$_POST["module-id"]);
                 }
