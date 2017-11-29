@@ -8,9 +8,9 @@ INSERT INTO users(email, firstname, lastname, password, language, status) VALUES
 	('teacher2@hotmail.com', 'Teacher', 'Dummy', 'Teacher', 'NL', 'ACTIVE'), -- 5
 	('student1@hotmail.com', 'Faisal', 'Nizami', 'Student', 'NL', 'ACTIVE'), -- 6
 	('student2@hotmail.com', 'Tatjana', 'Eekchout', 'Student', 'NL', 'ACTIVE'), -- 7
-	('student3@hotmail.com', 'Student', 'Dummy', 'Student', 'NL', 'ACTIVE'), -- 8
-	('student4@hotmail.com', 'Student', 'Dummy', 'Student', 'NL', 'ACTIVE'), -- 9
-	('student5@hotmail.com', 'Student', 'Dummy', 'Student', 'NL', 'ACTIVE'), -- 10
+	('student3@hotmail.com', 'Student', 'Kapper', 'Student', 'NL', 'ACTIVE'), -- 8
+	('student4@hotmail.com', 'Student', 'Kok', 'Student', 'NL', 'ACTIVE'), -- 9
+	('student5@hotmail.com', 'Student', 'Tegelzetter', 'Student', 'NL', 'ACTIVE'), -- 10
 	('thomas.de.nil@student.howest.be', 'Thomas', 'De Nil', 'Student', 'NL', 'ACTIVE'), -- 11
 	('teacher3@hotmail.com', 'Koen', 'Feys', 'Teacher', 'NL', 'ACTIVE'), -- 12
   	('teacher4@hotmail.com', 'Ann', 'Bert', 'Teacher', 'NL', 'ACTIVE'); -- 13
@@ -352,7 +352,7 @@ INSERT INTO studenten_modules(studentId, moduleId, opleidingId) VALUES
 	(9,1,null),
     (10,7,null),
     (9,3,1),
-    (10,3,1),
+    (10,3,3),
     (8,3,2);
     
 
