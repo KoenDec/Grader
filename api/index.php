@@ -45,20 +45,35 @@ if ($_SERVER['REQUEST_METHOD'] == 'GET') {
       http_response_code(401);
     }
   } else if ($_GET['url'] == 'currentUser') {
-    //if (Login::isLoggedIn()) {
+      //if (Login::isLoggedIn()) {
       if (isset($_GET['token'])) {
-        $token = $_GET['token'];
-        $userid = $userDAO->getLoggedInUserId(sha1($token));
-        $currentUser = $userDAO->getUserById($userid);
-        echo json_encode($currentUser);
+          $token = $_GET['token'];
+          $userid = $userDAO->getLoggedInUserId(sha1($token));
+          $currentUser = $userDAO->getUserById($userid);
+          echo json_encode($currentUser);
       } else {
-        echo $notFoundErr;
-        http_response_code(405);
+          echo $notFoundErr;
+          http_response_code(405);
       }
-    /*} else {
-      echo $notLoggedInErr;
-      http_response_code(401);
-    }*/
+      /*} else {
+        echo $notLoggedInErr;
+        http_response_code(401);
+      }*/
+  } else if ($_GET['url'] == 'studentReports'){
+      if (isset($_GET['id'])) {
+          $studentId = $_GET['id'];
+          $rapporten = $userDAO->getRapporten($studentId);
+
+          $reports = [];
+
+          foreach($rapporten as $rapport){
+              array_push($reports, $rapport);
+          }
+          echo json_encode($reports);
+      } else {
+          echo $notFoundErr;
+          http_response_code(405);
+      }
   } else if ($_GET['url'] == 'studentReport') {
     //if (Login::isLoggedIn()) {
       if (isset($_GET['id'])) {
