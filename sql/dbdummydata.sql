@@ -209,7 +209,7 @@ INSERT INTO doelstellingen(doelstellingscategorieId,name,creatorId) VALUES
     (33, 'Veiligheidsvoorschriften en -instructies inzake arbeidsmiddelen toepassen', 3),
     (33, 'Afval- en restproducten sorteren', 3),
     (34, 'Zin voor samenwerking tonen', 3),
-    (34, 'Nauwkeurig zijn'), -- 130
+    (34, 'Nauwkeurig zijn',3), -- 130
     (34, 'Voorkomen verzorgen', 3),
     (34, 'Discreet zijn', 3),
     (34, 'Op wisselende omstandigheden inspelen', 3),
