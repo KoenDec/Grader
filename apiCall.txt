@@ -29,11 +29,6 @@ id = student id
 type GET
 url  api/opleidingen
 
-#Get rapport of student
-type GET
-url  api/studentReport?id=
-id = studentid
-
 #insert score for criterium
 type POST
 url  api/evaluateCrit
@@ -68,3 +63,12 @@ url api/fullOpleiding?opleiding=?
 type POST
 url  api/resetPassword
 data {"username":???,"password":newpw,"confirm":repeatedpw}
+
+#get alle rapporten van 1 studentsTable
+type GET
+url  api/studentReports?id=studentid
+
+#Get rapport of student
+type GET
+url  api/studentReport?id=
+id = rapportid
