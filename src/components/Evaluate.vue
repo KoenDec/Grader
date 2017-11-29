@@ -11,9 +11,8 @@
             </v-flex>
         </v-layout>
         <v-layout row-wrap>
-            <v-flex>
+            <v-flex xs4 class="text-xs-left">
                 <v-breadcrumbs>
-                    <v-icon slot="divider">chevron_right</v-icon>
                     <v-breadcrumbs-item
                             v-for="breadcrumb in breadcrumbs" :key="breadcrumb.id" :disabled="breadcrumb.disabled"
                     >
@@ -27,11 +26,18 @@
                 <v-select
                         label="Select"
                         v-bind:items="modulesDropdown"
-                        v-model="e1"
+                        v-model="selectedModule"
                         hint="Selecteer een module"
                         persistent-hint
-                        @select-module="useModule"
+                        @input="selectItem()"
                 ></v-select>
+            </v-flex>
+        </v-layout>
+        <v-layout row wrap class="text-xs-left">
+            <v-flex offset-xs1>
+                <div>
+                    <v-btn color="primary"><v-icon>add</v-icon>Nieuwe Evaluatiefiche</v-btn>
+                </div>
             </v-flex>
         </v-layout>
         <v-layout row wrap>
@@ -56,13 +62,12 @@
           ],
           modulesDropdown: [],
           modules: [],
-          e1: []
+          selectedModule: []
         }
       },
       methods: {
         selectItem: function () {
-        },
-        useModule (payload) {
+          this.breadcrumbs[1].text = this.selectedModule
         }
       },
       created () {
