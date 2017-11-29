@@ -2,7 +2,7 @@
   <div>
     <v-layout row wrap>
         <v-flex xs12 offset-xs1 class="text-xs-left">
-          <h1 class="display-3">Studenten</h1>
+          <h1 class="display-3">Student {{pageUse[0]}}</h1>
         </v-flex>
     </v-layout>
     <v-layout row wrap>
@@ -12,6 +12,8 @@
             <v-stepper-step step="1" :complete="e1 > 1">Details</v-stepper-step>
             <v-divider></v-divider>
             <v-stepper-step step="2" :complete="e1 > 2">Modules toekennen</v-stepper-step>
+            <v-divider></v-divider>
+            <v-stepper-step step="3" :complete="e1 > 3">Voltooid</v-stepper-step>
           </v-stepper-header>
           <v-stepper-items>
             <v-stepper-content step="1">
@@ -35,10 +37,12 @@
                   required
                 ></v-text-field>
                 <v-select
-                  v-if="receivedData"
+                  v-if="receivedData && studentOplSet"
                   label="Opleiding"
                   v-model="select"
                   :items="opleidingenDropdown"
+                  item-text="select"
+                  item-value="select"
                   :rules="[v => !!v || 'Een opleiding moet geselecteerd worden']"
                   required
                 ></v-select>
@@ -74,6 +78,13 @@
               <v-btn color="primary" @click.native="e1 = 3">voltooien</v-btn>
               <v-btn flat  @click.native="e1 = 1">Vorige</v-btn>
             </v-stepper-content>
+              <v-stepper-content step="3">
+                <h5>Student {{firstname}} {{name}} {{pageUse[1]}}:</h5>
+                <p>Naam: {{firstname}} {{name}}</p>
+                <p>Email:{{email}}</p>
+                <p>Opleiding: {{select}}</p>
+                <router-link to="/studenten"><v-btn color="primary">Terug naar studenten</v-btn></router-link>
+              </v-stepper-content>
           </v-stepper-items>
         </v-stepper>
       </v-flex>
@@ -101,8 +112,10 @@ export default {
         (v) => !!v || 'E-mail moet ingevuld worden',
         (v) => /^\w+([.-]?\w+)*@\w+([.-]?\w+)*(\.\w{2,3})+$/.test(v) || 'E-mail moet geldig zijn'
       ],
-      select: null,
+      select: '',
+      pageUse: ['toevoegen', 'toegevoegd'],
       receivedData: false,
+      studentOplSet: false,
       opleidingen: [],
       opleidingenDropdown: [],
       modules: []
@@ -112,6 +125,7 @@ export default {
     submit () {
       if (this.$refs.form.validate()) {
         var select = this.select
+        console.log(select)
         var result = this.opleidingen.filter(function (obj) {
           return obj.name === select
         })
@@ -146,6 +160,25 @@ export default {
         .catch(function (error) {
           console.log(error)
         })
+    if (this.$route.query.id) {
+      self.pageUse = ['aanpassen', 'aangepast']
+      var studentId = this.$route.query.id
+      this.$http.get('http://146.185.183.217/api/student?id=' + studentId)
+        .then(function (response) {
+          console.log(response.data)
+          self.firstname = response.data.student.firstname
+          self.name = response.data.student.lastname
+          self.email = response.data.student.email
+          self.select = response.data.opleiding.name
+          console.log(self.select)
+          self.studentOplSet = true
+        })
+        .catch(function (error) {
+          console.log(error)
+        })
+    } else {
+      self.studentOplSet = true
+    }
   }
 }
 </script>

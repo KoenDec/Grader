@@ -63,7 +63,7 @@
                 <td class="text-xs-left">{{ props.item.opleidingName }}</td>
                 <td>
                   <v-btn color="error" class="ma-1 right" dark><v-icon dark>delete</v-icon></v-btn>
-                  <v-btn color="primary" class="ma-1 right" slot="activator" dark><v-icon dark>edit</v-icon></v-btn>
+                  <router-link :to="{ path: 'Addstudent', query: { id: props.item.id }}"><v-btn color="primary" class="ma-1 right" dark><v-icon dark>edit</v-icon></v-btn></router-link>
                   <v-btn color="primary" class="ma-1 right" dark>rapport<v-icon dark right>import_contacts</v-icon></v-btn>
                 </td>
               </tr>
