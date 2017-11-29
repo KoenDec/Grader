@@ -8,6 +8,7 @@
                   :label="`Zoek een ${labeltext}`"
                   no-data-text="Er werd niets gevonden"
                   autocomplete
+                  clearable
                   @input="selectItem()"
                   @update:searchInput="checkSelected"
                 ></v-select>
@@ -28,7 +29,9 @@ export default {
       this.$emit('select-student', this.selecteditem)
     },
     checkSelected: function (payload) {
-      this.selecteditem = ''
+      if (payload === '') {
+        this.$emit('no-student-select', '')
+      }
     }
   },
   computed: {
