@@ -42,20 +42,24 @@
             </v-flex>
         </v-layout>
         <v-layout v-if="newEvalTable" row wrap>
-            <table>
-                <tr>
-                    <th rowspan="2">
-                    <v-flex>
-                        <v-text-field
-                                name="EvalFicheName"
-                                label="Naam evaluatiefiche"
-                        ></v-text-field>
-                    </v-flex></th>
-                </tr>
-                <tr>
-
-                </tr>
-            </table>
+            <v-flex offset-xs1>
+                <table>
+                    <tr>
+                        <th rowspan="2">
+                            <v-flex>
+                                <v-text-field
+                                        name="EvalFicheName"
+                                        label="Naam evaluatiefiche"
+                                ></v-text-field>
+                            </v-flex>
+                        </th>
+                        <th colspan="4">datum:<input type="date" name="EvalDate" id="EvalDate" /></th>
+                    </tr>
+                    <tr>
+                        <th colspan="2">Evaluatie (JA | NEE)</th><th colspan="2">Eind Evaluatie</th>
+                    </tr>
+                </table>
+            </v-flex>
         </v-layout>
     </div>
 </template>
@@ -119,5 +123,7 @@
 
 <!-- Add "scoped" attribute to limit CSS to this component only -->
 <style scoped>
-
+th, tr{
+    border: 1px black solid
+}
 </style>
