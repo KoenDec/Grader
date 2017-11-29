@@ -58,7 +58,7 @@
             class="elevation-1"
             >
               <template slot="items" slot-scope="props">
-                <tr v-if="!filters.includes(props.item.opleidingName) && selectedid === props.item.id || selectedid === ''">
+                <tr v-if="!filters.includes(props.item.opleidingName) || selectedid === '' && selectedid === props.item.id">
                 <td class="text-xs-left">{{ props.item.firstname + ' ' + props.item.lastname  }}</td>
                 <td class="text-xs-left">{{ props.item.opleidingName }}</td>
                 <td>
