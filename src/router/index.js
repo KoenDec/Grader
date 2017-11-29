@@ -10,6 +10,8 @@ import checkboxes from '@/components/CheckboxContainer'
 import Subjects from '@/components/Subjects'
 import fileInput from '@/components/file-input'
 import SearchBar from '@/components/SearchBar'
+import Evaluate from '@/components/Evaluate'
+
 Vue.component('fileInput', fileInput)
 Vue.component('checkboxes', checkboxes)
 Vue.component('searchbar', SearchBar)
@@ -47,6 +49,11 @@ export default new Router({
           path: '/addstudent',
           name: 'addstudent',
           component: AddStudent
+        },
+        {
+          path: '/evaluate',
+          name: 'evaluate',
+          component: Evaluate
         },
         {
           path: '/',
