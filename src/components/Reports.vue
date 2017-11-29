@@ -70,7 +70,7 @@
                     </v-card>
                   </v-flex>
                   <v-flex xs2>
-                    <v-card color="teal" class="white--text">
+                    <v-card color="teal" class="white--text" fill-height height="100%">
                       <v-container fluid grid-list-lg>
                         {{'Geslaagd'}}
                       </v-container>
