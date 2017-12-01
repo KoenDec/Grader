@@ -16,16 +16,16 @@
     </v-layout>
     <v-layout row-wrap>
         <v-flex xs12 offset-xs1 class="text-xs-left">
-          <h2 class="headline" v-if="currentstudent != null">Studiemodules van: {{ currentstudent.name }}</h2>
+          <h2 class="headline" v-if="currentstudent != null && !currentreport">{{ 'Overzicht rapporten' }}</h2>
         </v-flex>
     </v-layout>
     <v-layout row-wrap>
         <v-flex xs10 offset-xs1>
-            <v-list two-line v-if="currentstudent != null">
+            <v-list two-line v-if="currentstudent != null && currentreport === null">
               <v-subheader>{{'Rapporten van ' + currentstudent.student.firstname + ' ' + currentstudent.student.lastname}}</v-subheader>
               <template v-for="report in current_student_reports">
                 <v-divider></v-divider>
-                <v-list-tile v-bind:key="report.id" @click="">
+                <v-list-tile v-bind:key="report.id" @click="getReport(report.id)">
                   <v-list-tile-content>
                     <v-list-tile-title v-html="report.name"></v-list-tile-title>
                     <!-- <v-list-tile-sub-title v-html="report.class"></v-list-tile-sub-title>-->
@@ -33,6 +33,72 @@
                 </v-list-tile>
               </template>
             </v-list>
+            <!-- REPORT TEMPLATE -->
+            <template v-if="currentreport != null">
+            <v-layout row-wrap>
+              <v-flex xs12>
+              <v-card color="blue darken-5" class="white--text">
+                 <v-container fluid grid-list-lg>
+                   <v-layout row>
+                     <v-flex xs7>
+                       <div>
+                         <div class="display-3 text-xs-left">{{ currentreport.name }}</div>
+                         <div class="display-2 text-xs-left">{{currentstudent.student.firstname + ' ' + currentstudent.student.lastname}}</div>
+                       </div>
+                     </v-flex>
+                   </v-layout>
+                 </v-container>
+               </v-card>
+             </v-flex>
+            </v-layout>
+            <!-- REPORT MODULES -->
+            <v-layout row-wrap v-for="module in currentreport.modules">
+              <v-flex xs2>
+              <v-card color="cyan darken-1" class="white--text text-xs-center display-1" height="100%">
+                 <v-container fluid grid-list-lg fill-height>
+                   {{module.naam}}
+                 </v-container>
+               </v-card>
+              </v-flex>
+              <v-flex xs10>
+                <v-layout row-wrap v-for="categorie in module.doelstellingscategories">
+                  <v-flex xs10>
+                    <v-card color="cyan darken-3" class="white--text text-xs-left">
+                      <v-container fluid grid-list-lg>
+                        {{categorie.name}}
+                      </v-container>
+                    </v-card>
+                  </v-flex>
+                  <v-flex xs2>
+                    <v-card color="teal" class="white--text" fill-height height="100%">
+                      <v-container fluid grid-list-lg>
+                        {{'Geslaagd'}}
+                      </v-container>
+                    </v-card>
+                  </v-flex>
+                </v-layout>
+              </v-flex>
+            </v-layout>
+            <!-- REPORT COMMENTS AND NOTES -->
+            <v-layout row-wrap>
+              <v-flex xs12>
+                <v-card color="cyan darken-3" class="white--text text-xs-left">
+                  <v-container fluid grid-list-lg>
+                    <v-chip label color="yellow" text-color="black">
+                      <v-icon left>label</v-icon>
+                      <div class="mr-4">Algemene commentaar</div>
+                      <div>{{currentreport.commentaarAlgemeen}}</div>
+                    </v-chip>
+                    <v-chip label color="yellow" text-color="black">
+                      <v-icon left>label</v-icon>
+                      <div class="mr-4">Klassenraad commentaar</div>
+                      <div>{{currentreport.commentaarKlassenraad}}</div>
+                    </v-chip>
+                  </v-container>
+                </v-card>
+              </v-flex>
+            </v-layout>
+          </template>
         </v-flex>
     </v-layout>
     {{Opleidingen}}
@@ -88,6 +154,21 @@ export default {
         .then(function (response) {
           console.log(response)
           self.current_student_reports = response.data
+        })
+        .catch(function (error) {
+          console.log(error)
+        })
+    },
+    getReport (rapportid) {
+      var self = this
+      this.$http.get('http://146.185.183.217/api/studentReport', {
+        params: {
+          id: rapportid
+        }
+      })
+        .then(function (response) {
+          console.log(response)
+          self.currentreport = response.data
         })
         .catch(function (error) {
           console.log(error)
