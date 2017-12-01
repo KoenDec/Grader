@@ -59,6 +59,106 @@ if ($_SERVER['REQUEST_METHOD'] == 'GET') {
         echo $notLoggedInErr;
         http_response_code(401);
       }*/
+  } else if ($_GET['url'] == 'studentEvaluations'){
+      if (isset($_GET['student']) && isset($_GET['module'])) {
+          $studentId = $_GET['student'];
+          $moduleId = $_GET['module'];
+          $evaluaties = $userDAO->getEvaluaties($studentId, $moduleId);
+
+          $evaluations = [];
+
+          foreach($evaluaties as $evaluatie){
+              array_push($evaluations, $evaluatie);
+          }
+          echo json_encode($evaluations);
+      } else {
+          echo $notFoundErr;
+          http_response_code(405);
+      }
+  } else if ($_GET['url'] == 'studentEvaluation') {
+      //if (Login::isLoggedIn()) {
+      if (isset($_GET['id'])) {
+          $evaluatieId = $_GET['id'];
+          $evaluatie = $userDAO->getEvaluatie($evaluatieId);
+          echo $evaluatie;
+          $module = $userDAO->getModule($evaluatie->moduleId);
+
+          $evaluation = (object)[
+              'id' => $evaluatie->id,
+              'naam' => $evaluatie->name,
+              'module' => $module->name,
+              'doelstellingscategories' => array(),
+          ];
+
+          $doelstellingscategories = $userDAO->getDoelstellingscategoriesInModule($module->id);
+
+          foreach($doelstellingscategories as $doelstellingscategorie){
+
+              $doelstellingscategorieObjToPush = (object)[
+                  'id' => $doelstellingscategorie->id,
+                  'name' => $doelstellingscategorie->name,
+                  'doelstellingen' => array()
+              ];
+
+              $doelstellingen = $userDAO->getDoelstellingenInDoelstellingscategorie($doelstellingscategorie->id);
+
+              foreach($doelstellingen as $doelstelling) {
+
+                  $doelstellingObjToPush = (object)[
+                      'id' => $doelstelling->id,
+                      'name' => $doelstelling->name,
+                      'evaluatiecriteria' => array()
+                  ];
+
+                  $evaluatiecriteria = $userDAO->getCriteriaInDoelstelling($doelstelling->id);
+
+                  foreach($evaluatiecriteria as $criterium) {
+
+                      $evaluatiecriteriumObjToPush = (object)[
+                          'id' => $criterium->id,
+                          'name' => $criterium->name,
+                          'beoordelingsaspecten' => array()
+                      ];
+
+                      $beoordelingsaspecten = $userDAO->getBeoordelingsaspectenInEvaluatiecriterium($criterium->id);
+
+                      foreach($beoordelingsaspecten as $aspect){
+
+                          $ratingObj = $userDAO->getAspectbeoordeling($evaluatie->id, $aspect->id);
+                          $score = null;
+                          if($ratingObj != null) {
+                              $score = $ratingObj->aspectBeoordeling;
+                          }
+
+                          $beoordelingsAspectObjToPush = (object)[
+                              'id' => $aspect->id,
+                              'name' => $aspect->name,
+                              'score' => $score
+                          ];
+
+                          array_push($evaluatiecriteriumObjToPush->beoordelingsaspecten, $beoordelingsAspectObjToPush);
+                      }
+
+                      array_push($doelstellingObjToPush->evaluatiecriteria, $evaluatiecriterumObjToPush);
+                  }
+
+                  array_push($doelstellingscategorieObjToPush->doelstellingen, $doelstellingObjToPush);
+              }
+
+              array_push($evaluation->doelstellingscategories, $doelstellingscategorieObjToPush);
+          }
+
+          echo json_encode($evaluation);
+
+          http_response_code(200);
+      } else {
+          echo $notFoundErr;
+          http_response_code(405);
+      }
+      /*} else {
+        echo $notLoggedInErr;
+        http_response_code(401);
+      }*/
   } else if ($_GET['url'] == 'studentReports'){
       if (isset($_GET['id'])) {
           $studentId = $_GET['id'];

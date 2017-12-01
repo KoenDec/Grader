@@ -124,6 +124,33 @@ create table `studenten_modules` (
   -- (if dat is possible in mysql)
 );
 
+CREATE TABLE `evaluaties` (
+  `id` int NOT NULL AUTO_INCREMENT PRIMARY KEY,
+  `name` varchar(200) NOT NULL,
+  `studentId` int NOT NULL,
+  `moduleId` int NOT NULL,
+  `datum` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP,
+  FOREIGN KEY(studentId) REFERENCES studenten(studentId),
+  FOREIGN KEY(moduleId) REFERENCES modules(id)
+);
+
+CREATE TABLE `evaluaties_criteria` (
+  `id` int NOT NULL AUTO_INCREMENT PRIMARY KEY,
+  `evaluatieId` int NOT NULL,
+  `criteriumId` int NOT NULL,
+  `criteriumBeoordeling`  tinyint(1) NOT NULL,
+  FOREIGN KEY(evaluatieId) REFERENCES evaluaties(id),
+  FOREIGN KEY(criteriumId) REFERENCES evaluatiecriteria(id)
+);
+
+CREATE TABLE `evaluaties_aspecten` (
+  `id` int NOT NULL AUTO_INCREMENT PRIMARY KEY,
+  `evaluatieId` int NOT NULL,
+  `aspectId` int NOT NULL,
+  `aspectBeoordeling`  tinyint(1) NOT NULL,
+  FOREIGN KEY(evaluatieId) REFERENCES evaluaties(id),
+  FOREIGN KEY(aspectId) REFERENCES aspecten(id)
+);
 
 CREATE TABLE `rapporten` (
   `id` int NOT NULL AUTO_INCREMENT PRIMARY KEY,

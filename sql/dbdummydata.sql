@@ -25,15 +25,15 @@ INSERT INTO opleidingen(name, creatorId) VALUES
 	('Keukenmedewerker', 3),
     ('Kapper', 3),
     ('Tegelzetter', 3),
-    ('Winnkelbediende', 3),
+    ('Winkelbediende', 3),
     ('Klantencontact', 3);
 
 INSERT INTO modules(name, opleidingId, teacherId, creatorId) VALUES
-    ('Initiatie keuken', 1, 4, 3),
+    ('Initiatie keuken', 1, 4, 3), -- 1
     ('Keukentechnieken', 1, 4, 3),
 	('Taalgebonden vaardigheden', null, 5, 3),
     ('Algemene vorming', null, 5, 3),
-    ('Vak Engels', null, 5, 3),
+    ('Vak Engels', null, 5, 3), -- 5
     ('Haarverzorging', 2, 5, 3),
     ('Basistechnieken tegelzetten', 3, 12, 3),
     ('Verkoop', 4, 13, 3), -- TODO not teacher 13
@@ -354,7 +354,64 @@ INSERT INTO studenten_modules(studentId, moduleId, opleidingId) VALUES
     (9,3,1),
     (10,3,3),
     (8,3,2);
+
+
+INSERT INTO evaluaties(name, studentId, moduleId) VALUES
+	('opdracht les 1', 10, 7);
     
+/*INSERT INTO evaluaties_criteria(evaluatieId, criteriumId, criteriumBeoordeling) VALUES
+	();*/
+    
+INSERT INTO evaluaties_aspecten(evaluatieId, aspectId, aspectBeoordeling) VALUES
+	(1, 1, TRUE),
+    (1, 2, TRUE),
+    (1, 3, TRUE),
+    (1, 4, TRUE),
+    (1, 5, FALSE),
+    (1, 6, TRUE),
+    (1, 7, TRUE),
+    (1, 8, TRUE),
+    (1, 9, FALSE),
+    (1, 10, TRUE),
+    (1, 11, TRUE),
+    (1, 12, TRUE),
+    (1, 13, TRUE),
+    (1, 14, FALSE),
+    (1, 15, FALSE),
+    (1, 16, FALSE),
+    (1, 17, TRUE),
+    (1, 18, TRUE),
+    (1, 19, TRUE),
+    (1, 20, TRUE),
+    (1, 21, TRUE),
+    (1, 22, TRUE),
+    (1, 23, TRUE),
+    (1, 24, TRUE),
+    (1, 25, FALSE),
+    (1, 26, TRUE),
+    (1, 27, TRUE),
+    (1, 28, TRUE),
+    (1, 29, TRUE),
+    (1, 30, TRUE),
+    (1, 31, TRUE),
+    (1, 32, TRUE),
+    (1, 33, TRUE),
+    (1, 34, FALSE),
+    (1, 35, TRUE),
+    (1, 36, TRUE),
+    (1, 37, TRUE),
+    (1, 38, TRUE),
+    (1, 39, TRUE),
+    (1, 40, TRUE),
+    (1, 41, TRUE),
+    (1, 42, TRUE),
+    (1, 43, TRUE),
+    (1, 44, FALSE),
+    (1, 45, TRUE),
+    (1, 46, TRUE),
+    (1, 47, TRUE),
+    (1, 48, TRUE),
+    (1, 49, TRUE);
 
 INSERT INTO rapporten(studentId, name, class, commentaarAlgemeen, commentaarKlassenraad) VALUES
 	(6, '2016-2017 TRIMESTER 3', 'Klas 2', 'Faisal voldoet aan de voorwaarden van het voltijds engagement door bijkomende lessen Nederlands te volgen.',

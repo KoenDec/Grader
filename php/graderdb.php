@@ -684,6 +684,58 @@ class UserDAO {
         return $aspecten;
     }
 
+    public static function getEvaluaties($studentId, $moduleId){
+        try{
+            $conn = graderdb::getConnection();
+
+            $sql = 'SELECT * from evaluaties WHERE studentId = :studentId AND moduleId = :moduleId';
+            $stmt = $conn->prepare($sql);
+            $stmt->bindParam(':studentId',$studentId);
+            $stmt->bindParam(':moduleId',$moduleId);
+
+            $stmt->execute();
+
+            $evaluatiesTable = $stmt->fetchAll(PDO::FETCH_CLASS);
+        } catch (PDOException $e) {
+            die($e->getMessage());
+        }
+
+        if(isset($evaluatiesTable[0])) {
+            $evaluaties = $evaluatiesTable;
+        } else {
+            //die('No rapporten found for student with id = ' . $studentId);
+            $evaluaties = null;
+        }
+
+        return $evaluaties;
+    }
+
+    public static function getEvaluatie($evaluatieId){
+        try{
+            $conn = graderdb::getConnection();
+
+            $sql = 'SELECT * from evaluaties WHERE id = :evaluatieId';
+            $stmt = $conn->prepare($sql);
+            $stmt->bindParam(':evaluatieId',$evaluatieId);
+
+            $stmt->execute();
+
+            $rapportTable = $stmt->fetchAll(PDO::FETCH_CLASS);
+        } catch (PDOException $e) {
+            die($e->getMessage());
+        }
+
+        if(isset($evaluatieTable[0])) {
+            $evaluatie = $evaluatieTable[0];
+        } else {
+            echo "no evaluatie found with id = ' . $evaluatieId";
+            //die('No evaluatie found with id = ' . $evaluatieId);
+            $evaluatie = null;
+        }
+        echo $evaluatie;
+        return $evaluatie;
+    }
+
     public static function getRapporten($studentId){
         try{
             $conn = graderdb::getConnection();

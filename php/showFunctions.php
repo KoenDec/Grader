@@ -521,27 +521,18 @@ $userRole = $userDAO->getUserRole($loggedInUserId);
                     <td><strong><?= $evaluatiecriterium->name ?></strong></td>
                     <td></td>
 
-                    <td rowspan="<?= count($aspecten) + 1 ?>"><?=((isset($aspecten))? "Voldoende" : "<select><option>Nog niet gequoteerd</option>
-                                                    <option value='RO'>Ruim
-                                                        onvoldoende
-                                                    </option>
-                                                    <option value='O'>
-                                                        Onvoldoende
-                                                    </option>
-                                                    <option value='V'>Voldoende
-                                                    </option>
-                                                    <option value='G'>Goed
-                                                    </option>
-                                                    <option value='ZG'>Zeer
-                                                        goed
-                                                    </option>
-                                                    <option value='NVT'>Niet
-                                                        van
-                                                        toepassing
-                                                    </option>
-                                                    <option value='A'>Afwezig
-                                                    </option></select>") ?></td>
-                    <!-- TODO berekenen uit goed/niet goed's van de aspecten -->
+                    <td rowspan="<?= count($aspecten) + 1 ?>"><?=((isset($aspecten))? "Voldoende" // TODO berekenen uit goed/niet goed's van de aspecten
+                            : "<select>
+                                <option>Nog niet gequoteerd</option>
+                                <option value='RO'>Ruim onvoldoende</option>
+                                <option value='O'>Onvoldoende</option>
+                                <option value='V'>Voldoende</option>
+                                <option value='G'>Goed</option>
+                                <option value='ZG'>Zeer goed</option>
+                                <option value='NVT'>Niet van toepassing</option>
+                                <option value='A'>Afwezig</option>
+                            </select>") ?>
+                    </td>
 
                     <?php
                     if(isset($aspecten)) foreach ($aspecten as $aspect){ // TODO if not, make dropdowns with "Voldoende", "Onvoldoende", ...
