@@ -720,7 +720,7 @@ class UserDAO {
 
             $stmt->execute();
 
-            $rapportTable = $stmt->fetchAll(PDO::FETCH_CLASS);
+            $evaluatieTable = $stmt->fetchAll(PDO::FETCH_CLASS);
         } catch (PDOException $e) {
             die($e->getMessage());
         }
@@ -728,12 +728,36 @@ class UserDAO {
         if(isset($evaluatieTable[0])) {
             $evaluatie = $evaluatieTable[0];
         } else {
-            echo "no evaluatie found with id = ' . $evaluatieId";
             //die('No evaluatie found with id = ' . $evaluatieId);
             $evaluatie = null;
         }
-        echo $evaluatie;
         return $evaluatie;
+    }
+
+    public static function getAspectbeoordeling($evaluatieId, $aspectId){
+        try {
+            $conn = graderdb::getConnection();
+
+            $sql = 'SELECT * FROM evaluaties_aspecten WHERE evaluatieId = :evaluatieId AND aspectId = :aspectId';
+            $stmt = $conn->prepare($sql);
+            $stmt->bindParam(':evaluatieId',$evaluatieId);
+            $stmt->bindParam(':aspectId',$aspectId);
+
+            $stmt->execute();
+
+            $doelstellingenTable = $stmt->fetchAll(PDO::FETCH_CLASS);
+        } catch (PDOException $e) {
+            die($e->getMessage());
+        }
+
+        if(isset($doelstellingenTable[0])) {
+            $rating = $doelstellingenTable[0];
+        } else {
+            //die('No score found for doelstelling with id '.$doelstellingId.' in rapport with id '.$rapportId.'!');
+            $rating = null;
+        }
+
+        return $rating;
     }
 
     public static function getRapporten($studentId){

@@ -79,8 +79,8 @@ if ($_SERVER['REQUEST_METHOD'] == 'GET') {
       //if (Login::isLoggedIn()) {
       if (isset($_GET['id'])) {
           $evaluatieId = $_GET['id'];
+
           $evaluatie = $userDAO->getEvaluatie($evaluatieId);
-          echo $evaluatie;
           $module = $userDAO->getModule($evaluatie->moduleId);
 
           $evaluation = (object)[
@@ -139,7 +139,7 @@ if ($_SERVER['REQUEST_METHOD'] == 'GET') {
                           array_push($evaluatiecriteriumObjToPush->beoordelingsaspecten, $beoordelingsAspectObjToPush);
                       }
 
-                      array_push($doelstellingObjToPush->evaluatiecriteria, $evaluatiecriterumObjToPush);
+                      array_push($doelstellingObjToPush->evaluatiecriteria, $evaluatiecriteriumObjToPush);
                   }
 
                   array_push($doelstellingscategorieObjToPush->doelstellingen, $doelstellingObjToPush);
