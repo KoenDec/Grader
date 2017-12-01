@@ -26,7 +26,7 @@
                 <v-select
                         label="Select"
                         v-bind:items="modulesDropdown"
-                        v-model="selectedModule"
+                        v-model="selectedModuleName"
                         hint="Selecteer een module"
                         persistent-hint
                         @input="selectItem()"
@@ -41,7 +41,7 @@
                 </div>
             </v-flex>
         </v-layout>
-        <v-layout v-if="newEvalTable" row wrap>
+        <v-layout v-if="newEvalTable && moduleSelected" row wrap>
             <v-flex offset-xs1>
                 <table>
                     <tr>
@@ -53,11 +53,14 @@
                                 ></v-text-field>
                             </v-flex>
                         </th>
-                        <th colspan="4">datum:<input type="date" name="EvalDate" id="EvalDate" /></th>
+                        <th colspan="3">datum:<input type="date" name="EvalDate" id="EvalDate" /></th>
                     </tr>
                     <tr>
-                        <th colspan="2">Evaluatie (JA | NEE)</th><th colspan="2">Eind Evaluatie</th>
+                        <th colspan="2">Evaluatie (JA | NEE)</th><th>Eind Evaluatie</th>
                     </tr>
+                    <v-flex v-for="cat in selectedModule.categorieen" :key="cat.id">
+                        <tr><th rowspan="4">{{cat.name}}</th></tr>
+                    </v-flex>
                 </table>
             </v-flex>
         </v-layout>
@@ -66,17 +69,18 @@
 
 <script>
     export default {
-      name: 'Studenten',
+      name: 'Evaluatie',
       data () {
         return {
           student: {name: '', firstname: ''},
           breadcrumbs: [
-              {id: 0, text: 'test', disabled: false},
-              {id: 1, text: '', disabled: false}
+            {id: 0, text: 'test', disabled: false},
+            {id: 1, text: '', disabled: false}
           ],
           modulesDropdown: [],
           modules: [],
-          selectedModule: [],
+          selectedModuleName: [],
+          selectedModule: {},
           evalFiches: [],
           moduleSelected: false,
           newEvalTable: false
@@ -84,7 +88,13 @@
       },
       methods: {
         selectItem: function () {
-          this.breadcrumbs[1].text = this.selectedModule
+          var self = this
+          this.breadcrumbs[1].text = this.selectedModuleName
+          var result = this.modules.filter(function (obj) {
+            return obj.name === self.selectedModuleName
+          })
+          this.selectedModule = result
+          console.log(this.selectedModule)
           this.moduleSelected = true
         },
         newEval: function () {
