@@ -82,3 +82,31 @@ id = studentId
 type GET
 url  api/studentReport?id=
 id = rapportId
+
+#Save new evaluation of student for module
+type POST
+url api/saveEvaluatie
+data example:
+ {
+     	"name": "opdracht les 4",
+     	"studentId": 10,
+     	"moduleId": 7,
+     	"aspecten": [
+     		{
+     			"aspectId": 1,
+     			"beoordeling": 1
+     		},
+     		{
+     			"aspectId": 2,
+     			"beoordeling": 1
+     		},
+     		{
+     			"aspectId": 3,
+     			"beoordeling": 1
+     		},
+     		{
+     			"aspectId": 4,
+     			"beoordeling": 1
+     		}
+     	]
+     }
