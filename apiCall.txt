@@ -64,11 +64,21 @@ type POST
 url  api/resetPassword
 data {"username":???,"password":newpw,"confirm":repeatedpw}
 
+#get alle evaluaties van 1 student voor 1 module
+type GET
+url  api/studentEvaluations?student=&module=
+
+#get evaluatie van student op module
+type GET
+url  api/studentEvaluation?id=
+id = evaluatieId
+
 #get alle rapporten van 1 studentsTable
 type GET
-url  api/studentReports?id=studentid
+url  api/studentReports?id=
+id = studentId
 
 #Get rapport of student
 type GET
 url  api/studentReport?id=
-id = rapportid
+id = rapportId

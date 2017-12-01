@@ -357,7 +357,8 @@ INSERT INTO studenten_modules(studentId, moduleId, opleidingId) VALUES
 
 
 INSERT INTO evaluaties(name, studentId, moduleId) VALUES
-	('opdracht les 1', 10, 7);
+	('opdracht les 1', 10, 7),
+	('opdracht les 2', 10, 7);
     
 /*INSERT INTO evaluaties_criteria(evaluatieId, criteriumId, criteriumBeoordeling) VALUES
 	();*/
@@ -411,7 +412,62 @@ INSERT INTO evaluaties_aspecten(evaluatieId, aspectId, aspectBeoordeling) VALUES
     (1, 46, TRUE),
     (1, 47, TRUE),
     (1, 48, TRUE),
-    (1, 49, TRUE);
+    (1, 49, TRUE),
+    (1, 50, TRUE),
+    (1, 51, TRUE),
+    (1, 52, TRUE),
+    (2, 1, FALSE),
+    (2, 2, TRUE),
+    (2, 3, TRUE),
+    (2, 4, TRUE),
+    (2, 5, TRUE),
+    (2, 6, TRUE),
+    (2, 7, TRUE),
+    (2, 8, TRUE),
+    (2, 9, TRUE),
+    (2, 10, TRUE),
+    (2, 11, FALSE),
+    (2, 12, TRUE),
+    (2, 13, TRUE),
+    (2, 14, TRUE),
+    (2, 15, FALSE),
+    (2, 16, FALSE),
+    (2, 17, TRUE),
+    (2, 18, TRUE),
+    (2, 19, TRUE),
+    (2, 20, FALSE),
+    (2, 21, TRUE),
+    (2, 22, TRUE),
+    (2, 23, TRUE),
+    (2, 24, TRUE),
+    (2, 25, TRUE),
+    (2, 26, TRUE),
+    (2, 27, TRUE),
+    (2, 28, TRUE),
+    (2, 29, TRUE),
+    (2, 30, TRUE),
+    (2, 31, TRUE),
+    (2, 32, FALSE),
+    (2, 33, FALSE),
+    (2, 34, FALSE),
+    (2, 35, TRUE),
+    (2, 36, TRUE),
+    (2, 37, TRUE),
+    (2, 38, TRUE),
+    (2, 39, TRUE),
+    (2, 40, TRUE),
+    (2, 41, TRUE),
+    (2, 42, TRUE),
+    (2, 43, TRUE),
+    (2, 44, TRUE),
+    (2, 45, TRUE),
+    (2, 46, FALSE),
+    (2, 47, FALSE),
+    (2, 48, TRUE),
+    (2, 49, TRUE),
+    (2, 50, TRUE),
+    (2, 51, TRUE),
+    (2, 52, TRUE);
 
 INSERT INTO rapporten(studentId, name, class, commentaarAlgemeen, commentaarKlassenraad) VALUES
 	(6, '2016-2017 TRIMESTER 3', 'Klas 2', 'Faisal voldoet aan de voorwaarden van het voltijds engagement door bijkomende lessen Nederlands te volgen.',
