@@ -8,7 +8,21 @@ $notFoundErr = '{"Status":"Geen user gevonden"}';
 $notLoggedInErr = '{"Status":"Niet ingelogd"}';
 $notAuthorizedErr = '{"Status":"Onbevoegd"}';
 
-if ($_SERVER['REQUEST_METHOD'] == 'GET') {
+$http_origin = $_SERVER['HTTP_ORIGIN'];
+
+
+header("Access-Control-Allow-Origin: $http_origin");
+
+if ($_SERVER['REQUEST_METHOD'] == 'OPTIONS') {
+    header("Access-Control-Allow-Headers: Content-Type");
+    header('Access-Control-Allow-Methods: GET, POST, OPTIONS');
+     header('Access-Control-Allow-Credentials: true');
+     header('Access-Control-Max-Age: 1728000');
+     header("Content-Length: 0");
+     header("Content-Type: text/plain");
+     echo '{"something":"sletten"}';
+}
+else if ($_SERVER['REQUEST_METHOD'] == 'GET') {
   if ($_GET['url'] == 'auth') {
 
   } else if ($_GET['url'] == 'students') {
@@ -170,6 +184,7 @@ if ($_SERVER['REQUEST_METHOD'] == 'GET') {
         $userDAO->insertNewLoginToken($user_id, sha1($token));
         setcookie("GID", $token, time() + 60 * 60 * 24 * 7, '/', NULL, NULL, false);
         setcookie("GID_", '1', time() + 60 * 60 * 24 * 3, '/', NULL, NULL, TRUE);
+        echo '{"message":"You were succesfully logged in"}';
       } else {
         http_response_code(401);
       }
