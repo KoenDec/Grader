@@ -547,6 +547,17 @@ if ($_SERVER['REQUEST_METHOD'] == 'GET') {
       http_response_code(403);
     }
 
+  } else if ($_GET['url'] == 'saveEvaluatie') { // TODO this is a PLACEHOLDER!
+    $postBody = file_get_contents('php://input');
+    $postBody = json_decode($postBody);
+
+    $aspecten = $postBody->aspecten;
+
+    foreach ($aspecten as $aspect) {
+      $aspectid = $aspect->id;
+      $quotering = $aspect->eval;
+      $userDAO->saveAspecten($aspectid,$quotering);
+    }
   }
 } else if ($_SERVER['REQUEST_METHOD'] == 'DELETE') {
   if ($_GET['url'] == 'auth') {
