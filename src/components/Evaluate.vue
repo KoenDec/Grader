@@ -41,16 +41,17 @@
                 </div>
             </v-flex>
         </v-layout>
-        <v-layout v-if="newEvalTable" row wrap>
+        <v-layout v-if="newEvalTable" row wrap v-for="(cat, i) in selectedModule[0].categorieen">
             <v-flex offset-xs1>
-                <v-layout row-wrap v-for="(cat, i) in selectedModule[0].categorieen">
+                <v-layout row-wrap>
                     <v-flex xs12>
                         <v-card color="cyan darken-1" class="white--text text-xs-center display-1" height="100%">
-                            <v-container fluid grid-list-lg fill-height>
+                            <v-container>
                                 {{i+1}} {{cat.name}}
                             </v-container>
                         </v-card>
                     </v-flex>
+                </v-layout>
                     <v-flex xs10>
                         <v-layout row-wrap v-for="(doel, j) in cat.doelstellingen">
                             <v-flex xs2>
@@ -84,7 +85,6 @@
                             </v-flex>
                         </v-layout>
                     </v-flex>
-                </v-layout>
                 <table>
                     <tr>
                         <th rowspan="2" colspan="3">
