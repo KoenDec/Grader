@@ -41,85 +41,114 @@
                 </div>
             </v-flex>
         </v-layout>
-        <v-layout v-if="newEvalTable" row wrap v-for="(cat, i) in selectedModule[0].categorieen">
-            <v-flex offset-xs1>
+        <v-layout v-if="newEvalTable" row-wrap>
+            <v-flex xs10 offset-xs1>
                 <v-layout row-wrap>
-                    <v-flex xs12>
-                        <v-card color="cyan darken-1" class="white--text text-xs-center display-1" height="100%">
-                            <v-container>
-                                {{i+1}} {{cat.name}}
+                    <v-flex xs6>
+                        <v-card color="cyan darken-3" class="white--text text-xs-left" height="100%">
+                            <v-container fluid grid-list-lg>
+                                <v-flex>
+                                    <v-text-field
+                                            name="EvalFicheName"
+                                            label="Naam evaluatiefiche"
+                                    ></v-text-field>
+                                </v-flex>
                             </v-container>
                         </v-card>
                     </v-flex>
-                </v-layout>
-                    <v-flex xs10>
-                        <v-layout row-wrap v-for="(doel, j) in cat.doelstellingen">
-                            <v-flex xs2>
+                    <v-flex xs6>
+                        <v-layout row-wrap>
+                            <v-flex xs12>
                                 <v-card color="cyan darken-3" class="white--text text-xs-left" height="100%">
                                     <v-container fluid grid-list-lg>
-                                        {{i+1}}.{{j+1}} {{doel.name}}
+                                        datum:<input type="date" name="EvalDate" id="EvalDate" />
                                     </v-container>
                                 </v-card>
                             </v-flex>
-                            <v-flex xs10>
-                                <v-layout row-wrap v-for="(crit, k) in doel.criteria">
-                                    <v-flex xs2>
-                                        <v-card color="cyan darken-3" class="white--text text-xs-left" height="100%">
-                                            <v-container fluid grid-list-lg>
-                                                {{i+1}}.{{j+1}}.{{k+1}} {{crit.name}}
-                                            </v-container>
-                                        </v-card>
-                                    </v-flex>
-                                    <v-flex xs10>
-                                        <v-layout row-wrap v-for="(aspect, l) in crit.aspecten">
-                                            <v-flex xs4>
-                                                <v-card color="cyan darken-3" class="white--text text-xs-left">
-                                                    <v-container fluid grid-list-lg>
-                                                        {{i+1}}.{{j+1}}.{{k+1}}.{{l+1}} {{aspect.name}}
-                                                    </v-container>
-                                                </v-card>
-                                            </v-flex>
-                                        </v-layout>
-                                    </v-flex>
-                                </v-layout>
+                        </v-layout>
+                        <v-layout row-wrap>
+                            <v-flex xs6>
+                                <v-card color="cyan darken-3" class="white--text text-xs-left" height="100%">
+                                    <v-container fluid grid-list-lg>
+                                        <p>Evaluatie leerkracht</p>
+                                        <p><span>JA</span><span class="right">NEE</span></p>
+                                    </v-container>
+                                </v-card>
+                            </v-flex>
+                            <v-flex xs6>
+                                <v-card color="cyan darken-3" class="white--text text-xs-left" height="100%">
+                                    <v-container fluid grid-list-lg>
+                                        <p>Eindevaluatie leerkracht</p>
+                                        <p>RO/O/V/G</p>
+                                    </v-container>
+                                </v-card>
                             </v-flex>
                         </v-layout>
                     </v-flex>
-                <table>
-                    <tr>
-                        <th rowspan="2" colspan="3">
-                            <v-flex>
-                                <v-text-field
-                                        name="EvalFicheName"
-                                        label="Naam evaluatiefiche"
-                                ></v-text-field>
-                            </v-flex>
-                        </th>
-                        <th colspan="3">datum:<input type="date" name="EvalDate" id="EvalDate" /></th>
-                    </tr>
-                    <tr>
-                        <th colspan="2">Evaluatie (JA | NEE)</th><th>Eind Evaluatie</th>
-                    </tr>
-                    <template v-for="cat in selectedModule[0].categorieen">
-                        <tr><th>{{cat.name}}</th><td colspan="5"></td></tr>
-                        <template v-for="doel in cat.doelstellingen">
-                            <tr>
-                                <td :rowspan="1">{{doel.name}}</td>
-                            </tr>
-                            <template v-for="crit in doel.criteria">
-                                <tr>
-                                    <td :rowspan="crit.aspecten.length">{{crit.name}}</td>
-                                </tr>
-                                <template v-for="aspect in crit.aspecten">
-                                    <tr>
-                                        <td>{{aspect.name}}</td><td class="empty-cel"></td><td class="empty-cel"></td><td class="empty-cel"></td>
-                                    </tr>
-                                </template>
-                            </template>
-                        </template>
-                    </template>
-                </table>
+                </v-layout>
             </v-flex>
+        </v-layout>
+        <v-layout v-if="newEvalTable">
+            <v-layout row wrap xs10 v-for="(cat, i) in selectedModule[0].categorieen">
+                <v-flex offset-xs1>
+                    <v-layout row-wrap>
+                        <v-flex xs12>
+                            <v-card color="cyan darken-1" class="white--text text-xs-center display-1" height="100%">
+                                <v-container>
+                                    {{i+1}} {{cat.name}}
+                                </v-container>
+                            </v-card>
+                        </v-flex>
+                    </v-layout>
+                    <v-layout row-wrap>
+                        <v-flex xs10>
+                            <v-layout row-wrap v-for="(doel, j) in cat.doelstellingen">
+                                <v-flex xs2>
+                                    <v-card color="cyan darken-3" class="white--text text-xs-left" height="100%">
+                                        <v-container fluid grid-list-lg>
+                                            {{i+1}}.{{j+1}} {{doel.name}}
+                                        </v-container>
+                                    </v-card>
+                                </v-flex>
+                                <v-flex xs10>
+                                    <v-layout row-wrap v-for="(crit, k) in doel.criteria">
+                                        <v-flex xs2>
+                                            <v-card color="cyan darken-3" class="white--text text-xs-left" height="100%">
+                                                <v-container fluid grid-list-lg>
+                                                    {{i+1}}.{{j+1}}.{{k+1}} {{crit.name}}
+                                                </v-container>
+                                            </v-card>
+                                        </v-flex>
+                                        <v-flex xs10>
+                                            <v-layout row-wrap v-for="(aspect, l) in crit.aspecten">
+                                                <v-flex xs4>
+                                                    <v-card color="cyan darken-3" class="white--text text-xs-left">
+                                                        <v-container fluid grid-list-lg>
+                                                            {{i+1}}.{{j+1}}.{{k+1}}.{{l+1}} {{aspect.name}}
+                                                        </v-container>
+                                                    </v-card>
+                                                </v-flex>
+                                                <v-flex xs2>
+                                                    <v-card color="cyan darken-3" class="white--text text-xs-left">
+                                                        <v-container fluid grid-list-lg>
+                                                        </v-container>
+                                                    </v-card>
+                                                </v-flex>
+                                                <v-flex xs2>
+                                                    <v-card color="cyan darken-3" class="white--text text-xs-left">
+                                                        <v-container fluid grid-list-lg>
+                                                        </v-container>
+                                                    </v-card>
+                                                </v-flex>
+                                            </v-layout>
+                                        </v-flex>
+                                    </v-layout>
+                                </v-flex>
+                            </v-layout>
+                        </v-flex>
+                    </v-layout>
+                </v-flex>
+            </v-layout>
         </v-layout>
     </div>
 </template>
