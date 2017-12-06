@@ -68,6 +68,7 @@ CREATE TABLE `doelstellingscategories` (
   `id` int NOT NULL AUTO_INCREMENT PRIMARY KEY,
   `name` varchar(100) CHARACTER SET utf8 COLLATE utf8_unicode_ci NOT NULL,
   `moduleId` int NOT NULL,
+  `inGebruik` tinyint(1) NOT NULL DEFAULT 1,
   `creatorId` int,
   FOREIGN KEY(moduleId) REFERENCES modules(id),
   FOREIGN KEY(creatorId) REFERENCES admins(adminId)
@@ -99,6 +100,7 @@ CREATE TABLE `aspecten` (
   `evaluatiecriteriumId` int NOT NULL,
   `name` varchar(200) NOT NULL,
   `inGebruik` tinyint(1) NOT NULL DEFAULT 1,
+  `gewicht` int NOT NULL DEFAULT 1,
   `creatorId` int,
   FOREIGN KEY(evaluatiecriteriumId) REFERENCES evaluatiecriteria(id),
   FOREIGN KEY(creatorId) REFERENCES admins(adminId)
@@ -138,7 +140,7 @@ CREATE TABLE `evaluaties_criteria` (
   `id` int NOT NULL AUTO_INCREMENT PRIMARY KEY,
   `evaluatieId` int NOT NULL,
   `criteriumId` int NOT NULL,
-  `criteriumBeoordeling`  tinyint(1) NOT NULL,
+  `criteriumBeoordeling`  enum('ZG', 'G', 'V', 'OV', 'RO', 'A', 'NVT') NOT NULL,
   FOREIGN KEY(evaluatieId) REFERENCES evaluaties(id),
   FOREIGN KEY(criteriumId) REFERENCES evaluatiecriteria(id)
 );
