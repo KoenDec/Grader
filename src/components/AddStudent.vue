@@ -81,7 +81,7 @@
               <v-stepper-content step="3">
                 <h5>Student {{firstname}} {{name}} {{pageUse[1]}}:</h5>
                 <p>Naam: {{firstname}} {{name}}</p>
-                <p>Email:{{email}}</p>
+                <p>Email: {{email}}</p>
                 <p>Opleiding: {{select}}</p>
                 <router-link to="/studenten"><v-btn color="primary">Terug naar studenten</v-btn></router-link>
               </v-stepper-content>
@@ -94,7 +94,7 @@
 
 <script>
 export default {
-  name: 'Home',
+  name: 'Addstudent',
   data () {
     return {
       e1: 0,
