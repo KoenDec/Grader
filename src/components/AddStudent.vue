@@ -123,59 +123,52 @@ export default {
   },
   methods: {
     submit () {
+      var self = this
       if (this.$refs.form.validate()) {
         var select = this.select
         console.log(select)
         var result = this.opleidingen.filter(function (obj) {
           return obj.name === select
         })
-        this.callForModules(result[0].id)
+        this.$http.getFullOpleiding(result[0].id, function (data) {
+          self.modules = data
+        })
+        // this.callForModules(result[0].id)
         this.e1 = 2
       }
-    },
+    }/*,
     callForModules (id) {
+      console.log(id)
       var self = this
-      self.$http.get('http://146.185.183.217/api/fullOpleiding?opleiding=' + id)
-        .then(function (response) {
-          self.modules = response.data
-          console.log(self.modules)
-        })
-        .catch(function (error) {
-          console.log(error)
-        })
-    }
+      this.$http.getFullOpleiding(id, function (data) {
+        console.log('data')
+        console.log(data)
+        self.modules = data
+      })
+    } */
   },
   created () {
     var self = this
-    this.$http.get('http://146.185.183.217/api/opleidingen')
-      .then(function (response) {
-        self.opleidingen = response.data
-        console.log(self.opleidingen)
-        for (var i = 0; i < self.opleidingen.length; i++) {
-          self.opleidingenDropdown.push(self.opleidingen[i].name)
-        }
-        console.log('dropdown: ' + self.opleidingenDropdown)
-        self.receivedData = true
-      })
-        .catch(function (error) {
-          console.log(error)
-        })
+    this.$http.getOpleidingen(function (data) {
+      self.opleidingen = data
+      console.log(self.opleidingen)
+      for (var i = 0; i < self.opleidingen.length; i++) {
+        self.opleidingenDropdown.push(self.opleidingen[i].name)
+      }
+      console.log('dropdown: ' + self.opleidingenDropdown)
+      self.receivedData = true
+    })
     if (this.$route.query.id) {
       self.pageUse = ['aanpassen', 'aangepast']
       var studentId = this.$route.query.id
-      this.$http.get('http://146.185.183.217/api/student?id=' + studentId)
-        .then(function (response) {
-          console.log(response.data)
-          self.firstname = response.data.student.firstname
-          self.name = response.data.student.lastname
-          self.email = response.data.student.email
-          self.select = response.data.opleiding.name
-          console.log(self.select)
-          self.studentOplSet = true
-        })
-        .catch(function (error) {
-          console.log(error)
-        })
+      this.$http.getStudent(studentId, function (data) {
+        self.firstname = data.student.firstname
+        self.name = data.student.lastname
+        self.email = data.student.email
+        self.select = data.opleiding.name
+        console.log(self.select)
+        self.studentOplSet = true
+      })
     } else {
       self.studentOplSet = true
     }

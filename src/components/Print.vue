@@ -71,23 +71,13 @@ export default {
   },
   created () {
     var self = this
-    this.$http.get('http://146.185.183.217/api/studentenMetOpleiding')
-        .then(function (response) {
-          self.items = response.data
-          console.log(self.items)
-        })
-        .catch(function (error) {
-          console.log(error)
-        })
-    this.$http.get('http://146.185.183.217/api/opleidingen')
-        .then(function (response) {
-          self.opleidingen = response.data
-          console.log(self.opleidingen)
-          self.receivedData = true
-        })
-        .catch(function (error) {
-          console.log(error)
-        })
+    this.$http.getStudentsWithEdu(function (data) {
+      self.items = data
+    })
+    this.$http.getOpleidingen(function (data) {
+      self.opleidingen = data
+      self.receivedData = true
+    })
   }
 }
 </script>
