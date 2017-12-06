@@ -11,7 +11,7 @@
       </v-flex>
         <v-flex>
           <v-btn @click="" large color="primary"><v-icon>get_app</v-icon></v-btn>
-          <v-btn @click="" large color="primary"><v-icon>print</v-icon></v-btn>
+          <v-btn @click="print" large color="primary"><v-icon>print</v-icon></v-btn>
         </v-flex>
     </v-layout>
     <v-layout row-wrap>
@@ -40,10 +40,10 @@
               <v-card color="blue darken-5" class="white--text">
                  <v-container fluid grid-list-lg>
                    <v-layout row>
-                     <v-flex xs7>
+                     <v-flex xs7 height="100%">
                        <div>
-                         <div class="display-3 text-xs-left">{{ currentreport.name }}</div>
-                         <div class="display-2 text-xs-left">{{currentstudent.student.firstname + ' ' + currentstudent.student.lastname}}</div>
+                         <div height="100%" block class="display-3 text-xs-left">{{ currentreport.name }}</div>
+                         <div block class="display-2 text-xs-left">{{currentstudent.student.firstname + ' ' + currentstudent.student.lastname}}</div>
                        </div>
                      </v-flex>
                    </v-layout>
@@ -52,33 +52,44 @@
              </v-flex>
             </v-layout>
             <!-- REPORT MODULES -->
-            <v-layout row-wrap v-for="module in currentreport.modules">
+            <template v-for="module in currentreport.modules">
+            <v-layout row-wrap>
+              <v-flex xs12>
+                <v-card color="red darken-3" class="display-2 white--text text-xs-left">
+                  <v-container fluid grid-list-lg>
+                    {{module.naam}}
+                  </v-container>
+                </v-card>
+              </v-flex>
+            </v-layout>
+            <v-layout row-wrap v-for="categorie in module.doelstellingscategories">
               <v-flex xs2>
-              <v-card color="cyan darken-1" class="white--text text-xs-center display-1" height="100%">
+              <v-card color="cyan darken-1" class="white--text text-xs-center" height="100%">
                  <v-container fluid grid-list-lg fill-height>
-                   {{module.naam}}
+                   {{categorie.name}}
                  </v-container>
                </v-card>
               </v-flex>
               <v-flex xs10>
-                <v-layout row-wrap v-for="categorie in module.doelstellingscategories">
+                <v-layout row-wrap v-for="doelstelling in categorie.doelstellingen">
                   <v-flex xs10>
                     <v-card color="cyan darken-3" class="white--text text-xs-left">
                       <v-container fluid grid-list-lg>
-                        {{categorie.name}}
+                        {{doelstelling.name}}
                       </v-container>
                     </v-card>
                   </v-flex>
                   <v-flex xs2>
                     <v-card color="teal" class="white--text" fill-height height="100%">
                       <v-container fluid grid-list-lg>
-                        {{'Geslaagd'}}
+                        {{doelstelling.score}}
                       </v-container>
                     </v-card>
                   </v-flex>
                 </v-layout>
               </v-flex>
             </v-layout>
+            </template>
             <!-- REPORT COMMENTS AND NOTES -->
             <v-layout row-wrap>
               <v-flex xs12>
@@ -128,6 +139,9 @@ export default {
     }
   },
   methods: {
+    print () {
+      this.$printer.print(this.currentstudent, this.currentreport)
+    },
     applySelection (payload) {
       var self = this
       this.$http.get('http://146.185.183.217/api/student', {

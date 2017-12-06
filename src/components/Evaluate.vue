@@ -89,8 +89,7 @@
             </v-flex>
         </v-layout>
         <v-layout v-if="newEvalTable">
-            <v-layout row wrap xs10 v-for="(cat, i) in selectedModule[0].categorieen">
-                <v-flex offset-xs1>
+            <v-layout row-wrap xs10 v-for="(cat, i) in selectedModule[0].categorieen">
                     <v-layout row-wrap>
                         <v-flex xs12>
                             <v-card color="cyan darken-1" class="white--text text-xs-center display-1" height="100%">
