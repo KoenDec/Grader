@@ -107,14 +107,9 @@ export default {
   },
   created () {
     var self = this
-    this.$http.get('http://146.185.183.217/api/opleidingen')
-        .then(function (response) {
-          self.items = response.data
-          console.log(self.items)
-        })
-        .catch(function (error) {
-          console.log(error)
-        })
+    this.$http.getOpleidingen(function (data) {
+      self.items = data
+    })
   }
 }
 </script>

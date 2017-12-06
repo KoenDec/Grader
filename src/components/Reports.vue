@@ -144,49 +144,24 @@ export default {
     },
     applySelection (payload) {
       var self = this
-      this.$http.get('http://146.185.183.217/api/student', {
-        params: {
-          id: payload
-        }
+      this.$http.getStudent(payload, function (data) {
+        self.currentstudent = data
+        console.log(self)
+        self.getCurrentStudentReports()
       })
-        .then(function (response) {
-          console.log(response)
-          self.currentstudent = response.data
-          self.getCurrentStudentReports()
-        })
-        .catch(function (error) {
-          console.log(error)
-        })
     },
     getCurrentStudentReports () {
+      console.log('RAWR')
       var self = this
-      this.$http.get('http://146.185.183.217/api/studentReports', {
-        params: {
-          id: self.currentstudent.student.id
-        }
+      this.$http.getStudentReports(self.currentstudent.student.id, function (data) {
+        self.current_student_reports = data
       })
-        .then(function (response) {
-          console.log(response)
-          self.current_student_reports = response.data
-        })
-        .catch(function (error) {
-          console.log(error)
-        })
     },
     getReport (rapportid) {
       var self = this
-      this.$http.get('http://146.185.183.217/api/studentReport', {
-        params: {
-          id: rapportid
-        }
+      this.$http.getStudentReport(rapportid, function (data) {
+        self.currentreport = data
       })
-        .then(function (response) {
-          console.log(response)
-          self.currentreport = response.data
-        })
-        .catch(function (error) {
-          console.log(error)
-        })
     }
   },
   computed: {
@@ -196,14 +171,9 @@ export default {
   },
   created () {
     var self = this
-    this.$http.get('http://146.185.183.217/api/studentenMetOpleiding')
-      .then(function (response) {
-        self.items = response.data
-        console.log(self.items)
-      })
-      .catch(function (error) {
-        console.log(error)
-      })
+    this.$http.getStudentsWithEdu(function (data) {
+      self.items = data
+    })
   },
   mounted () {
     var sheet = document.createElement('style')
