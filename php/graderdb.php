@@ -1000,6 +1000,29 @@ class UserDAO {
         }
     }
 
+    public static function addStudentToModules($studentId, $moduleIds){ // TODO opleidingId for general modules?
+        try {
+            $conn = graderdb::getConnection();
+
+            $sql = 'INSERT INTO studenten_modules (moduleId, studentId) VALUES ';
+
+            $sql .= '(:studentId, '.$moduleIds[0].')';
+
+            for($i = 1; $i < sizeof($moduleIds); $i++){
+                $sql .= ',(:studentId, '.moduleIds[$i].')'; // TODO parameter binding !!!
+            }
+
+            $sql .= ";";
+
+            $stmt = $conn->prepare($sql);
+            $stmt->bindParam(':studentId', $studentId);
+
+            $stmt->execute();
+        } catch (PDOException $e) {
+            die($e->getMessage());
+        }
+    }
+
     public static function insertNewLoginToken($userid, $token) {
           try {
               $conn = graderdb::getConnection();
@@ -1042,7 +1065,7 @@ class UserDAO {
 
             $sql .= '(:evaluatieId, '.$aspectIds[0].', '.$aspectScores[0].')';
 
-            for($i = 0; $i < sizeof($aspectscoresKeyValueArray); $i++){
+            for($i = 1; $i < sizeof($aspectscoresKeyValueArray); $i++){
                 $sql .= ',(:evaluatieId, '.$aspectIds[$i].', '.$aspectScores[$i].')'; // TODO parameter binding !!!
             }
 
