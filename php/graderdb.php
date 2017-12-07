@@ -999,7 +999,7 @@ class UserDAO {
             die($e->getMessage());
         }
     }
-
+/*
     public static function addStudentToModules($studentId, $moduleIds){ // TODO opleidingId for general modules?
         try {
             $conn = graderdb::getConnection();
@@ -1021,7 +1021,7 @@ class UserDAO {
         } catch (PDOException $e) {
             die($e->getMessage());
         }
-    }
+    }*/
 
     public static function insertNewLoginToken($userid, $token) {
           try {

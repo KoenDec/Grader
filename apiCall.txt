@@ -81,6 +81,14 @@ id = studentId
 #Get rapport of student
 type GET
 url  api/studentReport?id=
+<<<<<<< HEAD
+id = rapportid
+
+# create users
+type POST
+url  api/createUser
+data {"firstname":"","lastname":"","email":"","pw":"","id",""}
+=======
 id = rapportId
 
 #Save new evaluation of student for module
@@ -110,3 +118,4 @@ data example:
      		}
      	]
      }
+>>>>>>> 0322ab21c40edb4b3b9eadf1cb4df2c4715d5767
