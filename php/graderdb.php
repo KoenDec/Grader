@@ -710,6 +710,31 @@ class UserDAO {
         return $evaluaties;
     }
 
+    public static function getEvaluatieId($evaluatieName){
+        try{
+            $conn = graderdb::getConnection();
+
+            $sql = 'SELECT id FROM evaluaties WHERE name = :evaluatieName';
+            $stmt = $conn->prepare($sql);
+            $stmt->bindParam(':evaluatieName',$evaluatieName);
+
+            $stmt->execute();
+
+            $evaluatiesTable = $stmt->fetchAll(PDO::FETCH_CLASS);
+        } catch (PDOException $e) {
+            die($e->getMessage());
+        }
+
+        if(isset($evaluatiesTable[0])) {
+            $evaluatieId = $evaluatiesTable[0]->id;
+        } else {
+            //die('No rapporten found for student with id = ' . $studentId);
+            $evaluatieId = null;
+        }
+
+        return $evaluatieId;
+    }
+
     public static function getEvaluatie($evaluatieId){
         try{
             $conn = graderdb::getConnection();
@@ -976,19 +1001,60 @@ class UserDAO {
     }
 
     public static function insertNewLoginToken($userid, $token) {
-      try {
-        $conn = graderdb::getConnection();
+          try {
+              $conn = graderdb::getConnection();
 
-        $sql = 'INSERT INTO loginTokens(token, userId) VALUES(:token, :userid)';
-        $stmt = $conn->prepare($sql);
-        $stmt->bindParam(':token', $token);
-        $stmt->bindParam(':userid', $userid);
+              $sql = 'INSERT INTO loginTokens(token, userId) VALUES(:token, :userid)';
+              $stmt = $conn->prepare($sql);
+              $stmt->bindParam(':token', $token);
+              $stmt->bindParam(':userid', $userid);
 
-        $stmt->execute();
-      } catch (PDOException $e) {
-        die($e->getMessage());
-      }
+              $stmt->execute();
+          } catch (PDOException $e) {
+              die($e->getMessage());
+          }
+    }
 
+    public static function insertNewEvaluation($name, $studentId, $moduleId) {
+        try{
+            $conn = graderdb::getConnection();
+
+            $sql = 'INSERT INTO evaluaties(name, studentId, moduleId) VALUES (:name, :studentId, :moduleId)';
+            $stmt = $conn->prepare($sql);
+            $stmt->bindParam(':name', $name);
+            $stmt->bindParam(':studentId', $studentId);
+            $stmt->bindParam(':moduleId', $moduleId);
+
+            $stmt->execute();
+        } catch (PDOException $e) {
+            die($e->getMessage());
+        }
+    }
+
+    public static function insertAspectbeoordelingen($evaluatieId, $aspectscoresKeyValueArray){
+        try {
+            $conn = graderdb::getConnection();
+
+            $sql = 'INSERT INTO evaluaties_aspecten (evaluatieId, aspectId, aspectBeoordeling) VALUES ';
+
+            $aspectIds = array_keys($aspectscoresKeyValueArray);
+            $aspectScores = array_values($aspectscoresKeyValueArray);
+
+            $sql .= '(:evaluatieId, '.$aspectIds[0].', '.$aspectScores[0].')';
+
+            for($i = 0; $i < sizeof($aspectscoresKeyValueArray); $i++){
+                $sql .= ',(:evaluatieId, '.$aspectIds[$i].', '.$aspectScores[$i].')'; // TODO parameter binding !!!
+            }
+
+            $sql .= ";";
+
+            $stmt = $conn->prepare($sql);
+            $stmt->bindParam(':evaluatieId', $evaluatieId);
+
+            $stmt->execute();
+        } catch (PDOException $e) {
+            die($e->getMessage());
+        }
     }
 
     public static function saveRating($rapportId, $doelstellingId){
