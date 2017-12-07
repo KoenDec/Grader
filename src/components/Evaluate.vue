@@ -41,7 +41,8 @@
                 </div>
             </v-flex>
         </v-layout>
-        <v-layout v-if="newEvalTable" row-wrap>
+        <template v-if="newEvalTable">
+        <v-layout row-wrap>
             <v-flex xs10 offset-xs1>
                 <v-layout row-wrap>
                     <v-flex xs6>
@@ -71,7 +72,7 @@
                                 <v-card color="cyan darken-3" class="white--text text-xs-left" height="100%">
                                     <v-container fluid grid-list-lg>
                                         <p>Evaluatie leerkracht</p>
-                                        <p><span>JA</span><span class="right">NEE</span></p>
+                                        <p><span class="ml-5">JA</span><span class="right mr-5">NEE</span></p>
                                     </v-container>
                                 </v-card>
                             </v-flex>
@@ -88,10 +89,11 @@
                 </v-layout>
             </v-flex>
         </v-layout>
-        <v-layout v-if="newEvalTable">
-            <v-layout row-wrap xs10 v-for="(cat, i) in selectedModule[0].categorieen">
+        <v-layout v-for="(cat, i) in selectedModule[0].categorieen" :key="i">
+            <v-layout row-wrap xs10>
+                <v-flex offset-xs1>
                     <v-layout row-wrap>
-                        <v-flex xs12>
+                        <v-flex xs11>
                             <v-card color="cyan darken-1" class="white--text text-xs-center display-1" height="100%">
                                 <v-container>
                                     {{i+1}} {{cat.name}}
@@ -100,8 +102,8 @@
                         </v-flex>
                     </v-layout>
                     <v-layout row-wrap>
-                        <v-flex xs10>
-                            <v-layout row-wrap v-for="(doel, j) in cat.doelstellingen">
+                        <v-flex xs11>
+                            <v-layout row-wrap v-for="(doel, j) in cat.doelstellingen" :key="j">
                                 <v-flex xs2>
                                     <v-card color="cyan darken-3" class="white--text text-xs-left" height="100%">
                                         <v-container fluid grid-list-lg>
@@ -110,7 +112,7 @@
                                     </v-card>
                                 </v-flex>
                                 <v-flex xs10>
-                                    <v-layout row-wrap v-for="(crit, k) in doel.criteria">
+                                    <v-layout row-wrap v-for="(crit, k) in doel.criteria" :key="k">
                                         <v-flex xs2>
                                             <v-card color="cyan darken-3" class="white--text text-xs-left" height="100%">
                                                 <v-container fluid grid-list-lg>
@@ -118,28 +120,42 @@
                                                 </v-container>
                                             </v-card>
                                         </v-flex>
-                                        <v-flex xs10>
-                                            <v-layout row-wrap v-for="(aspect, l) in crit.aspecten">
-                                                <v-flex xs4>
-                                                    <v-card color="cyan darken-3" class="white--text text-xs-left">
+                                        <v-flex xs7>
+                                            <v-layout row-wrap v-for="(aspect, l) in crit.aspecten" :key="l">
+                                                <v-flex xs5>
+                                                    <v-card color="cyan darken-3" class="white--text text-xs-left" height="100%">
                                                         <v-container fluid grid-list-lg>
                                                             {{i+1}}.{{j+1}}.{{k+1}}.{{l+1}} {{aspect.name}}
                                                         </v-container>
                                                     </v-card>
                                                 </v-flex>
                                                 <v-flex xs2>
-                                                    <v-card color="cyan darken-3" class="white--text text-xs-left">
+                                                    <v-card color="cyan darken-3" class="evalCard white--text text-xs-left" height="100%">
                                                         <v-container fluid grid-list-lg>
+                                                            <div class="evalCel">
+                                                                <input type="radio" value="yes" :name="'eval' + i + j + k + l">
+                                                            </div>
                                                         </v-container>
                                                     </v-card>
                                                 </v-flex>
+                                                <v-flex xs1></v-flex>
                                                 <v-flex xs2>
-                                                    <v-card color="cyan darken-3" class="white--text text-xs-left">
+                                                    <v-card color="cyan darken-3" class="evalCard white--text text-xs-left" height="100%">
                                                         <v-container fluid grid-list-lg>
+                                                            <div class="evalCel">
+                                                                <input type="radio" value="no" :name="'eval' + i + j + k + l">
+                                                            </div>
                                                         </v-container>
                                                     </v-card>
                                                 </v-flex>
                                             </v-layout>
+                                        </v-flex>
+                                        <v-flex xs4>
+                                            <v-card color="cyan darken-3" class="mr-4 white--text text-xs-left" height="100%">
+                                                <v-container fluid grid-list-lg>
+
+                                                </v-container>
+                                            </v-card>
                                         </v-flex>
                                     </v-layout>
                                 </v-flex>
@@ -149,6 +165,7 @@
                 </v-flex>
             </v-layout>
         </v-layout>
+       </template>
     </div>
 </template>
 
@@ -186,6 +203,9 @@
         },
         newEval: function () {
           this.newEvalTable = true
+        },
+        selectEvalCel: function () {
+          console.log('clicked')
         }
       },
       created () {
@@ -211,8 +231,23 @@
 th, tr, td{
     border: 1px black solid
 }
-.empty-cel{
+.evalCel{
     width: 50px;
     height:50px;
+    margin:auto;
+    position:relative;
+}
+
+.evalCard{
+    width: 150px;
+    margin-left: 50px;
+}
+
+input[type="radio"]{
+    display:inline-block;
+    position: absolute;
+    left: 33%;
+    top: 50%;
+    transform: translateY(-50%) scale(3);
 }
 </style>
