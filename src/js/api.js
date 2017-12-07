@@ -95,6 +95,27 @@ var Api = (function () {
       })
   }
 
+  my.createUser = function (firstname, lastname, email, pw, moduleIds, id, cb) {
+    axios.post('http://146.185.183.217/api/createUser', {
+      params: {
+        firstname: firstname,
+        lastname: lastname,
+        email: email,
+        pw: pw,
+        moduleIds: moduleIds,
+        id: id
+      }
+    })
+      .then(function (response) {
+        // console.log(resvar res = 'Student created'ponse)
+        if (response.statusText === 'OK') return cb(response.data)
+        else return cb(response.data)
+      })
+      .catch(function (error) {
+        console.log(error)
+      })
+  }
+
   return my
 }())
 
