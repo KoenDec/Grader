@@ -23,6 +23,7 @@ if ($_SERVER['REQUEST_METHOD'] == 'GET') {
           echo $notLoggedInErr;
           http_response_code(401);
         }*/
+
       } else {
         echo '{"Status":"No edu set"}';
         http_response_code(401);
@@ -59,7 +60,7 @@ if ($_SERVER['REQUEST_METHOD'] == 'GET') {
           echo json_encode($reports);
       } else {
           echo $notFoundErr;
-          http_respons146.185.183.217e_code(405);
+          http_response_code(405);
       }
   } else if ($_GET['url'] == 'studentReport') {
     //if (Login::isLoggedIn()) {
