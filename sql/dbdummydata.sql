@@ -26,7 +26,8 @@ INSERT INTO opleidingen(name, creatorId) VALUES
     ('Kapper', 3),
     ('Tegelzetter', 3),
     ('Winkelbediende', 3),
-    ('Klantencontact', 3);
+    ('Klantencontact', 3),
+    ('Voeger', 3);
 
 INSERT INTO modules(name, opleidingId, teacherId, creatorId) VALUES
     ('Initiatie keuken', 1, 4, 3), -- 1
@@ -38,7 +39,9 @@ INSERT INTO modules(name, opleidingId, teacherId, creatorId) VALUES
     ('Basistechnieken tegelzetten', 3, 12, 3),
     ('Verkoop', 4, 13, 3), -- TODO not teacher 13
     ('Klantencontact', 4, 13, 3),
-    ('Plaatsen van wandtegels', 3, 12, 3); -- 10
+    ('Plaatsen van wandtegels', 3, 12, 3), -- 10
+    ('Basismetselen', 6, 12, 3),
+    ('', 6, 12, 3);
 
 INSERT INTO doelstellingscategories(name, moduleId, creatorId) VALUES
 	('Veilig, hygiënisch en milieubewust werken conform welzijn op het werk en de geldende regelgevingen', 1, 3), -- 1
@@ -79,7 +82,12 @@ INSERT INTO doelstellingscategories(name, moduleId, creatorId) VALUES
     ('Eigen werkzaamheden organiseren', 9, 3),
     ('Op klantvriendelijke wijze volgens bedrijfseigen procedures handelen', 9, 3),
     ('Diefstalpreventie volgens bedrijfseigen procedures toepassen', 9, 3),
-    ('Wandtegels plaatsen',10, 3);
+    ('Wandtegels plaatsen',10, 3),
+    ('Veilig, hygiënisch en milieubewust werken conform de nota welzijn op het werk zoals:', 11, 3), -- 40
+    ('Noodzakelijke houdingen voor de uitoefening van het beroep aannemen', 11, 3),
+    ('Functionele vaardigheden voor de uitvoering van het beroep toepassen', 11, 3),
+    ('Eigen werkzaamheden organiseren', 11, 3),
+    ('Metselwerk uitvoeren', 11, 3);
     
 INSERT INTO doelstellingen(doelstellingscategorieId,name,creatorId) VALUES
 	(1,'Ergonomisch werken',3), -- 1
@@ -246,7 +254,32 @@ INSERT INTO doelstellingen(doelstellingscategorieId,name,creatorId) VALUES
     (39, 'Kan tegels snijden, knippen en zagen', 3),
     (39, 'Kan wandtegels plaatsen', 3),
     (39, 'Kan wandtegels inwassen', 3),
-    (39, 'Kan geplaatste wandtegels afwerken', 3); -- 165
+    (39, 'Kan geplaatste wandtegels afwerken', 3), -- 165
+    (40, 'Ergonomisch werken', 3),
+    (40, 'Economisch werken', 3),
+    (40, 'Persoonlijke beschermingsmiddelen gebruiken', 3),
+    (40, 'Collectieve beschermingsmiddelen gebruiken', 3),
+    (40, 'Producten met gevaarlijke eigenschappen correct gebruiken', 3), -- 170
+    (40, 'Veiligheidsvoorschriften en -instructies inzake arbeidsmiddelen toepassen', 3),
+    (40, 'Afval- en restproducten sorteren', 3),
+    (40, 'Gereedschap en machines gebruiken', 3),
+    (40, 'Gereedschap en machines reinigen', 3),
+    (41, 'Met zin voor precisie werken', 3), -- 175
+    (41, 'Zin voor samenwerking tonen', 3),
+    (41, 'Doorzettingsvermogen tonen', 3),
+    (42, 'Dimensies (lengte, breedte, dikte, oppervlakte, inhoud, ...) meten en berekenen', 3),
+    (42, 'Meetinstrumenten gebruiken', 3),
+    (42, 'Technische tekeningen gebruiken', 3), -- 180
+    (43, 'Eigen werkzaamheden voorbereiden', 3),
+    (43, 'Eigen werkzaamheden uitvoeren', 3),
+    (43, 'Eigen werkzaamheden evalueren', 3),
+    (43, 'Eigen werkzaamheden bijsturen', 3),
+    (44, 'Mortel aanmaken', 3), -- 185
+    (44, 'Halfsteense muren metselen', 3),
+    (44, 'Eénsteense muren metselen', 3),
+    (43, 'Kleine elementen in metselwerk plaatsen', 3),
+    (43, 'Voegen uitkrabben', 3),
+    (43, 'Meegaand voegen', 3);
     
 INSERT INTO evaluatiecriteria(doelstellingId, name, creatorId) VALUES
 	(1, 'correcte werkhouding toepassen bij het bij het reinigen van groenten en fruit', 3), -- 1
@@ -391,7 +424,49 @@ INSERT INTO evaluatiecriteria(doelstellingId, name, creatorId) VALUES
     (164, 'Voegspecie aanmaken', 3), -- 140
     (164, 'Inwassen', 3),
     (165, 'Eindcontrole', 3),
-    (165, 'Opkitten hoeken en overgangen', 3);
+    (165, 'Opkitten hoeken en overgangen', 3),
+    (166, 'Hef- en tiltechnieken', 3),
+    (166, 'Werkhouding', 3), -- 145
+    (167, 'Op tijd', 3),
+    (167, 'Op materiaal', 3),
+    (168, 'Algemene werkkledij', 3),
+    (168, 'Bijkomende PBM\'s in functie van de activiteit (veiligheidsbril, gehoorbescherming, ...)', 3),
+    (169, 'Eigen werkzone', 3), -- 150
+    (169, 'Veiligheidsdoorgangen', 3),
+    (170, '', 3),
+    (171, 'Werkplaatsreglement volgen', 3),
+    (171, 'Instructies (VIK)', 3),
+    (172, 'Sorteren', 3), -- 155
+    (172, 'Opslaan', 3),
+    (173, 'Gereedschappen', 3),
+    (173, 'Machines', 3),
+    (174, 'Gereedschappen', 3),
+    (174, 'Machines', 3), -- 160
+    (175, '', 3),
+    (176, '', 3),
+    (177, '', 3),
+    (178, 'Meten', 3),
+    (178, 'Berekenen', 3), -- 165
+    (179, 'Meetgereedschappen', 3),
+    (179, 'Controlegereedschappen', 3),
+    (180, 'Tekeningen lezen', 3),
+    (181, 'Materiaalhoeveelheden bepalen', 3),
+    (181, 'Noodzakelijke gereedschappen bepalen', 3), -- 170
+    (181, 'Noodzakelijke machines bepalen', 3),
+    (181, 'Eenvoudig stappenplan', 3),
+    (182, '', 3),
+    (183, 'Tussentijdse controle', 3),
+    (183, 'Eindcontroles:', 3), -- 175
+    (184, 'Bijsturingen in functie van de tussentijdse controles', 3),
+    (184, 'Bijsturingen in functie van de eindcontrole', 3),
+    (185, '', 3),
+    (186, 'Algemeen', 3),
+    (186, 'Metselverband', 3), -- 180
+    (187, 'Algemeen', 3),
+    (187, 'Metselverband', 3),
+    (188, '', 3),
+    (189, '', 3),
+    (190, '', 3);
     
 INSERT INTO aspecten(evaluatiecriteriumId, name, creatorId) VALUES
     (36, 'controleert en beoordeelt de vlakheid van de muur', 3), -- 1
@@ -448,103 +523,239 @@ INSERT INTO aspecten(evaluatiecriteriumId, name, creatorId) VALUES
     (49, 'plaatst de passtukken', 3),
     (124, 'Controleert en beoordeelt de vlakheid van de muur', 3),
     (124, 'Controleert en beoordeelt de loodrechtheid van de muur', 3),
-    (124, 'Controleert de haaksheid van de hoeken', 3),
+    (124, 'Controleert de haaksheid van de hoeken', 3), -- 55
     (125, 'Controleert of er geen vochtige plekken aanwezig zijn', 3),
     (125, 'Controleert of het pleisterwerk voldoende droog is', 3),
     (125, 'Controleert de luchtvochtigheidsgraad in de ruimte', 3),
     (126, 'Controleert of de te betegelen oppervlakte geen losse delen bevat', 3),
-    (126, 'Controleert of de hoeken zuiver afgewerkt zijn (geen resten van pleisterwerk)', 3),
+    (126, 'Controleert of de hoeken zuiver afgewerkt zijn (geen resten van pleisterwerk)', 3), -- 60
     (126, 'Controleert of er geen scheuren of barsten aanwezig zijn', 3),
     (126, 'Controleert of er geen brokken aan de te betegelen gedeelten zijn (hoeken zuiver)', 3),
     (127, 'Bepaalt of het uitbreken manueel of machinaal kan gebeuren', 3),
     (127, 'Beschermt de vloer en de elementen tegen beschadigingen', 3),
-    (127, 'Bepaalt de beginplaats voor de uitbreekwerkzaamheden', 3),
+    (127, 'Bepaalt de beginplaats voor de uitbreekwerkzaamheden', 3), -- 65
     (127, 'Breekt op een gecontroleerde wijze de tegels uit', 3),
     (127, 'Voert een eindcontrole uit op de uitbreekwerkzaamheden', 3),
     (128, 'Bepaalt de meest geschikte afvoermethode', 3),
     (128, 'Voert op een gecontroleerde manier de werkzaamheden uit', 3),
-    (128, 'Voorkomt beschadigingen aan andere oppervlakten of elementen', 3),
+    (128, 'Voorkomt beschadigingen aan andere oppervlakten of elementen', 3), -- 70
     (129, 'Beoordeelt de scheur', 3),
     (129, 'Verwijdert losse delen (bezetsel)', 3),
     (129, 'Maakt de scheur stofvrij', 3),
     (129, 'Kiest de juiste producten om de scheuren op te vullen', 3),
-    (129, 'Maakt de vulmortel aan volgens de voorschriften van de producent', 3),
+    (129, 'Maakt de vulmortel aan volgens de voorschriften van de producent', 3), -- 75
     (129, 'Vult de scheuren op de juiste manier op', 3),
     (129, 'Vlakt het oppervlak nadien uit (afschuren)', 3),
     (130, 'Bepaalt het te gebruiken materiaal voor het onderkader', 3),
     (130, 'Bepaalt de grootte van het onderkader', 3),
-    (130, 'Zet de omtrekslijnen van het onderkader uit', 3),
+    (130, 'Zet de omtrekslijnen van het onderkader uit', 3), -- 80
     (130, 'Stelt het houten onderkader samen', 3),
     (130, 'Plaatst het onderkader en verankert het op correcte wijze', 3),
     (130, 'Bouwt het onderkader op in gipsblokken', 3),
     (130, 'Maakt het onderkader klaar om te betegelen (hechtingslaag aanbrengen)', 3),
-    (131, 'Bepaalt het te gebruiken materiaal voor de wand', 3),
+    (131, 'Bepaalt het te gebruiken materiaal voor de wand', 3), -- 85
     (131, 'Zet de omtrekslijnen van de wand uit', 3),
     (131, 'Stelt de houten wand samen', 3),
     (131, 'Plaatst de wand en verankert hem op correcte wijze', 3),
     (131, 'Bouwt de wand op in gipsblokken', 3),
-    (131, 'Maakt de wand klaar om te betegelen (hechtingslaag aanbrengen)', 3),
+    (131, 'Maakt de wand klaar om te betegelen (hechtingslaag aanbrengen)', 3), -- 90
     (132, 'Bepaalt de plaats van de rei', 3),
     (132, 'Bepaalt de bevestigingsmethode', 3),
     (132, 'Bepaalt de plaats van de muurhaken', 3),
     (132, 'Bevestigt de rei op de muur volgens de hoogtelijn', 3),
-    (133, 'Schat de noodakelijk aan te maken hoeveelheid lijm in', 3),
+    (133, 'Schat de noodakelijk aan te maken hoeveelheid lijm in', 3), -- 95
     (133, 'Juiste verhouding kunnen bepalen', 3),
     (133, 'Lijm aanmaken volgens de voorschriften van de producent', 3),
     (133, 'Mengtijden respecteren', 3),
     (134, 'Bepaalt de juiste lijmkan in functie van het uit te voeren werk', 3),
-    (134, 'Bepaalt de grootte van de in te lijmen oppervlakken', 3),
+    (134, 'Bepaalt de grootte van de in te lijmen oppervlakken', 3), -- 100
     (134, 'Brengt de lijm gelijkmatig aan op het volledige tegeloppervlak', 3),
     (134, 'Verwijdert overtollige lijmresten', 3),
     (135, 'Bepaalt de plaats van het profiel', 3),
     (135, 'Maakt het profiel op de juiste lengte', 3),
-    (135, 'Plaatst het profiel in de lijm en drukt het op de juiste plaats', 3),
+    (135, 'Plaatst het profiel in de lijm en drukt het op de juiste plaats', 3), -- 105
     (135, 'Plaatst het tegelwerk over het profiel', 3),
     (135, 'Controleert de aansluitingen tussen profiel en tegelwerk', 3),
     (135, 'Werkt de overgang correct af (overtollige lijm verwijderen, afwassen, ...)', 3),
     (136, 'Tekent de tegel juist af', 3),
-    (136, 'Plaatst de tegel correct en vlak onder de tegelsnijder', 3),
+    (136, 'Plaatst de tegel correct en vlak onder de tegelsnijder', 3), -- 110
     (136, 'Snijdt de tegels op een correcte manier (één vloeiende beweging)', 3),
     (136, 'Breekt de tegel op de juiste manier', 3),
     (137, 'Tekent de tegel juist af', 3),
     (137, 'Knipt in kleine stapjes', 3),
-    (137, 'Zorgt voor voldoende steunvlak van de tegel tijdens het knippen', 3),
+    (137, 'Zorgt voor voldoende steunvlak van de tegel tijdens het knippen', 3), -- 115
     (138, 'Tekent de tegel juist af', 3),
     (138, 'Kiest het juiste zaagblad in functie van de tegel', 3),
     (138, 'Zaagt op een gecontroleerde en juiste manier', 3),
     (138, 'Heeft oog voor de veiligheid', 3),
-    (139, 'Bepaalt en tekent de sttartlijn af op de tegelwand', 3),
+    (139, 'Bepaalt en tekent de sttartlijn af op de tegelwand', 3), -- 120
     (139, 'Bepaalt de passtukken aan de zijkanten (breedte uitzetten van het tegelwerk', 3),
     (139, 'Plaatst de loodlijnen op de wand', 3),
     (139, 'Brengt de lijm aan volgens de grootte van de tegel en rij', 3),
     (139, 'Plaatst de tegel op de loodlijn', 3),
-    (139, 'Plaatst de touw of kruisjes', 3),
+    (139, 'Plaatst de touw of kruisjes', 3), -- 125
     (139, 'Plaatst de volgende rij tegels', 3),
     (139, 'Controleert de voegafstanden', 3),
     (139, 'Drukt de tegel voldoende aan', 3),
     (139, 'Controleert de vlakheid van de overgangen tussen de tegels', 3),
-    (139, 'Meet de passtukken op', 3),
+    (139, 'Meet de passtukken op', 3), -- 130
     (139, 'Plaatst de passtukken', 3),
     (140, 'Schat de noodzakelijk aan te maken hoeveelhied lijm / specie in', 3),
     (140, 'Bepaalt de juiste verhouding', 3),
     (140, 'Maakt voegspecie aan volgens de voorschriften van de producent', 3),
-    (140, 'Respecteert de mengtijden', 3),
+    (140, 'Respecteert de mengtijden', 3), -- 135
     (141, 'Wast de muur af zodat tegels vuilvrij zijn', 3),
     (141, 'Maakt de voegen lijmvrij', 3),
     (141, 'Brengt de specie in voldoende mate aan op de muur', 3),
     (141, 'Zorgt dat de voegen volledig gevuld zijn', 3),
-    (141, 'Overtollige specie verwijderen en het tegeloppervlak reinigen', 3),
+    (141, 'Overtollige specie verwijderen en het tegeloppervlak reinigen', 3), -- 140
     (141, 'Kuist de muur af met een vochtige spons', 3),
     (141, 'Wrijft de muur na met een droge doek', 3),
     (142, 'Tegels nakuisen met vochtige / droge doek', 3),
     (142, 'Kleine gaatjes in het voegwerk herstellen', 3),
-    (143, 'Houdt het pistool onder de juiste hoek', 3),
+    (143, 'Houdt het pistool onder de juiste hoek', 3), -- 145
     (143, 'Brengt voegsel gelijkmatig aan', 3),
     (143, 'Brengt voegsel in een vloeiende beweging aan', 3),
     (143, 'Zorgt voor naadloze overgangen', 3),
     (143, 'Haalt de spanning van het pistool af als het pistool wordt verwijderd van de voeg', 3),
-    (143, 'Houdt de spuitmond proper tijdens en na afloop van de werkzaamheden', 3),
-    (143, 'Sluit de spuitmond op correcte wijze af na de werkzaamheden', 3);
+    (143, 'Houdt de spuitmond proper tijdens en na afloop van de werkzaamheden', 3), -- 150
+    (143, 'Sluit de spuitmond op correcte wijze af na de werkzaamheden', 3),
+    (144, 'Bepaalt en selecteert de juiste hulpmiddelen in functie van de werkzaamheden', 3),
+    (144, 'Gebruikt de hulpmiddelen op correcte wijze', 3),
+    (144, 'Plaatst de voeten vlak en voldoende gespreid voor het optillen van zware lasten', 3),
+    (144, 'Gaat voldoende door de knieën', 3), -- 155
+    (144, 'Houdt de rug tijdens het tillen zo recht mogelijk', 3),
+    (145, 'Bepaalt op voorhand de meest natuurlijke houding voor het uitvoeren van de werkzaamheden', 3),
+    (145, 'Bepaalt of er hulpmiddelen noodzakelijk zijn om het werk uit te voeren (ladders, kniebescherming, ...)', 3),
+    (145, 'Verplaatst zich indien nodig voor het uitvoeren van het werk en neemt geen risicovolle verhoudingen aan (reiken op een ladder, buiten de steiger hangen, ...', 3),
+    (146, 'Volgt een opgestelde planning', 3), -- 160
+    (146, 'Voert een opracht voor basismetselen binnen een opgegeven tijd correct uit', 3),
+    (147, 'Verwerkt eerst aangebroken producten', 3),
+    (147, 'Maakt beperkte materiaalhoeveelheden aan in functie van de werktijd', 3),
+    (147, 'Draagt zorg voor de opslag en bewaarprocedure van materialen', 3),
+    (148, 'Draagt veiligheidsschoenen', 3), -- 165
+    (148, 'Draagt een werkpak', 3),
+    (148, 'Draagt een helm', 3),
+    (149, 'Checkt de veiligheidsinstructiekaart', 3),
+    (149, 'Selecteert de juiste PBM', 3),
+    (149, 'Gebruikt de PBM op de juiste manier', 3), -- 170
+    (150, 'Bepaalt zijn eigen werkzone', 3),
+    (150, 'Bakent zijn eigen werkzone af', 3),
+    (151, 'Zet geen materiaal in veiligszones', 3),
+    (151, 'Houdt doorgangen (deuropeningen) vrij', 3),
+    (151, 'Respecteert veiligheidspictogrammen', 3), -- 175
+    (152, 'Leest de handleiding/etiket', 3),
+    (152, 'Leest de H- en P-zinnen per product', 3),
+    (152, 'Voert de verwerking van producten uit volgens de voorschriften', 3),
+    (153, 'Past de gedragsregels toe', 3),
+    (153, 'Volgt de afgesproken procedures', 3), -- 180
+    (153, 'Past de voorschriften met betrekking tot netheid en hygiëne op de werkplek toe', 3),
+    (154, 'Gebruikt de veiligheidsinstructiekaarten vor aanvang van de werkzaamheden', 3),
+    (154, 'Volgt de op te nemen acties van de VIK correct op', 3),
+    (154, 'Anticipeert op mogelijk gevaarlijke situaties (preventief)', 3),
+    (155, 'Sorteert afval zoals pmd, papier, karton, restafval, ... correct', 3), -- 185
+    (155, 'Sorteert restproducten zoals cement, kleurstof, detergent, reinigingsproducten, ... correct', 3),
+    (155, 'Vraagt om informatie in geval van twijfel', 3),
+    (156, 'Respecteert de milieuvoorschriften', 3),
+    (156, 'Slaat restproducten zoals cement, kleurstof, detergent, reinigingsproducten, ... correct op', 3),
+    (156, 'Slaat afval zoals pmd, papier, karton, restafval, ... correct op', 3), -- 190
+    (157, 'Controleert de gereedschappen voor gebruik', 3),
+    (157, 'Heeft oog voor de veiligheid (gebruik PBM\'s, CBM\'s, veiligheidsvoorschriften, ...)', 3),
+    (157, 'Wendt de gereedschappen correct en vakkundig aan', 3),
+    (158, 'Controleert de gereedschappen voor gebruik', 3),
+    (158, 'Heeft oog voor de veiligheid (gebruik PBM\'s, CBM\'s, veiligheidsvoorschriften, ...)', 3), -- 195
+    (158, 'Wendt de gereedschappen correct en vakkundig aan', 3),
+    (159, 'Reinigt persoonlijke handgereedschappen zorgvuldig (zoals truweel, voegijzers, pleisterspaan, ...)', 3),
+    (159, 'Reinigt gemeenschappelijke gereedschappen zorgvuldig (zoals kruiwagens, mortelkuipen, mortelemmers, ...)', 3),
+    (159, 'Slaat persoonlijke gereedschappen na de werkzaamheden correct op', 3),
+    (159, 'Slaat gemeenschappelijke gereedschappen na de werkzaamheden correct op', 3), -- 200
+    (160, 'Reinigt gemeenschappelijke machines na gebruik correct (zoals de betonmolen, ...)', 3),
+    (160, 'Reinigt handmachines na gebruik correct (zoals de boormachine met mixer, boorhamer, ...)', 3),
+    (160, 'Slaat de bouwmachines volgens de voorgeschreven regels op', 3),
+    (160, 'Slaat handmachines volgens de voorgeschreven regels op', 3),
+    (161, 'Heeft oog voor een ordelijke werkomgeving', 3), -- 205
+    (161, 'Heeft de wil om kwaliteitsvol werk te leveren', 3),
+    (161, 'Werkt nauwkeurig tijdens het uitvoeren van het werk (opmetingen, berekeningen, materiaal klaarmaken, afwerking, ...', 3),
+    (162, 'Neemt raad aan van collega\'s en medeleerlingen', 3),
+    (162, 'Helpt iemand spontaan', 3),
+    (162, 'Werkt gericht en positief samen', 3), -- 210
+    (163, 'Neemt een leergierige houding aan', 3),
+    (163, 'Zoekt mee naar oplossingen bij problemen', 3),
+    (163, 'Geeft de moed niet op, ook bij minder goede resultaten', 3),
+    (164, 'Meet de lengtematen op', 3),
+    (164, 'Meet de breedtematen op', 3), -- 215
+    (164, 'Meet de hoogtematen op', 3),
+    (165, 'Berekent de totale oppervlakte', 3),
+    (165, 'Berekent de hoeveelheid noodzakelijk materiaal', 3),
+    (165, 'Bepaalt de hoeveelheid grondstoffen in functie van de mengverhouding', 3),
+    (166, 'Selecteert de juiste meetgereedschappen', 3), -- 220
+    (166, 'Gebruikt de meetgereedschappen op correcte wijze', 3),
+    (166, 'Reinigt en bergt de meetgereedschappen op correcte wijze op', 3),
+    (167, 'Plaatst de waterpas op correcte wijze in functie van een horizontale controle', 3),
+    (167, 'Plaatst de waterpas op correcte wijze in functie van een verticale controle', 3),
+    (167, 'Leest de resultaten op correcte wijze af', 3), -- 225
+    (168, 'Herkent materialen via de tekening (soorten stenen)', 3),
+    (168, 'Herkent steenformaten (halve steen, drieklezoor, klezoor)', 3),
+    (168, 'Kan eenvoudige metselverbanden afleiden van de tekening', 3),
+    (168, 'Kan eenvoudige afmetingen terugvinden via de tekening', 3),
+    (169, 'Kan het aantal stenen bepalen', 3),
+    (169, 'Kan de noodzakelijke hoeveelheid mortel inschatten', 3),
+    (170, 'Kan de noodzakelijke handgereedschappen selecteren in functie van de opdracht (truweel, voegijzer, ...)', 3),
+    (170, 'Kan de noodzakelijke controlegereedschappen bepalen (waterpas, regel, ...)', 3),
+    (170, 'Kan de noodzakelijke hulpmiddelen bepalen (mortelkuip, kruiwagen, ...)', 3),
+    (171, 'Kan de noodzakelijke machine kiezen in functie van morte lmaken', 3),
+    (171, 'Kan de noodzakelijke machine kiezen voor het op maat maken van de stenen', 3),
+    (172, 'Kan een stappenplan volgen', 3),
+    (172, 'Kan in grote lijnen de volgorde van de stappen weergeven', 3),
+    (172, 'Houdt rekening met de opmerkingen / aandachtspunten in een stappenplan', 3),
+    (172, 'Kan een eenvoudig stappenplan opstellen', 3),
+    (174, 'Controleert of de producten en materialen gebruiksklaar zijn', 3),
+    (174, 'Beoordeelt of de gereedschappen gebruiksklaar zijn', 3),
+    (174, 'Voert een tussentijdse controle uit van zijn werk', 3),
+    (175, 'Controleert zijn werk op afmetingen', 3),
+    (175, 'Controleert zijn werk op kwaliteit (gestelde eisen)', 3),
+    (176, 'Bij problemen hulp vragen', 3),
+    (176, 'Fouten toegeven', 3),
+    (176, 'Gemaakte fouten corrigeren', 3),
+    (177, 'Uit gemaakte fouten verbeterpunten aanduiden naar de toekomst', 3),
+    (178, 'Bepaalt de plaats van de profielen', 3),
+    (178, 'Plaatst de profielen loodrecht en stabiel', 3),
+    (178, 'Bepaalt de meterpas (slangwaterpas, niveaumeter of laser)', 3),
+    (178, 'Zet de lagenmaat uit op de profielen', 3),
+    (178, 'Plaatst de metseldraad', 3),
+    (178, 'Gebruikt voldoende mortel', 3),
+    (178, 'Spreidt de mortel correct', 3),
+    (178, 'Plaatst de stenen op correcte wijze', 3),
+    (178, 'Verwijdert de overtollige mortel', 3),
+    (178, 'Metselt met voldoende vlotheid en de juiste techniek', 3),
+    (179, 'Respecteert de verhoudingen van het metselverband', 3),
+    (179, 'Respecteert het metselverband', 3),
+    (179, 'Bewaakt de voegbreedte', 3),
+    (179, 'Bewaakt de plaats van de stootvoegen', 3),
+    (180, 'Bepaalt de plaats van de profielen', 3),
+    (180, 'Plaatst de profielen loodrecht en stabiel', 3),
+    (180, 'Bepaalt de meterpas (slangwaterpas, niveaumeter of laser)', 3),
+    (180, 'Zet de lagenmaat uit op de profielen', 3),
+    (180, 'Plaatst de metseldraad', 3),
+    (180, 'Gebruikt voldoende mortel', 3),
+    (180, 'Spreidt de mortel correct', 3),
+    (180, 'Plaatst de stenen op correcte wijze', 3),
+    (180, 'Verwijdert de overtollige mortel', 3),
+    (180, 'Metselt met voldoende vlotheid en de juiste techniek', 3),
+    (181, 'Respecteert de verhoudingen van het metselverband', 3),
+    (181, 'Respecteert het metselverband', 3),
+    (181, 'Bewaakt de voegbreedte', 3),
+    (181, 'Bewaakt de plaats van de stootvoegen', 3),
+    (182, 'Bepaalt de plaats van het element', 3),
+    (182, 'Plaatst het element', 3),
+    (182, 'Controleert de plaatsing', 3),
+    (182, 'Werkt het element af', 3),
+    (183, 'Past de juiste techniek toe voor het uitkrabben van de voegen', 3),
+    (183, 'Krabt de voegen uit tot een diepte van 10mm', 3),
+    (183, 'Borstelt de voegen na het uitkrabben', 3),
+    (184, 'Past de juiste techniek toe om meegaand te voegen', 3),
+    (184, 'Voegt de opdracht egaal en even diep', 3),
+    (184, 'Borstelt het voegwerk', 3);
 
 INSERT INTO studenten_modules(studentId, moduleId, opleidingId) VALUES
 	-- REAL DATA
