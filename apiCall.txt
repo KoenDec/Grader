@@ -72,3 +72,8 @@ url  api/studentReports?id=studentid
 type GET
 url  api/studentReport?id=
 id = rapportid
+
+# create users
+type POST
+url  api/createUser
+data {"firstname":"","lastname":"","email":"","pw":"","id",""}
