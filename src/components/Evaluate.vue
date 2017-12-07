@@ -52,6 +52,7 @@
                                     <v-text-field
                                             name="EvalFicheName"
                                             label="Naam evaluatiefiche"
+                                            v-model="evalName"
                                     ></v-text-field>
                                 </v-flex>
                             </v-container>
@@ -130,23 +131,15 @@
                                                     </v-card>
                                                 </v-flex>
                                                 <v-flex xs2>
-                                                    <v-card color="cyan darken-3" class="evalCard white--text text-xs-left" height="100%">
-                                                        <v-container fluid grid-list-lg>
-                                                            <div class="evalCel">
-                                                                <input type="radio" value="yes" :name="'eval' + i + j + k + l">
-                                                            </div>
-                                                        </v-container>
-                                                    </v-card>
+                                                    <v-btn color="cyan darken-3" class="evalCard white--text text-xs-left" height="100%" v-if="activeBoxesCreated" v-bind:class="{active: activeBoxes['yes' + aspect.id]}" v-on:click="logYes(aspect.id)">
+                                                        {{aspect.id}} {{activeBoxes['yes' + aspect.id]}}
+                                                    </v-btn>
                                                 </v-flex>
                                                 <v-flex xs1></v-flex>
                                                 <v-flex xs2>
-                                                    <v-card color="cyan darken-3" class="evalCard white--text text-xs-left" height="100%">
-                                                        <v-container fluid grid-list-lg>
-                                                            <div class="evalCel">
-                                                                <input type="radio" value="no" :name="'eval' + i + j + k + l">
-                                                            </div>
-                                                        </v-container>
-                                                    </v-card>
+                                                    <v-btn color="cyan darken-3" class="evalCard white--text text-xs-left" height="100%" v-if="activeBoxesCreated" v-bind:class="{active: activeBoxes['no' + aspect.id]}" v-on:click="logNo(aspect.id)">
+                                                        {{aspect.id}} {{activeBoxes['no' + aspect.id]}}
+                                                    </v-btn>
                                                 </v-flex>
                                             </v-layout>
                                         </v-flex>
@@ -174,7 +167,7 @@
       name: 'Evaluatie',
       data () {
         return {
-          student: {name: '', firstname: ''},
+          student: {name: '', firstname: '', id: null},
           breadcrumbs: [
             {id: 0, text: 'test', disabled: false},
             {id: 1, text: '', disabled: false}
@@ -186,7 +179,11 @@
           evalFiches: [],
           moduleSelected: false,
           newEvalTable: false,
-          doelRowSpan: 0
+          doelRowSpan: 0,
+          activeBoxes: {},
+          activeBoxesCreated: false,
+          saveEval: {},
+          evalName: ''
         }
       },
       methods: {
@@ -200,12 +197,43 @@
           console.log(this.selectedModule)
           this.moduleSelected = true
           this.newEvalTable = false
+          self.createActiveBoxes(this.selectedModule)
         },
         newEval: function () {
           this.newEvalTable = true
         },
-        selectEvalCel: function () {
-          console.log('clicked')
+        createActiveBoxes: function (module) {
+          this.activeBoxes = {}
+          console.log(module)
+          for (var i = 0; i < module.length; i++) {
+            for (var j = 0; j < module[i].categorieen.length; j++) {
+              for (var k = 0; k < module[i].categorieen[j].doelstellingen.length; k++) {
+                for (var l = 0; l < module[i].categorieen[j].doelstellingen[k].criteria.length; l++) {
+                  for (var m = 0; m < module[i].categorieen[j].doelstellingen[k].criteria[l].aspecten.length; m++) {
+                    var objectid = module[i].categorieen[j].doelstellingen[k].criteria[l].aspecten[m].id
+                    var objectName = 'yes' + objectid
+                    this.activeBoxes[objectName] = false
+                    objectName = 'no' + objectid
+                    this.activeBoxes[objectName] = false
+                  }
+                }
+              }
+            }
+          }
+          console.log(this.activeBoxes)
+          this.activeBoxesCreated = true
+        },
+        logYes: function (id) {
+          this.activeBoxes['yes' + id] = true
+          this.activeBoxes['no' + id] = false
+        },
+        logNo: function (id) {
+          this.activeBoxes['no' + id] = true
+          this.activeBoxes['yes' + id] = false
+        },
+        makeJSON: function () {
+          this.saveEval['name'] = this.evalName
+          this.saveEval['studentId'] = this.student.id
         }
       },
       created () {
@@ -214,6 +242,7 @@
         this.$http.getStudent(studentId, function (data) {
           self.student.firstname = data.student.firstname
           self.student.name = data.student.lastname
+          self.student.id = data.student.id
           self.breadcrumbs[0].text = data.opleiding.name
         })
         this.$http.getEvalForStudent(studentId, function (data) {
@@ -231,17 +260,6 @@
 th, tr, td{
     border: 1px black solid
 }
-.evalCel{
-    width: 50px;
-    height:50px;
-    margin:auto;
-    position:relative;
-}
-
-.evalCard{
-    width: 150px;
-    margin-left: 50px;
-}
 
 input[type="radio"]{
     display:inline-block;
@@ -249,5 +267,9 @@ input[type="radio"]{
     left: 33%;
     top: 50%;
     transform: translateY(-50%) scale(3);
+}
+
+.active{
+    background-color: black;
 }
 </style>
