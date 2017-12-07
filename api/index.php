@@ -23,7 +23,6 @@ if ($_SERVER['REQUEST_METHOD'] == 'GET') {
           echo $notLoggedInErr;
           http_response_code(401);
         }*/
-<<<<<<< HEAD
       } else {
         echo '{"Status":"No edu set"}';
         http_response_code(401);
@@ -60,7 +59,7 @@ if ($_SERVER['REQUEST_METHOD'] == 'GET') {
           echo json_encode($reports);
       } else {
           echo $notFoundErr;
-          http_response_code(405);
+          http_respons146.185.183.217e_code(405);
       }
   } else if ($_GET['url'] == 'studentReport') {
     //if (Login::isLoggedIn()) {
@@ -127,7 +126,6 @@ if ($_SERVER['REQUEST_METHOD'] == 'GET') {
           }
 
         echo json_encode($report);
-=======
     } else if ($_GET['url'] == 'studentInEducation') {
         if (Login::isLoggedIn()) {
             $userid = Login::isLoggedIn();
@@ -184,7 +182,6 @@ if ($_SERVER['REQUEST_METHOD'] == 'GET') {
         //if (Login::isLoggedIn()) {
         if (isset($_GET['id'])) {
             $evaluatieId = $_GET['id'];
->>>>>>> 0322ab21c40edb4b3b9eadf1cb4df2c4715d5767
 
             $evaluatie = $userDAO->getEvaluatie($evaluatieId);
             $module = $userDAO->getModule($evaluatie->moduleId);
@@ -675,7 +672,6 @@ if ($_SERVER['REQUEST_METHOD'] == 'GET') {
           $userDAO->saveAspecten($aspectid,$quotering);
         }*/
     }
-<<<<<<< HEAD
   } else if ($_GET['url'] == 'createStudent') {
     $postBody = file_get_contents('php://input');
     $postBody = json_decode($postBody);
@@ -701,8 +697,6 @@ if ($_SERVER['REQUEST_METHOD'] == 'GET') {
       http_response_code(200);
     }
   }
-=======
->>>>>>> 0322ab21c40edb4b3b9eadf1cb4df2c4715d5767
 } else if ($_SERVER['REQUEST_METHOD'] == 'DELETE') {
     if ($_GET['url'] == 'auth') {
         if (isset($_GET['token'])) {
