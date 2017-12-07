@@ -10,6 +10,7 @@ import api from './js/api.js'
 // index.js or main.js
 import('../node_modules/vuetify/dist/vuetify.min.css')
 Vue.use(Vuetify)
+Vue.prototype.$printer = printer
 Vue.prototype.$http = api
 Vue.config.productionTip = false
 
@@ -17,7 +18,6 @@ Vue.config.productionTip = false
 new Vue({
   el: '#app',
   router,
-  printer,
   api,
   template: '<App/>',
   components: { App }

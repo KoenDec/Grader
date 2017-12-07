@@ -140,6 +140,7 @@ export default {
   },
   methods: {
     print () {
+      console.log(this.$printer)
       this.$printer.print(this.currentstudent, this.currentreport)
     },
     applySelection (payload) {
