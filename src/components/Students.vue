@@ -155,6 +155,7 @@ export default {
     })
     this.$http.getOpleidingen(function (data) {
       self.opleidingen = data
+      self.receivedData = true
     })
   },
   mounted () {

@@ -76,15 +76,16 @@
                   </v-expansion-panel>
               </v-flex>
               <v-btn flat  @click.native="e1 = 1">Vorige</v-btn>
-              <v-btn color="primary" @click.native="e1 = 3">voltooien</v-btn>
+              <v-btn color="primary" @click.native="handleCreateStudent" >voltooien</v-btn>
             </v-stepper-content>
-              <v-stepper-content step="3">
-                <h5>Student {{firstname}} {{name}} {{pageUse[1]}}:</h5>
-                <p>Naam: {{firstname}} {{name}}</p>
-                <p>Email: {{email}}</p>
-                <p>Opleiding: {{select}}</p>
-                <router-link to="/studenten"><v-btn color="primary">Terug naar studenten</v-btn></router-link>
-              </v-stepper-content>
+            <v-stepper-content step="3">
+              <h5>Student {{firstname}} {{name}} {{pageUse[1]}}:</h5>
+              <p>Naam: {{firstname}} {{name}}</p>
+              <p>Email: {{email}}</p>
+              <p>Opleiding: {{select}}</p>
+              <p class="primary white--text">{{succesfull}}</p>
+              <router-link to="/studenten"><v-btn color="primary">Terug naar studenten</v-btn></router-link>
+            </v-stepper-content>
           </v-stepper-items>
         </v-stepper>
       </v-flex>
@@ -118,7 +119,8 @@ export default {
       studentOplSet: false,
       opleidingen: [],
       opleidingenDropdown: [],
-      modules: []
+      modules: [],
+      succesfull: ''
     }
   },
   methods: {
@@ -136,16 +138,18 @@ export default {
         // this.callForModules(result[0].id)
         this.e1 = 2
       }
-    }/*,
-    callForModules (id) {
-      console.log(id)
+    },
+    handleCreateStudent () {
       var self = this
-      this.$http.getFullOpleiding(id, function (data) {
-        console.log('data')
-        console.log(data)
-        self.modules = data
+      var moduleIds = []
+      this.modules.modules.forEach(function (item) {
+        moduleIds.push(item.id)
       })
-    } */
+      this.$http.createUser(self.firstname, self.name, self.email, self.pw, moduleIds, 2, function (data) {
+        self.succesfull = data
+        self.e1 = 3
+      })
+    }
   },
   created () {
     var self = this
