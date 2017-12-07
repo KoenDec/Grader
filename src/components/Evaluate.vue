@@ -211,29 +211,17 @@
       created () {
         var self = this
         var studentId = this.$route.query.id
-        this.$http.get('http://146.185.183.217/api/student?id=' + studentId)
-          .then(function (response) {
-            console.log(response.data)
-            self.student.firstname = response.data.student.firstname
-            self.student.name = response.data.student.lastname
-            self.breadcrumbs[0].text = response.data.opleiding.name
-          })
-          .catch(function (error) {
-            console.log(error)
-          })
-
-        this.$http.get('http://146.185.183.217/api/evaluatieVoorStudent?id=' + studentId)
-          .then(function (response) {
-            console.log(response.data)
-            self.modules = response.data.modules
-            console.log(self.modules)
-            for (var i = 0; i < self.modules.length; i++) {
-              self.modulesDropdown.push(self.modules[i].name)
-            }
-          })
-          .catch(function (error) {
-            console.log(error)
-          })
+        this.$http.getStudent(studentId, function (data) {
+          self.student.firstname = data.student.firstname
+          self.student.name = data.student.lastname
+          self.breadcrumbs[0].text = data.opleiding.name
+        })
+        this.$http.getEvalForStudent(studentId, function (data) {
+          self.modules = data.modules
+          for (var i = 0; i < self.modules.length; i++) {
+            self.modulesDropdown.push(self.modules[i].name)
+          }
+        })
       }
     }
 </script>

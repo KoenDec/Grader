@@ -18,21 +18,28 @@
      <v-toolbar-title>Rapportensysteem</v-toolbar-title>
      <v-spacer></v-spacer>
      <v-menu
-      origin="center center"
-      transition="scale-transition"
-      auto
-      >
-        <v-toolbar-title slot="activator">
-          <span>USERNAME</span>
-          <v-icon dark>arrow_drop_down</v-icon>
-        </v-toolbar-title>
+       :close-on-content-click="false"
+       v-model="menu"
+     >
+      <v-btn color="white" flat slot="activator">Account</v-btn><v-card>
         <v-list>
-          <v-list-tile v-for="(item, i) in 2" :key="item" @click="">
-            <v-list-tile-title v-text="item"></v-list-tile-title>
+          <v-list-tile avatar>
+            <v-list-tile-content>
+              <v-list-tile-title class="amber--text">Moderator</v-list-tile-title>
+              <div>Elon Musk</div>
+              <v-list-tile-sub-title>Lector fysica & Chemie</v-list-tile-sub-title>
+            </v-list-tile-content>
           </v-list-tile>
         </v-list>
-      </v-menu>
-      <v-toolbar-title flat>ADMIN</v-toolbar-title>
+        <v-divider></v-divider>
+        <v-card-actions>
+          <v-spacer></v-spacer>
+          <v-btn flat @click="menu = false">Cancel</v-btn>
+          <v-btn color="primary" flat @click="menu = false">Afmelden</v-btn>
+        </v-card-actions>
+      </v-card>
+
+     </v-menu>
    </v-toolbar>
    <main>
      <v-content class="pt-1">
@@ -54,7 +61,11 @@ export default {
       'Studenten',
       'Opleidingen',
       'Afdrukken'
-    ]
+    ],
+    fav: true,
+    menu: false,
+    message: false,
+    hints: true
   }),
   methods: {
     route (path) {

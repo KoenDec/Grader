@@ -4,18 +4,21 @@ import Vue from 'vue'
 import App from './App'
 import router from './router'
 import Vuetify from 'vuetify'
-import axios from 'axios'
+import printer from './printer'
+import api from './js/api.js'
 
 // index.js or main.js
 import('../node_modules/vuetify/dist/vuetify.min.css')
 Vue.use(Vuetify)
-Vue.prototype.$http = axios
+Vue.prototype.$http = api
 Vue.config.productionTip = false
 
 /* eslint-disable no-new */
 new Vue({
   el: '#app',
   router,
+  printer,
+  api,
   template: '<App/>',
   components: { App }
 })
