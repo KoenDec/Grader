@@ -38,6 +38,7 @@
                 <div>
                     <v-btn color="primary"><v-icon>repeat</v-icon>Vorige Evaluatiefiches</v-btn>
                     <v-btn @click="newEval" color="primary"><v-icon>add</v-icon>Nieuwe Evaluatiefiche</v-btn>
+                    <v-btn v-if="newEvalTable" @click="makeJSON" color="primary"><v-icon>save</v-icon>Evaluatie Opslaan</v-btn>
                 </div>
             </v-flex>
         </v-layout>
@@ -131,14 +132,25 @@
                                                     </v-card>
                                                 </v-flex>
                                                 <v-flex xs2>
-                                                    <v-btn color="cyan darken-3" class="evalCard white--text text-xs-left" height="100%" v-if="activeBoxesCreated" v-bind:class="{active: activeBoxes['yes' + aspect.id]}" v-on:click="logYes(aspect.id)">
-                                                        {{aspect.id}} {{activeBoxes['yes' + aspect.id]}}
+                                                    <v-btn
+                                                            color="cyan darken-3"
+                                                            class="evalCard white--text text-xs-left"
+                                                            height="100%" v-if="activeBoxesCreated"
+                                                            v-on:click="logYes(aspect.id)"
+                                                    >
+                                                        <p v-if="activeBoxes['yes' + aspect.id]">X</p>
                                                     </v-btn>
                                                 </v-flex>
                                                 <v-flex xs1></v-flex>
                                                 <v-flex xs2>
-                                                    <v-btn color="cyan darken-3" class="evalCard white--text text-xs-left" height="100%" v-if="activeBoxesCreated" v-bind:class="{active: activeBoxes['no' + aspect.id]}" v-on:click="logNo(aspect.id)">
-                                                        {{aspect.id}} {{activeBoxes['no' + aspect.id]}}
+                                                    <v-btn
+                                                            color="cyan darken-3"
+                                                            class="evalCard white--text text-xs-left"
+                                                            height="100%"
+                                                            v-if="activeBoxesCreated"
+                                                            v-on:click="logNo(aspect.id)"
+                                                    >
+                                                        <p v-if="activeBoxes['no' + aspect.id]">X</p>
                                                     </v-btn>
                                                 </v-flex>
                                             </v-layout>
@@ -212,9 +224,9 @@
                   for (var m = 0; m < module[i].categorieen[j].doelstellingen[k].criteria[l].aspecten.length; m++) {
                     var objectid = module[i].categorieen[j].doelstellingen[k].criteria[l].aspecten[m].id
                     var objectName = 'yes' + objectid
-                    this.activeBoxes[objectName] = false
+                    this.activeBoxes[objectName] = null
                     objectName = 'no' + objectid
-                    this.activeBoxes[objectName] = false
+                    this.activeBoxes[objectName] = null
                   }
                 }
               }
@@ -224,16 +236,30 @@
           this.activeBoxesCreated = true
         },
         logYes: function (id) {
-          this.activeBoxes['yes' + id] = true
-          this.activeBoxes['no' + id] = false
+          this.$set(this.activeBoxes, 'yes' + id, true)
+          this.$set(this.activeBoxes, 'no' + id, false)
+          console.log(this.activeBoxes)
+          this.$forceUpdate()
         },
         logNo: function (id) {
-          this.activeBoxes['no' + id] = true
-          this.activeBoxes['yes' + id] = false
+          this.$set(this.activeBoxes, 'yes' + id, false)
+          this.$set(this.activeBoxes, 'no' + id, true)
+          console.log(this.activeBoxes)
+          this.$forceUpdate()
         },
         makeJSON: function () {
+          var objKeys = Object.keys(this.activeBoxes)
+          var objLength = Object.keys(this.activeBoxes).length
+          console.log(objLength)
           this.saveEval['name'] = this.evalName
           this.saveEval['studentId'] = this.student.id
+          this.saveEval['moduleId'] = this.selectedModule[0].id
+          this.saveEval['aspecten'] = []
+          for (var i = 0; i < objLength; i = i + 2) {
+            var obj = {aspectId: objKeys[i].substr(3), beoordeling: this.activeBoxes[objKeys[i]]}
+            this.saveEval['aspecten'].push(obj)
+          }
+          console.log(this.saveEval)
         }
       },
       created () {
@@ -267,9 +293,5 @@ input[type="radio"]{
     left: 33%;
     top: 50%;
     transform: translateY(-50%) scale(3);
-}
-
-.active{
-    background-color: black;
 }
 </style>
