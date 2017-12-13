@@ -1,5 +1,4 @@
 import pdfMake from 'pdfmake/build/pdfmake.js'
-// require('pdfmake/build/pdfmake.js')
 import pdfFonts from 'pdfmake/build/vfs_fonts'
 pdfMake.vfs = pdfFonts.pdfMake.vfs
 
@@ -12,6 +11,7 @@ var Printer = (function () {
     years.sort()
     return years
   }
+
   function writeRotatedText (text) {
     var canvas = document.createElement('canvas')
     var ctx = document.createElement('canvas')
@@ -52,7 +52,7 @@ var Printer = (function () {
   function addModule (module) {
     docDefinition.content.push({text: 'MODULE: ' + module.naam.toUpperCase(), style: 'moduleStyle', margin: [ 0, 5, 0, 10 ]})
     module.doelstellingscategories.forEach(function (item, index) {
-      docDefinition.content.push({text: item.name, margin: [0, 0, 0, 5]})
+      docDefinition.content.push({text: item.name, margin: [0, 5, 0, 5]})
       var object = {
         table: {
           widths: [160, 20, 20, 20, 20, 20, '*'],
