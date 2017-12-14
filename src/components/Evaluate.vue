@@ -106,7 +106,7 @@
                                     <v-card color="gray darken-3" class="black--text text-xs-left" height="100%">
                                         <v-container style="text-align: right; padding-right: 90px" fluid grid-list-lg>
                                             <p>Evaluatie leerkracht</p>
-                                            <p><span>JA</span> | <span>NEE</span> | <span>AFWEZIG</span></p>
+                                            <p><span>JA</span> | <span>NEE</span></p>
                                         </v-container>
                                     </v-card>
                                 </v-flex>
@@ -182,9 +182,9 @@
                                                                 class="evalCard black--text text-xs-left"
                                                                 style="height: 100%; margin: 0"
                                                                 v-if="activeBoxesCreated"
-                                                                v-on:click="afwezig(aspect.id)"
+                                                                v-on:click="reset(aspect.id)"
                                                         >
-                                                            <p>afwezig</p>
+                                                            <p>Reset</p>
                                                         </v-btn>
                                                     </v-flex>
                                                 </v-layout>
@@ -269,16 +269,14 @@
         logYes: function (id) {
           this.$set(this.activeBoxes, 'yes' + id, true)
           this.$set(this.activeBoxes, 'no' + id, false)
-          console.log(this.activeBoxes)
           this.$forceUpdate()
         },
         logNo: function (id) {
           this.$set(this.activeBoxes, 'yes' + id, false)
           this.$set(this.activeBoxes, 'no' + id, true)
-          console.log(this.activeBoxes)
           this.$forceUpdate()
         },
-        afwezig: function (id) {
+        reset: function (id) {
           this.$set(this.activeBoxes, 'yes' + id, null)
           this.$set(this.activeBoxes, 'no' + id, null)
           this.$forceUpdate()
@@ -286,7 +284,6 @@
         makeJSON: function () {
           var objKeys = Object.keys(this.activeBoxes)
           var objLength = Object.keys(this.activeBoxes).length
-          console.log(objLength)
           this.saveEval['name'] = this.evalName
           this.saveEval['studentId'] = this.student.id
           this.saveEval['moduleId'] = this.selectedModule[0].id
@@ -314,6 +311,9 @@
       },
       created () {
         var self = this
+        var d = new Date()
+        var month = d.getMonth() + 1
+        self.dateFormatted = d.getDate() + '/' + month + '/' + d.getFullYear()
         var studentId = this.$route.query.id
         this.$http.getStudent(studentId, function (data) {
           self.student.firstname = data.student.firstname
