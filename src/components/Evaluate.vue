@@ -148,14 +148,14 @@
                                             </v-flex>
                                             <v-flex xs8>
                                                 <v-layout row-wrap v-for="(aspect, l) in crit.aspecten" :key="l">
-                                                    <v-flex xs7>
+                                                    <v-flex xs6>
                                                         <v-card color="gray darken-3" class="black--text text-xs-left" height="100%">
                                                             <v-container fluid grid-list-lg>
                                                                 {{i+1}}.{{j+1}}.{{k+1}}.{{l+1}} {{aspect.name}}
                                                             </v-container>
                                                         </v-card>
                                                     </v-flex>
-                                                    <v-flex>
+                                                    <v-flex xs2 class="yellow">
                                                         <v-btn
                                                                 color="gray darken-3"
                                                                 class="evalCard black--text text-xs-left"
@@ -166,7 +166,7 @@
                                                             <p v-if="activeBoxes['yes' + aspect.id]">JA</p>
                                                         </v-btn>
                                                     </v-flex>
-                                                    <v-flex>
+                                                    <v-flex xs2>
                                                         <v-btn
                                                                 color="gray darken-3"
                                                                 class="evalCard black--text text-xs-left"
@@ -177,7 +177,7 @@
                                                             <p v-if="activeBoxes['no' + aspect.id]">NEE</p>
                                                         </v-btn>
                                                     </v-flex>
-                                                    <v-flex>
+                                                    <v-flex xs2>
                                                         <v-btn
                                                                 color="gray darken-3"
                                                                 class="evalCard black--text text-xs-left"
