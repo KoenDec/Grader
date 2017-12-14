@@ -43,133 +43,162 @@
             </v-flex>
         </v-layout>
         <template v-if="newEvalTable">
-        <v-layout row-wrap>
-            <v-flex xs10 offset-xs1>
-                <v-layout row-wrap>
-                    <v-flex xs6>
-                        <v-card color="cyan darken-3" class="white--text text-xs-left" height="100%">
-                            <v-container fluid grid-list-lg>
-                                <v-flex>
-                                    <v-text-field
-                                            name="EvalFicheName"
-                                            label="Naam evaluatiefiche"
-                                            v-model="evalName"
-                                    ></v-text-field>
-                                </v-flex>
-                            </v-container>
-                        </v-card>
-                    </v-flex>
-                    <v-flex xs6>
-                        <v-layout row-wrap>
-                            <v-flex xs12>
-                                <v-card color="cyan darken-3" class="white--text text-xs-left" height="100%">
-                                    <v-container fluid grid-list-lg>
-                                        datum:<input type="date" name="EvalDate" id="EvalDate" />
-                                    </v-container>
-                                </v-card>
-                            </v-flex>
-                        </v-layout>
-                        <v-layout row-wrap>
-                            <v-flex xs6>
-                                <v-card color="cyan darken-3" class="white--text text-xs-left" height="100%">
-                                    <v-container fluid grid-list-lg>
-                                        <p>Evaluatie leerkracht</p>
-                                        <p><span class="ml-5">JA</span><span class="right mr-5">NEE</span></p>
-                                    </v-container>
-                                </v-card>
-                            </v-flex>
-                            <v-flex xs6>
-                                <v-card color="cyan darken-3" class="white--text text-xs-left" height="100%">
-                                    <v-container fluid grid-list-lg>
-                                        <p>Eindevaluatie leerkracht</p>
-                                        <p>RO/O/V/G</p>
-                                    </v-container>
-                                </v-card>
-                            </v-flex>
-                        </v-layout>
-                    </v-flex>
-                </v-layout>
-            </v-flex>
-        </v-layout>
-        <v-layout v-for="(cat, i) in selectedModule[0].categorieen" :key="i">
-            <v-layout row-wrap xs10>
-                <v-flex offset-xs1>
+        <v-flex xs8 offset-xs2>
+            <v-layout row-wrap>
+                <v-flex>
                     <v-layout row-wrap>
-                        <v-flex xs11>
-                            <v-card color="cyan darken-1" class="white--text text-xs-center display-1" height="100%">
-                                <v-container>
-                                    {{i+1}} {{cat.name}}
+                        <v-flex>
+                            <v-card color="gray darken-3" class="black--text text-xs-left" height="100%">
+                                <v-container fluid grid-list-lg>
+                                    <v-flex>
+                                        <v-text-field
+                                                name="EvalFicheName"
+                                                label="Naam evaluatiefiche"
+                                                v-model="evalName"
+                                        ></v-text-field>
+                                    </v-flex>
                                 </v-container>
                             </v-card>
                         </v-flex>
-                    </v-layout>
-                    <v-layout row-wrap>
-                        <v-flex xs11>
-                            <v-layout row-wrap v-for="(doel, j) in cat.doelstellingen" :key="j">
-                                <v-flex xs2>
-                                    <v-card color="cyan darken-3" class="white--text text-xs-left" height="100%">
+                        <v-flex>
+                            <v-layout row-wrap>
+                                <v-flex>
+                                    <v-card color="gray darken-3" class="black--text text-xs-left" height="100%">
                                         <v-container fluid grid-list-lg>
-                                            {{i+1}}.{{j+1}} {{doel.name}}
+                                            <v-layout row wrap>
+                                                <v-flex>
+                                                    <v-menu
+                                                            lazy
+                                                            :close-on-content-click="false"
+                                                            v-model="menu"
+                                                            transition="scale-transition"
+                                                            offset-y
+                                                            full-width
+                                                            :nudge-right="40"
+                                                            max-width="290px"
+                                                            min-width="290px"
+                                                    >
+                                                        <v-text-field
+                                                                slot="activator"
+                                                                label="Datum"
+                                                                v-model="dateFormatted"
+                                                                prepend-icon="event"
+                                                                @blur="date = parseDate(dateFormatted)"
+                                                        ></v-text-field>
+                                                        <v-date-picker v-model="date" @input="dateFormatted = formatDate($event)" no-title scrollable actions>
+                                                            <template slot-scope="{ save, cancel }">
+                                                                <v-card-actions>
+                                                                    <v-spacer></v-spacer>
+                                                                    <v-btn flat color="primary" @click="cancel">Cancel</v-btn>
+                                                                    <v-btn flat color="primary" @click="save">OK</v-btn>
+                                                                </v-card-actions>
+                                                            </template>
+                                                        </v-date-picker>
+                                                    </v-menu>
+                                                </v-flex>
+                                            </v-layout>
                                         </v-container>
                                     </v-card>
                                 </v-flex>
-                                <v-flex xs10>
-                                    <v-layout row-wrap v-for="(crit, k) in doel.criteria" :key="k">
-                                        <v-flex xs2>
-                                            <v-card color="cyan darken-3" class="white--text text-xs-left" height="100%">
-                                                <v-container fluid grid-list-lg>
-                                                    {{i+1}}.{{j+1}}.{{k+1}} {{crit.name}}
-                                                </v-container>
-                                            </v-card>
-                                        </v-flex>
-                                        <v-flex xs7>
-                                            <v-layout row-wrap v-for="(aspect, l) in crit.aspecten" :key="l">
-                                                <v-flex xs5>
-                                                    <v-card color="cyan darken-3" class="white--text text-xs-left" height="100%">
-                                                        <v-container fluid grid-list-lg>
-                                                            {{i+1}}.{{j+1}}.{{k+1}}.{{l+1}} {{aspect.name}}
-                                                        </v-container>
-                                                    </v-card>
-                                                </v-flex>
-                                                <v-flex xs2>
-                                                    <v-btn
-                                                            color="cyan darken-3"
-                                                            class="evalCard white--text text-xs-left"
-                                                            height="100%" v-if="activeBoxesCreated"
-                                                            v-on:click="logYes(aspect.id)"
-                                                    >
-                                                        <p v-if="activeBoxes['yes' + aspect.id]">X</p>
-                                                    </v-btn>
-                                                </v-flex>
-                                                <v-flex xs1></v-flex>
-                                                <v-flex xs2>
-                                                    <v-btn
-                                                            color="cyan darken-3"
-                                                            class="evalCard white--text text-xs-left"
-                                                            height="100%"
-                                                            v-if="activeBoxesCreated"
-                                                            v-on:click="logNo(aspect.id)"
-                                                    >
-                                                        <p v-if="activeBoxes['no' + aspect.id]">X</p>
-                                                    </v-btn>
-                                                </v-flex>
-                                            </v-layout>
-                                        </v-flex>
-                                        <v-flex xs4>
-                                            <v-card color="cyan darken-3" class="mr-4 white--text text-xs-left" height="100%">
-                                                <v-container fluid grid-list-lg>
-
-                                                </v-container>
-                                            </v-card>
-                                        </v-flex>
-                                    </v-layout>
+                            </v-layout>
+                            <v-layout row-wrap>
+                                <v-flex>
+                                    <v-card color="gray darken-3" class="black--text text-xs-left" height="100%">
+                                        <v-container style="text-align: right; padding-right: 90px" fluid grid-list-lg>
+                                            <p>Evaluatie leerkracht</p>
+                                            <p><span>JA</span> | <span>NEE</span> | <span>AFWEZIG</span></p>
+                                        </v-container>
+                                    </v-card>
                                 </v-flex>
                             </v-layout>
                         </v-flex>
                     </v-layout>
                 </v-flex>
             </v-layout>
-        </v-layout>
+            <v-layout v-for="(cat, i) in selectedModule[0].categorieen" :key="i">
+                <v-layout row-wrap>
+                    <v-flex>
+                        <v-layout row-wrap>
+                            <v-flex>
+                                <v-card color="gray darken-1" class="black--text text-xs-center display-1" height="100%">
+                                    <v-container>
+                                        {{i+1}} {{cat.name}}
+                                    </v-container>
+                                </v-card>
+                            </v-flex>
+                        </v-layout>
+                        <v-layout row-wrap>
+                            <v-flex xs12>
+                                <v-layout row-wrap v-for="(doel, j) in cat.doelstellingen" :key="j">
+                                    <v-flex xs3>
+                                        <v-card color="gray darken-3" class="black--text text-xs-left" height="100%">
+                                            <v-container fluid grid-list-lg>
+                                                {{i+1}}.{{j+1}} {{doel.name}}
+                                            </v-container>
+                                        </v-card>
+                                    </v-flex>
+                                    <v-flex>
+                                        <v-layout row-wrap v-for="(crit, k) in doel.criteria" :key="k">
+                                            <v-flex xs4>
+                                                <v-card color="gray darken-3" class="black--text text-xs-left" height="100%">
+                                                    <v-container fluid grid-list-lg>
+                                                        {{i+1}}.{{j+1}}.{{k+1}} {{crit.name}}
+                                                    </v-container>
+                                                </v-card>
+                                            </v-flex>
+                                            <v-flex>
+                                                <v-layout row-wrap v-for="(aspect, l) in crit.aspecten" :key="l">
+                                                    <v-flex xs7>
+                                                        <v-card color="gray darken-3" class="black--text text-xs-left" height="100%">
+                                                            <v-container fluid grid-list-lg>
+                                                                {{i+1}}.{{j+1}}.{{k+1}}.{{l+1}} {{aspect.name}}
+                                                            </v-container>
+                                                        </v-card>
+                                                    </v-flex>
+                                                    <v-flex>
+                                                        <v-btn
+                                                                color="gray darken-3"
+                                                                class="evalCard black--text text-xs-left"
+                                                                style="height: 100%;margin: 0;"
+                                                                v-if="activeBoxesCreated"
+                                                                v-on:click="logYes(aspect.id)"
+                                                        >
+                                                            <p v-if="activeBoxes['yes' + aspect.id]">JA</p>
+                                                        </v-btn>
+                                                    </v-flex>
+                                                    <v-flex>
+                                                        <v-btn
+                                                                color="gray darken-3"
+                                                                class="evalCard black--text text-xs-left"
+                                                                style="height: 100%; margin: 0"
+                                                                v-if="activeBoxesCreated"
+                                                                v-on:click="logNo(aspect.id)"
+                                                        >
+                                                            <p v-if="activeBoxes['no' + aspect.id]">NEE</p>
+                                                        </v-btn>
+                                                    </v-flex>
+                                                    <v-flex>
+                                                        <v-btn
+                                                                color="gray darken-3"
+                                                                class="evalCard black--text text-xs-left"
+                                                                style="height: 100%; margin: 0"
+                                                                v-if="activeBoxesCreated"
+                                                                v-on:click="afwezig(aspect.id)"
+                                                        >
+                                                            <p>afwezig</p>
+                                                        </v-btn>
+                                                    </v-flex>
+                                                </v-layout>
+                                            </v-flex>
+                                        </v-layout>
+                                    </v-flex>
+                                </v-layout>
+                            </v-flex>
+                        </v-layout>
+                    </v-flex>
+                </v-layout>
+            </v-layout>
+        </v-flex>
        </template>
     </div>
 </template>
@@ -195,7 +224,10 @@
           activeBoxes: {},
           activeBoxesCreated: false,
           saveEval: {},
-          evalName: ''
+          evalName: '',
+          date: null,
+          dateFormatted: null,
+          menu: false
         }
       },
       methods: {
@@ -247,6 +279,11 @@
           console.log(this.activeBoxes)
           this.$forceUpdate()
         },
+        afwezig: function (id) {
+          this.$set(this.activeBoxes, 'yes' + id, null)
+          this.$set(this.activeBoxes, 'no' + id, null)
+          this.$forceUpdate()
+        },
         makeJSON: function () {
           var objKeys = Object.keys(this.activeBoxes)
           var objLength = Object.keys(this.activeBoxes).length
@@ -260,6 +297,20 @@
             this.saveEval['aspecten'].push(obj)
           }
           console.log(this.saveEval)
+        },
+        formatDate (date) {
+          if (!date) {
+            return null
+          }
+          const [year, month, day] = date.split('-')
+          return `${day}/${month}/${year}`
+        },
+        parseDate (date) {
+          if (!date) {
+            return null
+          }
+          const [month, day, year] = date.split('/')
+          return `${year}-${month.padStart(2, '0')}-${day.padStart(2, '0')}`
         }
       },
       created () {
@@ -283,10 +334,9 @@
 
 <!-- Add "scoped" attribute to limit CSS to this component only -->
 <style scoped>
-th, tr, td{
-    border: 1px black solid
+p{
+    margin-bottom: 0;
 }
-
 input[type="radio"]{
     display:inline-block;
     position: absolute;
