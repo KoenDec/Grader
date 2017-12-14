@@ -120,7 +120,7 @@
                     <v-flex>
                         <v-layout row-wrap>
                             <v-flex>
-                                <v-card color="gray darken-1" class="black--text text-xs-center display-1" height="100%">
+                                <v-card class="black--text text-xs-center display-1" height="100%">
                                     <v-container>
                                         {{i+1}} {{cat.name}}
                                     </v-container>
@@ -131,16 +131,16 @@
                             <v-flex xs12>
                                 <v-layout row-wrap v-for="(doel, j) in cat.doelstellingen" :key="j">
                                     <v-flex xs3>
-                                        <v-card color="red darken-3" class="black--text text-xs-left" height="100%">
+                                        <v-card class="black--text text-xs-left" height="100%">
                                             <v-container fluid grid-list-lg>
                                                 {{i+1}}.{{j+1}} {{doel.name}}
                                             </v-container>
                                         </v-card>
                                     </v-flex>
-                                    <v-flex class="blue">
+                                    <v-flex xs9>
                                         <v-layout row-wrap v-for="(crit, k) in doel.criteria" :key="k">
-                                            <v-flex xs4 class="purple">
-                                                <v-card color="green darken-3" class="black--text text-xs-left" height="100%">
+                                            <v-flex xs4>
+                                                <v-card class="black--text text-xs-left" height="100%">
                                                     <v-container fluid grid-list-lg>
                                                         {{i+1}}.{{j+1}}.{{k+1}} {{crit.name}}
                                                     </v-container>
@@ -149,7 +149,7 @@
                                             <v-flex xs8>
                                                 <v-layout row-wrap v-for="(aspect, l) in crit.aspecten" :key="l">
                                                     <v-flex xs7>
-                                                        <v-card color="gray darken-3" class="black--text text-xs-left" height="100%">
+                                                        <v-card class="black--text text-xs-left" height="100%">
                                                             <v-container fluid grid-list-lg>
                                                                 {{i+1}}.{{j+1}}.{{k+1}}.{{l+1}} {{aspect.name}}
                                                             </v-container>
@@ -157,29 +157,28 @@
                                                     </v-flex>
                                                     <v-flex>
                                                         <v-btn
-                                                                color="gray darken-3"
                                                                 class="evalCard black--text text-xs-left"
                                                                 style="height: 100%;margin: 0;"
                                                                 v-if="activeBoxesCreated"
                                                                 v-on:click="logYes(aspect.id)"
+                                                                :class="{green: activeBoxes['yes' + aspect.id]}"
                                                         >
-                                                            <p v-if="activeBoxes['yes' + aspect.id]">JA</p>
+                                                            <p>JA</p>
                                                         </v-btn>
                                                     </v-flex>
                                                     <v-flex>
                                                         <v-btn
-                                                                color="gray darken-3"
                                                                 class="evalCard black--text text-xs-left"
                                                                 style="height: 100%; margin: 0"
                                                                 v-if="activeBoxesCreated"
                                                                 v-on:click="logNo(aspect.id)"
+                                                                :class="{red: activeBoxes['no' + aspect.id]}"
                                                         >
-                                                            <p v-if="activeBoxes['no' + aspect.id]">NEE</p>
+                                                            <p>NEE</p>
                                                         </v-btn>
                                                     </v-flex>
                                                     <v-flex>
                                                         <v-btn
-                                                                color="gray darken-3"
                                                                 class="evalCard black--text text-xs-left"
                                                                 style="height: 100%; margin: 0"
                                                                 v-if="activeBoxesCreated"
