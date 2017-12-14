@@ -9,10 +9,6 @@
       <v-flex xs4 offset-xs1 ref="results" @>
         <searchbar @select-student="applySelection" :list="items" :concat_keys="keys" :labeltext="zoeklabel" :item_concat_key="item_name" :item_value="item_value"></searchbar>
       </v-flex>
-        <v-flex>
-          <v-btn @click="" large color="primary"><v-icon>get_app</v-icon></v-btn>
-          <v-btn @click="print" large color="primary"><v-icon>print</v-icon></v-btn>
-        </v-flex>
     </v-layout>
     <v-layout row-wrap>
         <v-flex xs12 offset-xs1 class="text-xs-left">
@@ -48,6 +44,10 @@
                      </v-flex>
                    </v-layout>
                  </v-container>
+                 <v-flex>
+                   <v-btn @click="" large color="primary"><v-icon>get_app</v-icon></v-btn>
+                   <v-btn @click="print" large color="primary"><v-icon>print</v-icon></v-btn>
+                 </v-flex>
                </v-card>
              </v-flex>
             </v-layout>
@@ -140,7 +140,6 @@ export default {
   },
   methods: {
     print () {
-      console.log(this.$printer)
       this.$printer.print(this.currentstudent, this.currentreport)
     },
     applySelection (payload) {
