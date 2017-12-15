@@ -33,7 +33,7 @@
             <template v-if="currentreport != null">
             <v-layout row-wrap>
               <v-flex xs12>
-              <v-card color="blue darken-5" class="white--text">
+              <v-card color="blue-grey darken-4" class="white--text">
                  <v-container fluid grid-list-lg>
                    <v-layout row>
                      <v-flex xs7 height="100%">
@@ -55,7 +55,7 @@
             <template v-for="module in currentreport.modules">
             <v-layout row-wrap>
               <v-flex xs12>
-                <v-card color="red darken-3" class="display-2 white--text text-xs-left">
+                <v-card color="blue-grey darken-3" class="display-2 white--text text-xs-left">
                   <v-container fluid grid-list-lg>
                     {{module.naam}}
                   </v-container>
@@ -64,7 +64,7 @@
             </v-layout>
             <v-layout row-wrap v-for="categorie in module.doelstellingscategories">
               <v-flex xs2>
-              <v-card color="cyan darken-1" class="white--text text-xs-center" height="100%">
+              <v-card color="blue-grey darken-2" class="white--text text-xs-center" height="100%">
                  <v-container fluid grid-list-lg fill-height>
                    {{categorie.name}}
                  </v-container>
@@ -73,7 +73,7 @@
               <v-flex xs10>
                 <v-layout row-wrap v-for="doelstelling in categorie.doelstellingen">
                   <v-flex xs10>
-                    <v-card color="cyan darken-3" class="white--text text-xs-left">
+                    <v-card color="blue-grey" class="white--text text-xs-left">
                       <v-container fluid grid-list-lg>
                         {{doelstelling.name}}
                       </v-container>
@@ -93,9 +93,9 @@
             <!-- REPORT COMMENTS AND NOTES -->
             <v-layout row-wrap>
               <v-flex xs12>
-                <v-card color="cyan darken-3" class="white--text text-xs-left">
+                <v-card color="blue-grey darken-4" class="white--text text-xs-left">
                   <v-container fluid grid-list-lg>
-                    <v-chip label color="yellow" text-color="black">
+                    <v-chip label color="yellow" text-color="black" width="100%">
                       <v-icon left>label</v-icon>
                       <div class="mr-4">Algemene commentaar</div>
                       <div>{{currentreport.commentaarAlgemeen}}</div>
