@@ -320,25 +320,6 @@ if ($_SERVER['REQUEST_METHOD'] == 'GET') {
             echo '{"Status":"Opleiding niet gevonden"}';
             http_response_code(403);
         }
-        setcookie("GID", $token, time() + 60 * 60 * 24 * 7, '/'/*, NULL, NULL, false*/);
-        //setcookie("GID_", '1', time() + 60 * 60 * 24 * 3, '/', NULL, NULL, TRUE);
-        $cookieObj = (object)[
-          'GID' => $token,
-          'GID_' => '1'
-        ];
-        echo json_encode($cookieObj);
-        http_response_code(200);
-      } else {
-        echo '{"Error":"Wrong pw"}';
-        http_response_code(401);
-      }
-    } else {
-      echo '{"Error":"Wrong username"}';
-      http_response_code(401);
-    }
-  } else if ($_GET['url'] == 'updateUser') {
-    $postBody = file_get_contents('php://input');
-    $postBody = json_decode($postBody);
     } else if ($_GET['url'] == 'modulesVoorOpleiding') {
         //if (Login::isLoggedIn()) {
         if (isset($_GET['opleiding'])) {
@@ -458,6 +439,13 @@ if ($_SERVER['REQUEST_METHOD'] == 'GET') {
             echo '{"Error":"No studentid found"}';
             http_response_code(403);
         }
+    } else if ($_GET['url'] == 'getEvaluatie') {
+      if (isset($_GET['name'])) {
+        
+      } else {
+        echo '{"Status":"No evaluatie name given"}';
+        http_response_code(403);
+      }
     }
 } else if ($_SERVER['REQUEST_METHOD'] == 'POST') {
     if ($_GET['url'] == 'auth') {
@@ -520,7 +508,7 @@ if ($_SERVER['REQUEST_METHOD'] == 'GET') {
         echo '{"Error":"Opleiding not created"}';
         http_response_code(403);
       } else {
-        $userDAO->createEducation($name, $creatorId)
+        $userDAO->createEducation($name, $creatorId);
         echo 'Opleiding created';
         http_response_code(200);
       }
@@ -585,7 +573,7 @@ if ($_SERVER['REQUEST_METHOD'] == 'GET') {
         $postBody = json_decode($postBody);
 
         $date = $postBody->date;
-        $date = str_replace('/','-',$date);
+        $date = preg_replace('#(\d{2})/(\d{2})/(\d{4})', '$3-$2-$1', $date);
         $aspecten = $postBody->aspecten;
 
         $beoordeeldeAspecten = [];
@@ -594,7 +582,7 @@ if ($_SERVER['REQUEST_METHOD'] == 'GET') {
             $beoordeeldeAspecten[$aspect->aspectId] = $aspect->beoordeling;
         }
 
-        $userDAO->insertNewEvaluation($postBody->name,$postBody->studentId,$postBody->moduleId,$postBody->date);
+        $userDAO->insertNewEvaluation($postBody->name,$postBody->studentId,$postBody->moduleId,$date);
         $evaluatieId = $userDAO->getEvaluatieId($postBody->name);
         $userDAO->insertAspectbeoordelingen($evaluatieId, $beoordeeldeAspecten);
 
@@ -610,7 +598,7 @@ if ($_SERVER['REQUEST_METHOD'] == 'GET') {
       $firstname = $postBody->firstname;
       $lastname = $postBody->lastname;
       $email = $postBody->email;
-      $pw = $postBody->pw;
+      // TODO $pw = generate a password + email it;
       $moduleIds = $postBody->moduleIds;
       $creatorId = $postBody->id;
 
@@ -636,6 +624,8 @@ if ($_SERVER['REQUEST_METHOD'] == 'GET') {
     $email = $postBody->email;
     $moduleIds = $postBody->moduleIds;
     $creatorId = $postBody->id;
+
+    $userDAO->updateStudent();
 */
   }
 } else if ($_SERVER['REQUEST_METHOD'] == 'DELETE') {
