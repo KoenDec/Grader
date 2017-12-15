@@ -320,6 +320,25 @@ if ($_SERVER['REQUEST_METHOD'] == 'GET') {
             echo '{"Status":"Opleiding niet gevonden"}';
             http_response_code(403);
         }
+        setcookie("GID", $token, time() + 60 * 60 * 24 * 7, '/'/*, NULL, NULL, false*/);
+        //setcookie("GID_", '1', time() + 60 * 60 * 24 * 3, '/', NULL, NULL, TRUE);
+        $cookieObj = (object)[
+          'GID' => $token,
+          'GID_' => '1'
+        ];
+        echo json_encode($cookieObj);
+        http_response_code(200);
+      } else {
+        echo '{"Error":"Wrong pw"}';
+        http_response_code(401);
+      }
+    } else {
+      echo '{"Error":"Wrong username"}';
+      http_response_code(401);
+    }
+  } else if ($_GET['url'] == 'updateUser') {
+    $postBody = file_get_contents('php://input');
+    $postBody = json_decode($postBody);
     } else if ($_GET['url'] == 'modulesVoorOpleiding') {
         //if (Login::isLoggedIn()) {
         if (isset($_GET['opleiding'])) {
@@ -375,7 +394,6 @@ if ($_SERVER['REQUEST_METHOD'] == 'GET') {
     } else if ($_GET['url'] == 'evalFicheVoorLeerkracht') {
         if (isset($_GET['leerkracht'])) {
             $teachId = $_GET['leerkracht'];
-
         }
         http_response_code(200);
     } else if ($_GET['url'] == 'evaluatieVoorStudent') {
@@ -491,7 +509,22 @@ if ($_SERVER['REQUEST_METHOD'] == 'GET') {
         }
     } else if ($_GET['url'] == 'createModule') {
 
-    } else if ($_GET['url'] == 'evaluateCrit') {
+    } else if ($_GET['url'] == 'createOpleiding') {
+      $postBody = file_get_contents('php://input');
+      $postBody = json_decode($postBody);
+
+      $creatorid =   $postBody->creatorid;
+      $name =   $postBody->name;
+
+      if (empty($creatorid) || empty($name)) {
+        echo '{"Error":"Opleiding not created"}';
+        http_response_code(403);
+      } else {
+        $userDAO->createEducation($name, $creatorId)
+        echo 'Opleiding created';
+        http_response_code(200);
+      }
+    }else if ($_GET['url'] == 'evaluateCrit') {
         $postBody = file_get_contents('php://input');
         $postBody = json_decode($postBody);
 
@@ -551,6 +584,8 @@ if ($_SERVER['REQUEST_METHOD'] == 'GET') {
         $postBody = file_get_contents('php://input');
         $postBody = json_decode($postBody);
 
+        $date = $postBody->date;
+        $date = str_replace('/','-',$date);
         $aspecten = $postBody->aspecten;
 
         $beoordeeldeAspecten = [];
@@ -559,7 +594,7 @@ if ($_SERVER['REQUEST_METHOD'] == 'GET') {
             $beoordeeldeAspecten[$aspect->aspectId] = $aspect->beoordeling;
         }
 
-        $userDAO->insertNewEvaluation($postBody->name,$postBody->studentId,$postBody->moduleId);
+        $userDAO->insertNewEvaluation($postBody->name,$postBody->studentId,$postBody->moduleId,$postBody->date);
         $evaluatieId = $userDAO->getEvaluatieId($postBody->name);
         $userDAO->insertAspectbeoordelingen($evaluatieId, $beoordeeldeAspecten);
 
@@ -569,29 +604,39 @@ if ($_SERVER['REQUEST_METHOD'] == 'GET') {
           $userDAO->saveAspecten($aspectid,$quotering);
         }*/
     } else if ($_GET['url'] == 'createStudent') {
-    $postBody = file_get_contents('php://input');
+      /*$postBody = file_get_contents('php://input');
+      $postBody = json_decode($postBody);
+
+      $firstname = $postBody->firstname;
+      $lastname = $postBody->lastname;
+      $email = $postBody->email;
+      $pw = $postBody->pw;
+      $moduleIds = $postBody->moduleIds;
+      $creatorId = $postBody->id;
+
+      $password_hash = password_hash($pw, PASSWORD_BCRYPT);
+
+      if ($firstname != "" || $lastname != "" || $pw != "") {
+        echo '{"Error":"Student not created"}';
+        http_response_code(403);
+      } else {
+        $studentid = $userDAO->getUser($email)->id;
+        $userDAO->createUser($firstname,$lastname,$email,$password_hash,$creatorId);
+        $userDAO->makeUserStudent($studentid);
+        $userDAO->addStudentToModules($studentid, $moduleIds);
+        echo 'Student created';
+        http_response_code(200);
+      }*/
+  } else if ($_GET['url'] == 'updateStudent') {
+    /*$postBody = file_get_contents('php://input');
     $postBody = json_decode($postBody);
 
     $firstname = $postBody->firstname;
     $lastname = $postBody->lastname;
     $email = $postBody->email;
-    $pw = $postBody->pw;
     $moduleIds = $postBody->moduleIds;
     $creatorId = $postBody->id;
-
-    $password_hash = password_hash($pw, PASSWORD_BCRYPT);
-
-    if (empty($firstname) || $lastname == null || $pw == null) {
-      echo '{"Error":"Student not created"}';
-      http_response_code(403);
-    } else {
-      $studentid = $userDAO->getUser($email)->id;
-      $userDAO->createUser($firstname,$lastname,$email,$password_hash,$creatorId);
-      $userDAO->makeUserStudent($studentid);
-      $userDAO->addStudentToModules($studentid, $moduleIds);
-      echo 'Student created';
-      http_response_code(200);
-    }
+*/
   }
 } else if ($_SERVER['REQUEST_METHOD'] == 'DELETE') {
     if ($_GET['url'] == 'auth') {
