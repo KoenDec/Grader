@@ -64,11 +64,58 @@ type POST
 url  api/resetPassword
 data {"username":???,"password":newpw,"confirm":repeatedpw}
 
+#get alle evaluaties van 1 student voor 1 module
+type GET
+url  api/studentEvaluations?student=&module=
+
+#get evaluatie van student op module
+type GET
+url  api/studentEvaluation?id=
+id = evaluatieId
+
 #get alle rapporten van 1 studentsTable
 type GET
-url  api/studentReports?id=studentid
+url  api/studentReports?id=
+id = studentId
 
 #Get rapport of student
 type GET
 url  api/studentReport?id=
+<<<<<<< HEAD
 id = rapportid
+
+# create users
+type POST
+url  api/createUser
+data {"firstname":"","lastname":"","email":"","pw":"","id",""}
+=======
+id = rapportId
+
+#Save new evaluation of student for module
+type POST
+url api/saveEvaluatie
+data example:
+ {
+     	"name": "opdracht les 4",
+     	"studentId": 10,
+     	"moduleId": 7,
+     	"aspecten": [
+     		{
+     			"aspectId": 1,
+     			"beoordeling": 1
+     		},
+     		{
+     			"aspectId": 2,
+     			"beoordeling": 1
+     		},
+     		{
+     			"aspectId": 3,
+     			"beoordeling": 1
+     		},
+     		{
+     			"aspectId": 4,
+     			"beoordeling": 1
+     		}
+     	]
+     }
+>>>>>>> 0322ab21c40edb4b3b9eadf1cb4df2c4715d5767
