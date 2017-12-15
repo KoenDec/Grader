@@ -36,9 +36,9 @@
         <v-layout v-if="moduleSelected" row wrap class="text-xs-left">
             <v-flex offset-xs1>
                 <div>
-                    <v-btn color="primary"><v-icon>repeat</v-icon>Vorige Evaluatiefiches</v-btn>
                     <v-btn @click="newEval" color="primary"><v-icon>add</v-icon>Nieuwe Evaluatiefiche</v-btn>
                     <v-btn v-if="newEvalTable" @click="makeJSON" color="primary"><v-icon>save</v-icon>Evaluatie Opslaan</v-btn>
+                    <p v-if="evalError" style="display: inline-block" class="red--text">{{evalError}}</p>
                 </div>
             </v-flex>
         </v-layout>
@@ -104,7 +104,7 @@
                             <v-layout row-wrap>
                                 <v-flex>
                                     <v-card color="gray darken-3" class="black--text text-xs-left" height="100%">
-                                        <v-container style="text-align: right; padding-right: 90px" fluid grid-list-lg>
+                                        <v-container style="text-align: right;" fluid grid-list-lg>
                                             <p>Evaluatie leerkracht</p>
                                             <p><span>JA</span> | <span>NEE</span></p>
                                         </v-container>
@@ -116,7 +116,7 @@
                 </v-flex>
             </v-layout>
             <v-layout v-for="(cat, i) in selectedModule[0].categorieen" :key="i">
-                <v-layout row-wrap>
+                <v-layout row-wrap class="mb-1">
                     <v-flex>
                         <v-layout row-wrap>
                             <v-flex>
@@ -224,6 +224,7 @@
           activeBoxesCreated: false,
           saveEval: {},
           evalName: '',
+          evalError: null,
           date: null,
           dateFormatted: null,
           menu: false
@@ -282,17 +283,25 @@
           this.$forceUpdate()
         },
         makeJSON: function () {
-          var objKeys = Object.keys(this.activeBoxes)
-          var objLength = Object.keys(this.activeBoxes).length
-          this.saveEval['name'] = this.evalName
-          this.saveEval['studentId'] = this.student.id
-          this.saveEval['moduleId'] = this.selectedModule[0].id
-          this.saveEval['aspecten'] = []
-          for (var i = 0; i < objLength; i = i + 2) {
-            var obj = {aspectId: objKeys[i].substr(3), beoordeling: this.activeBoxes[objKeys[i]]}
-            this.saveEval['aspecten'].push(obj)
+          if (this.evalName !== '') {
+            this.evalError = null
+            var objKeys = Object.keys(this.activeBoxes)
+            var objLength = Object.keys(this.activeBoxes).length
+            this.saveEval['name'] = this.evalName
+            this.saveEval['studentId'] = this.student.id
+            this.saveEval['moduleId'] = this.selectedModule[0].id
+            this.saveEval['aspecten'] = []
+            this.saveEval['date'] = this.dateFormatted
+            for (var i = 0; i < objLength; i = i + 2) {
+              var obj = {aspectId: objKeys[i].substr(3), beoordeling: this.activeBoxes[objKeys[i]]}
+              this.saveEval['aspecten'].push(obj)
+            }
+            this.$http.createEval(this.saveEval, function (data) { console.log(data) })
+            console.log(this.saveEval)
+            this.newEvalTable = false
+          } else {
+            this.evalError = 'geef een naam op voor de Evaluatiefiche'
           }
-          console.log(this.saveEval)
         },
         formatDate (date) {
           if (!date) {
