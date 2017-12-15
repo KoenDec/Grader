@@ -11,6 +11,7 @@ import Subjects from '@/components/Subjects'
 import fileInput from '@/components/file-input'
 import SearchBar from '@/components/SearchBar'
 import Evaluate from '@/components/Evaluate'
+import Login from '@/components/Login'
 
 Vue.component('fileInput', fileInput)
 Vue.component('checkboxes', checkboxes)
@@ -20,6 +21,11 @@ Vue.use(Router)
 
 export default new Router({
   routes: [
+    {
+      path: '/login',
+      name: 'login',
+      component: Login
+    },
     {
       path: '/',
       name: 'index',
