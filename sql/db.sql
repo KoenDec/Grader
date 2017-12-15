@@ -131,7 +131,7 @@ CREATE TABLE `evaluaties` (
   `name` varchar(200) NOT NULL,
   `studentId` int NOT NULL,
   `moduleId` int NOT NULL,
-  `datum` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP,
+  `datum` date NOT NULL,
   FOREIGN KEY(studentId) REFERENCES studenten(studentId),
   FOREIGN KEY(moduleId) REFERENCES modules(id)
 );
