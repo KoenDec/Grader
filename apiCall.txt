@@ -1,4 +1,4 @@
-# Login 
+# Login
 type POST
 url  api/auth
 data {"username":"","password":""}
@@ -28,3 +28,47 @@ id = student id
 #Get opleidingen
 type GET
 url  api/opleidingen
+
+#insert score for criterium
+type POST
+url  api/evaluateCrit
+data {"critToEval":"","score":""}
+
+#update user
+type POST
+url  api/updateUser
+data {"firstname":"","lastname":"","email":""}
+
+#Get modules in opleiding
+type GET
+url  api/modulesVoorOpleiding?opleiding=?
+
+#Get categorieen in module
+type GET
+url  api/categorieenInModules?module=?
+
+#Get doelstellingen in categorie
+type GET
+url  api/doelstellingenInCategorie?categorie=?
+
+#Get criteria in doelstelling
+type GET
+url  api/criteriaInDoelstelling?doelstelling=?
+
+#Get volledige opleiding
+type GET
+url api/fullOpleiding?opleiding=?
+
+#Reset user password
+type POST
+url  api/resetPassword
+data {"username":???,"password":newpw,"confirm":repeatedpw}
+
+#get alle rapporten van 1 studentsTable
+type GET
+url  api/studentReports?id=studentid
+
+#Get rapport of student
+type GET
+url  api/studentReport?id=
+id = rapportid

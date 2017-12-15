@@ -53,7 +53,7 @@ class UserDAO {
         try {
             $conn = graderdb::getConnection();
 
-            $sql = 'SELECT * FROM users WHERE email = :username';
+            $sql = 'SELECT id,email,firstname,lastname,accountCreatedTimestamp FROM users WHERE email = :username';
             $stmt = $conn->prepare($sql);
             $stmt->bindParam(':username', $username);
             $stmt->execute();
@@ -114,7 +114,7 @@ class UserDAO {
         try {
             $conn = graderdb::getConnection();
 
-            $sql = 'SELECT * FROM users WHERE id = :userid';
+            $sql = 'SELECT id,email,firstname,lastname,accountCreatedTimestamp FROM users WHERE id = :userid';
             $stmt = $conn->prepare($sql);
             $stmt->bindParam(':userid', $userid);
             $stmt->execute();
@@ -236,17 +236,80 @@ class UserDAO {
         return $students;
     }
 
+    public static function getEducationFromStudent($studentId){
+        try {
+            $conn = graderdb::getConnection();
+
+            $sql = 'SELECT DISTINCT o.id, o.name from studenten s
+		            JOIN studenten_modules sm ON sm.studentId = s.studentId
+                    JOIN modules m ON sm.moduleId = m.id
+                    LEFT JOIN opleidingen o ON m.opleidingId = o.id OR sm.opleidingId = o.id
+                    WHERE s.studentId = :studentId
+					  AND s.stillStudent = TRUE
+                      AND sm.status = \'volgt\'';
+
+            $stmt = $conn->prepare($sql);
+            $stmt->bindParam(':studentId',$studentId);
+
+            $stmt->execute();
+
+            $educationsTable = $stmt->fetchAll(PDO::FETCH_CLASS);
+        } catch (PDOException $e) {
+            die($e->getMessage());
+        }
+
+        if(isset($educationsTable[0])) {
+            $education = $educationsTable[0];
+        } else {
+            //die('Student has no education!');
+            $education = null;
+        }
+
+        return $education;
+    }
+
+    public static function getAllActiveStudentsWithEducation(){
+        try {
+            $conn = graderdb::getConnection();
+
+            $sql = 'SELECT DISTINCT u.id, u.email, u.firstname, u.lastname, o.id as opleidingId, o.name as opleidingName from studenten s
+                    JOIN users u ON s.studentId = u.id
+		            JOIN studenten_modules sm ON sm.studentId = s.studentId
+                    JOIN modules m ON sm.moduleId = m.id
+                    LEFT JOIN opleidingen o ON m.opleidingId = o.id OR sm.opleidingId = o.id
+                    WHERE s.stillStudent = TRUE
+                      AND sm.status = \'volgt\'
+                      AND u.status = \'ACTIVE\'';
+
+            $stmt = $conn->prepare($sql);
+
+            $stmt->execute();
+
+            $studentsTable = $stmt->fetchAll(PDO::FETCH_CLASS);
+        } catch (PDOException $e) {
+            die($e->getMessage());
+        }
+
+        if(isset($studentsTable[0])) {
+            $students = $studentsTable;
+        } else {
+            //die('No students found!');
+            $students = null;
+        }
+
+        return $students;
+    }
+
     public static function getAllStudentsInEducation($educationId){
         try {
             $conn = graderdb::getConnection();
 
             $sql = 'SELECT DISTINCT u.* FROM users u
 		              JOIN studenten s on u.id = s.studentId
-	                  JOIN studenten_doelstellingscategories sd ON s.studentId = sd.studentId
-	                  JOIN doelstellingscategories d ON sd.doelstellingscategorieId = d.id
-                      JOIN modules m ON d.moduleId = m.id
-                      WHERE sd.status = \'volgt\'
-			            AND m.opleidingId = :educationId OR sd.opleidingId = :educationId';
+	                  JOIN studenten_modules sm ON s.studentId = sm.studentId
+                      JOIN modules m ON sm.moduleId = m.id
+                      WHERE sm.status = \'volgt\'
+			            AND m.opleidingId = :educationId OR sm.opleidingId = :educationId';
 
             $stmt = $conn->prepare($sql);
             $stmt->bindParam(':educationId',$educationId);
@@ -464,20 +527,16 @@ class UserDAO {
         return $module;
     }
 
-    // TODO: method is for werkfiches, not for rapporten
-    /*
     public static function getModulesFromStudent($studentId){
         try{
             $conn = graderdb::getConnection();
 
-            $sql = 'SELECT DISTINCT m.* FROM users u JOIN studenten s ON u.id = s.studentId
-                      JOIN studenten_doelstellingscategories sd ON s.studentId = sd.studentId
-                      JOIN doelstellingscategories d ON d.id = sd.doelstellingscategorieId
-                      JOIN modules m ON d.moduleId = m.id
-                      -- JOIN opleidingen o ON sd.opleidingId = o.id -- geeft de algemene modules, niet specifiek aan de opleiding
+            $sql = 'SELECT DISTINCT m.* FROM studenten_modules sm
+                      JOIN modules m ON sm.moduleId = m.id
+                      -- JOIN opleidingen o ON sm.opleidingId = o.id -- geeft de algemene modules, niet specifiek aan de opleiding
                       -- JOIN opleidingen o ON m.opleidingId = o.id -- geeft de opleidingsspecifieke modules
-                      WHERE sd.status = \'volgt\'
-	                    AND s.studentId = :studentId';
+                      WHERE sm.status = \'volgt\'
+	                    AND sm.studentId = :studentId';
             $stmt = $conn->prepare($sql);
             $stmt->bindParam(':studentId',$studentId);
 
@@ -494,7 +553,7 @@ class UserDAO {
             die('No modules found for student with id = ' . $studentId);
         }
         return $modules;
-    }*/
+    }
 
     public static function getDoelstellingscategoriesInModule($moduleId){
         try {
@@ -520,33 +579,31 @@ class UserDAO {
         return $doelstellingscategorieen;
     }
 
-    public static function getFollowedDoelstellingscategoriesInModule($moduleId, $studentId){
+    public static function getFollowedModules($studentId){
         try{
             $conn = graderdb::getConnection();
 
-            $sql = 'SELECT d.* FROM studenten_doelstellingscategories sd
-                      JOIN doelstellingscategories d ON sd.doelstellingscategorieId = d.id
-                      JOIN modules m on d.moduleId = m.id
-                      WHERE studentId = :studentId AND moduleId = :moduleId
+            $sql = 'SELECT m.* FROM studenten_modules sm
+                      JOIN modules m on sm.moduleId = m.id
+                      WHERE studentId = :studentId
                         AND status=\'volgt\'';
             $stmt = $conn->prepare($sql);
             $stmt->bindParam(':studentId',$studentId);
-            $stmt->bindParam(':moduleId',$moduleId);
 
             $stmt->execute();
 
-            $doelstellingscategorieTable = $stmt->fetchAll(PDO::FETCH_CLASS);
+            $modulesTable = $stmt->fetchAll(PDO::FETCH_CLASS);
         } catch (PDOException $e) {
             die($e->getMessage());
         }
 
-        if(isset($doelstellingscategorieTable[0])) {
-            $doelstellingscategorieen = $doelstellingscategorieTable;
+        if(isset($modulesTable[0])) {
+            $modules = $modulesTable;
         } else {
-            die('No doelstellingscategorieën found for student with id = ' . $studentId . ' in module with id ' . $moduleId);
+            die('No modules found for student with id = ' . $studentId);
         }
 
-        return $doelstellingscategorieen;
+        return $modules;
     }
 
     public static function getDoelstellingenInDoelstellingscategorie($doelstellingscategorieId){
@@ -568,11 +625,115 @@ class UserDAO {
         if(isset($doelstellingenTable[0])) {
             $doelstellingen = $doelstellingenTable;
         } else {
-            //die('No criteria found for doelstellingscategorie with id = ' . $doelstellingscategorieId);
+            //die('No doelstellingen found for doelstellingscategorie with id = ' . $doelstellingscategorieId);
             $doelstellingen = null;
         }
 
         return $doelstellingen;
+    }
+
+    public static function getCriteriaInDoelstelling($doelstellingId){
+        try{
+            $conn = graderdb::getConnection();
+
+            $sql = 'SELECT * from evaluatiecriteria
+                    WHERE doelstellingId = :doelstellingId';
+            $stmt = $conn->prepare($sql);
+            $stmt->bindParam(':doelstellingId',$doelstellingId);
+
+            $stmt->execute();
+
+            $criteriaTable = $stmt->fetchAll(PDO::FETCH_CLASS);
+        } catch (PDOException $e) {
+            die($e->getMessage());
+        }
+
+        if(isset($criteriaTable[0])) {
+            $criteria = $criteriaTable;
+        } else {
+            //die('No criteria found for doelstelling with id = ' . $doelstellingId);
+            $criteria = null;
+        }
+
+        return $criteria;
+    }
+
+    public static function getBeoordelingsaspectenInEvaluatiecriterium($evaluatiecriteriumId){
+        try{
+            $conn = graderdb::getConnection();
+
+            $sql = 'SELECT * from aspecten
+                    WHERE evaluatiecriteriumId = :evaluatiecriteriumId';
+            $stmt = $conn->prepare($sql);
+            $stmt->bindParam(':evaluatiecriteriumId',$evaluatiecriteriumId);
+
+            $stmt->execute();
+
+            $aspectenTable = $stmt->fetchAll(PDO::FETCH_CLASS);
+        } catch (PDOException $e) {
+            die($e->getMessage());
+        }
+
+        if(isset($aspectenTable[0])) {
+            $aspecten = $aspectenTable;
+        } else {
+            //die('No aspecten found for evaluatiecriterium with id = ' . $evaluatiecriteriumId);
+            $aspecten = null;
+        }
+
+        return $aspecten;
+    }
+
+    public static function getEvaluaties($studentId, $moduleId){
+        try{
+            $conn = graderdb::getConnection();
+
+            $sql = 'SELECT * from evaluaties WHERE studentId = :studentId AND moduleId = :moduleId';
+            $stmt = $conn->prepare($sql);
+            $stmt->bindParam(':studentId',$studentId);
+            $stmt->bindParam(':moduleId',$moduleId);
+
+            $stmt->execute();
+
+            $evaluatiesTable = $stmt->fetchAll(PDO::FETCH_CLASS);
+        } catch (PDOException $e) {
+            die($e->getMessage());
+        }
+
+        if(isset($evaluatiesTable[0])) {
+            $evaluaties = $evaluatiesTable;
+        } else {
+            //die('No rapporten found for student with id = ' . $studentId);
+            $evaluaties = null;
+        }
+
+        return $evaluaties;
+    }
+
+    public static function getEvaluatie($evaluatieId){
+        try{
+            $conn = graderdb::getConnection();
+
+            $sql = 'SELECT * from evaluaties WHERE id = :evaluatieId';
+            $stmt = $conn->prepare($sql);
+            $stmt->bindParam(':evaluatieId',$evaluatieId);
+
+            $stmt->execute();
+
+            $rapportTable = $stmt->fetchAll(PDO::FETCH_CLASS);
+        } catch (PDOException $e) {
+            die($e->getMessage());
+        }
+
+        if(isset($evaluatieTable[0])) {
+            $evaluatie = $evaluatieTable[0];
+        } else {
+            echo "no evaluatie found with id = ' . $evaluatieId";
+            //die('No evaluatie found with id = ' . $evaluatieId);
+            $evaluatie = null;
+        }
+        echo $evaluatie;
+        return $evaluatie;
     }
 
     public static function getRapporten($studentId){
@@ -598,6 +759,31 @@ class UserDAO {
         }
 
         return $rapporten;
+    }
+
+    public static function getRapport($rapportId){
+        try{
+            $conn = graderdb::getConnection();
+
+            $sql = 'SELECT * from rapporten WHERE id = :rapportId';
+            $stmt = $conn->prepare($sql);
+            $stmt->bindParam(':rapportId',$rapportId);
+
+            $stmt->execute();
+
+            $rapportTable = $stmt->fetchAll(PDO::FETCH_CLASS);
+        } catch (PDOException $e) {
+            die($e->getMessage());
+        }
+
+        if(isset($rapportTable[0])) {
+            $rapport = $rapportTable[0];
+        } else {
+            //die('No rapporten found for student with id = ' . $studentId);
+            $rapport = null;
+        }
+
+        return $rapport;
     }
 
     public static function getRapportmodules($rapportId){
@@ -672,6 +858,30 @@ class UserDAO {
         }
 
         return $rating;
+    }
+
+    public static function getUserPw($username) {
+      try {
+          $conn = graderdb::getConnection();
+
+          $sql = 'SELECT * FROM users WHERE email = :username';
+          $stmt = $conn->prepare($sql);
+          $stmt->bindParam(':username', $username);
+          $stmt->execute();
+
+          $usersTable = $stmt->fetchAll(PDO::FETCH_CLASS);
+      } catch (PDOException $e) {
+          die($e->getMessage());
+      }
+
+      if(isset($usersTable[0])) {
+          $user = $usersTable[0];
+      } else {
+          //die('No user with username = ' . $username);
+          $user = null;
+      }
+
+      return $user;
     }
 
      //////////////////////////////////////////////
@@ -757,6 +967,13 @@ class UserDAO {
 
     }
 
+    public static function saveRating($rapportId, $doelstellingId){
+        // TODO berekenen
+        // avg(rating 'aspecten' (OK/NOK)) = rating evaluatiecriterium (RO/OV/V/G/Afwezig/Voldaan)
+        // avg(rating evaluatiecriteria) = rating doelstelling
+        // leerkracht kan dit met 1 stap aanpassen (bv als het gemiddelde OV is maar de leerkracht vindt het ok kan deze hier V van maken, of omgekeerd)
+    }
+
     //////////////////////////////////////////////
     //              UPDATE-QUERIES              //
     //////////////////////////////////////////////
@@ -776,6 +993,22 @@ class UserDAO {
         } catch (PDOException $e) {
             die($e->getMessage());
         }
+    }
+
+    public static function updatePassword($userid, $password) {
+      try {
+        $conn = graderdb::getConnection();
+
+        $sql = 'UPDATE users SET password=:password WHERE id = :userId';
+        $stmt = $conn->prepare($sql);
+        $stmt->bindParam(':password', $password);
+        $stmt->bindParam(':userId', $userid);
+
+        $stmt->execute();
+      } catch (PDOException $e) {
+        die($e->getMessage());
+      }
+
     }
 
     //////////////////////////////////////////////

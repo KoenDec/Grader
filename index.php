@@ -1,8 +1,8 @@
 <?php
 include_once "header.html";
-include_once "showFunctions.php";
-include_once "graderdb.php";
-include_once('Login.php');
+include_once "php/showFunctions.php";
+include_once "php/graderdb.php";
+include_once('php/Login.php');
 
 $userDAO = new UserDAO();
 
@@ -37,14 +37,27 @@ function checkGET()
                 break;
 
             case "rapporten":
-                if(isset($_POST["student-id"])){
-                    showReportsPage($_POST["student-id"]);
+                if(isset($_POST["rapport-id"]) && isset($_POST["student-id"])) {
+                    showReportsPage($_POST["student-id"], $_POST["rapport-id"]);
+                }
+                else if(isset($_POST["rapport-id"])) {
+                    showReportsPage(null, $_POST["rapport-id"]);
+                }
+                else if(isset($_POST["student-id"])){
+                    showReportsPage($_POST["student-id"], null);
                 } else {
-                    showReportsPage(null);
+                    showReportsPage(null, null);
                 }
                 break;
             case "werkfiches":
-                showWerkfichesPage();
+                if(isset($_POST["student-id"]) && isset($_POST["module-id"])) {
+                    showWerkfichesPage($_POST["student-id"],$_POST["module-id"]);
+                }
+                if(isset($_POST["student-id"])) {
+                    showWerkfichesPage($_POST["student-id"], null);
+                } else {
+                    showWerkfichesPage(null, null);
+                }
                 break;
 
             case "studenten":

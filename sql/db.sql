@@ -1,6 +1,6 @@
 DROP DATABASE `graderDB`;
 
-CREATE DATABASE `graderDB`;
+CREATE DATABASE `graderDB` CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci;
 
 USE `graderDB`;
 
@@ -57,47 +57,26 @@ CREATE TABLE `modules` (
   `id` int NOT NULL AUTO_INCREMENT PRIMARY KEY,
   `name` varchar(50) NOT NULL,
   `opleidingId` int,
+  `teacherId` int NOT NULL,
   `creatorId` int,
   FOREIGN KEY(opleidingId) REFERENCES opleidingen(id),
+  FOREIGN KEY(teacherId) REFERENCES teachers(teacherId),
   FOREIGN KEY(creatorId) REFERENCES admins(adminId)
 );
 
 CREATE TABLE `doelstellingscategories` (
   `id` int NOT NULL AUTO_INCREMENT PRIMARY KEY,
-  `name` varchar(100) NOT NULL,
+  `name` varchar(100) CHARACTER SET utf8 COLLATE utf8_unicode_ci NOT NULL,
   `moduleId` int NOT NULL,
-  `teacherId` int NOT NULL,
   `creatorId` int,
   FOREIGN KEY(moduleId) REFERENCES modules(id),
-  FOREIGN KEY(teacherId) REFERENCES teachers(teacherId),
   FOREIGN KEY(creatorId) REFERENCES admins(adminId)
-);
-
-create table `studenten_doelstellingscategories` (
-  `doelstellingscategorieId` int NOT NULL,
-  `studentId` int NOT NULL,
-  `opleidingId` int DEFAULT NULL,
-  `status` enum('Volgt','Beëindigd') NOT NULL DEFAULT 'Volgt',
-  CONSTRAINT PK_studenten_doelstellingen PRIMARY KEY (doelstellingscategorieId, studentId),
-  FOREIGN KEY(doelstellingscategorieId) REFERENCES doelstellingscategories(id),
-  FOREIGN KEY(opleidingId) REFERENCES opleidingen(id),
-  FOREIGN KEY(studentId) REFERENCES studenten(studentId)
-  
-	-- TODO DODO
-    --
-    -- opleidingId in werkfiches can be null because some werkfiches are general and are used in all opleidingen.
-    -- opleidingId in studenten_doelstellingscategories is default null because the opleidingId is already mentioned in werkfiches.
-    -- SO
-    -- if you add a record in studenten_doelstellingscategories and for the werkfiche that that module belongs to the oplidingId is null
-    -- a constraint should oblige you to fill out the opleidingId in studenten_doelstellingscategories.
-    -- (if dat is possible in mysql)
-  
 );
 
 CREATE TABLE `doelstellingen` (
   `id` int NOT NULL AUTO_INCREMENT PRIMARY KEY,
   `doelstellingscategorieId` int NOT NULL,
-  `weergaveTitel` varchar(200) NOT NULL,
+  `name` varchar(200) NOT NULL,
   `inGebruik` tinyint(1) NOT NULL DEFAULT 1,
   `creatorId` int,
   FOREIGN KEY(doelstellingscategorieId) REFERENCES doelstellingscategories(id),
@@ -105,21 +84,91 @@ CREATE TABLE `doelstellingen` (
 );
 
 CREATE TABLE `evaluatiecriteria` (
-`id` int NOT NULL AUTO_INCREMENT PRIMARY KEY,
+  `id` int NOT NULL AUTO_INCREMENT PRIMARY KEY,
   `doelstellingId` int NOT NULL,
-  `weergaveTitel` varchar(200) NOT NULL,
+  `name` varchar(200) NOT NULL,
+  `gewicht` int NOT NULL DEFAULT 1,
   `inGebruik` tinyint(1) NOT NULL DEFAULT 1,
   `creatorId` int,
   FOREIGN KEY(doelstellingId) REFERENCES doelstellingen(id),
   FOREIGN KEY(creatorId) REFERENCES admins(adminId)
 );
 
+CREATE TABLE `aspecten` (
+  `id`int NOT NULL AUTO_INCREMENT PRIMARY KEY,
+  `evaluatiecriteriumId` int NOT NULL,
+  `name` varchar(200) NOT NULL,
+  `inGebruik` tinyint(1) NOT NULL DEFAULT 1,
+  `creatorId` int,
+  FOREIGN KEY(evaluatiecriteriumId) REFERENCES evaluatiecriteria(id),
+  FOREIGN KEY(creatorId) REFERENCES admins(adminId)
+);
+
+create table `studenten_modules` (
+  `moduleId` int NOT NULL,
+  `studentId` int NOT NULL,
+  `opleidingId` int DEFAULT NULL,
+  `status` enum('Volgt','Beëindigd') NOT NULL DEFAULT 'Volgt',
+  CONSTRAINT PK_studenten_modules PRIMARY KEY (moduleId, studentId),
+  FOREIGN KEY(moduleId) REFERENCES modules(id),
+  FOREIGN KEY(opleidingId) REFERENCES opleidingen(id),
+  FOREIGN KEY(studentId) REFERENCES studenten(studentId)
+  
+  -- TODO DODO
+  --
+  -- opleidingId in modules CAN BE NULL because some modules are general and are used in alle opleidingen.
+  -- opleidingId in studenten_modules is default null because the opleidingId is already mentioned in modules.
+  -- SO!!
+  -- if you add a record in studenten_modules and for the module that that doelstellingscategorie belongs to the opleidingId is null,
+  -- a constraint should oblige you to fill out the opleidingId in studenten_doelstellingscategories.
+  -- (if dat is possible in mysql)
+);
+
+CREATE TABLE `evaluaties` (
+  `id` int NOT NULL AUTO_INCREMENT PRIMARY KEY,
+  `name` varchar(200) NOT NULL,
+  `studentId` int NOT NULL,
+  `moduleId` int NOT NULL,
+  `datum` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP,
+  FOREIGN KEY(studentId) REFERENCES studenten(studentId),
+  FOREIGN KEY(moduleId) REFERENCES modules(id)
+);
+
+CREATE TABLE `evaluaties_criteria` (
+  `id` int NOT NULL AUTO_INCREMENT PRIMARY KEY,
+  `evaluatieId` int NOT NULL,
+  `criteriumId` int NOT NULL,
+  `criteriumBeoordeling`  tinyint(1) NOT NULL,
+  FOREIGN KEY(evaluatieId) REFERENCES evaluaties(id),
+  FOREIGN KEY(criteriumId) REFERENCES evaluatiecriteria(id)
+);
+
+CREATE TABLE `evaluaties_aspecten` (
+  `id` int NOT NULL AUTO_INCREMENT PRIMARY KEY,
+  `evaluatieId` int NOT NULL,
+  `aspectId` int NOT NULL,
+  `aspectBeoordeling`  tinyint(1) NOT NULL,
+  FOREIGN KEY(evaluatieId) REFERENCES evaluaties(id),
+  FOREIGN KEY(aspectId) REFERENCES aspecten(id)
+);
+
 CREATE TABLE `rapporten` (
   `id` int NOT NULL AUTO_INCREMENT PRIMARY KEY,
   `studentId` int NOT NULL,
+  `name` varchar(200) NOT NULL,
+  `class` varchar(50) NOT NULL,
   `commentaarKlassenraad` text,
   `commentaarAlgemeen` text,
   FOREIGN KEY(studentId) REFERENCES studenten(studentId)
+);
+
+CREATE TABLE `rapporten_modules` (
+  `rapportId` int NOT NULL,
+  `moduleId` int NOT NULL,
+  `commentaar` text,
+  CONSTRAINT PK_rapporten_modules PRIMARY KEY (rapportId, moduleId),
+  FOREIGN KEY(moduleId) REFERENCES modules(id),
+  FOREIGN KEY(rapportId) REFERENCES rapporten(id)
 );
 
 CREATE TABLE `rapporten_scores` (
