@@ -1038,15 +1038,16 @@ class UserDAO {
           }
     }
 
-    public static function insertNewEvaluation($name, $studentId, $moduleId) {
+    public static function insertNewEvaluation($name, $studentId, $moduleId, $date) {
         try{
             $conn = graderdb::getConnection();
 
-            $sql = 'INSERT INTO evaluaties(name, studentId, moduleId) VALUES (:name, :studentId, :moduleId)';
+            $sql = 'INSERT INTO evaluaties(name, studentId, moduleId, datum) VALUES (:name, :studentId, :moduleId, :datum)';
             $stmt = $conn->prepare($sql);
             $stmt->bindParam(':name', $name);
             $stmt->bindParam(':studentId', $studentId);
             $stmt->bindParam(':moduleId', $moduleId);
+            $stmt->bindParam(':datum', $date);
 
             $stmt->execute();
         } catch (PDOException $e) {
