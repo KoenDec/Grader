@@ -118,4 +118,11 @@ data example:
      		}
      	]
      }
->>>>>>> 0322ab21c40edb4b3b9eadf1cb4df2c4715d5767
+
+# Get an evaluation by name
+type get
+url api/getEvaluatieByName?name=evaluatieName
+
+# Get an evaluation by id
+type GET
+url api/getEvaluatie?id=evaluatieId
