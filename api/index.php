@@ -439,11 +439,23 @@ if ($_SERVER['REQUEST_METHOD'] == 'GET') {
             echo '{"Error":"No studentid found"}';
             http_response_code(403);
         }
-    } else if ($_GET['url'] == 'getEvaluatie') {
+    } else if ($_GET['url'] == 'getEvaluatieByName') {
       if (isset($_GET['name'])) {
-        
+        $id = $userDAO->getEvaluatieId($_GET['name']);
+        $evaluatie = $userDAO->getEvaluatie($id);
+        echo json_encode($evaluatie);
+        http_response_code(200);
       } else {
-        echo '{"Status":"No evaluatie name given"}';
+        echo '{"Status":"No correct evaluatie name given"}';
+        http_response_code(403);
+      }
+    } else if ($_GET['url'] == 'getEvaluatie') {
+      if (isset($_GET['id'])) {
+        $evaluatie = $userDAO->getEvaluatie($_GET['id']);
+        echo json_encode($evaluatie);
+        http_response_code(200);
+      } else {
+        echo '{"Status": "No correct eval id given"}';
         http_response_code(403);
       }
     }
