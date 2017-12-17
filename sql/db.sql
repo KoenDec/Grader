@@ -10,6 +10,7 @@ CREATE TABLE `users` (
   `firstname` varchar(50) NOT NULL,
   `lastname` varchar(100) NOT NULL,
   `password` varchar(128) NOT NULL,
+  `gender` enum('M', 'F') NOT NULL,
   `language` enum('NL','EN') NOT NULL DEFAULT 'NL',
   `activationKey` varchar(100) DEFAULT NULL,
   `status` enum('WAIT_ACTIVATION','ACTIVE','DISABLED') NOT NULL DEFAULT 'WAIT_ACTIVATION',

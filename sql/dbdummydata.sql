@@ -1,20 +1,29 @@
 use graderDB;
 
-INSERT INTO users(email, firstname, lastname, password, language, status) VALUES
-	('kenny.depecker@student.howest.be', 'Kenny', 'Depecker', 'Student', 'NL', 'ACTIVE'), -- 1
-	('koen.declerck@student.howest.be', 'Koen', 'Declerck', 'Student', 'NL', 'ACTIVE'), -- 2
-	('riwan.carpentier@student.howest.be', 'Riwan', 'Carpentier', '$2y$10$TOVnkl/zFUzGeKIJccvdquNWiT2tFFf1Dd/HayZj8ouyUOZJtIqx.', 'NL', 'ACTIVE'), -- 3
-	('teacher1@hotmail.com', 'Joline', 'Soete', 'Teacher', 'NL', 'ACTIVE'), -- 4
-	('teacher2@hotmail.com', 'Teacher', 'Dummy', 'Teacher', 'NL', 'ACTIVE'), -- 5
-	('student1@hotmail.com', 'Faisal', 'Nizami', 'Student', 'NL', 'ACTIVE'), -- 6
-	('student2@hotmail.com', 'Tatjana', 'Eekchout', 'Student', 'NL', 'ACTIVE'), -- 7
-	('student3@hotmail.com', 'Student', 'Kapper', 'Student', 'NL', 'ACTIVE'), -- 8
-	('student4@hotmail.com', 'Student', 'Kok', 'Student', 'NL', 'ACTIVE'), -- 9
-	('student5@hotmail.com', 'Student', 'Tegelzetter', 'Student', 'NL', 'ACTIVE'), -- 10
-	('thomas.de.nil@student.howest.be', 'Thomas', 'De Nil', 'Student', 'NL', 'ACTIVE'), -- 11
-	('teacher3@hotmail.com', 'Koen', 'Feys', 'Teacher', 'NL', 'ACTIVE'), -- 12
-  	('teacher4@hotmail.com', 'Ann', 'Bert', 'Teacher', 'NL', 'ACTIVE'), -- 13
-    ('student6@hotmail.com', 'Student', 'Voeger', 'Student', 'NL', 'ACTIVE'); -- 14
+INSERT INTO users(email, firstname, lastname, password, gender, language, status) VALUES
+	('kenny.depecker@student.howest.be', 'Kenny', 'Depecker', 'Student', 'M', 'NL', 'ACTIVE'), -- 1
+	('koen.declerck@student.howest.be', 'Koen', 'Declerck', 'Student', 'M', 'NL', 'ACTIVE'), -- 2
+	('riwan.carpentier@student.howest.be', 'Riwan', 'Carpentier', '$2y$10$TOVnkl/zFUzGeKIJccvdquNWiT2tFFf1Dd/HayZj8ouyUOZJtIqx.', 'M', 'NL', 'ACTIVE'), -- 3
+	('teacher1@hotmail.com', 'Joline', 'Soete', 'Teacher', 'F', 'NL', 'ACTIVE'), -- 4
+	('teacher2@hotmail.com', 'Teacher', 'Dummy', 'Teacher', 'M', 'NL', 'ACTIVE'), -- 5
+	('student1@hotmail.com', 'Faisal', 'Nizami', 'Student', 'M', 'NL', 'ACTIVE'), -- 6
+	('student2@hotmail.com', 'Tatjana', 'Eekchout', 'Student', 'F', 'NL', 'ACTIVE'), -- 7
+	('student3@hotmail.com', 'Student', 'Kapper', 'Student', 'M', 'NL', 'ACTIVE'), -- 8
+	('student4@hotmail.com', 'Student', 'Kok', 'Student', 'M', 'NL', 'ACTIVE'), -- 9
+	('student5@hotmail.com', 'Student', 'Tegelzetter', 'Student', 'M', 'NL', 'ACTIVE'), -- 10
+	('thomas.de.nil@student.howest.be', 'Thomas', 'De Nil', 'Student', 'M', 'NL', 'ACTIVE'), -- 11
+	('teacher3@hotmail.com', 'Koen', 'Feys', 'Teacher', 'M', 'NL', 'ACTIVE'), -- 12
+  	('teacher4@hotmail.com', 'Ann', 'Bert', 'Teacher', 'F', 'NL', 'ACTIVE'), -- 13
+    ('student6@hotmail.com', 'Student', 'Voeger', 'Student', 'M', 'NL', 'ACTIVE'), -- 14
+    ('student7@hotmail.com', 'Student', 'Onderhoudsmedewerker gbouw', 'Student', 'M', 'NL', 'ACTIVE'), -- 15
+    ('student8@hotmail.com', 'Student', 'Thuishelper', 'Student', 'M', 'NL', 'ACTIVE'), -- 16
+    ('student9@hotmail.com', 'Student', 'Hoeknaadlasser', 'Student', 'M', 'NL', 'ACTIVE'), -- 17
+    ('student10@hotmail.com', 'Student', 'Fietsmecanicien', 'Student', 'M', 'NL', 'ACTIVE'), -- 18
+    ('student11@hotmail.com', 'Student', 'Buurtsportwerker', 'Student', 'M', 'NL', 'ACTIVE'), -- 18
+    ('student12@hotmail.com', 'Student', 'Hulpkok', 'Student', 'M', 'NL', 'ACTIVE'), -- 18
+    ('student13@hotmail.com', 'Student', 'Hulpkelner', 'Student', 'M', 'NL', 'ACTIVE'), -- 18
+    ('student14@hotmail.com', 'Student', 'Kelner', 'Student', 'M', 'NL', 'ACTIVE'), -- 18
+    ('student15@hotmail.com', 'Student', 'Snackbar tearoom', 'Student', 'M', 'NL', 'ACTIVE'); -- 19
     
 INSERT INTO admins(adminId) VALUES (1),(2),(3), (11);
 
@@ -28,7 +37,16 @@ INSERT INTO opleidingen(name, creatorId) VALUES
     ('Tegelzetter', 3),
     ('Winkelbediende', 3),
     ('Klantencontact', 3), -- 5
-    ('Voeger', 3);
+    ('Voeger', 3),
+    ('Onderhoudsmedewerker gebouw', 3),
+    ('Thuishelper', 3),
+    ('Hoeknaadlasser', 3),
+    ('Fietsmecanicien', 3),
+    ('Buurtsportwerker', 3),
+    ('Hulpkok', 3),
+    ('Hulpkelner', 3),
+    ('Kelner', 3),
+    ('Snackbar tearoom', 3);
 
 INSERT INTO modules(name, opleidingId, teacherId, creatorId) VALUES
     ('Initiatie keuken', 1, 4, 3), -- 1
@@ -1783,9 +1801,9 @@ INSERT INTO studenten_modules(studentId, moduleId, opleidingId) VALUES
     (14, 13, 6);
 
 
-INSERT INTO evaluaties(name, studentId, moduleId) VALUES
-	('opdracht les 1', 10, 7),
-	('opdracht les 2', 10, 7);
+INSERT INTO evaluaties(name, studentId, moduleId, datum) VALUES
+	('opdracht les 1', 10, 7, '2017-09-22'),
+	('opdracht les 2', 10, 7, '2017-09-29');
     
 /*INSERT INTO evaluaties_criteria(evaluatieId, criteriumId, criteriumBeoordeling) VALUES
 	();*/
