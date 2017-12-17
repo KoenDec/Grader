@@ -3,6 +3,16 @@ require_once('graderdb.php');
 
 class Login {
 
+  private $token;
+
+  public function getLoginToken() {
+    return $token;
+  }
+
+  public function setLoginToken($newToken) {
+    $token = $newToken;
+  }
+
   public static function isLoggedIn() {
   $userDAO = new UserDAO();
     if (isset($_COOKIE['GID'])) {

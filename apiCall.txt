@@ -126,3 +126,7 @@ url api/getEvaluatieByName?name=evaluatieName
 # Get an evaluation by id
 type GET
 url api/getEvaluatie?id=evaluatieId
+
+# GET all evaluations for student in module
+type GET
+url api/getEvaluatiesPerStudent?modId=?&studId=?

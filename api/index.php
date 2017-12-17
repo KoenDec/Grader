@@ -458,6 +458,15 @@ if ($_SERVER['REQUEST_METHOD'] == 'GET') {
         echo '{"Status": "No correct eval id given"}';
         http_response_code(403);
       }
+    } else if ($_GET['url'] == 'getEvaluatiesPerStudent') {
+      if (isset($_GET['modId']) && isset($_GET['studId'])) {
+        $evaluaties = $userDAO->getEvaluaties($_GET['studId'], $_GET['modId']);
+        echo json_encode($evaluaties);
+        http_response_code(200);
+      } else {
+        echo '{"Error":"Wrong student or module id(s)"}';
+        http_response_code(403);
+      }
     }
 } else if ($_SERVER['REQUEST_METHOD'] == 'POST') {
     if ($_GET['url'] == 'auth') {
