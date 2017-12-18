@@ -1111,7 +1111,7 @@ class UserDAO
             $sql .= '(:evaluatieId, ' . $aspectIds[0] . ', ' . $aspectScores[0] . ')';
 
             for ($i = 1; $i < sizeof($aspectscoresKeyValueArray); $i++) {
-                if ($aspectScores[$i] != null) $sql .= ',(:evaluatieId, ' . $aspectIds[$i] . ', ' . $aspectScores[$i] . ')'; // TODO parameter binding !!!
+                /*if ($aspectScores[$i] != null) */ $sql .= ',(:evaluatieId, ' . $aspectIds[$i] . ', ' . $aspectScores[$i] . ')'; // TODO parameter binding !!!
             }
 
             $sql .= ";";

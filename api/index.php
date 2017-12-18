@@ -1,8 +1,9 @@
 <?php
-require_once('../php/graderdb.php');
-require_once('../php/Login.php');
+require_once('graderdb.php');
+require_once('Login.php');
 
 header("Access-Control-Allow-Origin: *");
+header("Access-Control-Allow-Methods: DELETE");
 header("Access-Control-Allow-Headers: Origin,Content-Type");
 header('Content-Type: application/json');
 
@@ -617,7 +618,7 @@ if ($_SERVER['REQUEST_METHOD'] == 'GET') {
         foreach($aspecten as $aspect){
             $beoordeeldeAspecten[$aspect->aspectId] = $aspect->beoordeling;
         }
-        
+
         $userDAO->insertNewEvaluation($postBody->name,$postBody->studentId,$postBody->moduleId,$date);
         $evaluatieId = $userDAO->getEvaluatieId($postBody->name);
         $userDAO->insertAspectbeoordelingen($evaluatieId, $beoordeeldeAspecten);
@@ -702,7 +703,7 @@ if ($_SERVER['REQUEST_METHOD'] == 'GET') {
         }
     } else if ($_GET['url'] == 'deleteEvaluatie') {
         if (isset($_GET['id'])) {
-            echo('deleting evaluation '.$_GET['id']);
+            echo '{"Status": "deleting evaluation '.$_GET['id'].'"}';
             $userDAO->deleteEvaluatie($_GET['id']);
             http_response_code(200);
         } else {
