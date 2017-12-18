@@ -1115,9 +1115,7 @@ class UserDAO
             }
 
             $sql .= ";";
-
-            var_dump($sql);
-
+            
             $stmt = $conn->prepare($sql);
             $stmt->bindParam(':evaluatieId', $evaluatieId);
 
