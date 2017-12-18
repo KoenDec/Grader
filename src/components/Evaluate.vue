@@ -259,6 +259,10 @@
           this.moduleSelected = true
           this.newEvalTable = false
           self.createActiveBoxes(this.selectedModule)
+          self.getPrevEvals()
+        },
+        getPrevEvals: function () {
+          var self = this
           self.prevEvals = []
           this.$http.getEvalsByStudent(this.selectedModule[0].id, this.student.id, function (data) {
             self.prevEvals.push(data)
@@ -314,6 +318,7 @@
           this.$forceUpdate()
         },
         makeJSON: function () {
+          var self = this
           if (this.evalName !== '') {
             this.evalError = null
             var objKeys = Object.keys(this.activeBoxes)
@@ -327,7 +332,10 @@
               var obj = {aspectId: objKeys[i].substr(3), beoordeling: this.activeBoxes[objKeys[i]]}
               this.saveEval['aspecten'].push(obj)
             }
-            this.$http.createEval(this.saveEval, function (data) { console.log(data) })
+            this.$http.createEval(this.saveEval, function (data) {
+              console.log(data)
+              self.getPrevEvals()
+            })
             console.log(this.saveEval)
             this.newEvalTable = false
           } else {
