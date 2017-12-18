@@ -134,11 +134,44 @@ var Api = (function () {
       })
   }
 
+  my.updateEval = function (evalJSON, cb) {
+    axios.post('http://146.185.183.217/api/updateEvaluatie', {
+      evalId: evalJSON.evalId,
+      aspecten: evalJSON.aspecten,
+      name: evalJSON.name,
+      studentId: evalJSON.studentId,
+      moduleId: evalJSON.moduleId,
+      date: evalJSON.date
+    })
+      .then(function (response) {
+        if (response.statusText === 'OK') return cb(response.data)
+        else return cb(response.data)
+      })
+      .catch(function (error) {
+        console.log(error)
+      })
+  }
+
   my.getEvalsByStudent = function (modId, studId, cb) {
     axios.get('http://146.185.183.217/api/getEvaluatiesPerStudent', {
       params: {
         modId: modId,
         studId: studId
+      }
+    })
+      .then(function (response) {
+        console.log(response.data)
+        return cb(response.data)
+      })
+      .catch(function (error) {
+        console.log(error)
+      })
+  }
+
+  my.deleteEval = function (id, cb) {
+    axios.delete('http://146.185.183.217/api/deleteEvaluation', {
+      params: {
+        id: id
       }
     })
       .then(function (response) {

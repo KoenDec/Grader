@@ -38,7 +38,8 @@
                 <div>
                     <v-btn v-if="!newEvalTable" @click="newEval" color="primary"><v-icon class="mr-2">add</v-icon>Nieuwe Evaluatiefiche</v-btn>
                     <v-btn v-if="newEvalTable" @click="newEvalTable = false; updateEval = true" color="primary"><v-icon class="mr-2">undo</v-icon>Back</v-btn>
-                    <v-btn v-if="newEvalTable && !updateEval" @click="makeJSON" color="primary"><v-icon class="mr-2">save</v-icon>Evaluatie Opslaan</v-btn>
+                    <v-btn v-if="newEvalTable && !updateEval" @click="makeJSON(false)" color="primary"><v-icon class="mr-2">save</v-icon>Evaluatie Opslaan</v-btn>
+                    <v-btn v-if="newEvalTable && updateEval" @click="makeJSON(true)" color="primary"><v-icon class="mr-2">save</v-icon>Evaluatie Opslaan</v-btn>
                     <p v-if="evalError" style="display: inline-block" class="red--text">{{evalError}}</p>
                 </div>
             </v-flex>
@@ -50,8 +51,9 @@
                     <v-divider></v-divider>
                     <v-list-tile v-bind:key="evaluation.id" @click="getEvaluation(evaluation.id)">
                         <v-list-tile-content>
-                            <v-list-tile-title>{{evaluation.date}} {{evaluation.name}}</v-list-tile-title>
+                            <v-list-tile-title>{{evaluation.date}} {{evaluation.name}} </v-list-tile-title>
                         </v-list-tile-content>
+                        <v-btn color="error" v-on:click.stop="deleteEval(evaluation.id)" class="right" dark><v-icon dark>delete</v-icon></v-btn>
                     </v-list-tile>
                 </template>
             </v-list>
@@ -241,6 +243,7 @@
           activeBoxesCreated: false,
           saveEval: {},
           evalName: '',
+          currentEvalId: null,
           evalError: null,
           date: null,
           dateFormatted: null,
@@ -317,7 +320,7 @@
           this.$set(this.activeBoxes, 'no' + id, null)
           this.$forceUpdate()
         },
-        makeJSON: function () {
+        makeJSON: function (update) {
           var self = this
           if (this.evalName !== '') {
             this.evalError = null
@@ -332,10 +335,19 @@
               var obj = {aspectId: objKeys[i].substr(3), beoordeling: this.activeBoxes[objKeys[i]]}
               this.saveEval['aspecten'].push(obj)
             }
-            this.$http.createEval(this.saveEval, function (data) {
-              console.log(data)
-              self.getPrevEvals()
-            })
+            if (update) {
+              this.saveEval['evalId'] = this.currentEvalId
+              console.log(this.saveEval['evalId'])
+              this.$http.updateEval(this.saveEval, function (data) {
+                console.log(data)
+                self.getPrevEvals()
+              })
+            } else {
+              this.$http.createEval(this.saveEval, function (data) {
+                console.log(data)
+                self.getPrevEvals()
+              })
+            }
             console.log(this.saveEval)
             this.newEvalTable = false
           } else {
@@ -351,6 +363,7 @@
           console.log(obj)
           self.evalName = obj[0].name
           self.dateFormatted = obj[0].date
+          self.currentEvalId = obj[0].id
           self.createActiveBoxes(this.selectedModule)
           obj[0].aspecten.forEach(function (item) {
             if (item.aspectBeoordeling === '1') {
@@ -363,6 +376,13 @@
           })
           self.updateEval = true
           this.$forceUpdate()
+        },
+        deleteEval: function (id) {
+          var self = this
+          this.$http.deleteEval(id, function (data) {
+            console.log(data)
+            self.getPrevEvals()
+          })
         },
         formatDate (date) {
           if (!date) {

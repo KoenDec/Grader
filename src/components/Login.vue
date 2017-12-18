@@ -1,33 +1,38 @@
 <template>
-  <v-layout>
-    <v-flex xs12 sm6 offset-sm3>
-      <v-card>
-        <v-card-title primary-title>
-          <div>
-            <h3 class="headline mb-0">Login</h3>
-          </div>
-        </v-card-title>
-        <v-card-actions>
-          <v-form v-model="valid" ref="form" lazy-validation>
-            <v-text-field
-                    label="E-mail"
-                    v-model="email"
-                    :rules="emailRules"
-                    required
-            ></v-text-field>
-            <v-text-field
-                    label="Passwoord"
-                    v-model="password"
-                    :rules="passwordRules"
-                    required
-            ></v-text-field>
-            <v-btn color="primary" :disabled="!valid" @click="submit">Log in<v-icon class="ml-2">send</v-icon></v-btn>
-          </v-form>
-        </v-card-actions>
-      </v-card>
-    </v-flex>
+  <v-layout column>
+      <v-flex xs4 offset-xs4>
+        <form v-model="valid">
+          <v-flex xs12 class="text-xs-center" mt-5>
+            <h3>Sign In</h3>
+          </v-flex>
+          <v-layout column>
+            <v-flex>
+              <v-text-field
+                      name="email"
+                      label="Email"
+                      id="email"
+                      type="email"
+                      :rules="emailRules"
+                      required></v-text-field>
+            </v-flex>
+            <v-flex>
+              <v-text-field
+                      name="paswoord"
+                      label="Password"
+                      id="password"
+                      type="password"
+                      :rules="passwordRules"
+                      required></v-text-field>
+            </v-flex>
+            <v-flex class="text-xs-center" mt-5>
+              <v-btn primary type="submit">Sign In</v-btn>
+            </v-flex>
+          </v-layout>
+        </form>
+      </v-flex>
   </v-layout>
 </template>
+
 
 <script>
 export default {
@@ -36,7 +41,7 @@ export default {
     valid: true,
     password: '',
     passwordRules: [
-      (v) => !!v || 'passwoord moet ingevuld worden'
+      (v) => !!v || 'paswoord moet ingevuld worden'
     ],
     email: '',
     emailRules: [
@@ -51,5 +56,4 @@ export default {
 
 <style scoped>
 /* TODO custom css for the logo to fit the drawer */
-
 </style>
