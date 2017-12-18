@@ -149,7 +149,6 @@ var Api = (function () {
         console.log(error)
       })
   }
-
   return my
 }())
 
