@@ -1,6 +1,6 @@
 <?php
-require_once('graderdb.php');
-require_once('Login.php');
+require_once('../php/graderdb.php');
+require_once('../php/Login.php');
 
 header("Access-Control-Allow-Origin: *");
 header("Access-Control-Allow-Headers: Origin,Content-Type");
@@ -606,6 +606,8 @@ if ($_SERVER['REQUEST_METHOD'] == 'GET') {
         $postBody = file_get_contents('php://input');
         $postBody = json_decode($postBody);
 
+        var_dump($postBody);
+
         $date = $postBody->date;
         $date = preg_replace('#(\d{2})/(\d{2})/(\d{4})#', '$3-$2-$1', $date);
         $aspecten = $postBody->aspecten;
@@ -697,6 +699,15 @@ if ($_SERVER['REQUEST_METHOD'] == 'GET') {
         } else {
             echo '{ "Error": "Malformed request" }';
             http_response_code(400);
+        }
+    } else if ($_GET['url'] == 'deleteEvaluatie') {
+        if (isset($_GET['id'])) {
+            echo('deleting evaluation '.$_GET['id']);
+            $userDAO->deleteEvaluatie($_GET['id']);
+            http_response_code(200);
+        } else {
+            echo '{"Status": "No correct evaluation id given"}';
+            http_response_code(403);
         }
     }
 } else if ($_SERVER['REQUEST_METHOD'] == 'OPTIONS') {

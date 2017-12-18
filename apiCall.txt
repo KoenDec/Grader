@@ -130,3 +130,8 @@ url api/getEvaluatie?id=evaluatieId
 # GET all evaluations for student in module
 type GET
 url api/getEvaluatiesPerStudent?modId=?&studId=?
+
+# DELETE an evaluation by id
+type DELETE
+url api/deleteEvaluatie?id=
+id = evaluatieId

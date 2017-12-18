@@ -20,13 +20,15 @@ class graderdb {
 
 }
 
-class UserDAO {
+class UserDAO
+{
 
-     ///////////////////////////////////////////
+    ///////////////////////////////////////////
     //              GET-QUERIES              //
-   ///////////////////////////////////////////
+    ///////////////////////////////////////////
 
-    public static function getAllUsers(){
+    public static function getAllUsers()
+    {
         try {
             $conn = graderdb::getConnection();
 
@@ -40,7 +42,7 @@ class UserDAO {
             die($e->getMessage());
         }
 
-        if(isset($usersTable[0])) {
+        if (isset($usersTable[0])) {
             $users = $usersTable;
         } else {
             die('No users found!');
@@ -49,7 +51,8 @@ class UserDAO {
         return $users;
     }
 
-    public static function getUser($username) {
+    public static function getUser($username)
+    {
         try {
             $conn = graderdb::getConnection();
 
@@ -63,7 +66,7 @@ class UserDAO {
             die($e->getMessage());
         }
 
-        if(isset($usersTable[0])) {
+        if (isset($usersTable[0])) {
             $user = $usersTable[0];
         } else {
             //die('No user with username = ' . $username);
@@ -73,7 +76,8 @@ class UserDAO {
         return $user;
     }
 
-    public static function getUserRole($userId){
+    public static function getUserRole($userId)
+    {
         try {
             $conn = graderdb::getConnection();
 
@@ -99,18 +103,19 @@ class UserDAO {
             die($e->getMessage());
         }
 
-        if(isset($studentsTable[0])) {
+        if (isset($studentsTable[0])) {
             return "STUDENT";
-        } else if(isset($teachersTable[0])){
+        } else if (isset($teachersTable[0])) {
             return "LEERKRACHT";
-        } else if(isset($adminsTable[0])){
+        } else if (isset($adminsTable[0])) {
             return "ADMIN";
         } else {
             die("user does not have a role yet");
         }
     }
 
-    public static function getUserById($userid) {
+    public static function getUserById($userid)
+    {
         try {
             $conn = graderdb::getConnection();
 
@@ -124,7 +129,7 @@ class UserDAO {
             die($e->getMessage());
         }
 
-        if(isset($usersTable[0])) {
+        if (isset($usersTable[0])) {
             $user = $usersTable[0];
         } else {
             //die('No user with username = ' . $userid);
@@ -134,7 +139,8 @@ class UserDAO {
         return $user;
     }
 
-    public static function getLoggedInUserId($token) {
+    public static function getLoggedInUserId($token)
+    {
         try {
             $conn = graderdb::getConnection();
 
@@ -148,7 +154,7 @@ class UserDAO {
             die($e->getMessage());
         }
 
-        if(isset($usersTable[0])) {
+        if (isset($usersTable[0])) {
             $userid = $usersTable[0];
         } /*else {
             die('No userid found');
@@ -157,7 +163,8 @@ class UserDAO {
         return $userid;
     }
 
-    public static function getToken($token) {
+    public static function getToken($token)
+    {
         try {
             $conn = graderdb::getConnection();
 
@@ -171,7 +178,7 @@ class UserDAO {
             die($e->getMessage());
         }
 
-        if(isset($tokenTable[0])) {
+        if (isset($tokenTable[0])) {
             $token = $tokenTable[0];
         } /*else {
             die('No userid found');
@@ -180,7 +187,8 @@ class UserDAO {
         return $token;
     }
 
-    public static function searchStudents($query) {
+    public static function searchStudents($query)
+    {
         try {
             $conn = graderdb::getConnection();
 
@@ -191,8 +199,8 @@ class UserDAO {
 							                  ) AND (id IN (SELECT studentId FROM studenten))';
 
             $stmt = $conn->prepare($sql);
-            $query = '%'.$query.'%';
-            $stmt->bindParam(':query',$query,PDO::PARAM_STR);
+            $query = '%' . $query . '%';
+            $stmt->bindParam(':query', $query, PDO::PARAM_STR);
             $stmt->execute();
 
             $studentsTable = $stmt->fetchAll(PDO::FETCH_CLASS);
@@ -200,7 +208,7 @@ class UserDAO {
             die($e->getMessage());
         }
 
-        if(isset($studentsTable[0])) {
+        if (isset($studentsTable[0])) {
             $students = $studentsTable;
         } else {
             die('no students found');
@@ -213,7 +221,8 @@ class UserDAO {
       return;
     }*/
 
-    public static function getAllStudents(){
+    public static function getAllStudents()
+    {
         try {
             $conn = graderdb::getConnection();
 
@@ -227,7 +236,7 @@ class UserDAO {
             die($e->getMessage());
         }
 
-        if(isset($studentsTable[0])) {
+        if (isset($studentsTable[0])) {
             $students = $studentsTable;
         } else {
             die('No users found!');
@@ -236,7 +245,8 @@ class UserDAO {
         return $students;
     }
 
-    public static function getEducationFromStudent($studentId){
+    public static function getEducationFromStudent($studentId)
+    {
         try {
             $conn = graderdb::getConnection();
 
@@ -249,7 +259,7 @@ class UserDAO {
                       AND sm.status = \'volgt\'';
 
             $stmt = $conn->prepare($sql);
-            $stmt->bindParam(':studentId',$studentId);
+            $stmt->bindParam(':studentId', $studentId);
 
             $stmt->execute();
 
@@ -258,7 +268,7 @@ class UserDAO {
             die($e->getMessage());
         }
 
-        if(isset($educationsTable[0])) {
+        if (isset($educationsTable[0])) {
             $education = $educationsTable[0];
         } else {
             //die('Student has no education!');
@@ -268,7 +278,8 @@ class UserDAO {
         return $education;
     }
 
-    public static function getAllActiveStudentsWithEducation(){
+    public static function getAllActiveStudentsWithEducation()
+    {
         try {
             $conn = graderdb::getConnection();
 
@@ -290,7 +301,7 @@ class UserDAO {
             die($e->getMessage());
         }
 
-        if(isset($studentsTable[0])) {
+        if (isset($studentsTable[0])) {
             $students = $studentsTable;
         } else {
             //die('No students found!');
@@ -300,7 +311,8 @@ class UserDAO {
         return $students;
     }
 
-    public static function getAllStudentsInEducation($educationId){
+    public static function getAllStudentsInEducation($educationId)
+    {
         try {
             $conn = graderdb::getConnection();
 
@@ -312,7 +324,7 @@ class UserDAO {
 			            AND m.opleidingId = :educationId OR sm.opleidingId = :educationId';
 
             $stmt = $conn->prepare($sql);
-            $stmt->bindParam(':educationId',$educationId);
+            $stmt->bindParam(':educationId', $educationId);
 
             $stmt->execute();
 
@@ -321,7 +333,7 @@ class UserDAO {
             die($e->getMessage());
         }
 
-        if(isset($studentsTable[0])) {
+        if (isset($studentsTable[0])) {
             $students = $studentsTable;
         } else {
             //die('No students found!');
@@ -331,7 +343,8 @@ class UserDAO {
         return $students;
     }
 
-    public static function getAllEducations(){
+    public static function getAllEducations()
+    {
         try {
             $conn = graderdb::getConnection();
 
@@ -345,7 +358,7 @@ class UserDAO {
             die($e->getMessage());
         }
 
-        if(isset($educationsTable[0])) {
+        if (isset($educationsTable[0])) {
             $educations = $educationsTable;
         } else {
             //die('No educations found!');
@@ -355,13 +368,14 @@ class UserDAO {
         return $educations;
     }
 
-    public static function getEducation($educationId){
+    public static function getEducation($educationId)
+    {
         try {
             $conn = graderdb::getConnection();
 
             $sql = 'SELECT * FROM opleidingen WHERE id = :educationId';
             $stmt = $conn->prepare($sql);
-            $stmt->bindParam(':educationId',$educationId);
+            $stmt->bindParam(':educationId', $educationId);
 
             $stmt->execute();
 
@@ -370,7 +384,7 @@ class UserDAO {
             die($e->getMessage());
         }
 
-        if(isset($educationsTable[0])) {
+        if (isset($educationsTable[0])) {
             $education = $educationsTable[0];
         } else {
             //die('No education found with id '.$educationId);
@@ -380,13 +394,14 @@ class UserDAO {
         return $education;
     }
 
-    public static function getEducationByName($educationName){
+    public static function getEducationByName($educationName)
+    {
         try {
             $conn = graderdb::getConnection();
 
             $sql = 'SELECT * FROM opleidingen WHERE name = :educationName';
             $stmt = $conn->prepare($sql);
-            $stmt->bindParam(':educationName',$educationName);
+            $stmt->bindParam(':educationName', $educationName);
 
             $stmt->execute();
 
@@ -395,7 +410,7 @@ class UserDAO {
             die($e->getMessage());
         }
 
-        if(isset($educationsTable[0])) {
+        if (isset($educationsTable[0])) {
             $education = $educationsTable[0];
         } else {
             //die('No education found with id '.$educationId);
@@ -405,7 +420,8 @@ class UserDAO {
         return $education;
     }
 
-    public static function getAllMessages(){
+    public static function getAllMessages()
+    {
         try {
             $conn = graderdb::getConnection();
 
@@ -419,7 +435,7 @@ class UserDAO {
             die($e->getMessage());
         }
 
-        if(isset($messagesTable[0])) {
+        if (isset($messagesTable[0])) {
             $messages = $messagesTable;
         } else {
 
@@ -429,7 +445,8 @@ class UserDAO {
         return $messages;
     }
 
-    public static function getAllTeachers(){
+    public static function getAllTeachers()
+    {
         try {
             $conn = graderdb::getConnection();
 
@@ -443,7 +460,7 @@ class UserDAO {
             die($e->getMessage());
         }
 
-        if(isset($teachersTable[0])) {
+        if (isset($teachersTable[0])) {
             $teachers = $teachersTable;
         } else {
             die('No teachers found!');
@@ -452,13 +469,14 @@ class UserDAO {
         return $teachers;
     }
 
-    public static function getTeacherById($teacherId){
+    public static function getTeacherById($teacherId)
+    {
         try {
             $conn = graderdb::getConnection();
 
             $sql = 'SELECT * FROM users u JOIN teachers t ON u.id = t.teacherId WHERE teacherId = :teacherId';
             $stmt = $conn->prepare($sql);
-            $stmt->bindParam(':teacherId',$teacherId);
+            $stmt->bindParam(':teacherId', $teacherId);
 
             $stmt->execute();
 
@@ -467,7 +485,7 @@ class UserDAO {
             die($e->getMessage());
         }
 
-        if(isset($teachersTable[0])) {
+        if (isset($teachersTable[0])) {
             $teacher = $teachersTable[0];
         } else {
             die('No teacher found with id = ' . $teacherId);
@@ -476,14 +494,15 @@ class UserDAO {
         return $teacher;
     }
 
-    public static function getModulesInOpleiding($opleidingId){
+    public static function getModulesInOpleiding($opleidingId)
+    {
         try {
             $conn = graderdb::getConnection();
 
-            if($opleidingId == null) $sql = 'SELECT * FROM modules WHERE opleidingId is null';
+            if ($opleidingId == null) $sql = 'SELECT * FROM modules WHERE opleidingId is null';
             else $sql = 'SELECT * FROM modules WHERE opleidingId = :opleidingId';
             $stmt = $conn->prepare($sql);
-            $stmt->bindParam(':opleidingId',$opleidingId);
+            $stmt->bindParam(':opleidingId', $opleidingId);
 
             $stmt->execute();
 
@@ -492,7 +511,7 @@ class UserDAO {
             die($e->getMessage());
         }
 
-        if(isset($modulesTable[0])) {
+        if (isset($modulesTable[0])) {
             $modules = $modulesTable;
         } else {
             //die('No modules found!');
@@ -502,13 +521,14 @@ class UserDAO {
         return $modules;
     }
 
-    public static function getModule($moduleId){
+    public static function getModule($moduleId)
+    {
         try {
             $conn = graderdb::getConnection();
 
             $sql = 'SELECT * FROM modules WHERE id = :moduleId';
             $stmt = $conn->prepare($sql);
-            $stmt->bindParam(':moduleId',$moduleId);
+            $stmt->bindParam(':moduleId', $moduleId);
 
             $stmt->execute();
 
@@ -517,7 +537,7 @@ class UserDAO {
             die($e->getMessage());
         }
 
-        if(isset($modulesTable[0])) {
+        if (isset($modulesTable[0])) {
             $module = $modulesTable[0];
         } else {
             //die('No module found with id '.$moduleId.'!');
@@ -527,8 +547,9 @@ class UserDAO {
         return $module;
     }
 
-    public static function getModulesFromStudent($studentId){
-        try{
+    public static function getModulesFromStudent($studentId)
+    {
+        try {
             $conn = graderdb::getConnection();
 
             $sql = 'SELECT DISTINCT m.* FROM studenten_modules sm
@@ -538,7 +559,7 @@ class UserDAO {
                       WHERE sm.status = \'volgt\'
 	                    AND sm.studentId = :studentId';
             $stmt = $conn->prepare($sql);
-            $stmt->bindParam(':studentId',$studentId);
+            $stmt->bindParam(':studentId', $studentId);
 
             $stmt->execute();
 
@@ -547,7 +568,7 @@ class UserDAO {
             die($e->getMessage());
         }
 
-        if(isset($moduleTable[0])) {
+        if (isset($moduleTable[0])) {
             $modules = $moduleTable;
         } else {
             die('No modules found for student with id = ' . $studentId);
@@ -555,13 +576,14 @@ class UserDAO {
         return $modules;
     }
 
-    public static function getDoelstellingscategoriesInModule($moduleId){
+    public static function getDoelstellingscategoriesInModule($moduleId)
+    {
         try {
             $conn = graderdb::getConnection();
 
             $sql = 'SELECT * FROM doelstellingscategories WHERE moduleId = :moduleId';
             $stmt = $conn->prepare($sql);
-            $stmt->bindParam(':moduleId',$moduleId);
+            $stmt->bindParam(':moduleId', $moduleId);
 
             $stmt->execute();
 
@@ -570,7 +592,7 @@ class UserDAO {
             die($e->getMessage());
         }
 
-        if(isset($doelstellingscategoriesTable[0])) {
+        if (isset($doelstellingscategoriesTable[0])) {
             $doelstellingscategorieen = $doelstellingscategoriesTable;
         } else {
             //die('No doelstellingscategorieën found!');
@@ -579,8 +601,9 @@ class UserDAO {
         return $doelstellingscategorieen;
     }
 
-    public static function getFollowedModules($studentId){
-        try{
+    public static function getFollowedModules($studentId)
+    {
+        try {
             $conn = graderdb::getConnection();
 
             $sql = 'SELECT m.* FROM studenten_modules sm
@@ -588,7 +611,7 @@ class UserDAO {
                       WHERE studentId = :studentId
                         AND status=\'volgt\'';
             $stmt = $conn->prepare($sql);
-            $stmt->bindParam(':studentId',$studentId);
+            $stmt->bindParam(':studentId', $studentId);
 
             $stmt->execute();
 
@@ -597,7 +620,7 @@ class UserDAO {
             die($e->getMessage());
         }
 
-        if(isset($modulesTable[0])) {
+        if (isset($modulesTable[0])) {
             $modules = $modulesTable;
         } else {
             die('No modules found for student with id = ' . $studentId);
@@ -606,14 +629,15 @@ class UserDAO {
         return $modules;
     }
 
-    public static function getDoelstellingenInDoelstellingscategorie($doelstellingscategorieId){
-        try{
+    public static function getDoelstellingenInDoelstellingscategorie($doelstellingscategorieId)
+    {
+        try {
             $conn = graderdb::getConnection();
 
             $sql = 'SELECT * from doelstellingen
                     WHERE doelstellingscategorieId = :doelstellingscategorieId';
             $stmt = $conn->prepare($sql);
-            $stmt->bindParam(':doelstellingscategorieId',$doelstellingscategorieId);
+            $stmt->bindParam(':doelstellingscategorieId', $doelstellingscategorieId);
 
             $stmt->execute();
 
@@ -622,7 +646,7 @@ class UserDAO {
             die($e->getMessage());
         }
 
-        if(isset($doelstellingenTable[0])) {
+        if (isset($doelstellingenTable[0])) {
             $doelstellingen = $doelstellingenTable;
         } else {
             //die('No doelstellingen found for doelstellingscategorie with id = ' . $doelstellingscategorieId);
@@ -632,14 +656,15 @@ class UserDAO {
         return $doelstellingen;
     }
 
-    public static function getCriteriaInDoelstelling($doelstellingId){
-        try{
+    public static function getCriteriaInDoelstelling($doelstellingId)
+    {
+        try {
             $conn = graderdb::getConnection();
 
             $sql = 'SELECT * from evaluatiecriteria
                     WHERE doelstellingId = :doelstellingId';
             $stmt = $conn->prepare($sql);
-            $stmt->bindParam(':doelstellingId',$doelstellingId);
+            $stmt->bindParam(':doelstellingId', $doelstellingId);
 
             $stmt->execute();
 
@@ -648,7 +673,7 @@ class UserDAO {
             die($e->getMessage());
         }
 
-        if(isset($criteriaTable[0])) {
+        if (isset($criteriaTable[0])) {
             $criteria = $criteriaTable;
         } else {
             //die('No criteria found for doelstelling with id = ' . $doelstellingId);
@@ -658,14 +683,15 @@ class UserDAO {
         return $criteria;
     }
 
-    public static function getBeoordelingsaspectenInEvaluatiecriterium($evaluatiecriteriumId){
-        try{
+    public static function getBeoordelingsaspectenInEvaluatiecriterium($evaluatiecriteriumId)
+    {
+        try {
             $conn = graderdb::getConnection();
 
             $sql = 'SELECT * from aspecten
                     WHERE evaluatiecriteriumId = :evaluatiecriteriumId';
             $stmt = $conn->prepare($sql);
-            $stmt->bindParam(':evaluatiecriteriumId',$evaluatiecriteriumId);
+            $stmt->bindParam(':evaluatiecriteriumId', $evaluatiecriteriumId);
 
             $stmt->execute();
 
@@ -674,7 +700,7 @@ class UserDAO {
             die($e->getMessage());
         }
 
-        if(isset($aspectenTable[0])) {
+        if (isset($aspectenTable[0])) {
             $aspecten = $aspectenTable;
         } else {
             //die('No aspecten found for evaluatiecriterium with id = ' . $evaluatiecriteriumId);
@@ -684,14 +710,15 @@ class UserDAO {
         return $aspecten;
     }
 
-    public static function getEvaluaties($studentId, $moduleId){
-        try{
+    public static function getEvaluaties($studentId, $moduleId)
+    {
+        try {
             $conn = graderdb::getConnection();
 
             $sql = 'SELECT * from evaluaties WHERE studentId = :studentId AND moduleId = :moduleId';
             $stmt = $conn->prepare($sql);
-            $stmt->bindParam(':studentId',$studentId);
-            $stmt->bindParam(':moduleId',$moduleId);
+            $stmt->bindParam(':studentId', $studentId);
+            $stmt->bindParam(':moduleId', $moduleId);
 
             $stmt->execute();
 
@@ -700,7 +727,7 @@ class UserDAO {
             die($e->getMessage());
         }
 
-        if(isset($evaluatiesTable[0])) {
+        if (isset($evaluatiesTable[0])) {
             $evaluaties = $evaluatiesTable;
         } else {
             //die('No rapporten found for student with id = ' . $studentId);
@@ -710,13 +737,14 @@ class UserDAO {
         return $evaluaties;
     }
 
-    public static function getEvaluatieId($evaluatieName){
-        try{
+    public static function getEvaluatieId($evaluatieName)
+    {
+        try {
             $conn = graderdb::getConnection();
 
             $sql = 'SELECT id FROM evaluaties WHERE name = :evaluatieName';
             $stmt = $conn->prepare($sql);
-            $stmt->bindParam(':evaluatieName',$evaluatieName);
+            $stmt->bindParam(':evaluatieName', $evaluatieName);
 
             $stmt->execute();
 
@@ -725,7 +753,7 @@ class UserDAO {
             die($e->getMessage());
         }
 
-        if(isset($evaluatiesTable[0])) {
+        if (isset($evaluatiesTable[0])) {
             $evaluatieId = $evaluatiesTable[0]->id;
         } else {
             //die('No rapporten found for student with id = ' . $studentId);
@@ -735,13 +763,14 @@ class UserDAO {
         return $evaluatieId;
     }
 
-    public static function getEvaluatie($evaluatieId){
-        try{
+    public static function getEvaluatie($evaluatieId)
+    {
+        try {
             $conn = graderdb::getConnection();
 
             $sql = 'SELECT * from evaluaties WHERE id = :evaluatieId';
             $stmt = $conn->prepare($sql);
-            $stmt->bindParam(':evaluatieId',$evaluatieId);
+            $stmt->bindParam(':evaluatieId', $evaluatieId);
 
             $stmt->execute();
 
@@ -750,7 +779,7 @@ class UserDAO {
             die($e->getMessage());
         }
 
-        if(isset($evaluatieTable[0])) {
+        if (isset($evaluatieTable[0])) {
             $evaluatie = $evaluatieTable[0];
         } else {
             //die('No evaluatie found with id = ' . $evaluatieId);
@@ -759,13 +788,14 @@ class UserDAO {
         return $evaluatie;
     }
 
-  public static function getAspectbeoordeling($evaluatieId/*, $aspectId*/){
+    public static function getAspectbeoordeling($evaluatieId/*, $aspectId*/)
+    {
         try {
             $conn = graderdb::getConnection();
 
             $sql = 'SELECT * FROM evaluaties_aspecten WHERE evaluatieId = :evaluatieId /*AND aspectId = :aspectId*/';
             $stmt = $conn->prepare($sql);
-            $stmt->bindParam(':evaluatieId',$evaluatieId);
+            $stmt->bindParam(':evaluatieId', $evaluatieId);
             /*$stmt->bindParam(':aspectId',$aspectId);*/
 
             $stmt->execute();
@@ -775,7 +805,7 @@ class UserDAO {
             die($e->getMessage());
         }
 
-        if(isset($doelstellingenTable[0])) {
+        if (isset($doelstellingenTable[0])) {
             $rating = $doelstellingenTable;
         } else {
             //die('No score found for doelstelling with id '.$doelstellingId.' in rapport with id '.$rapportId.'!');
@@ -785,13 +815,14 @@ class UserDAO {
         return $rating;
     }
 
-    public static function getRapporten($studentId){
-        try{
+    public static function getRapporten($studentId)
+    {
+        try {
             $conn = graderdb::getConnection();
 
             $sql = 'SELECT * from rapporten WHERE studentId = :studentId';
             $stmt = $conn->prepare($sql);
-            $stmt->bindParam(':studentId',$studentId);
+            $stmt->bindParam(':studentId', $studentId);
 
             $stmt->execute();
 
@@ -800,7 +831,7 @@ class UserDAO {
             die($e->getMessage());
         }
 
-        if(isset($rapportenTable[0])) {
+        if (isset($rapportenTable[0])) {
             $rapporten = $rapportenTable;
         } else {
             //die('No rapporten found for student with id = ' . $studentId);
@@ -810,13 +841,14 @@ class UserDAO {
         return $rapporten;
     }
 
-    public static function getRapport($rapportId){
-        try{
+    public static function getRapport($rapportId)
+    {
+        try {
             $conn = graderdb::getConnection();
 
             $sql = 'SELECT * from rapporten WHERE id = :rapportId';
             $stmt = $conn->prepare($sql);
-            $stmt->bindParam(':rapportId',$rapportId);
+            $stmt->bindParam(':rapportId', $rapportId);
 
             $stmt->execute();
 
@@ -825,7 +857,7 @@ class UserDAO {
             die($e->getMessage());
         }
 
-        if(isset($rapportTable[0])) {
+        if (isset($rapportTable[0])) {
             $rapport = $rapportTable[0];
         } else {
             //die('No rapporten found for student with id = ' . $studentId);
@@ -835,37 +867,39 @@ class UserDAO {
         return $rapport;
     }
 
-    public static function getRapportmodules($rapportId){
-            try{
-                $conn = graderdb::getConnection();
+    public static function getRapportmodules($rapportId)
+    {
+        try {
+            $conn = graderdb::getConnection();
 
-                $sql = 'SELECT * from rapporten_modules WHERE rapportId = :rapportId';
-                $stmt = $conn->prepare($sql);
-                $stmt->bindParam(':rapportId',$rapportId);
+            $sql = 'SELECT * from rapporten_modules WHERE rapportId = :rapportId';
+            $stmt = $conn->prepare($sql);
+            $stmt->bindParam(':rapportId', $rapportId);
 
-                $stmt->execute();
+            $stmt->execute();
 
-                $modulesTable = $stmt->fetchAll(PDO::FETCH_CLASS);
-            } catch (PDOException $e) {
-                die($e->getMessage());
-            }
+            $modulesTable = $stmt->fetchAll(PDO::FETCH_CLASS);
+        } catch (PDOException $e) {
+            die($e->getMessage());
+        }
 
-            if(isset($modulesTable[0])) {
-                $modules = $modulesTable;
-            } else {
-                //die('No modules found in rapport with id = ' . $rapportId);
-                $modules = null;
-            }
-            return $modules;
+        if (isset($modulesTable[0])) {
+            $modules = $modulesTable;
+        } else {
+            //die('No modules found in rapport with id = ' . $rapportId);
+            $modules = null;
+        }
+        return $modules;
     }
 
-    public static function getRapportscores($rapportId){
-        try{
+    public static function getRapportscores($rapportId)
+    {
+        try {
             $conn = graderdb::getConnection();
 
             $sql = 'SELECT * from rapporten_scores WHERE rapportId = :rapportId';
             $stmt = $conn->prepare($sql);
-            $stmt->bindParam(':rapportId',$rapportId);
+            $stmt->bindParam(':rapportId', $rapportId);
 
             $stmt->execute();
 
@@ -874,7 +908,7 @@ class UserDAO {
             die($e->getMessage());
         }
 
-        if(isset($scoresTable[0])) {
+        if (isset($scoresTable[0])) {
             $scores = $scoresTable;
         } else {
             //die('No scores found in rapport with id = ' . $rapportId);
@@ -883,14 +917,15 @@ class UserDAO {
         return $scores;
     }
 
-    public static function getRating($rapportId, $doelstellingId){
+    public static function getRating($rapportId, $doelstellingId)
+    {
         try {
             $conn = graderdb::getConnection();
 
             $sql = 'SELECT * FROM rapporten_scores WHERE rapportId = :rapportId AND doelstellingId = :doelstellingId';
             $stmt = $conn->prepare($sql);
-            $stmt->bindParam(':rapportId',$rapportId);
-            $stmt->bindParam(':doelstellingId',$doelstellingId);
+            $stmt->bindParam(':rapportId', $rapportId);
+            $stmt->bindParam(':doelstellingId', $doelstellingId);
 
             $stmt->execute();
 
@@ -899,7 +934,7 @@ class UserDAO {
             die($e->getMessage());
         }
 
-        if(isset($doelstellingenTable[0])) {
+        if (isset($doelstellingenTable[0])) {
             $rating = $doelstellingenTable[0];
         } else {
             //die('No score found for doelstelling with id '.$doelstellingId.' in rapport with id '.$rapportId.'!');
@@ -909,45 +944,47 @@ class UserDAO {
         return $rating;
     }
 
-    public static function getUserPw($username) {
-      try {
-          $conn = graderdb::getConnection();
+    public static function getUserPw($username)
+    {
+        try {
+            $conn = graderdb::getConnection();
 
-          $sql = 'SELECT * FROM users WHERE email = :username';
-          $stmt = $conn->prepare($sql);
-          $stmt->bindParam(':username', $username);
-          $stmt->execute();
+            $sql = 'SELECT * FROM users WHERE email = :username';
+            $stmt = $conn->prepare($sql);
+            $stmt->bindParam(':username', $username);
+            $stmt->execute();
 
-          $usersTable = $stmt->fetchAll(PDO::FETCH_CLASS);
-      } catch (PDOException $e) {
-          die($e->getMessage());
-      }
+            $usersTable = $stmt->fetchAll(PDO::FETCH_CLASS);
+        } catch (PDOException $e) {
+            die($e->getMessage());
+        }
 
-      if(isset($usersTable[0])) {
-          $user = $usersTable[0];
-      } else {
-          //die('No user with username = ' . $username);
-          $user = null;
-      }
+        if (isset($usersTable[0])) {
+            $user = $usersTable[0];
+        } else {
+            //die('No user with username = ' . $username);
+            $user = null;
+        }
 
-      return $user;
+        return $user;
     }
 
-     //////////////////////////////////////////////
+    //////////////////////////////////////////////
     //              INSERT-QUERIES              //
-   //////////////////////////////////////////////
+    //////////////////////////////////////////////
 
-    public static function createUser($firstname, $lastname, $email, $password, $creatorId) {
+    public static function createUser($firstname, $lastname, $email, $password, $creatorId)
+    {
         try {
             $conn = graderdb::getConnection();
 
             $sql = 'INSERT INTO users(firstname,lastname,email,password,creatorId) VALUES(:firstname, :lastname, :email, :password, :creatorId)';
             $stmt = $conn->prepare($sql);
-            $stmt->bindParam(':firstname',$firstname);
-            $stmt->bindParam(':lastname',$lastname);
-            $stmt->bindParam(':email',$email);
-            $stmt->bindParam(':password',$password);
-            $stmt->bindParam(':creatorId',$creatorId);
+            $stmt->bindParam(':firstname', $firstname);
+            $stmt->bindParam(':lastname', $lastname);
+            $stmt->bindParam(':email', $email);
+            $stmt->bindParam(':password', $password);
+            $stmt->bindParam(':creatorId', $creatorId);
             $stmt->execute();
 
         } catch (PDOException $e) {
@@ -955,13 +992,14 @@ class UserDAO {
         }
     }
 
-    public static function makeUserStudent($userId){
+    public static function makeUserStudent($userId)
+    {
         try {
             $conn = graderdb::getConnection();
 
             $sql = 'INSERT INTO studenten(studentId) VALUES(:userId)';
             $stmt = $conn->prepare($sql);
-            $stmt->bindParam(':userId',$userId);
+            $stmt->bindParam(':userId', $userId);
             $stmt->execute();
 
         } catch (PDOException $e) {
@@ -969,7 +1007,8 @@ class UserDAO {
         }
     }
 
-    public static function createEducation($name, $creatorId) {
+    public static function createEducation($name, $creatorId)
+    {
         try {
             $conn = graderdb::getConnection();
 
@@ -984,7 +1023,8 @@ class UserDAO {
         }
     }
 
-    public static function createModule($name, $opleidingId, $creatorId) {
+    public static function createModule($name, $opleidingId, $creatorId)
+    {
         try {
             $conn = graderdb::getConnection();
 
@@ -999,47 +1039,50 @@ class UserDAO {
             die($e->getMessage());
         }
     }
-/*
-    public static function addStudentToModules($studentId, $moduleIds){ // TODO opleidingId for general modules?
+
+    /*
+        public static function addStudentToModules($studentId, $moduleIds){ // TODO opleidingId for general modules?
+            try {
+                $conn = graderdb::getConnection();
+
+                $sql = 'INSERT INTO studenten_modules (moduleId, studentId) VALUES ';
+
+                $sql .= '(:studentId, '.$moduleIds[0].')';
+
+                for($i = 1; $i < sizeof($moduleIds); $i++){
+                    $sql .= ',(:studentId, '.moduleIds[$i].')'; // TODO parameter binding !!!
+                }
+
+                $sql .= ";";
+
+                $stmt = $conn->prepare($sql);
+                $stmt->bindParam(':studentId', $studentId);
+
+                $stmt->execute();
+            } catch (PDOException $e) {
+                die($e->getMessage());
+            }
+        }*/
+
+    public static function insertNewLoginToken($userid, $token)
+    {
         try {
             $conn = graderdb::getConnection();
 
-            $sql = 'INSERT INTO studenten_modules (moduleId, studentId) VALUES ';
-
-            $sql .= '(:studentId, '.$moduleIds[0].')';
-
-            for($i = 1; $i < sizeof($moduleIds); $i++){
-                $sql .= ',(:studentId, '.moduleIds[$i].')'; // TODO parameter binding !!!
-            }
-
-            $sql .= ";";
-
+            $sql = 'INSERT INTO loginTokens(token, userId) VALUES(:token, :userid)';
             $stmt = $conn->prepare($sql);
-            $stmt->bindParam(':studentId', $studentId);
+            $stmt->bindParam(':token', $token);
+            $stmt->bindParam(':userid', $userid);
 
             $stmt->execute();
         } catch (PDOException $e) {
             die($e->getMessage());
         }
-    }*/
-
-    public static function insertNewLoginToken($userid, $token) {
-          try {
-              $conn = graderdb::getConnection();
-
-              $sql = 'INSERT INTO loginTokens(token, userId) VALUES(:token, :userid)';
-              $stmt = $conn->prepare($sql);
-              $stmt->bindParam(':token', $token);
-              $stmt->bindParam(':userid', $userid);
-
-              $stmt->execute();
-          } catch (PDOException $e) {
-              die($e->getMessage());
-          }
     }
 
-    public static function insertNewEvaluation($name, $studentId, $moduleId, $date) {
-        try{
+    public static function insertNewEvaluation($name, $studentId, $moduleId, $date)
+    {
+        try {
             $conn = graderdb::getConnection();
 
             $sql = 'INSERT INTO evaluaties(name, studentId, moduleId, datum) VALUES (:name, :studentId, :moduleId, :datum)';
@@ -1055,7 +1098,8 @@ class UserDAO {
         }
     }
 
-    public static function insertAspectbeoordelingen($evaluatieId, $aspectscoresKeyValueArray){
+    public static function insertAspectbeoordelingen($evaluatieId, $aspectscoresKeyValueArray)
+    {
         try {
             $conn = graderdb::getConnection();
 
@@ -1064,10 +1108,10 @@ class UserDAO {
             $aspectIds = array_keys($aspectscoresKeyValueArray);
             $aspectScores = array_values($aspectscoresKeyValueArray);
 
-            $sql .= '(:evaluatieId, '.$aspectIds[0].', '.$aspectScores[0].')';
+            $sql .= '(:evaluatieId, ' . $aspectIds[0] . ', ' . $aspectScores[0] . ')';
 
-            for($i = 1; $i < sizeof($aspectscoresKeyValueArray); $i++){
-                if($aspectScores[$i] != null) $sql .= ',(:evaluatieId, '.$aspectIds[$i].', '.$aspectScores[$i].')'; // TODO parameter binding !!!
+            for ($i = 1; $i < sizeof($aspectscoresKeyValueArray); $i++) {
+                if ($aspectScores[$i] != null) $sql .= ',(:evaluatieId, ' . $aspectIds[$i] . ', ' . $aspectScores[$i] . ')'; // TODO parameter binding !!!
             }
 
             $sql .= ";";
@@ -1081,7 +1125,8 @@ class UserDAO {
         }
     }
 
-    public static function saveRating($rapportId, $doelstellingId){
+    public static function saveRating($rapportId, $doelstellingId)
+    {
         // TODO berekenen
         // avg(rating 'aspecten' (OK/NOK)) = rating evaluatiecriterium (RO/OV/V/G/Afwezig/Voldaan)
         // avg(rating evaluatiecriteria) = rating doelstelling
@@ -1092,7 +1137,8 @@ class UserDAO {
     //              UPDATE-QUERIES              //
     //////////////////////////////////////////////
 
-    public static function updateUser($firstName, $lastName, $email, $userId) {
+    public static function updateUser($firstName, $lastName, $email, $userId)
+    {
         try {
             $conn = graderdb::getConnection();
 
@@ -1109,19 +1155,20 @@ class UserDAO {
         }
     }
 
-    public static function updatePassword($userid, $password) {
-      try {
-        $conn = graderdb::getConnection();
+    public static function updatePassword($userid, $password)
+    {
+        try {
+            $conn = graderdb::getConnection();
 
-        $sql = 'UPDATE users SET password=:password WHERE id = :userId';
-        $stmt = $conn->prepare($sql);
-        $stmt->bindParam(':password', $password);
-        $stmt->bindParam(':userId', $userid);
+            $sql = 'UPDATE users SET password=:password WHERE id = :userId';
+            $stmt = $conn->prepare($sql);
+            $stmt->bindParam(':password', $password);
+            $stmt->bindParam(':userId', $userid);
 
-        $stmt->execute();
-      } catch (PDOException $e) {
-        die($e->getMessage());
-      }
+            $stmt->execute();
+        } catch (PDOException $e) {
+            die($e->getMessage());
+        }
 
     }
 
@@ -1131,34 +1178,63 @@ class UserDAO {
     //              DELETE-QUERIES              //
     //////////////////////////////////////////////
 
-  public static function removeLoginToken($token) {
-    try {
-      $conn = graderdb::getConnection();
+    public static function removeLoginToken($token)
+    {
+        try {
+            $conn = graderdb::getConnection();
 
-      $sql = 'DELETE FROM loginTokens WHERE token=:token';
-      $stmt = $conn->prepare($sql);
-      $stmt->bindParam(':token', $token);
+            $sql = 'DELETE FROM loginTokens WHERE token=:token';
+            $stmt = $conn->prepare($sql);
+            $stmt->bindParam(':token', $token);
 
-      $stmt->execute();
+            $stmt->execute();
 
-    } catch (PDOException $e) {
-      die($e->getMessage());
+        } catch (PDOException $e) {
+            die($e->getMessage());
+        }
+
     }
 
-  }
+    public static function removeAllTokensFromUser($userid)
+    {
+        try {
+            $conn = graderdb::getConnection();
 
-  public static function removeAllTokensFromUser($userid) {
-    try {
-      $conn = graderdb::getConnection();
+            $sql = 'DELETE FROM loginTokens WHERE userId=:userid';
+            $stmt = $conn->prepare($sql);
+            $stmt->bindParam(':userid', $userid);
 
-      $sql = 'DELETE FROM loginTokens WHERE userId=:userid';
-      $stmt = $conn->prepare($sql);
-      $stmt->bindParam(':userid', $userid);
+            $stmt->execute();
+        } catch (PDOException $e) {
+            die($e->getMessage());
+        }
 
-      $stmt->execute();
-    } catch (PDOException $e) {
-      die($e->getMessage());
     }
 
-  }
+    public static function deleteEvaluatie($evaluatieId)
+    {
+        try {
+            $conn = graderdb::getConnection();
+
+            $sql = 'DELETE FROM evaluaties_aspecten WHERE evaluatieId = :evaluatieId';
+            $stmt = $conn->prepare($sql);
+            $stmt->bindParam(':evaluatieId', $evaluatieId);
+
+            $stmt->execute();
+
+            $sql = 'DELETE FROM evaluaties WHERE id = :evaluatieId';
+            $stmt = $conn->prepare($sql);
+            $stmt->bindParam(':evaluatieId', $evaluatieId);
+
+            $stmt->execute();
+
+        } catch (PDOException $e) {
+            die($e->getMessage());
+        }
+
+    }
+
 }
+
+//$userDAO->updateEvaluation($evalId, $postBody->name,$postBody->studentId,$postBody->moduleId,$date);
+//$userDAO->updateAspectbeoordelingen($evalId, $beoordeeldeAspecten);
