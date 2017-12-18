@@ -759,14 +759,14 @@ class UserDAO {
         return $evaluatie;
     }
 
-    public static function getAspectbeoordeling($evaluatieId, $aspectId){
+  public static function getAspectbeoordeling($evaluatieId/*, $aspectId*/){
         try {
             $conn = graderdb::getConnection();
 
-            $sql = 'SELECT * FROM evaluaties_aspecten WHERE evaluatieId = :evaluatieId AND aspectId = :aspectId';
+            $sql = 'SELECT * FROM evaluaties_aspecten WHERE evaluatieId = :evaluatieId /*AND aspectId = :aspectId*/';
             $stmt = $conn->prepare($sql);
             $stmt->bindParam(':evaluatieId',$evaluatieId);
-            $stmt->bindParam(':aspectId',$aspectId);
+            /*$stmt->bindParam(':aspectId',$aspectId);*/
 
             $stmt->execute();
 
@@ -776,7 +776,7 @@ class UserDAO {
         }
 
         if(isset($doelstellingenTable[0])) {
-            $rating = $doelstellingenTable[0];
+            $rating = $doelstellingenTable;
         } else {
             //die('No score found for doelstelling with id '.$doelstellingId.' in rapport with id '.$rapportId.'!');
             $rating = null;

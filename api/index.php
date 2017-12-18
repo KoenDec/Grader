@@ -460,7 +460,20 @@ if ($_SERVER['REQUEST_METHOD'] == 'GET') {
       }
     } else if ($_GET['url'] == 'getEvaluatiesPerStudent') {
       if (isset($_GET['modId']) && isset($_GET['studId'])) {
-        $evaluaties = $userDAO->getEvaluaties($_GET['studId'], $_GET['modId']);
+        $evaluaties = (object)[
+          'evaluaties' => array()
+        ];
+        $evaluatiesPerStudent = $userDAO->getEvaluaties($_GET['studId'], $_GET['modId']);
+        foreach ($evaluatiesPerStudent as $eval) {
+          $evalObj = (object)[
+            'evaluatieId' => $eval->id,
+            'name' => $eval->name,
+            'date' => preg_replace('/(\d{4})-(\d{2})-(\d{2})/', '$3/$2/$1', $eval->datum),
+            'aspecten' => $userDAO->getAspectbeoordeling($eval->id)
+          ];
+          array_push($evaluaties->evaluaties, $evalObj);
+        }
+
         echo json_encode($evaluaties);
         http_response_code(200);
       } else {
