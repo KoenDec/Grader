@@ -134,6 +134,22 @@ var Api = (function () {
       })
   }
 
+  my.getEvalsByStudent = function (modId, studId, cb) {
+    axios.get('http://146.185.183.217/api/getEvaluatiesPerStudent', {
+      params: {
+        modId: modId,
+        studId: studId
+      }
+    })
+      .then(function (response) {
+        console.log(response.data)
+        return cb(response.data)
+      })
+      .catch(function (error) {
+        console.log(error)
+      })
+  }
+
   return my
 }())
 
