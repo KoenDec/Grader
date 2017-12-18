@@ -1802,8 +1802,8 @@ INSERT INTO studenten_modules(studentId, moduleId, opleidingId) VALUES
 
 
 INSERT INTO evaluaties(name, studentId, moduleId, datum) VALUES
-	('opdracht les 1', 10, 7, '2017-09-22'),
-	('opdracht les 2', 10, 7, '2017-09-29');
+	('opdracht les 1', 10, 7, "2017-09-22"),
+	('opdracht les 2', 10, 7, "2017-09-29");
     
 /*INSERT INTO evaluaties_criteria(evaluatieId, criteriumId, criteriumBeoordeling) VALUES
 	();*/
