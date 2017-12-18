@@ -4,7 +4,7 @@ require_once('Login.php');
 
 header("Access-Control-Allow-Origin: *");
 header("Access-Control-Allow-Headers: Origin,Content-Type");
-
+header('Content-Type: application/json');
 
 $userDAO = new UserDAO();
 $notFoundErr = '{"Error":"Geen user gevonden"}';
@@ -466,7 +466,7 @@ if ($_SERVER['REQUEST_METHOD'] == 'GET') {
         $evaluatiesPerStudent = $userDAO->getEvaluaties($_GET['studId'], $_GET['modId']);
         foreach ($evaluatiesPerStudent as $eval) {
           $evalObj = (object)[
-            'evaluatieId' => $eval->id,
+            'id' => $eval->id,
             'name' => $eval->name,
             'date' => preg_replace('/(\d{4})-(\d{2})-(\d{2})/', '$3/$2/$1', $eval->datum),
             'aspecten' => $userDAO->getAspectbeoordeling($eval->id)
@@ -607,7 +607,7 @@ if ($_SERVER['REQUEST_METHOD'] == 'GET') {
         $postBody = json_decode($postBody);
 
         $date = $postBody->date;
-        $date = preg_replace('#(\d{2})/(\d{2})/(\d{4})', '$3-$2-$1', $date);
+        $date = preg_replace('#(\d{2})/(\d{2})/(\d{4})#', '$3-$2-$1', $date);
         $aspecten = $postBody->aspecten;
 
         $beoordeeldeAspecten = [];
@@ -615,7 +615,7 @@ if ($_SERVER['REQUEST_METHOD'] == 'GET') {
         foreach($aspecten as $aspect){
             $beoordeeldeAspecten[$aspect->aspectId] = $aspect->beoordeling;
         }
-
+        
         $userDAO->insertNewEvaluation($postBody->name,$postBody->studentId,$postBody->moduleId,$date);
         $evaluatieId = $userDAO->getEvaluatieId($postBody->name);
         $userDAO->insertAspectbeoordelingen($evaluatieId, $beoordeeldeAspecten);
@@ -625,6 +625,27 @@ if ($_SERVER['REQUEST_METHOD'] == 'GET') {
           $quotering = $aspect->eval;
           $userDAO->saveAspecten($aspectid,$quotering);
         }*/
+    } else if ($_GET['url'] == 'updateEvaluatie') {
+      $postBody = file_get_contents('php://input');
+      $postBody = json_decode($postBody);
+
+      $evalId = $postBody->id;
+
+      if (isset($evalId)) {
+        $date = $postBody->date;
+        $date = preg_replace("/(\d{2})/(\d{2})/(\d{4})/", "$3-$2-$1", $date);
+        $aspecten = $postBody->aspecten;
+
+        $beoordeeldeAspecten = [];
+
+        foreach($aspecten as $aspect){
+            $beoordeeldeAspecten[$aspect->aspectId] = $aspect->beoordeling;
+        }
+
+        $userDAO->updateEvaluation($evalId, $postBody->name,$postBody->studentId,$postBody->moduleId,$date);
+        $userDAO->updateAspectbeoordelingen($evalId, $beoordeeldeAspecten);
+      }
+
     } else if ($_GET['url'] == 'createStudent') {
       /*$postBody = file_get_contents('php://input');
       $postBody = json_decode($postBody);
