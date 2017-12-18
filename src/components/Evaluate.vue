@@ -37,7 +37,7 @@
             <v-flex offset-xs1>
                 <div>
                     <v-btn v-if="!newEvalTable" @click="newEval" color="primary"><v-icon class="mr-2">add</v-icon>Nieuwe Evaluatiefiche</v-btn>
-                    <v-btn v-if="newEvalTable" @click="newEvalTable = false" color="primary"><v-icon class="mr-2">undo</v-icon>Back</v-btn>
+                    <v-btn v-if="newEvalTable" @click="newEvalTable = false; updateEval = true" color="primary"><v-icon class="mr-2">undo</v-icon>Back</v-btn>
                     <v-btn v-if="newEvalTable && !updateEval" @click="makeJSON" color="primary"><v-icon class="mr-2">save</v-icon>Evaluatie Opslaan</v-btn>
                     <p v-if="evalError" style="display: inline-block" class="red--text">{{evalError}}</p>
                 </div>
@@ -353,8 +353,8 @@
               self.$set(self.activeBoxes, 'no' + item.aspectId, true)
             }
           })
-          this.$forceUpdate()
           self.updateEval = true
+          this.$forceUpdate()
         },
         formatDate (date) {
           if (!date) {
