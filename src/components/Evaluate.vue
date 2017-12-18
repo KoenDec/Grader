@@ -36,9 +36,9 @@
         <v-layout v-if="moduleSelected" row wrap class="text-xs-left">
             <v-flex offset-xs1>
                 <div>
-                    <v-btn v-if="!newEvalTable" @click="newEval" color="primary"><v-icon>add</v-icon>Nieuwe Evaluatiefiche</v-btn>
-                    <v-btn v-if="newEvalTable" @click="newEvalTable = false" color="primary"><v-icon>undo</v-icon>Back</v-btn>
-                    <v-btn v-if="newEvalTable && !updateEval" @click="makeJSON" color="primary"><v-icon>save</v-icon>Evaluatie Opslaan</v-btn>
+                    <v-btn v-if="!newEvalTable" @click="newEval" color="primary"><v-icon class="mr-2">add</v-icon>Nieuwe Evaluatiefiche</v-btn>
+                    <v-btn v-if="newEvalTable" @click="newEvalTable = false" color="primary"><v-icon class="mr-2">undo</v-icon>Back</v-btn>
+                    <v-btn v-if="newEvalTable && !updateEval" @click="makeJSON" color="primary"><v-icon class="mr-2">save</v-icon>Evaluatie Opslaan</v-btn>
                     <p v-if="evalError" style="display: inline-block" class="red--text">{{evalError}}</p>
                 </div>
             </v-flex>
@@ -343,6 +343,7 @@
           console.log(obj)
           self.evalName = obj[0].name
           self.dateFormatted = obj[0].date
+          self.createActiveBoxes(this.selectedModule)
           obj[0].aspecten.forEach(function (item) {
             if (item.aspectBeoordeling === '1') {
               self.$set(self.activeBoxes, 'yes' + item.aspectId, true)
