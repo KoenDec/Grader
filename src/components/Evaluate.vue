@@ -379,6 +379,7 @@
         },
         deleteEval: function (id) {
           var self = this
+          console.log(id)
           this.$http.deleteEval(id, function (data) {
             console.log(data)
             self.getPrevEvals()

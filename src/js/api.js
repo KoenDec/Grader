@@ -169,7 +169,7 @@ var Api = (function () {
   }
 
   my.deleteEval = function (id, cb) {
-    axios.delete('http://146.185.183.217/api/deleteEvaluation', {
+    axios.delete('http://146.185.183.217/api/deleteEvaluatie', {
       params: {
         id: id
       }
