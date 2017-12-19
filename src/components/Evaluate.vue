@@ -306,13 +306,13 @@
           this.activeBoxesCreated = true
         },
         logYes: function (id) {
-          this.$set(this.activeBoxes, 'yes' + id, true)
-          this.$set(this.activeBoxes, 'no' + id, false)
+          this.$set(this.activeBoxes, 'yes' + id, 1)
+          this.$set(this.activeBoxes, 'no' + id, 0)
           this.$forceUpdate()
         },
         logNo: function (id) {
-          this.$set(this.activeBoxes, 'yes' + id, false)
-          this.$set(this.activeBoxes, 'no' + id, true)
+          this.$set(this.activeBoxes, 'yes' + id, 0)
+          this.$set(this.activeBoxes, 'no' + id, 1)
           this.$forceUpdate()
         },
         reset: function (id) {
@@ -367,11 +367,11 @@
           self.createActiveBoxes(this.selectedModule)
           obj[0].aspecten.forEach(function (item) {
             if (item.aspectBeoordeling === '1') {
-              self.$set(self.activeBoxes, 'yes' + item.aspectId, true)
-              self.$set(self.activeBoxes, 'no' + item.aspectId, false)
+              self.$set(self.activeBoxes, 'yes' + item.aspectId, 1)
+              self.$set(self.activeBoxes, 'no' + item.aspectId, 0)
             } else if (item.aspectBeoordeling === '0') {
-              self.$set(self.activeBoxes, 'yes' + item.aspectId, false)
-              self.$set(self.activeBoxes, 'no' + item.aspectId, true)
+              self.$set(self.activeBoxes, 'yes' + item.aspectId, 0)
+              self.$set(self.activeBoxes, 'no' + item.aspectId, 1)
             }
           })
           self.updateEval = true
