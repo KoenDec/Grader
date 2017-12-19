@@ -129,7 +129,7 @@ create table `studenten_modules` (
 
 CREATE TABLE `evaluaties` (
   `id` int NOT NULL AUTO_INCREMENT PRIMARY KEY,
-  `name` varchar(200) NOT NULL,
+  `name` varchar(150) NOT NULL UNIQUE,
   `studentId` int NOT NULL,
   `moduleId` int NOT NULL,
   `datum` date NOT NULL,

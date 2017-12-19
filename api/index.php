@@ -1,6 +1,6 @@
 <?php
-require_once('graderdb.php');
-require_once('Login.php');
+require_once('../php/graderdb.php');
+require_once('../php/Login.php');
 
 header("Access-Control-Allow-Origin: *");
 header("Access-Control-Allow-Methods: DELETE");
@@ -670,18 +670,38 @@ if ($_SERVER['REQUEST_METHOD'] == 'GET') {
         echo 'Student created';
         http_response_code(200);
       }*/
-    } else if ($_GET['url'] == 'updateStudent') {
-      /*$postBody = fi$aspect->beoordelingle_get_contents('php://input');
-      $postBody = json_decode($postBody);
+  } else if ($_GET['url'] == 'updateStudent') {
+    /*$postBody = file_get_contents('php://input');
+    $postBody = json_decode($postBody);
 
-      $firstname = $postBody->firstname;
-      $lastname = $postBody->lastname;
-      $email = $postBody->email;
-      $moduleIds = $postBody->moduleIds;
-      $creatorId = $postBody->id;
+    $firstname = $postBody->firstname;
+    $lastname = $postBody->lastname;
+    $email = $postBody->email;
+    $moduleIds = $postBody->moduleIds;
+    $creatorId = $postBody->id;
 
-      $userDAO->updateStudent();
-  */
+    $userDAO->updateStudent();
+*/
+  }
+} else if ($_SERVER['REQUEST_METHOD'] == 'PATCH') {
+    if ($_GET['url'] == 'updateEvaluatie') {
+        $postBody = file_get_contents('php://input');
+        $postBody = json_decode($postBody);
+
+        if (isset($_GET['id'])) {
+            $evalId = $_GET['id'];
+            $date = $postBody->date;
+            $date = preg_replace('#(\d{2})/(\d{2})/(\d{4})#', '$3-$2-$1', $date);
+            $aspecten = $postBody->aspecten;
+
+            $beoordeeldeAspecten = [];
+
+            foreach($aspecten as $aspect){
+                $beoordeeldeAspecten[$aspect->aspectId] = $aspect->beoordeling;
+            }
+            $userDAO->updateEvaluatie($evalId, $postBody->name,$postBody->studentId,$postBody->moduleId,$date, $beoordeeldeAspecten);
+        }
+
     }
 } else if ($_SERVER['REQUEST_METHOD'] == 'DELETE') {
     if ($_GET['url'] == 'auth') {
