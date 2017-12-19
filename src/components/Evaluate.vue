@@ -285,7 +285,7 @@
           self.prevEvals = []
           this.$http.getEvalsByStudent(this.selectedModule[0].id, this.student.id, function (data) {
             self.prevEvals.push(data)
-            console.log(self.prevEvals)
+            // console.log(self.prevEvals)
             self.gotEvals = true
           })
         },
@@ -298,11 +298,11 @@
           self.evalName = null
           self.createActiveBoxes(this.selectedModule)
           self.updateEval = false
-          console.log(self.activeBoxes)
+          // console.log(self.activeBoxes)
         },
         createActiveBoxes: function (module) {
           this.activeBoxes = {}
-          console.log(module)
+          // console.log(module)
           for (var i = 0; i < module.length; i++) {
             for (var j = 0; j < module[i].categorieen.length; j++) {
               for (var k = 0; k < module[i].categorieen[j].doelstellingen.length; k++) {
@@ -318,7 +318,7 @@
               }
             }
           }
-          console.log(this.activeBoxes)
+          // console.log(this.activeBoxes)
           this.activeBoxesCreated = true
         },
         logYes: function (id) {
