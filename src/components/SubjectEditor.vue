@@ -21,10 +21,10 @@
                 <v-text-field
                   auto-focus
                   v-if="addCategorieActive"
-                  @keyup.enter="enterAddition(currentAddString, item.categorieen)"
+                  @keyup.enter="enterAddition(CategorieAddString, item.categorieen, 'categorie')"
                   prepend-icon="add"
                   label="Nieuwe Categorie"
-                  v-model="currentAddString"
+                  v-model="CategorieAddString"
                   single-line
                   hide-details
                   dark
@@ -36,10 +36,10 @@
               <v-text-field
                 auto-focus
                 v-if="addModuleActive"
-                @keyup.enter="enterAddition(currentAddString, opleiding)"
+                @keyup.enter="enterAddition(ModuleAddString, opleiding, 'module')"
                 prepend-icon="add"
                 label="Nieuwe Module"
-                v-model="currentAddString"
+                v-model="ModuleAddString"
                 single-line
                 hide-details
                 dark
@@ -60,18 +60,25 @@ export default {
     return {
       addModuleActive: false,
       addCategorieActive: false,
-      currentAddString: '',
+      selectedcategorie: '',
+      ModuleAddString: '',
+      CategorieAddString: '',
       opleiding: [
         {id: 1, name: 'Initiatie Keuken', categorieen: []}
       ]
     }
   },
   methods: {
-    enterAddition (title, object) {
+    enterAddition (title, object, level) {
       if (title !== '') {
-        object.push({id: 1, name: title, categorieen: []})
+        if (level === 'module') {
+          object.push({name: title, categorieen: []})
+        } else if (level === 'categorie') {
+          object.push({name: title, doelstellingen: []})
+        }
       }
-      this.currentAddString = ''
+      this.ModuleAddString = ''
+      this.CategorieAddString = ''
       this.addModuleActive = false
       this.addCategorieActive = false
     }
