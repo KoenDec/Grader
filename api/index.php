@@ -13,6 +13,10 @@ $notFoundErr = '{"Error":"Geen user gevonden"}';
 $notLoggedInErr = '{"Error":"Niet ingelogd"}';
 $notAuthorizedErr = '{"Error":" Onbevoegd"}';
 
+$studentRole = "STUDENT";
+$teacherRole = "LEERKRACHT";
+$adminRole = "ADMIN";
+
 if ($_SERVER['REQUEST_METHOD'] == 'GET') {
     if ($_GET['url'] == 'auth') {
 
@@ -495,8 +499,9 @@ if ($_SERVER['REQUEST_METHOD'] == 'GET') {
         if (!empty($user)) {
             $hashedPW = $user->password;
           if (password_verify($password, $hashedPW)) {
-            $token = Token::createToken();
             $user_id = $userDAO->getUser($username)->id;
+            $clearance = $userDAO->getUserRole($user_id);
+            $token = Token::createToken($user_id,$clearance);
             // $userDAO->insertNewLoginToken($user_id, $token);
             echo json_encode($token);
             http_response_code(200);
@@ -506,22 +511,6 @@ if ($_SERVER['REQUEST_METHOD'] == 'GET') {
           }
         } else {
             echo '{"Error":"Wrong username"}';
-            http_response_code(401);
-        }
-    } else if ($_GET['url'] == 'updateUser') {
-        $postBody = file_get_contents('php://input');
-        $postBody = json_decode($postBody);
-
-        $firstname = $postBody->firstname;
-        $lastname = $postBody->lastname;
-        $email = $postBody->email;
-
-        if (Token::isValid($_GET['token'])) {
-            //$userDAO->updateUser($firstname, $lastname, $email , $id);
-            echo '{"Status":"User updated"}';
-            http_response_code(200);
-        } else {
-            echo $notLoggedInErr;
             http_response_code(401);
         }
     } else if ($_GET['url'] == 'createModule') {
@@ -676,6 +665,23 @@ if ($_SERVER['REQUEST_METHOD'] == 'GET') {
             $userDAO->updateEvaluatie($evalId, $postBody->name,$date, $beoordeeldeAspecten);
         }
 
+    } else if ($_GET['url'] == 'updateUser') {
+        $postBody = file_get_contents('php://input');
+        $postBody = json_decode($postBody);
+
+        $firstname = $postBody->firstname;
+        $lastname = $postBody->lastname;
+        $email = $postBody->email;
+        $id = $postBody->id;
+
+        if (Token::hasClearance($_GET['token'], $teacherRole) || Token::hasClearance($_GET['token'], $adminRole)) {
+          $userDAO->updateUser($firstname, $lastname, $email , $id);
+          echo '{"Status":"User updated"}';
+          http_response_code(200);
+        } else {
+            echo $notAuthorizedErr;
+            http_response_code(401);
+        }
     }
 } else if ($_SERVER['REQUEST_METHOD'] == 'DELETE') {
     if ($_GET['url'] == 'auth') {

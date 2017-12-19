@@ -44,6 +44,21 @@ class Token
     }
   }
 
+  public static function hasClearance($receivedToken, $clearanceLevel) {// also validates the token
+    $jwt_values = explode(".", $receivedToken);
+    $receivedSignature = $jwt_values[2];
+    $receivedHeaderAndPayload = $jwt_values[0] . "." . $jwt_values[1];
+    $resultedSignature = base64_encode(hash_hmac('sha256', $receivedHeaderAndPayload, $secret, true));
+
+    if ($resultedSignature == $receivedSignature) {
+      $receivedPayload = $jwt_values[1];
+      if ($receivedPayload[1] === $clearanceLevel) {
+        return true;// clearanceLevel is gelijk
+      } else return false;
+    } else {
+      return false;
+    }
+  }
 }
 
 ?>
