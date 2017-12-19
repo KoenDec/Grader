@@ -302,7 +302,6 @@
         },
         createActiveBoxes: function (module) {
           this.activeBoxes = {}
-          // console.log(module)
           for (var i = 0; i < module.length; i++) {
             for (var j = 0; j < module[i].categorieen.length; j++) {
               for (var k = 0; k < module[i].categorieen[j].doelstellingen.length; k++) {
@@ -318,7 +317,6 @@
               }
             }
           }
-          // console.log(this.activeBoxes)
           this.activeBoxesCreated = true
         },
         logYes: function (id) {
@@ -353,14 +351,11 @@
             }
             if (update) {
               this.saveEval['evalId'] = this.currentEvalId
-              console.log(this.saveEval['evalId'])
               this.$http.updateEval(this.saveEval, function (data) {
-                console.log(data)
                 self.getPrevEvals()
               })
             } else {
               this.$http.createEval(this.saveEval, function (data) {
-                console.log(data)
                 self.getPrevEvals()
               })
             }
@@ -376,8 +371,6 @@
           var obj = self.prevEvals[0].evaluaties.filter(function (elem) {
             if (elem.id === id) return elem
           })
-          console.log('what does riwan send me:')
-          console.log(obj)
           self.evalName = obj[0].name
           self.dateFormatted = obj[0].date
           self.currentEvalId = obj[0].id
