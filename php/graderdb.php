@@ -121,7 +121,7 @@ class UserDAO
 
             $sql = 'SELECT id,email,firstname,lastname,accountCreatedTimestamp FROM users WHERE id = :userId';
             $stmt = $conn->prepare($sql);
-            $stmt->bindParam(':userId', userId);
+            $stmt->bindParam(':userId', $userId);
             $stmt->execute();
 
             $usersTable = $stmt->fetchAll(PDO::FETCH_CLASS);
@@ -1210,8 +1210,6 @@ class UserDAO
             $stmt->bindParam(':datum', $datum);
 
             $stmt->execute();
-
-            // hierboven ok
 
             $aspectIds = array_keys($aspectscoresKeyValueArray);
             $aspectScores = array_values($aspectscoresKeyValueArray);
