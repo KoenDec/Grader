@@ -1134,7 +1134,7 @@ class UserDAO
             $aspectIds = array_keys($aspectscoresKeyValueArray);
             $aspectScores = array_values($aspectscoresKeyValueArray);
 
-            $sql .= '(:evaluatieId, ' . $aspectIds[0] . ', ' . $aspectScores[0] . ')';
+            $sql .= '(:evaluatieId, ' . $aspectIds[0] . ', "' . $aspectScores[0] . '")';
 
             for ($i = 1; $i < sizeof($aspectscoresKeyValueArray); $i++) {
                 if ($aspectScores[$i] !== null) $sql .= ',(:evaluatieId, ' . $aspectIds[$i] . ', "' . $aspectScores[$i] . '")'; // TODO parameter binding !!!
@@ -1213,25 +1213,30 @@ class UserDAO
 
             $stmt->execute();
 
+            // hierboven ok
+
             $aspectIds = array_keys($aspectscoresKeyValueArray);
             $aspectScores = array_values($aspectscoresKeyValueArray);
-            echo "lo";
-            var_dump($aspectscoresKeyValueArray);
-            foreach($aspectIds as $aspectId){
-                $bestaandeQuotering = self::getAspectbeoordeling($evaluatieId, $aspectId);
+
+            $newAspects = [];
+
+            for ($i = 0; $i < sizeof($aspectscoresKeyValueArray); $i++) {
+                $bestaandeQuotering = self::getAspectbeoordeling($evaluatieId, $aspectIds[$i]);
                 if(isset($bestaandeQuotering)){
-                   var_dump($bestaandeQuotering);
+                    $sql2 = 'UPDATE evaluaties_aspecten SET aspectBeoordeling = :aspectBeoordeling WHERE evaluatieId = :evaluatieId AND aspectId = :aspectId'; // TODO mogelijke manier om aantal calls te verminderen?
+                    $stmt = $conn->prepare($sql2);
+                    $stmt->bindParam(':evaluatieId', $evaluatieId);
+                    $stmt->bindParam(':aspectId', $aspectIds[$i]);
+                    $stmt->bindParam(':aspectBeoordeling', $aspectScores[$i]);
+
+                    $stmt->execute();
                 } else {
-                    echo "aspect niet gequoteerd";
+                    $newAspects[$aspectIds[$i]] = $aspectScores[$i];
                 }
             }
 
+            if(sizeof($newAspects) > 0) self::insertAspectbeoordelingen($evaluatieId, $newAspects);
 
-            $sql = 'UPDATE evaluaties_aspecten SET  WHERE id = :evaluatieId';
-            $stmt = $conn->prepare($sql);
-            $stmt->bindParam(':evaluatieId', $evaluatieId);
-
-            $stmt->execute();
         } catch (PDOException $e) {
             die($e->getMessage());
         }

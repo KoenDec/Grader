@@ -81,17 +81,15 @@ id = studentId
 #Get rapport of student
 type GET
 url  api/studentReport?id=
-<<<<<<< HEAD
 id = rapportid
 
 # create users
 type POST
 url  api/createUser
 data {"firstname":"","lastname":"","email":"","pw":"","id",""}
-=======
 id = rapportId
 
-#Save new evaluation of student for module
+# create new evaluation of student for module
 type POST
 url api/saveEvaluatie
 data example:
@@ -99,6 +97,7 @@ data example:
      	"name": "opdracht les 4",
      	"studentId": 10,
      	"moduleId": 7,
+        "datum": "2017-12-18",
      	"aspecten": [
      		{
      			"aspectId": 1,
@@ -119,19 +118,25 @@ data example:
      	]
      }
 
-# Get an evaluation by name
-type get
+#get an evaluation by name
+type GET
 url api/getEvaluatieByName?name=evaluatieName
 
-# Get an evaluation by id
+#get an evaluation by id
 type GET
 url api/getEvaluatie?id=evaluatieId
 
-# GET all evaluations for student in module
+#get all evaluations for student in module
 type GET
 url api/getEvaluatiesPerStudent?modId=?&studId=?
 
-# DELETE an evaluation by id
+# delete an evaluation by id
 type DELETE
 url api/deleteEvaluatie?id=
 id = evaluatieId
+
+#update an evaluation by id
+type PATCH
+url api/updateEvaluatie?id=
+id = evaluatieId
+'postbody' same as saveEvaluatie
