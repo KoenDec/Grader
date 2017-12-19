@@ -1198,17 +1198,15 @@ class UserDAO
 
     }
 
-    public static function updateEvaluatie($evaluatieId, $evaluatieName, $studentId, $moduleId, $datum, $aspectscoresKeyValueArray)
+    public static function updateEvaluatie($evaluatieId, $evaluatieName, $datum, $aspectscoresKeyValueArray)
     {
         try {
             $conn = graderdb::getConnection();
 
-            $sql = 'UPDATE evaluaties SET name=:evaluatieName, studentId=:studentId, moduleId=:moduleId, datum=:datum WHERE id = :evaluatieId';
+            $sql = 'UPDATE evaluaties SET name=:evaluatieName, datum=:datum WHERE id = :evaluatieId';
             $stmt = $conn->prepare($sql);
             $stmt->bindParam(':evaluatieId', $evaluatieId);
             $stmt->bindParam(':evaluatieName', $evaluatieName);
-            $stmt->bindParam(':studentId', $studentId);
-            $stmt->bindParam(':moduleId', $moduleId);
             $stmt->bindParam(':datum', $datum);
 
             $stmt->execute();
