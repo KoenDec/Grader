@@ -4,20 +4,23 @@ require_once('graderdb.php');
 class Login {
 
   protected $token;
+  protected $userid;
 
-  public function getLoginToken() {
+  public static function getLoginToken() {
     return $token;
   }
 
-  public function setLoginToken($newToken) {
+  public static function setLoginToken($userId,$newToken) {
     $token = $newToken;
+    $userid = $userId;
   }
 
   public static function isLoggedIn() {
-  $userDAO = new UserDAO();
-    if (isset($_COOKIE['GID'])) {
+    $userDAO = new UserDAO();
+    if (self::getLoginToken()) {
 
-      if ($userDAO->getLoggedInUserId(sha1($_COOKIE['GID']))){
+      return true;
+      /*if ($userDAO->getLoggedInUserId(sha1($_COOKIE['GID']))){
         $userid = $userDAO->getLoggedInUserId(sha1($_COOKIE['GID']))->userId;
 
         if (isset($_COOKIE['GID_'])) {
@@ -33,7 +36,7 @@ class Login {
 
           return $userid;
         }
-      }
+      }*/
     }
     return false;
   }

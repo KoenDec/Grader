@@ -1,6 +1,6 @@
 <?php
-require_once('../php/graderdb.php');
-require_once('../php/Login.php');
+require_once('graderdb.php');
+require_once('Login.php');
 
 header("Access-Control-Allow-Origin: *");
 header("Access-Control-Allow-Methods: DELETE");
@@ -490,15 +490,18 @@ if ($_SERVER['REQUEST_METHOD'] == 'GET') {
         $username = $postBody->username;
         $password = $postBody->password;
 
-        if ($userDAO->getUser($username)) {
-            $password_hash = $userDAO->getUserPw($username)->password;
-          if (password_verify($password, '$2y$10$xP8hMgml6RvoGqXlQAcJMOgif9dp2c1X11OVzR4W6SPM4mts4BAZm')) {//$password == $userDAO->getUserPw($username)->password) {// TODO hash PW!
+        $user = $userDAO->getUserPw($username);
+        if (!empty($user)) {
+            // $password_hash = $userDAO->getUserPw($username)->password;
+            $hashedPW = $user->password;
+          if (password_verify($password, $hashedPW)) {//$password == $userDAO->getUserPw($username)->password) {// TODO hash PW!
                 $cstrong = True;
                 $token = bin2hex(openssl_random_pseudo_bytes(64, $cstrong));
                 $user_id = $userDAO->getUser($username)->id;
                 $userDAO->insertNewLoginToken($user_id, sha1($token));
                 setcookie("GID", $token, time() + 60 * 60 * 24 * 7, '/'/*, NULL, NULL, false*/);
                 //setcookie("GID_", '1', time() + 60 * 60 * 24 * 3, '/', NULL, NULL, TRUE);
+                Login::setLoginToken($user_id, $token);
                 $cookieObj = (object)[
                     'GID' => $token,
                     'GID_' => '1'
@@ -521,9 +524,9 @@ if ($_SERVER['REQUEST_METHOD'] == 'GET') {
         $lastname = $postBody->lastname;
         $email = $postBody->email;
 
-        $id = Login::isLoggedIn();
+        //$id = Login::isLoggedIn();
         if (Login::isLoggedIn()) {
-            $userDAO->updateUser($firstname, $lastname, $email , $id);
+            //$userDAO->updateUser($firstname, $lastname, $email , $id);
             echo '{"Status":"User updated"}';
             http_response_code(200);
         } else {
