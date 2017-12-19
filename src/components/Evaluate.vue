@@ -1,5 +1,18 @@
 <template>
     <div>
+        <v-layout row justify-center>
+            <v-dialog v-model="popup" persistent max-width="290">
+                <v-card>
+                    <v-card-title class="headline">Evaluatie verwijderen?</v-card-title>
+                    <v-card-text>Zeker dat u {{popupName}} wilt verwijderen? <br/> <span style="color: red">(Dit kan niet ongedaan gemaakt worden)</span></v-card-text>
+                    <v-card-actions>
+                        <v-spacer></v-spacer>
+                        <v-btn color="green darken-1" flat @click.native="popup = false">NEE</v-btn>
+                        <v-btn color="green darken-1" flat @click.native="deleteEval(popupId)">JA</v-btn>
+                    </v-card-actions>
+                </v-card>
+            </v-dialog>
+        </v-layout>
         <v-layout row wrap>
             <v-flex xs12 offset-xs1 class="text-xs-left">
                 <h1 class="display-3">Evaluatie</h1>
@@ -36,12 +49,28 @@
         <v-layout v-if="moduleSelected" row wrap class="text-xs-left">
             <v-flex offset-xs1>
                 <div>
-                    <v-btn color="primary"><v-icon>repeat</v-icon>Vorige Evaluatiefiches</v-btn>
-                    <v-btn @click="newEval" color="primary"><v-icon>add</v-icon>Nieuwe Evaluatiefiche</v-btn>
-                    <v-btn v-if="newEvalTable" @click="makeJSON" color="primary"><v-icon>save</v-icon>Evaluatie Opslaan</v-btn>
+                    <v-btn v-if="!newEvalTable" @click="newEval" color="primary"><v-icon class="mr-2">add</v-icon>Nieuwe Evaluatiefiche</v-btn>
+                    <v-btn v-if="newEvalTable" @click="newEvalTable = false; updateEval = true" color="primary"><v-icon class="mr-2">undo</v-icon>Back</v-btn>
+                    <v-btn v-if="newEvalTable && !updateEval" @click="makeJSON(false)" color="primary"><v-icon class="mr-2">save</v-icon>Evaluatie Opslaan</v-btn>
+                    <v-btn v-if="newEvalTable && updateEval" @click="makeJSON(true)" color="primary"><v-icon class="mr-2">save</v-icon>Evaluatie Opslaan</v-btn>
+                    <p v-if="evalError" style="display: inline-block" class="red--text">{{evalError}}</p>
                 </div>
             </v-flex>
         </v-layout>
+        <v-flex xs10 offset-xs1>
+            <v-list two-line v-if="moduleSelected && !newEvalTable && gotEvals">
+                <v-subheader>{{'Evaluaties van ' + student.firstname + ' ' + student.name}}</v-subheader>
+                <template v-for="evaluation in prevEvals[0].evaluaties.slice().reverse()">
+                    <v-divider></v-divider>
+                    <v-list-tile v-bind:key="evaluation.id" @click="getEvaluation(evaluation.id)">
+                        <v-list-tile-content>
+                            <v-list-tile-title>{{evaluation.date}} {{evaluation.name}} </v-list-tile-title>
+                        </v-list-tile-content>
+                        <v-btn color="error" v-on:click.stop="deleteEvalPopup(evaluation.id, evaluation.name)" class="right" dark><v-icon dark>delete</v-icon></v-btn>
+                    </v-list-tile>
+                </template>
+            </v-list>
+        </v-flex>
         <template v-if="newEvalTable">
         <v-flex xs8 offset-xs2>
             <v-layout row-wrap>
@@ -104,7 +133,7 @@
                             <v-layout row-wrap>
                                 <v-flex>
                                     <v-card color="gray darken-3" class="black--text text-xs-left" height="100%">
-                                        <v-container style="text-align: right; padding-right: 90px" fluid grid-list-lg>
+                                        <v-container style="text-align: right;" fluid grid-list-lg>
                                             <p>Evaluatie leerkracht</p>
                                             <p><span>JA</span> | <span>NEE</span></p>
                                         </v-container>
@@ -116,7 +145,7 @@
                 </v-flex>
             </v-layout>
             <v-layout v-for="(cat, i) in selectedModule[0].categorieen" :key="i">
-                <v-layout row-wrap>
+                <v-layout row-wrap class="mb-1">
                     <v-flex>
                         <v-layout row-wrap>
                             <v-flex>
@@ -217,16 +246,24 @@
           selectedModuleName: [],
           selectedModule: {},
           evalFiches: [],
+          prevEvals: [],
           moduleSelected: false,
           newEvalTable: false,
+          gotEvals: false,
+          updateEval: false,
           doelRowSpan: 0,
           activeBoxes: {},
           activeBoxesCreated: false,
           saveEval: {},
           evalName: '',
+          currentEvalId: null,
+          evalError: null,
           date: null,
           dateFormatted: null,
-          menu: false
+          menu: false,
+          popup: false,
+          popupId: null,
+          popupName: null
         }
       },
       methods: {
@@ -241,9 +278,27 @@
           this.moduleSelected = true
           this.newEvalTable = false
           self.createActiveBoxes(this.selectedModule)
+          self.getPrevEvals()
+        },
+        getPrevEvals: function () {
+          var self = this
+          self.prevEvals = []
+          this.$http.getEvalsByStudent(this.selectedModule[0].id, this.student.id, function (data) {
+            self.prevEvals.push(data)
+            console.log(self.prevEvals)
+            self.gotEvals = true
+          })
         },
         newEval: function () {
-          this.newEvalTable = true
+          var self = this
+          self.newEvalTable = true
+          var d = new Date()
+          var month = d.getMonth() + 1
+          self.dateFormatted = d.getDate() + '/' + month + '/' + d.getFullYear()
+          self.evalName = null
+          self.createActiveBoxes(this.selectedModule)
+          self.updateEval = false
+          console.log(self.activeBoxes)
         },
         createActiveBoxes: function (module) {
           this.activeBoxes = {}
@@ -267,13 +322,13 @@
           this.activeBoxesCreated = true
         },
         logYes: function (id) {
-          this.$set(this.activeBoxes, 'yes' + id, true)
-          this.$set(this.activeBoxes, 'no' + id, false)
+          this.$set(this.activeBoxes, 'yes' + id, 1)
+          this.$set(this.activeBoxes, 'no' + id, 0)
           this.$forceUpdate()
         },
         logNo: function (id) {
-          this.$set(this.activeBoxes, 'yes' + id, false)
-          this.$set(this.activeBoxes, 'no' + id, true)
+          this.$set(this.activeBoxes, 'yes' + id, 0)
+          this.$set(this.activeBoxes, 'no' + id, 1)
           this.$forceUpdate()
         },
         reset: function (id) {
@@ -281,18 +336,77 @@
           this.$set(this.activeBoxes, 'no' + id, null)
           this.$forceUpdate()
         },
-        makeJSON: function () {
-          var objKeys = Object.keys(this.activeBoxes)
-          var objLength = Object.keys(this.activeBoxes).length
-          this.saveEval['name'] = this.evalName
-          this.saveEval['studentId'] = this.student.id
-          this.saveEval['moduleId'] = this.selectedModule[0].id
-          this.saveEval['aspecten'] = []
-          for (var i = 0; i < objLength; i = i + 2) {
-            var obj = {aspectId: objKeys[i].substr(3), beoordeling: this.activeBoxes[objKeys[i]]}
-            this.saveEval['aspecten'].push(obj)
+        makeJSON: function (update) {
+          var self = this
+          if (this.evalName !== '') {
+            this.evalError = null
+            var objKeys = Object.keys(this.activeBoxes)
+            var objLength = Object.keys(this.activeBoxes).length
+            this.saveEval['name'] = this.evalName
+            this.saveEval['studentId'] = this.student.id
+            this.saveEval['moduleId'] = this.selectedModule[0].id
+            this.saveEval['aspecten'] = []
+            this.saveEval['date'] = this.dateFormatted
+            for (var i = 0; i < objLength; i = i + 2) {
+              var obj = {aspectId: objKeys[i].substr(3), beoordeling: this.activeBoxes[objKeys[i]]}
+              this.saveEval['aspecten'].push(obj)
+            }
+            if (update) {
+              this.saveEval['evalId'] = this.currentEvalId
+              console.log(this.saveEval['evalId'])
+              this.$http.updateEval(this.saveEval, function (data) {
+                console.log(data)
+                self.getPrevEvals()
+              })
+            } else {
+              this.$http.createEval(this.saveEval, function (data) {
+                console.log(data)
+                self.getPrevEvals()
+              })
+            }
+            console.log(this.saveEval)
+            this.newEvalTable = false
+          } else {
+            this.evalError = 'geef een naam op voor de Evaluatiefiche'
           }
-          console.log(this.saveEval)
+        },
+        getEvaluation: function (id) {
+          var self = this
+          self.newEvalTable = true
+          var obj = self.prevEvals[0].evaluaties.filter(function (elem) {
+            if (elem.id === id) return elem
+          })
+          console.log('what does riwan send me:')
+          console.log(obj)
+          self.evalName = obj[0].name
+          self.dateFormatted = obj[0].date
+          self.currentEvalId = obj[0].id
+          self.createActiveBoxes(this.selectedModule)
+          obj[0].aspecten.forEach(function (item) {
+            if (item.aspectBeoordeling === '1') {
+              self.$set(self.activeBoxes, 'yes' + item.aspectId, 1)
+              self.$set(self.activeBoxes, 'no' + item.aspectId, 0)
+            } else if (item.aspectBeoordeling === '0') {
+              self.$set(self.activeBoxes, 'yes' + item.aspectId, 0)
+              self.$set(self.activeBoxes, 'no' + item.aspectId, 1)
+            }
+          })
+          self.updateEval = true
+          this.$forceUpdate()
+        },
+        deleteEvalPopup: function (id, name) {
+          this.popupId = id
+          this.popupName = name
+          this.popup = true
+        },
+        deleteEval: function (id) {
+          this.popup = false
+          var self = this
+          console.log(id)
+          this.$http.deleteEval(id, function (data) {
+            console.log(data)
+            self.getPrevEvals()
+          })
         },
         formatDate (date) {
           if (!date) {
@@ -311,9 +425,6 @@
       },
       created () {
         var self = this
-        var d = new Date()
-        var month = d.getMonth() + 1
-        self.dateFormatted = d.getDate() + '/' + month + '/' + d.getFullYear()
         var studentId = this.$route.query.id
         this.$http.getStudent(studentId, function (data) {
           self.student.firstname = data.student.firstname

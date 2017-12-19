@@ -1,6 +1,6 @@
 <template>
   <v-app>
-    <v-navigation-drawer persistent v-model="drawer" app>
+    <v-navigation-drawer persistent v-model="drawer" app v-if="['login'].indexOf($route.name)">
     <v-toolbar flat center height="150vh">
         <img class="" src="../assets/CLW_Logo.png" height="100%">
     </v-toolbar>
@@ -13,7 +13,7 @@
        </v-list-tile>
      </v-list>
    </v-navigation-drawer>
-   <v-toolbar color="indigo" dark fixed app>
+   <v-toolbar color="indigo" dark fixed app v-if="['login'].indexOf($route.name)">
         <v-icon large color="white" @click.stop="drawer = !drawer">{{ drawer? 'close':'menu' }}</v-icon>
      <v-toolbar-title>Rapportensysteem</v-toolbar-title>
      <v-spacer></v-spacer>
@@ -35,7 +35,7 @@
         <v-card-actions>
           <v-spacer></v-spacer>
           <v-btn flat @click="menu = false">Cancel</v-btn>
-          <v-btn color="primary" flat @click="menu = false">Afmelden</v-btn>
+          <v-btn color="primary" flat :to="{name: 'login'}" @click="menu = false">Afmelden</v-btn>
         </v-card-actions>
       </v-card>
 
