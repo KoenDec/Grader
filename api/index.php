@@ -3,7 +3,7 @@ require_once('graderdb.php');
 require_once('Login.php');
 
 header("Access-Control-Allow-Origin: *");
-header("Access-Control-Allow-Methods: DELETE");
+header("Access-Control-Allow-Methods: DELETE, PATCH");
 header("Access-Control-Allow-Headers: Origin,Content-Type");
 header('Content-Type: application/json');
 
@@ -501,7 +501,6 @@ if ($_SERVER['REQUEST_METHOD'] == 'GET') {
                 $userDAO->insertNewLoginToken($user_id, sha1($token));
                 setcookie("GID", $token, time() + 60 * 60 * 24 * 7, '/'/*, NULL, NULL, false*/);
                 //setcookie("GID_", '1', time() + 60 * 60 * 24 * 3, '/', NULL, NULL, TRUE);
-                Login::setLoginToken($user_id, $token);
                 $cookieObj = (object)[
                     'GID' => $token,
                     'GID_' => '1'
