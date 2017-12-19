@@ -72,7 +72,6 @@ var Api = (function () {
       }
     })
       .then(function (response) {
-        console.log(response.data)
         return cb(response.data)
       })
       .catch(function (error) {
@@ -87,7 +86,6 @@ var Api = (function () {
       }
     })
       .then(function (response) {
-        console.log(response.data)
         return cb(response.data)
       })
       .catch(function (error) {
@@ -117,7 +115,6 @@ var Api = (function () {
   }
 
   my.createEval = function (evalJSON, cb) {
-    console.log(evalJSON.name)
     axios.post('http://146.185.183.217/api/saveEvaluatie', {
       aspecten: evalJSON.aspecten,
       name: evalJSON.name,
@@ -136,14 +133,10 @@ var Api = (function () {
 
   my.updateEval = function (evalJSON, cb) {
     axios.patch('http://146.185.183.217/api/updateEvaluatie', {
-      params: {
-        evalId: evalJSON.evalId,
-        aspecten: evalJSON.aspecten,
-        name: evalJSON.name,
-        studentId: evalJSON.studentId,
-        moduleId: evalJSON.moduleId,
-        date: evalJSON.date
-      }
+      evalId: evalJSON.evalId,
+      aspecten: evalJSON.aspecten,
+      name: evalJSON.name,
+      date: evalJSON.date
     })
       .then(function (response) {
         if (response.statusText === 'OK') return cb(response.data)
@@ -162,7 +155,6 @@ var Api = (function () {
       }
     })
       .then(function (response) {
-        console.log(response.data)
         return cb(response.data)
       })
       .catch(function (error) {
@@ -177,7 +169,6 @@ var Api = (function () {
       }
     })
       .then(function (response) {
-        console.log(response.data)
         return cb(response.data)
       })
       .catch(function (error) {
