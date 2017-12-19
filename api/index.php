@@ -681,7 +681,7 @@ if ($_SERVER['REQUEST_METHOD'] == 'GET') {
             foreach($aspecten as $aspect){
                 $beoordeeldeAspecten[$aspect->aspectId] = $aspect->beoordeling;
             }
-            $userDAO->updateEvaluatie($evalId, $postBody->name,$postBody->studentId,$postBody->moduleId,$date, $beoordeeldeAspecten);
+            $userDAO->updateEvaluatie($evalId, $postBody->name,$date, $beoordeeldeAspecten);
         }
 
     }
