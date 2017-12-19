@@ -135,7 +135,7 @@ var Api = (function () {
   }
 
   my.updateEval = function (evalJSON, cb) {
-    axios.patch('http://146.185.183.217/api/updateEvaluatie', {
+    axios.put('http://146.185.183.217/api/updateEvaluatie', {
       params: {
         evalId: evalJSON.evalId,
         aspecten: evalJSON.aspecten,
