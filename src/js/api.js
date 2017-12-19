@@ -114,6 +114,21 @@ var Api = (function () {
       })
   }
 
+  my.updateUser = function (firstname, lastname, email, id, cb) {
+    axios.patch('http://146.185.183.217/api/updateUser', {
+      firstname: firstname,
+      lastname: lastname,
+      email: email,
+      id: id
+    })
+      .then(function (response) {
+        if (response.statusText === 'OK') return cb(response.data)
+      })
+      .catch(function (error) {
+        console.log(error)
+      })
+  }
+
   my.createEval = function (evalJSON, cb) {
     axios.post('http://146.185.183.217/api/saveEvaluatie', {
       aspecten: evalJSON.aspecten,
