@@ -669,9 +669,10 @@ if ($_SERVER['REQUEST_METHOD'] == 'GET') {
     if ($_GET['url'] == 'updateEvaluatie') {
         $postBody = file_get_contents('php://input');
         $postBody = json_decode($postBody);
+        var_dump($postBody);
 
-        if (isset($_GET['id'])) {
-            $evalId = $_GET['id'];
+        if (!empty($postBody)) {
+            $evalId = $postBody->evalId;
             $date = $postBody->date;
             $date = preg_replace('#(\d{2})/(\d{2})/(\d{4})#', '$3-$2-$1', $date);
             $aspecten = $postBody->aspecten;
