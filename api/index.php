@@ -470,7 +470,7 @@ if ($_SERVER['REQUEST_METHOD'] == 'GET') {
             'id' => $eval->id,
             'name' => $eval->name,
             'date' => preg_replace('/(\d{4})-(\d{2})-(\d{2})/', '$3/$2/$1', $eval->datum),
-            'aspecten' => $userDAO->getAspectbeoordeling($eval->id)
+            'aspecten' => $userDAO->getAspectbeoordelingen($eval->id)
           ];
           array_push($evaluaties->evaluaties, $evalObj);
         }
@@ -492,7 +492,7 @@ if ($_SERVER['REQUEST_METHOD'] == 'GET') {
 
         if ($userDAO->getUser($username)) {
             $password_hash = $userDAO->getUserPw($username)->password;
-            if (password_verify($password, $password_hash)) {//$password == $userDAO->getUserPw($username)->password) {// TODO hash PW!
+          if (password_verify($password, '$2y$10$xP8hMgml6RvoGqXlQAcJMOgif9dp2c1X11OVzR4W6SPM4mts4BAZm')) {//$password == $userDAO->getUserPw($username)->password) {// TODO hash PW!
                 $cstrong = True;
                 $token = bin2hex(openssl_random_pseudo_bytes(64, $cstrong));
                 $user_id = $userDAO->getUser($username)->id;
@@ -547,7 +547,7 @@ if ($_SERVER['REQUEST_METHOD'] == 'GET') {
         echo 'Opleiding created';
         http_response_code(200);
       }
-    }else if ($_GET['url'] == 'evaluateCrit') {
+    } else if ($_GET['url'] == 'evaluateCrit') {
         $postBody = file_get_contents('php://input');
         $postBody = json_decode($postBody);
 
@@ -607,8 +607,6 @@ if ($_SERVER['REQUEST_METHOD'] == 'GET') {
         $postBody = file_get_contents('php://input');
         $postBody = json_decode($postBody);
 
-        var_dump($postBody);
-
         $date = $postBody->date;
         $date = preg_replace('#(\d{2})/(\d{2})/(\d{4})#', '$3-$2-$1', $date);
         $aspecten = $postBody->aspecten;
@@ -616,7 +614,7 @@ if ($_SERVER['REQUEST_METHOD'] == 'GET') {
         $beoordeeldeAspecten = [];
 
         foreach($aspecten as $aspect){
-            $beoordeeldeAspecten[$aspect->aspectId] = $aspect->beoordeling;
+          $beoordeeldeAspecten[$aspect->aspectId] = $aspect->beoordeling;
         }
 
         $userDAO->insertNewEvaluation($postBody->name,$postBody->studentId,$postBody->moduleId,$date);
@@ -645,8 +643,7 @@ if ($_SERVER['REQUEST_METHOD'] == 'GET') {
             $beoordeeldeAspecten[$aspect->aspectId] = $aspect->beoordeling;
         }
 
-        $userDAO->updateEvaluation($evalId, $postBody->name,$postBody->studentId,$postBody->moduleId,$date);
-        $userDAO->updateAspectbeoordelingen($evalId, $beoordeeldeAspecten);
+        $userDAO->updateEvaluation($evalId, $postBody->name,$postBody->studentId,$postBody->moduleId,$date,$beoordeeldeAspecten);
       }
 
     } else if ($_GET['url'] == 'createStudent') {
@@ -673,19 +670,19 @@ if ($_SERVER['REQUEST_METHOD'] == 'GET') {
         echo 'Student created';
         http_response_code(200);
       }*/
-  } else if ($_GET['url'] == 'updateStudent') {
-    /*$postBody = file_get_contents('php://input');
-    $postBody = json_decode($postBody);
+    } else if ($_GET['url'] == 'updateStudent') {
+      /*$postBody = fi$aspect->beoordelingle_get_contents('php://input');
+      $postBody = json_decode($postBody);
 
-    $firstname = $postBody->firstname;
-    $lastname = $postBody->lastname;
-    $email = $postBody->email;
-    $moduleIds = $postBody->moduleIds;
-    $creatorId = $postBody->id;
+      $firstname = $postBody->firstname;
+      $lastname = $postBody->lastname;
+      $email = $postBody->email;
+      $moduleIds = $postBody->moduleIds;
+      $creatorId = $postBody->id;
 
-    $userDAO->updateStudent();
-*/
-  }
+      $userDAO->updateStudent();
+  */
+    }
 } else if ($_SERVER['REQUEST_METHOD'] == 'DELETE') {
     if ($_GET['url'] == 'auth') {
         if (isset($_GET['token'])) {

@@ -3,7 +3,7 @@ require_once('graderdb.php');
 
 class Login {
 
-  private $token;
+  protected $token;
 
   public function getLoginToken() {
     return $token;
