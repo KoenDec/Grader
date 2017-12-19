@@ -1,6 +1,6 @@
 <?php
-require_once('graderdb.php');
-require_once('Login.php');
+require_once('../php/graderdb.php');
+require_once('../php/Login.php');
 
 header("Access-Control-Allow-Origin: *");
 header("Access-Control-Allow-Methods: DELETE");
