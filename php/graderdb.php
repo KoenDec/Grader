@@ -81,16 +81,16 @@ class UserDAO
         try {
             $conn = graderdb::getConnection();
 
-            $sql1 = 'SELECT * FROM teachers WHERE teacherId = :userid';
-            $sql2 = 'SELECT * FROM admins WHERE adminId = :userid';
-            $sql3 = 'SELECT * FROM studenten WHERE studentId = :userid';
+            $sql1 = 'SELECT * FROM teachers WHERE teacherId = :userId';
+            $sql2 = 'SELECT * FROM admins WHERE adminId = :userId';
+            $sql3 = 'SELECT * FROM studenten WHERE studentId = :userId';
 
             $stmt1 = $conn->prepare($sql1);
-            $stmt1->bindParam(':userid', $userId);
+            $stmt1->bindParam(':userId', $userId);
             $stmt2 = $conn->prepare($sql2);
-            $stmt2->bindParam(':userid', $userId);
+            $stmt2->bindParam(':userId', $userId);
             $stmt3 = $conn->prepare($sql3);
-            $stmt3->bindParam(':userid', $userId);
+            $stmt3->bindParam(':userId', $userId);
 
             $stmt1->execute();
             $stmt2->execute();
@@ -114,14 +114,14 @@ class UserDAO
         }
     }
 
-    public static function getUserById($userid)
+    public static function getUserById($userId)
     {
         try {
             $conn = graderdb::getConnection();
 
-            $sql = 'SELECT id,email,firstname,lastname,accountCreatedTimestamp FROM users WHERE id = :userid';
+            $sql = 'SELECT id,email,firstname,lastname,accountCreatedTimestamp FROM users WHERE id = :userId';
             $stmt = $conn->prepare($sql);
-            $stmt->bindParam(':userid', $userid);
+            $stmt->bindParam(':userId', userId);
             $stmt->execute();
 
             $usersTable = $stmt->fetchAll(PDO::FETCH_CLASS);
@@ -132,7 +132,7 @@ class UserDAO
         if (isset($usersTable[0])) {
             $user = $usersTable[0];
         } else {
-            //die('No user with username = ' . $userid);
+            //die('No user with username = ' . $userId);
 
         }
 
@@ -155,12 +155,12 @@ class UserDAO
         }
 
         if (isset($usersTable[0])) {
-            $userid = $usersTable[0];
+            $userId = $usersTable[0];
         } /*else {
-            die('No userid found');
+            die('No userId found');
         }*/
 
-        return $userid;
+        return $userId;
     }
 
     public static function getToken($token)
@@ -181,7 +181,7 @@ class UserDAO
         if (isset($tokenTable[0])) {
             $token = $tokenTable[0];
         } /*else {
-            die('No userid found');
+            die('No userId found');
         }*/
 
         return $token;
@@ -1090,15 +1090,15 @@ class UserDAO
             }
         }*/
 
-    public static function insertNewLoginToken($userid, $token)
+    public static function insertNewLoginToken($userId, $token)
     {
         try {
             $conn = graderdb::getConnection();
 
-            $sql = 'INSERT INTO loginTokens(token, userId) VALUES(:token, :userid)';
+            $sql = 'INSERT INTO loginTokens(token, userId) VALUES(:token, :userId)';
             $stmt = $conn->prepare($sql);
             $stmt->bindParam(':token', $token);
-            $stmt->bindParam(':userid', $userid);
+            $stmt->bindParam(':userId', $userId);
 
             $stmt->execute();
         } catch (PDOException $e) {
@@ -1181,7 +1181,7 @@ class UserDAO
         }
     }
 
-    public static function updatePassword($userid, $password)
+    public static function updatePassword($userId, $password)
     {
         try {
             $conn = graderdb::getConnection();
@@ -1189,7 +1189,7 @@ class UserDAO
             $sql = 'UPDATE users SET password=:password WHERE id = :userId';
             $stmt = $conn->prepare($sql);
             $stmt->bindParam(':password', $password);
-            $stmt->bindParam(':userId', $userid);
+            $stmt->bindParam(':userId', $userId);
 
             $stmt->execute();
         } catch (PDOException $e) {
@@ -1198,17 +1198,15 @@ class UserDAO
 
     }
 
-    public static function updateEvaluatie($evaluatieId, $evaluatieName, $studentId, $moduleId, $datum, $aspectscoresKeyValueArray)
+    public static function updateEvaluatie($evaluatieId, $evaluatieName, $datum, $aspectscoresKeyValueArray)
     {
         try {
             $conn = graderdb::getConnection();
 
-            $sql = 'UPDATE evaluaties SET name=:evaluatieName, studentId=:studentId, moduleId=:moduleId, datum=:datum WHERE id = :evaluatieId';
+            $sql = 'UPDATE evaluaties SET name=:evaluatieName, datum=:datum WHERE id = :evaluatieId';
             $stmt = $conn->prepare($sql);
             $stmt->bindParam(':evaluatieId', $evaluatieId);
             $stmt->bindParam(':evaluatieName', $evaluatieName);
-            $stmt->bindParam(':studentId', $studentId);
-            $stmt->bindParam(':moduleId', $moduleId);
             $stmt->bindParam(':datum', $datum);
 
             $stmt->execute();
@@ -1265,14 +1263,14 @@ class UserDAO
 
     }
 
-    public static function removeAllTokensFromUser($userid)
+    public static function removeAllTokensFromUser($userId)
     {
         try {
             $conn = graderdb::getConnection();
 
-            $sql = 'DELETE FROM loginTokens WHERE userId=:userid';
+            $sql = 'DELETE FROM loginTokens WHERE userId=:userId';
             $stmt = $conn->prepare($sql);
-            $stmt->bindParam(':userid', $userid);
+            $stmt->bindParam(':userId', $userId);
 
             $stmt->execute();
         } catch (PDOException $e) {
@@ -1298,6 +1296,42 @@ class UserDAO
 
             $stmt->execute();
 
+        } catch (PDOException $e) {
+            die($e->getMessage());
+        }
+    }
+
+    ////////////////////////////////////////////////////////////////////////////////////////////
+    //                  FAKE DELETE-QUERIES THAT ARE ACTUALLY UPDATE QUERIES                  //
+    //         because we not delete users and educations to keep the reports working         //
+    ////////////////////////////////////////////////////////////////////////////////////////////
+
+    public static function deleteAccount($userId)
+    {
+        try {
+            $conn = graderdb::getConnection();
+
+            $sql = 'UPDATE users SET status="DISABLED" WHERE id = :userId';
+            $stmt = $conn->prepare($sql);
+            $stmt->bindParam(':userId', $userId);
+
+            $stmt->execute();
+        } catch (PDOException $e) {
+            die($e->getMessage());
+        }
+
+    }
+
+    public static function deleteEducation($educationId)
+    {
+        try {
+            $conn = graderdb::getConnection();
+
+            $sql = 'UPDATE opleidingen SET active=false WHERE id = :educationId';
+            $stmt = $conn->prepare($sql);
+            $stmt->bindParam(':educationId', $educationId);
+
+            $stmt->execute();
         } catch (PDOException $e) {
             die($e->getMessage());
         }

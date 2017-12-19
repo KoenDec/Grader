@@ -141,7 +141,7 @@ CREATE TABLE `evaluaties_criteria` (
   `id` int NOT NULL AUTO_INCREMENT PRIMARY KEY,
   `evaluatieId` int NOT NULL,
   `criteriumId` int NOT NULL,
-  `criteriumBeoordeling`  enum('ZG', 'G', 'V', 'OV', 'RO', 'A', 'NVT') NOT NULL,
+  `criteriumBeoordeling`  enum('G', 'V', 'OV', 'RO', 'A', 'NVT') NOT NULL,
   FOREIGN KEY(evaluatieId) REFERENCES evaluaties(id),
   FOREIGN KEY(criteriumId) REFERENCES evaluatiecriteria(id)
 );
