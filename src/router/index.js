@@ -57,12 +57,12 @@ export default new Router({
           component: Evaluate
         },
         {
-          path: '/',
+          path: '/home',
           name: 'home',
           component: Home
         },
         {
-          path: '/login',
+          path: '/',
           name: 'login',
           component: Login
         }

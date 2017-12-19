@@ -1,5 +1,18 @@
 <template>
     <div>
+        <v-layout row justify-center>
+            <v-dialog v-model="popup" persistent max-width="290">
+                <v-card>
+                    <v-card-title class="headline">Evaluatie verwijderen?</v-card-title>
+                    <v-card-text>Zeker dat u {{popupName}} wilt verwijderen? <br/> <span style="color: red">(Dit kan niet ongedaan gemaakt worden)</span></v-card-text>
+                    <v-card-actions>
+                        <v-spacer></v-spacer>
+                        <v-btn color="green darken-1" flat @click.native="popup = false">NEE</v-btn>
+                        <v-btn color="green darken-1" flat @click.native="deleteEval(popupId)">JA</v-btn>
+                    </v-card-actions>
+                </v-card>
+            </v-dialog>
+        </v-layout>
         <v-layout row wrap>
             <v-flex xs12 offset-xs1 class="text-xs-left">
                 <h1 class="display-3">Evaluatie</h1>
@@ -53,7 +66,7 @@
                         <v-list-tile-content>
                             <v-list-tile-title>{{evaluation.date}} {{evaluation.name}} </v-list-tile-title>
                         </v-list-tile-content>
-                        <v-btn color="error" v-on:click.stop="deleteEval(evaluation.id)" class="right" dark><v-icon dark>delete</v-icon></v-btn>
+                        <v-btn color="error" v-on:click.stop="deleteEvalPopup(evaluation.id, evaluation.name)" class="right" dark><v-icon dark>delete</v-icon></v-btn>
                     </v-list-tile>
                 </template>
             </v-list>
@@ -247,7 +260,10 @@
           evalError: null,
           date: null,
           dateFormatted: null,
-          menu: false
+          menu: false,
+          popup: false,
+          popupId: null,
+          popupName: null
         }
       },
       methods: {
@@ -360,6 +376,7 @@
           var obj = self.prevEvals[0].evaluaties.filter(function (elem) {
             if (elem.id === id) return elem
           })
+          console.log('what does riwan send me:')
           console.log(obj)
           self.evalName = obj[0].name
           self.dateFormatted = obj[0].date
@@ -377,7 +394,13 @@
           self.updateEval = true
           this.$forceUpdate()
         },
+        deleteEvalPopup: function (id, name) {
+          this.popupId = id
+          this.popupName = name
+          this.popup = true
+        },
         deleteEval: function (id) {
+          this.popup = false
           var self = this
           console.log(id)
           this.$http.deleteEval(id, function (data) {
