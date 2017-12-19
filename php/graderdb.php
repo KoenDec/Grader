@@ -788,15 +788,41 @@ class UserDAO
         return $evaluatie;
     }
 
-    public static function getAspectbeoordeling($evaluatieId/*, $aspectId*/)
+    public static function getAspectbeoordeling($evaluatieId, $aspectId)
     {
         try {
             $conn = graderdb::getConnection();
 
-            $sql = 'SELECT * FROM evaluaties_aspecten WHERE evaluatieId = :evaluatieId /*AND aspectId = :aspectId*/';
+            $sql = 'SELECT * FROM evaluaties_aspecten WHERE evaluatieId = :evaluatieId AND aspectId = :aspectId';
             $stmt = $conn->prepare($sql);
             $stmt->bindParam(':evaluatieId', $evaluatieId);
-            /*$stmt->bindParam(':aspectId',$aspectId);*/
+            $stmt->bindParam(':aspectId',$aspectId);
+
+            $stmt->execute();
+
+            $doelstellingenTable = $stmt->fetchAll(PDO::FETCH_CLASS);
+        } catch (PDOException $e) {
+            die($e->getMessage());
+        }
+
+        if (isset($doelstellingenTable[0])) {
+            $rating = $doelstellingenTable;
+        } else {
+            //die('No score found for doelstelling with id '.$doelstellingId.' in rapport with id '.$rapportId.'!');
+            $rating = null;
+        }
+
+        return $rating;
+    }
+
+    public static function getAspectbeoordelingen($evaluatieId)
+    {
+        try {
+            $conn = graderdb::getConnection();
+
+            $sql = 'SELECT * FROM evaluaties_aspecten WHERE evaluatieId = :evaluatieId';
+            $stmt = $conn->prepare($sql);
+            $stmt->bindParam(':evaluatieId', $evaluatieId);
 
             $stmt->execute();
 
@@ -1172,6 +1198,45 @@ class UserDAO
 
     }
 
+    public static function updateEvaluatie($evaluatieId, $evaluatieName, $studentId, $moduleId, $datum, $aspectscoresKeyValueArray)
+    {
+        try {
+            $conn = graderdb::getConnection();
+
+            $sql = 'UPDATE evaluaties SET name=:evaluatieName, studentId=:studentId, moduleId=:moduleId, datum=:datum WHERE id = :evaluatieId';
+            $stmt = $conn->prepare($sql);
+            $stmt->bindParam(':evaluatieId', $evaluatieId);
+            $stmt->bindParam(':evaluatieName', $evaluatieName);
+            $stmt->bindParam(':studentId', $studentId);
+            $stmt->bindParam(':moduleId', $moduleId);
+            $stmt->bindParam(':datum', $datum);
+
+            $stmt->execute();
+
+            $aspectIds = array_keys($aspectscoresKeyValueArray);
+            $aspectScores = array_values($aspectscoresKeyValueArray);
+            echo "lo";
+            var_dump($aspectscoresKeyValueArray);
+            foreach($aspectIds as $aspectId){
+                $bestaandeQuotering = self::getAspectbeoordeling($evaluatieId, $aspectId);
+                if(isset($bestaandeQuotering)){
+                   var_dump($bestaandeQuotering);
+                } else {
+                    echo "aspect niet gequoteerd";
+                }
+            }
+
+
+            $sql = 'UPDATE evaluaties_aspecten SET  WHERE id = :evaluatieId';
+            $stmt = $conn->prepare($sql);
+            $stmt->bindParam(':evaluatieId', $evaluatieId);
+
+            $stmt->execute();
+        } catch (PDOException $e) {
+            die($e->getMessage());
+        }
+    }
+
     // TODO update student
 
     //////////////////////////////////////////////
@@ -1233,8 +1298,4 @@ class UserDAO
         }
 
     }
-
 }
-
-//$userDAO->updateEvaluation($evalId, $postBody->name,$postBody->studentId,$postBody->moduleId,$date);
-//$userDAO->updateAspectbeoordelingen($evalId, $beoordeeldeAspecten);

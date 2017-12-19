@@ -628,27 +628,6 @@ if ($_SERVER['REQUEST_METHOD'] == 'GET') {
           $quotering = $aspect->eval;
           $userDAO->saveAspecten($aspectid,$quotering);
         }*/
-    } else if ($_GET['url'] == 'updateEvaluatie') {
-      $postBody = file_get_contents('php://input');
-      $postBody = json_decode($postBody);
-
-      $evalId = $postBody->id;
-
-      if (isset($evalId)) {
-        $date = $postBody->date;
-        $date = preg_replace("/(\d{2})/(\d{2})/(\d{4})/", "$3-$2-$1", $date);
-        $aspecten = $postBody->aspecten;
-
-        $beoordeeldeAspecten = [];
-
-        foreach($aspecten as $aspect){
-            $beoordeeldeAspecten[$aspect->aspectId] = $aspect->beoordeling;
-        }
-
-        $userDAO->updateEvaluation($evalId, $postBody->name,$postBody->studentId,$postBody->moduleId,$date);
-        $userDAO->updateAspectbeoordelingen($evalId, $beoordeeldeAspecten);
-      }
-
     } else if ($_GET['url'] == 'createStudent') {
       /*$postBody = file_get_contents('php://input');
       $postBody = json_decode($postBody);
@@ -686,6 +665,26 @@ if ($_SERVER['REQUEST_METHOD'] == 'GET') {
     $userDAO->updateStudent();
 */
   }
+} else if ($_SERVER['REQUEST_METHOD'] == 'PATCH') {
+    if ($_GET['url'] == 'updateEvaluatie') {
+        $postBody = file_get_contents('php://input');
+        $postBody = json_decode($postBody);
+
+        if (isset($_GET['id'])) {
+            $evalId = $_GET['id'];
+            $date = $postBody->date;
+            $date = preg_replace('#(\d{2})/(\d{2})/(\d{4})#', '$3-$2-$1', $date);
+            $aspecten = $postBody->aspecten;
+
+            $beoordeeldeAspecten = [];
+
+            foreach($aspecten as $aspect){
+                $beoordeeldeAspecten[$aspect->aspectId] = $aspect->beoordeling;
+            }
+            $userDAO->updateEvaluatie($evalId, $postBody->name,$postBody->studentId,$postBody->moduleId,$date, $beoordeeldeAspecten);
+        }
+
+    }
 } else if ($_SERVER['REQUEST_METHOD'] == 'DELETE') {
     if ($_GET['url'] == 'auth') {
         if (isset($_GET['token'])) {
