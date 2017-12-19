@@ -1,6 +1,7 @@
 <?php
 require_once('graderdb.php');
 require_once('Login.php');
+require_once('token.php');
 
 header("Access-Control-Allow-Origin: *");
 header("Access-Control-Allow-Methods: DELETE, PATCH");
@@ -492,25 +493,17 @@ if ($_SERVER['REQUEST_METHOD'] == 'GET') {
 
         $user = $userDAO->getUserPw($username);
         if (!empty($user)) {
-            // $password_hash = $userDAO->getUserPw($username)->password;
             $hashedPW = $user->password;
-          if (password_verify($password, $hashedPW)) {//$password == $userDAO->getUserPw($username)->password) {// TODO hash PW!
-                $cstrong = True;
-                $token = bin2hex(openssl_random_pseudo_bytes(64, $cstrong));
-                $user_id = $userDAO->getUser($username)->id;
-                $userDAO->insertNewLoginToken($user_id, sha1($token));
-                setcookie("GID", $token, time() + 60 * 60 * 24 * 7, '/'/*, NULL, NULL, false*/);
-                //setcookie("GID_", '1', time() + 60 * 60 * 24 * 3, '/', NULL, NULL, TRUE);
-                $cookieObj = (object)[
-                    'GID' => $token,
-                    'GID_' => '1'
-                ];
-                echo json_encode($cookieObj);
-                http_response_code(200);
-            } else {
-                echo '{"Error":"Wrong pw"}';
-                http_response_code(401);
-            }
+          if (password_verify($password, $hashedPW)) {
+            $token = Token::createToken();
+            $user_id = $userDAO->getUser($username)->id;
+            // $userDAO->insertNewLoginToken($user_id, $token);
+            echo json_encode($token);
+            http_response_code(200);
+          } else {
+              echo '{"Error":"Wrong pw"}';
+              http_response_code(401);
+          }
         } else {
             echo '{"Error":"Wrong username"}';
             http_response_code(401);
@@ -523,8 +516,7 @@ if ($_SERVER['REQUEST_METHOD'] == 'GET') {
         $lastname = $postBody->lastname;
         $email = $postBody->email;
 
-        //$id = Login::isLoggedIn();
-        if (Login::isLoggedIn()) {
+        if (Token::isValid($_GET['token'])) {
             //$userDAO->updateUser($firstname, $lastname, $email , $id);
             echo '{"Status":"User updated"}';
             http_response_code(200);
@@ -669,7 +661,6 @@ if ($_SERVER['REQUEST_METHOD'] == 'GET') {
     if ($_GET['url'] == 'updateEvaluatie') {
         $postBody = file_get_contents('php://input');
         $postBody = json_decode($postBody);
-        var_dump($postBody);
 
         if (!empty($postBody)) {
             $evalId = $postBody->evalId;
@@ -689,8 +680,8 @@ if ($_SERVER['REQUEST_METHOD'] == 'GET') {
 } else if ($_SERVER['REQUEST_METHOD'] == 'DELETE') {
     if ($_GET['url'] == 'auth') {
         if (isset($_GET['token'])) {
-            if ($userDAO->getToken(sha1($_GET['token']))) {
-                $userDAO->removeLoginToken(sha1($_GET['token']));
+            if (Token::isValid($_GET['token'])) {
+                $userDAO->removeLoginToken($_GET['token']);
                 echo '{ "Status": "Logged out" }';
                 http_response_code(200);
             } else {
