@@ -7,7 +7,7 @@
       </v-layout>
       <v-layout row wrap>
           <v-flex xs4 offset-xs1 ref="results" @>
-            <searchbar @select-student="applySelection" :list="items" :concat_keys="keys" :labeltext="zoeklabel" :item_concat_key="item_name" :item_value="item_value"></searchbar>
+            <searchbar @select-item="applySelection" :list="items" :concat_keys="keys" :labeltext="zoeklabel" :item_concat_key="item_name" :item_value="item_value"></searchbar>
           </v-flex>
           <v-flex xs1 offset-xs4 class="mr-5">
           </v-flex>
@@ -94,7 +94,7 @@
 
 <script>
 export default {
-  name: 'Studenten',
+  name: 'Students',
   data () {
     return {
       filename: '',

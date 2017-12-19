@@ -26,7 +26,7 @@ export default {
   },
   methods: {
     selectItem: function () {
-      this.$emit('select-student', this.selecteditem)
+      this.$emit('select-item', this.selecteditem)
     },
     checkSelected: function (payload) {
       if (payload === '') {
