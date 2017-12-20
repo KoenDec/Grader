@@ -1915,9 +1915,9 @@ INSERT INTO evaluaties_aspecten(evaluatieId, aspectId, aspectBeoordeling) VALUES
     (2, 52, TRUE);
 
 INSERT INTO rapporten(studentId, name, class, startdate, enddate, commentaarAlgemeen, commentaarKlassenraad) VALUES
-	(6, '2016-2017 TRIMESTER 3', 'Klas 2', '2017-02-02', '2017-08-02', 'Faisal voldoet aan de voorwaarden van het voltijds engagement door bijkomende lessen Nederlands te volgen.',
+	(6, 'TRIMESTER 3', 'Klas 2', '2017-02-02', '2017-08-02', 'Faisal voldoet aan de voorwaarden van het voltijds engagement door bijkomende lessen Nederlands te volgen.',
 		'Je bent een aangename leerling met een grote inzet. \n\n Proficiat! Prettige vakantie!'),
-    (7, '2016-2017 TRIMESTER 3', 'Klas 2', '2017-02-02', '2017-08-02', null, 'Geen evaluatie mogelijk wegens afwezigheden.');
+    (7, 'TRIMESTER 3', 'Klas 2', '2017-02-02', '2017-08-02', null, 'Geen evaluatie mogelijk wegens afwezigheden.');
 
 INSERT INTO rapporten_modules(rapportId, moduleId, commentaar) VALUES -- ? TODO ? merge table with studenten_modules ?
 	(1, 3, null),
