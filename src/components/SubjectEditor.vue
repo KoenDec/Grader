@@ -1,27 +1,29 @@
 <template>
   <v-layout row-wrap class="ml-5">
-    <v-flex xs3>
-      <v-card color="blue-grey darken-2" class="white--text">
-        <v-list dark class="blue darken-3">
-            <v-list-group class="blue darken-3" dark v-for="item in opleiding" :value="item.active" v-bind:key="item.name">
+    <!-- MODULES & CATEGORIEEN DISPLAY-->
+    <v-flex xs3 class="mr-0 pa-0">
+      <v-card color="blue-grey darken-2" class="white--text pa-0">
+        <v-list dark class="blue darken-3 pa-0">
+            <v-list-group class="blue darken-3" dark v-for="(item, moduleIndex) in opleiding" :value="item.active" v-bind:key="item.name">
               <v-list-tile slot="item" @click="enterAddition('', opleiding)">
                 <v-list-tile-content>
-                  <v-list-tile-title>{{ item.name }}</v-list-tile-title>
+                  <v-list-tile-title>{{ moduleIndex +1 + ' ' + item.name }}</v-list-tile-title>
                 </v-list-tile-content>
                 <v-list-tile-action>
                   <v-icon>keyboard_arrow_down</v-icon>
                 </v-list-tile-action>
               </v-list-tile>
-              <v-list-tile class="blue-grey darken-2" v-for="subItem in item.categorieen" v-bind:key="subItem" @click="">
+              <v-list-tile class="blue-grey darken-2" v-for="(categorie,categorieIndex) in item.categorieen" v-bind:key="categorieIndex" @click="setCategorie(categorie)">
                 <v-list-tile-content>
-                  <v-list-tile-title>{{ subItem.name}}</v-list-tile-title>
+                  <v-list-tile-title>{{ categorie.indexes.toString().replace(",", ".") + ' ' + categorie.name}}</v-list-tile-title>
                 </v-list-tile-content>
               </v-list-tile>
               <v-list-tile class="blue-grey darken-2">
                 <v-text-field
+                  class="pb-2"
                   auto-focus
                   v-if="addCategorieActive"
-                  @keyup.enter="enterAddition(CategorieAddString, item.categorieen, 'categorie')"
+                  @keyup.enter="enterAddition(CategorieAddString, item.categorieen, 'categorie', item.indexes)"
                   prepend-icon="add"
                   label="Nieuwe Categorie"
                   v-model="CategorieAddString"
@@ -34,6 +36,7 @@
             </v-list-group>
             <v-list-tile class="white--text">
               <v-text-field
+                class="pb-2"
                 auto-focus
                 v-if="addModuleActive"
                 @keyup.enter="enterAddition(ModuleAddString, opleiding, 'module')"
@@ -47,7 +50,34 @@
               <v-btn flat color="white darken-1" v-if="!addModuleActive" @click="addModuleActive = true" full-width>+ Nieuwe Module</v-btn>
             </v-list-tile>
           </v-list>
-
+      </v-card>
+    </v-flex>
+    <!-- DOELSTELLINGEN & EVALUATIECRITERIA DISPLAY-->
+    <v-flex xs4 class="ml-0 pa-0" v-if="selectedcategorie !== null">
+      <v-card color="blue-grey darken-2" class="white--text">
+        <v-list dark class="blue darken-3 pa-0">
+          <v-list-group class="blue darken-1" dark v-for="(doelstelling, doelstellingIndex) in selectedcategorie.doelstellingen" :value="doelstelling.active" v-bind:key="doelstellingIndex">
+            <v-list-tile slot="doelstelling" @click="enterAddition('', opleiding)">
+              <v-list-tile-content>
+                <v-list-tile-title>{{ doelstelling.indexes.toString().replace(",", ".") + ' ' + doelstelling.name}}</v-list-tile-title>
+              </v-list-tile-content>
+            </v-list-tile>
+          </v-list-group>
+          <v-list-tile class="white--text">
+            <v-text-field
+              auto-focus
+              v-if="addDoelstellingActive"
+              @keyup.enter="enterAddition(ModuleAddString, selectedcategorie.doelstellingen, 'doelstelling', selectedcategorie.indexes)"
+              prepend-icon="add"
+              label="Nieuwe Doelstelling"
+              v-model="ModuleAddString"
+              single-line
+              hide-details
+              dark
+            ></v-text-field>
+            <v-btn flat color="white darken-1" v-if="!addDoelstellingActive" @click="addDoelstellingActive = true" full-width>+ Nieuwe Doelstelling</v-btn>
+          </v-list-tile>
+        </v-list>
       </v-card>
     </v-flex>
   </v-layout>
@@ -60,27 +90,45 @@ export default {
     return {
       addModuleActive: false,
       addCategorieActive: false,
-      selectedcategorie: '',
+      addDoelstellingActive: false,
+      selectedcategorie: null,
       ModuleAddString: '',
       CategorieAddString: '',
       opleiding: [
-        {id: 1, name: 'Initiatie Keuken', categorieen: []}
       ]
     }
   },
   methods: {
-    enterAddition (title, object, level) {
+    enterAddition (title, object, level, parentIndexes) {
       if (title !== '') {
         if (level === 'module') {
-          object.push({name: title, categorieen: []})
+          object.push({name: title, indexes: [], categorieen: []})
+          object[object.length - 1].indexes.push(object.length)
         } else if (level === 'categorie') {
-          object.push({name: title, doelstellingen: []})
+          var array = []
+          parentIndexes.forEach(function (item) {
+            array.push(item)
+          })
+          object.push({name: title, indexes: array, doelstellingen: []})
+          object[object.length - 1].indexes.push(object.length)
+        } else if (level === 'doelstelling') {
+          array = []
+          parentIndexes.forEach(function (item) {
+            array.push(item)
+          })
+          object.push({name: title, indexes: array, evaluatiecriteria: []})
+          object[object.length - 1].indexes.push(object.length)
         }
       }
       this.ModuleAddString = ''
       this.CategorieAddString = ''
       this.addModuleActive = false
       this.addCategorieActive = false
+    },
+    setCategorie (data) {
+      console.log(data)
+      console.log(data)
+      this.selectedcategorie = data
     }
   }
 }
