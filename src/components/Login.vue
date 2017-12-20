@@ -1,39 +1,41 @@
 <template>
-  <v-layout column>
-      <v-flex xs4 offset-xs4>
-        <form v-model="valid">
-          <v-flex xs12 class="text-xs-center" mt-5>
-            <h3>Sign In</h3>
-          </v-flex>
-          <v-layout column>
-            <v-flex>
-              <v-text-field
-                      name="email"
-                      label="Email"
-                      id="email"
-                      type="email"
-                      :rules="emailRules"
-                      v-model="email"
-                      required></v-text-field>
+  <v-app>
+    <v-layout column>
+        <v-flex xs4 offset-xs4>
+          <form v-model="valid">
+            <v-flex xs12 class="text-xs-center" mt-5>
+              <h3>Sign In</h3>
             </v-flex>
-            <v-flex>
-              <v-text-field
-                      name="paswoord"
-                      label="Password"
-                      id="password"
-                      type="password"
-                      :rules="passwordRules"
-                      v-model="password"
-                      required></v-text-field>
-            </v-flex>
-            <v-flex class="text-xs-center" mt-5>
-              <v-btn primary type="submit" v-on:click.prevent="onLogin">Sign In</v-btn>
-              <p v-if="loginError" class="red--text">{{loginError}}</p>
-            </v-flex>
-          </v-layout>
-        </form>
-      </v-flex>
-  </v-layout>
+            <v-layout column>
+              <v-flex>
+                <v-text-field
+                        name="email"
+                        label="Email"
+                        id="email"
+                        type="email"
+                        :rules="emailRules"
+                        v-model="email"
+                        required></v-text-field>
+              </v-flex>
+              <v-flex>
+                <v-text-field
+                        name="paswoord"
+                        label="Password"
+                        id="password"
+                        type="password"
+                        :rules="passwordRules"
+                        v-model="password"
+                        required></v-text-field>
+              </v-flex>
+              <v-flex class="text-xs-center" mt-5>
+                <v-btn primary type="submit" v-on:click.prevent="onLogin">Sign In</v-btn>
+                <p v-if="loginError" class="red--text">{{loginError}}</p>
+              </v-flex>
+            </v-layout>
+          </form>
+        </v-flex>
+    </v-layout>
+  </v-app>
 </template>
 
 
