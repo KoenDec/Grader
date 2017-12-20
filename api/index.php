@@ -1,6 +1,6 @@
 <?php
-require_once('../php/graderdb.php');
-require_once('../php/Login.php');
+require_once('graderdb.php');
+require_once('Login.php');
 require_once('token.php');
 
 header("Access-Control-Allow-Origin: *");
@@ -21,67 +21,67 @@ if ($_SERVER['REQUEST_METHOD'] == 'GET') {
     if ($_GET['url'] == 'auth') {
 
     } else if ($_GET['url'] == 'students') {
-        //if (Login::isLoggedIn()) {
+      //if (Token::hasClearance($_GET['token'], $teacherRole) || Token::hasClearance($_GET['token'], $adminRole)) {
         $students = $userDAO->getAllStudents();
         echo json_encode($students);
         http_response_code(200);
-        /*} else {
-          echo $notLoggedInErr;
-          http_response_code(401);
-        }*/
-    } else if ($_GET['url'] == 'studentInEducation') {
-        if (Login::isLoggedIn()) {
-          $userid = Login::isLoggedIn();
-            if (isset($_GET['edu'])) {
-              $edu = $_GET['edu'];
-              //if (!isStudent($userid)) {
-              $studentsInEdu = $userDAO->getAllStudentsInEducation($_GET['edu']);
-              echo json_encode($studentsInEdu);
-              http_response_code(200);
-              /*} else {
-                echo $notAuthorizedErr;
-                http_response_code(401);
-              }*/
-      } else {
-        echo '{"Status":"No edu set"}';
-        http_response_code(401);
-      }
-    } else {
-      echo $notLoggedInErr;
-      http_response_code(401);
-    }
-  } else if ($_GET['url'] == 'currentUser') {
-      //if (Login::isLoggedIn()) {
-      if (isset($_GET['token'])) {
-          $token = $_GET['token'];
-          $userid = $userDAO->getLoggedInUserId(sha1($token));
-          $currentUser = $userDAO->getUserById($userid);
-          echo json_encode($currentUser);
-      } else {
-          echo $notFoundErr;
-          http_response_code(405);
-      }
       /*} else {
         echo $notLoggedInErr;
         http_response_code(401);
       }*/
-  } else if ($_GET['url'] == 'studentEvaluations'){
-        if (isset($_GET['student']) && isset($_GET['module'])) {
-            $studentId = $_GET['student'];
-            $moduleId = $_GET['module'];
-            $evaluaties = $userDAO->getEvaluaties($studentId, $moduleId);
-
-            $evaluations = [];
-
-            foreach($evaluaties as $evaluatie){
-                array_push($evaluations, $evaluatie);
-            }
-            echo json_encode($evaluations);
+    } else if ($_GET['url'] == 'studentInEducation') {
+      //if (Token::hasClearance($_GET['token'], $teacherRole) || Token::hasClearance($_GET['token'], $adminRole)) {
+        if (isset($_GET['edu'])) {
+          $edu = $_GET['edu'];
+          $studentsInEdu = $userDAO->getAllStudentsInEducation($_GET['edu']);
+          echo json_encode($studentsInEdu);
+          http_response_code(200);
         } else {
-            echo $notFoundErr;
-            http_response_code(405);
+          echo '{"Error":"No edu set"}';
+          http_response_code(401);
         }
-    } else if ($_GET['url'] == 'studentAllEvaluationsFull'){
+      /*} else {
+        echo $notAuthorizedErr;
+        http_response_code(401);
+      }*/
+  } else if ($_GET['url'] == 'currentUser') {
+    //if (Token::hasClearance($_GET['token'], $teacherRole) || Token::hasClearance($_GET['token'], $adminRole) || Token::hasClearance($_GET['token'], $studentRole)) {
+      if (isset($_GET['token'])) {
+        $token = $_GET['token'];
+        $userid = $userDAO->getLoggedInUserId(sha1($token));
+        $currentUser = $userDAO->getUserById($userid);
+        echo json_encode($currentUser);
+      } else {
+        echo $notFoundErr;
+        http_response_code(405);
+      }
+    /*} else {
+      echo $notAuthorizedErr;
+      http_response_code(401);
+    }*/
+  } else if ($_GET['url'] == 'studentEvaluations'){
+    //if (Token::hasClearance($_GET['token'], $teacherRole) || Token::hasClearance($_GET['token'], $adminRole)) {
+      if (isset($_GET['student']) && isset($_GET['module'])) {
+        $studentId = $_GET['student'];
+        $moduleId = $_GET['module'];
+        $evaluaties = $userDAO->getEvaluaties($studentId, $moduleId);
+
+        $evaluations = [];
+
+        foreach($evaluaties as $evaluatie){
+          array_push($evaluations, $evaluatie);
+        }
+          echo json_encode($evaluations);
+      } else {
+          echo $notFoundErr;
+          http_response_code(405);
+      }
+    /*} else {
+      echo $notAuthorizedErr;
+      http_response_code(401);
+    }*/
+  } else if ($_GET['url'] == 'studentAllEvaluationsFull'){
+    //if (Token::hasClearance($_GET['token'], $teacherRole) || Token::hasClearance($_GET['token'], $adminRole)) {
         if (isset($_GET['student'])) {
             $studentId = $_GET['student'];
             $evaluaties = $userDAO->getAllEvaluaties($studentId);
@@ -92,6 +92,7 @@ if ($_SERVER['REQUEST_METHOD'] == 'GET') {
                 $evaluation = (object)[
                     'id' => $evaluatie->id,
                     'naam' => $evaluatie->name,
+                    'date' => preg_replace('/(\d{4})-(\d{2})-(\d{2})/', '$3/$2/$1', $evaluatie->datum),
                     'module' => $userDAO->getModule($evaluatie->moduleId)->name,
                     'doelstellingscategories' => array()
                 ];
@@ -157,8 +158,12 @@ if ($_SERVER['REQUEST_METHOD'] == 'GET') {
             echo $notFoundErr;
             http_response_code(405);
         }
+      /*} else {
+        echo $notAuthorizedErr;
+        http_response_code(401);
+      }*/
     } else if ($_GET['url'] == 'studentEvaluation') {
-      //if (Login::isLoggedIn()) {
+    //if (Token::hasClearance($_GET['token'], $teacherRole) || Token::hasClearance($_GET['token'], $adminRole)) {
       if (isset($_GET['id'])) {
           $evaluatieId = $_GET['id'];
 
@@ -237,11 +242,12 @@ if ($_SERVER['REQUEST_METHOD'] == 'GET') {
           echo $notFoundErr;
           http_response_code(405);
       }
-      /*} else {
-        echo $notLoggedInErr;
-        http_response_code(401);
-      }*/
+    /*} else {
+      echo $notAuthorizedErr;
+      http_response_code(401);
+    }*/
   } else if ($_GET['url'] == 'studentReports'){
+    //if (Token::hasClearance($_GET['token'], $teacherRole) || Token::hasClearance($_GET['token'], $adminRole)) {
       if (isset($_GET['id'])) {
           $studentId = $_GET['id'];
           $rapporten = $userDAO->getRapporten($studentId);
@@ -256,8 +262,12 @@ if ($_SERVER['REQUEST_METHOD'] == 'GET') {
           echo $notFoundErr;
           http_response_code(405);
       }
+    /*} else {
+      echo $notAuthorizedErr;
+      http_response_code(401);
+    }*/
   } else if ($_GET['url'] == 'studentReport') {
-    //if (Login::isLoggedIn()) {
+    //if (Token::hasClearance($_GET['token'], $teacherRole) || Token::hasClearance($_GET['token'], $adminRole)) {
       if (isset($_GET['id'])) {
         $rapportid = $_GET['id'];
 
@@ -327,37 +337,38 @@ if ($_SERVER['REQUEST_METHOD'] == 'GET') {
           echo $notFoundErr;
           http_response_code(405);
       }
-      /*} else {
-        echo $notLoggedInErr;
-        http_response_code(401);
-      }*/
-    } else if ($_GET['url'] == 'student') {
-        //if (Login::isLoggedIn()) {
-        if (isset($_GET['id'])) {
-            $userid = $_GET['id'];
-            $obj = (object)[
-                'student' => $userDAO->getUserById($userid),
-                'opleiding' => $userDAO->getEducationFromStudent($userid)
-            ];
-            echo json_encode($obj);
-        } else {
-            echo $notFoundErr;
-            http_response_code(405);
-        }
-        /*} else {
-          echo $notLoggedInErr;
-          http_response_code(401);
-        }*/
-    } else if ($_GET['url'] == 'opleidingen') {
-      if (Token::hasClearance($_GET['token'], $teacherRole) || Token::hasClearance($_GET['token'], $adminRole)) {
-        $edus = $userDAO->getAllEducations();
-        echo json_encode($edus);
-        http_response_code(200);
+    /*} else {
+      echo $notAuthorizedErr;
+      http_response_code(401);
+    }*/
+  } else if ($_GET['url'] == 'student') {
+    //if (Token::hasClearance($_GET['token'], $teacherRole) || Token::hasClearance($_GET['token'], $adminRole)) {
+      if (isset($_GET['id'])) {
+          $userid = $_GET['id'];
+          $obj = (object)[
+              'student' => $userDAO->getUserById($userid),
+              'opleiding' => $userDAO->getEducationFromStudent($userid)
+          ];
+          echo json_encode($obj);
       } else {
-          echo $notAuthorizedErr;
-          http_response_code(401);
+          echo $notFoundErr;
+          http_response_code(405);
       }
-    } else if ($_GET['url'] == 'fullOpleiding') {
+    /*} else {
+      echo $notLoggedInErr;
+      http_response_code(401);
+    }*/
+  } else if ($_GET['url'] == 'opleidingen') {
+    //if (Token::hasClearance($_GET['token'], $teacherRole) || Token::hasClearance($_GET['token'], $adminRole)) {
+      $edus = $userDAO->getAllEducations();
+      echo json_encode($edus);
+      http_response_code(200);
+    /*} else {
+        echo $notAuthorizedErr;
+        http_response_code(401);
+    }*/
+  } else if ($_GET['url'] == 'fullOpleiding') {
+    //if (Token::hasClearance($_GET['token'], $teacherRole) || Token::hasClearance($_GET['token'], $adminRole)) {
         if (isset($_GET['opleiding'])) {
             $opleidingid = $_GET['opleiding'];
 
@@ -402,8 +413,12 @@ if ($_SERVER['REQUEST_METHOD'] == 'GET') {
             echo '{"Status":"Opleiding niet gevonden"}';
             http_response_code(403);
         }
-    } else if ($_GET['url'] == 'modulesVoorOpleiding') {
-        //if (Login::isLoggedIn()) {
+      /*} else {
+        echo $notAuthorizedErr;
+        http_response_code(401);
+      }*/
+  } else if ($_GET['url'] == 'modulesVoorOpleiding') {
+        //
         if (isset($_GET['opleiding'])) {
             $opleidingid = $_GET['opleiding'];
             $modules = $userDAO->getModulesInOpleiding($opleidingid);
@@ -414,8 +429,8 @@ if ($_SERVER['REQUEST_METHOD'] == 'GET') {
           echo $notLoggedInErr;
           http_response_code(401);
         }*/
-    } else if ($_GET['url'] == 'categorieenInModules') {
-        //if (Login::isLoggedIn()) {
+  } else if ($_GET['url'] == 'categorieenInModules') {
+        //if (Token::hasClearance($_GET['token'], $teacherRole) || Token::hasClearance($_GET['token'], $adminRole)) {
         if (isset($_GET['module'])) {
             $modid = $_GET['module'];
             $categorieen = $userDAO->getDoelstellingscategoriesInModule($modid);
@@ -423,11 +438,11 @@ if ($_SERVER['REQUEST_METHOD'] == 'GET') {
             http_response_code(200);
         }
         /*} else {
-          echo $notLoggedInErr;
+          echo $notAuthorizedErr;
           http_response_code(401);
         }*/
-    } else if ($_GET['url'] == 'doelstellingenInCategorie') {
-        //if (Login::isLoggedIn()) {
+  } else if ($_GET['url'] == 'doelstellingenInCategorie') {
+        //if (Token::hasClearance($_GET['token'], $teacherRole) || Token::hasClearance($_GET['token'], $adminRole)) {
         if (isset($_GET['categorie'])) {
             $categorieId = $_GET['categorie'];
             $doelstellingen = $userDAO->getDoelstellingenInDoelstellingscategorie($categorieId);
@@ -435,11 +450,11 @@ if ($_SERVER['REQUEST_METHOD'] == 'GET') {
             http_response_code(200);
         }
         /*} else {
-          echo $notLoggedInErr;
+          echo $notAuthorizedErr;
           http_response_code(401);
         }*/
-    } else if ($_GET['url'] == 'criteriaInDoelstelling') {
-        //if (Login::isLoggedIn()) {
+  } else if ($_GET['url'] == 'criteriaInDoelstelling') {
+        //if (Token::hasClearance($_GET['token'], $teacherRole) || Token::hasClearance($_GET['token'], $adminRole)) {
         if (isset($_GET['doelstelling'])) {
             $doelid = $_GET['doelstelling'];
             $criteria = $userDAO->getCriteriaInDoelstelling($doelid);
@@ -447,19 +462,20 @@ if ($_SERVER['REQUEST_METHOD'] == 'GET') {
             http_response_code(200);
         }
         /*} else {
-          echo $notLoggedInErr;
+          echo $notAuthorizedErr;
           http_response_code(401);
         }*/
-    } else if ($_GET['url'] == 'studentenMetOpleiding') {
+  } else if ($_GET['url'] == 'studentenMetOpleiding') {
+      //if (Token::hasClearance($_GET['token'], $teacherRole) || Token::hasClearance($_GET['token'], $adminRole)) {
         $obj = $userDAO->getAllActiveStudentsWithEducation();
         echo json_encode($obj);
         http_response_code(200);
-    } else if ($_GET['url'] == 'evalFicheVoorLeerkracht') {
-        if (isset($_GET['leerkracht'])) {
-            $teachId = $_GET['leerkracht'];
-        }
-        http_response_code(200);
-    } else if ($_GET['url'] == 'evaluatieVoorStudent') {
+      /*} else {
+        echo $notAuthorizedErr;
+        http_response_code(401);
+      }*/
+  } else if ($_GET['url'] == 'evaluatieVoorStudent') {
+      //if (Token::hasClearance($_GET['token'], $teacherRole) || Token::hasClearance($_GET['token'], $adminRole)) {
         if (isset($_GET['id'])) {
             $studentid = $_GET['id'];
             $evalForStudent = (object)[
@@ -521,7 +537,12 @@ if ($_SERVER['REQUEST_METHOD'] == 'GET') {
             echo '{"Error":"No studentid found"}';
             http_response_code(403);
         }
-    } else if ($_GET['url'] == 'getEvaluatieByName') {
+      /*} else {
+        echo $notAuthorizedErr;
+        http_response_code(401);
+      }*/
+  } else if ($_GET['url'] == 'getEvaluatieByName') {
+    //if (Token::hasClearance($_GET['token'], $teacherRole) || Token::hasClearance($_GET['token'], $adminRole)) {
       if (isset($_GET['name'])) {
         $id = $userDAO->getEvaluatieId($_GET['name']);
         $evaluatie = $userDAO->getEvaluatie($id);
@@ -531,7 +552,12 @@ if ($_SERVER['REQUEST_METHOD'] == 'GET') {
         echo '{"Status":"No correct evaluatie name given"}';
         http_response_code(403);
       }
-    } else if ($_GET['url'] == 'getEvaluatie') {
+    /*} else {
+      echo $notAuthorizedErr;
+      http_response_code(401);
+    }*/
+  } else if ($_GET['url'] == 'getEvaluatie') {
+    //if (Token::hasClearance($_GET['token'], $teacherRole) || Token::hasClearance($_GET['token'], $adminRole)) {
       if (isset($_GET['id'])) {
         $evaluatie = $userDAO->getEvaluatie($_GET['id']);
         echo json_encode($evaluatie);
@@ -540,7 +566,12 @@ if ($_SERVER['REQUEST_METHOD'] == 'GET') {
         echo '{"Status": "No correct eval id given"}';
         http_response_code(403);
       }
-    } else if ($_GET['url'] == 'getEvaluatiesPerStudent') {
+    /*} else {
+      echo $notAuthorizedErr;
+      http_response_code(401);
+    }*/
+  } else if ($_GET['url'] == 'getEvaluatiesPerStudent') {
+    //if (Token::hasClearance($_GET['token'], $teacherRole) || Token::hasClearance($_GET['token'], $adminRole)) {
       if (isset($_GET['modId']) && isset($_GET['studId'])) {
         $evaluaties = (object)[
           'evaluaties' => array()
@@ -562,7 +593,11 @@ if ($_SERVER['REQUEST_METHOD'] == 'GET') {
         echo '{"Error":"Wrong student or module id(s)"}';
         http_response_code(403);
       }
-    }
+    /*} else {
+      echo $notAuthorizedErr;
+      http_response_code(401);
+    }*/
+  }
 } else if ($_SERVER['REQUEST_METHOD'] == 'POST') {
     if ($_GET['url'] == 'auth') {
         $postBody = file_get_contents('php://input');
@@ -589,6 +624,20 @@ if ($_SERVER['REQUEST_METHOD'] == 'GET') {
           echo '{"Error":"Onjuiste email"}';
           http_response_code(401);
         }
+    } else if ($_GET['url'] == 'validateToken') {
+      $postBody = file_get_contents('php://input');
+      $postBody = json_decode($postBody);
+
+      $receivedToken = $postBody->token;
+
+      if (Token::isValid($receivedToken)) {
+        echo '{"validation":"true"}';
+        http_response_code(200);
+      } else {
+        echo $notLoggedInErr;
+        http_response_code(401);
+      }
+
     } else if ($_GET['url'] == 'createModule') {
         // TODO
     } else if ($_GET['url'] == 'createOpleiding') {
@@ -623,8 +672,11 @@ if ($_SERVER['REQUEST_METHOD'] == 'GET') {
             http_response_code(401);
         }
     } else if ($_GET['url'] == 'updatePw') {
-        $postBody = file_get_contents('php://input');
-        $postBody = json_decode($postBody);
+      $postBody = file_get_contents('php://input');
+      $postBody = json_decode($postBody);
+      $token = $postBody->token;
+
+      //if (Token::hasClearance($token, $teacherRole) || Token::hasClearance($token, $adminRole)) {
 
         $userid = $postBody->userid;
         $newpw = $postBody->pw;
@@ -638,9 +690,16 @@ if ($_SERVER['REQUEST_METHOD'] == 'GET') {
             echo '{"Error":"Not updated"}';
             http_response_code(403);
         }
+      /*} else {
+        echo $notAuthorizedErr;
+        http_response_code(401);
+      }*/
     } else if ($_GET['url'] == 'resetPassword') {
-        $postBody = file_get_contents('php://input');
-        $postBody = json_decode($postBody);
+      $postBody = file_get_contents('php://input');
+      $postBody = json_decode($postBody);
+      $token = $postBody->token;
+
+      //if (Token::hasClearance($token, $teacherRole) || Token::hasClearance($token, $adminRole)) {
 
         $username = $postBody->username;
         $password = $postBody->password;
@@ -661,11 +720,16 @@ if ($_SERVER['REQUEST_METHOD'] == 'GET') {
             echo '{"Error":"Gebruiker bestaat niet"}';
             http_response_code(403);
         }
-
+      /*} else {
+        echo $notAuthorizedErr;
+        http_response_code(401);
+      }*/
     } else if ($_GET['url'] == 'saveEvaluatie') {
         $postBody = file_get_contents('php://input');
         $postBody = json_decode($postBody);
+        $token = $postBody->token;
 
+      //if (Token::hasClearance($token, $teacherRole) || Token::hasClearance($token, $adminRole)) {
         $date = $postBody->date;
         $date = preg_replace('#(\d{2})/(\d{2})/(\d{4})#', '$3-$2-$1', $date);
         $aspecten = $postBody->aspecten;
@@ -680,11 +744,10 @@ if ($_SERVER['REQUEST_METHOD'] == 'GET') {
         $evaluatieId = $userDAO->getEvaluatieId($postBody->name);
         $userDAO->insertAspectbeoordelingen($evaluatieId, $beoordeeldeAspecten);
 
-        /*foreach ($aspecten as $aspect) {
-          $aspectid = $aspect->id;
-          $quotering = $aspect->eval;
-          $userDAO->saveAspecten($aspectid,$quotering);
-        }*/
+      /*} else {
+        echo $notAuthorizedErr;
+        http_response_code(401);
+      }*/
     } else if ($_GET['url'] == 'saveReport') {
         //if (Login::isLoggedIn()) {
 
@@ -816,6 +879,7 @@ if ($_SERVER['REQUEST_METHOD'] == 'GET') {
   }
 } else if ($_SERVER['REQUEST_METHOD'] == 'PATCH') {
     if ($_GET['url'] == 'updateEvaluatie') {
+      //if (Token::hasClearance($$postBody->token, $teacherRole) || Token::hasClearance($postBody->token, $adminRole)) {
         $postBody = file_get_contents('php://input');
         $postBody = json_decode($postBody);
 
@@ -832,7 +896,10 @@ if ($_SERVER['REQUEST_METHOD'] == 'GET') {
             }
             $userDAO->updateEvaluatie($evalId, $postBody->name,$date, $beoordeeldeAspecten);
         }
-
+      /*} else {
+        echo $notAuthorizedErr;
+        http_response_code(401);
+      }*/
     } else if ($_GET['url'] == 'updateUser') {
         $postBody = file_get_contents('php://input');
         $postBody = json_decode($postBody);
@@ -841,8 +908,9 @@ if ($_SERVER['REQUEST_METHOD'] == 'GET') {
         $lastname = $postBody->lastname;
         $email = $postBody->email;
         $id = $postBody->id;
+        $token = $postBody->token;
 
-        if (Token::hasClearance($_GET['token'], $teacherRole) || Token::hasClearance($_GET['token'], $adminRole)) {
+        if (Token::hasClearance($token, $teacherRole) || Token::hasClearance($token, $adminRole)) {
           $userDAO->updateUser($firstname, $lastname, $email , $id);
           echo '{"Status":"User updated"}';
           http_response_code(200);
@@ -867,6 +935,7 @@ if ($_SERVER['REQUEST_METHOD'] == 'GET') {
             http_response_code(400);
         }
     } else if ($_GET['url'] == 'deleteEvaluatie') {
+      //if (Token::hasClearance($_GET['token'], $teacherRole) || Token::hasClearance($_GET['token'], $adminRole)) {
         if (isset($_GET['id'])) {
             echo '{"Status": "deleting evaluation '.$_GET['id'].'"}';
             $userDAO->deleteEvaluatie($_GET['id']);
@@ -875,6 +944,10 @@ if ($_SERVER['REQUEST_METHOD'] == 'GET') {
             echo '{"Status": "No correct evaluation id given"}';
             http_response_code(403);
         }
+      /*} else {
+        echo $notAuthorizedErr;
+        http_response_code(401);
+      }*/
     }
 } else if ($_SERVER['REQUEST_METHOD'] == 'OPTIONS') {
     echo '{"Status":"options allowed"}';
