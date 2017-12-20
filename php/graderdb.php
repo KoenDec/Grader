@@ -710,6 +710,32 @@ class UserDAO
         return $aspecten;
     }
 
+    public static function getAllEvaluaties($studentId)
+    {
+        try {
+            $conn = graderdb::getConnection();
+
+            $sql = 'SELECT * from evaluaties WHERE studentId = :studentId';
+            $stmt = $conn->prepare($sql);
+            $stmt->bindParam(':studentId', $studentId);
+
+            $stmt->execute();
+
+            $evaluatiesTable = $stmt->fetchAll(PDO::FETCH_CLASS);
+        } catch (PDOException $e) {
+            die($e->getMessage());
+        }
+
+        if (isset($evaluatiesTable[0])) {
+            $evaluaties = $evaluatiesTable;
+        } else {
+            //die('No evaluaties found for student with id = ' . $studentId);
+            $evaluaties = null;
+        }
+
+        return $evaluaties;
+    }
+
     public static function getEvaluaties($studentId, $moduleId)
     {
         try {
@@ -788,6 +814,8 @@ class UserDAO
         return $evaluatie;
     }
 
+
+
     public static function getAspectbeoordeling($evaluatieId, $aspectId)
     {
         try {
@@ -806,7 +834,7 @@ class UserDAO
         }
 
         if (isset($doelstellingenTable[0])) {
-            $rating = $doelstellingenTable;
+            $rating = $doelstellingenTable[0];
         } else {
             //die('No score found for doelstelling with id '.$doelstellingId.' in rapport with id '.$rapportId.'!');
             $rating = null;
@@ -1151,6 +1179,24 @@ class UserDAO
         }
     }
 
+    public static function insertNewReport($name, $studentId, $moduleId, $date)
+    {
+        try {
+            $conn = graderdb::getConnection();
+
+            $sql = 'INSERT INTO evaluaties(name, studentId, moduleId, datum) VALUES (:name, :studentId, :moduleId, :datum)';
+            $stmt = $conn->prepare($sql);
+            $stmt->bindParam(':name', $name);
+            $stmt->bindParam(':studentId', $studentId);
+            $stmt->bindParam(':moduleId', $moduleId);
+            $stmt->bindParam(':datum', $date);
+
+            $stmt->execute();
+        } catch (PDOException $e) {
+            die($e->getMessage());
+        }
+    }
+
     public static function saveRating($rapportId, $doelstellingId)
     {
         // TODO berekenen
@@ -1333,6 +1379,5 @@ class UserDAO
         } catch (PDOException $e) {
             die($e->getMessage());
         }
-
     }
 }

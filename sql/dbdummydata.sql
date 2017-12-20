@@ -1,8 +1,8 @@
 use graderDB;
 
 INSERT INTO users(email, firstname, lastname, password, gender, language, status) VALUES
-	('kenny.depecker@student.howest.be', 'Kenny', 'Depecker', 'Student', 'M', 'NL', 'ACTIVE'), -- 1
-	('koen.declerck@student.howest.be', 'Koen', 'Declerck', 'Student', 'M', 'NL', 'ACTIVE'), -- 2
+	('kenny.depecker@student.howest.be', 'Kenny', 'Depecker', '$2y$10$TOVnkl/zFUzGeKIJccvdquNWiT2tFFf1Dd/HayZj8ouyUOZJtIqx.', 'M', 'NL', 'ACTIVE'), -- 1
+	('koen.declerck@student.howest.be', 'Koen', 'Declerck', '$2y$10$TOVnkl/zFUzGeKIJccvdquNWiT2tFFf1Dd/HayZj8ouyUOZJtIqx.', 'M', 'NL', 'ACTIVE'), -- 2
 	('riwan.carpentier@student.howest.be', 'Riwan', 'Carpentier', '$2y$10$TOVnkl/zFUzGeKIJccvdquNWiT2tFFf1Dd/HayZj8ouyUOZJtIqx.', 'M', 'NL', 'ACTIVE'), -- 3
 	('teacher1@hotmail.com', 'Joline', 'Soete', 'Teacher', 'F', 'NL', 'ACTIVE'), -- 4
 	('teacher2@hotmail.com', 'Teacher', 'Dummy', 'Teacher', 'M', 'NL', 'ACTIVE'), -- 5
@@ -11,7 +11,7 @@ INSERT INTO users(email, firstname, lastname, password, gender, language, status
 	('student3@hotmail.com', 'Student', 'Kapper', 'Student', 'M', 'NL', 'ACTIVE'), -- 8
 	('student4@hotmail.com', 'Student', 'Kok', 'Student', 'M', 'NL', 'ACTIVE'), -- 9
 	('student5@hotmail.com', 'Student', 'Tegelzetter', 'Student', 'M', 'NL', 'ACTIVE'), -- 10
-	('thomas.de.nil@student.howest.be', 'Thomas', 'De Nil', 'Student', 'M', 'NL', 'ACTIVE'), -- 11
+	('thomas.de.nil@student.howest.be', 'Thomas', 'De Nil', '$2y$10$TOVnkl/zFUzGeKIJccvdquNWiT2tFFf1Dd/HayZj8ouyUOZJtIqx.', 'M', 'NL', 'ACTIVE'), -- 11
 	('teacher3@hotmail.com', 'Koen', 'Feys', 'Teacher', 'M', 'NL', 'ACTIVE'), -- 12
   	('teacher4@hotmail.com', 'Ann', 'Bert', 'Teacher', 'F', 'NL', 'ACTIVE'), -- 13
     ('student6@hotmail.com', 'Student', 'Voeger', 'Student', 'M', 'NL', 'ACTIVE'), -- 14
@@ -1775,7 +1775,7 @@ INSERT INTO aspecten(evaluatiecriteriumId, name, creatorId) VALUES
     (410, 'Blijf niet op één en dezelfde plaats staan, wissel van plaats, zorg dat je de klanten steeds in de gaten kan houden', 3),
     (411, 'Kan een klant die zich verdacht gedraagt herkennen', 3),
     (412, 'Spreekt de verdachte aan in het bijzijn van een collega', 3),
-    (412, 'Probeert de klant virjwillig te laten meewerken', 3),
+    (412, 'Probeert de klant vrijwillig te laten meewerken', 3),
     (413, 'Gaat de confrontatie niet aan bij agressie', 3),
     (413, 'Sluit de klant zeker niet op', 3),
     (413, 'Belt de politie en doet aangifte', 3),
@@ -1794,11 +1794,11 @@ INSERT INTO studenten_modules(studentId, moduleId, opleidingId) VALUES
 	(9, 1, null),
     (10, 7, null),
     (9, 3, 1),
-    (10, 3, 3),
+    (10, 11, null),
     (8, 3, 2),
-    (14, 11, 6),
-    (14, 12, 6),
-    (14, 13, 6);
+    (14, 11, null),
+    (14, 12, null),
+    (14, 13, null);
 
 
 INSERT INTO evaluaties(name, studentId, moduleId, datum) VALUES
