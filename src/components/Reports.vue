@@ -103,6 +103,9 @@
       </v-flex>
     </v-layout>
     <v-layout row-wrap>
+        <v-flex v-if="currentreport" offset-xs1>
+            <v-btn @click="currentreport = null; getCurrentStudentReports()" color="primary"><v-icon class="mr-2">undo</v-icon>Back</v-btn>
+        </v-flex>
         <v-flex xs12 offset-xs1 class="text-xs-left">
           <h2 class="headline" v-if="currentstudent != null && !currentreport">{{ 'Overzicht rapporten' }}</h2>
           <v-flex>
@@ -117,11 +120,11 @@
         <v-flex xs10 offset-xs1>
             <v-list two-line v-if="currentstudent != null && currentreport === null">
               <v-subheader>{{'Rapporten van ' + currentstudent.student.firstname + ' ' + currentstudent.student.lastname}}</v-subheader>
-              <template v-for="report in current_student_reports">
+              <template v-for="report in current_student_reports.slice().reverse()">
                 <v-divider></v-divider>
                 <v-list-tile v-bind:key="report.id" @click="getReport(report.id)">
                   <v-list-tile-content>
-                    <v-list-tile-title v-html="report.name"></v-list-tile-title>
+                      <v-list-tile-title><span style="border-right: solid 1px gray; padding-right: 5px">{{report.startdate}} - {{report.enddate}}</span> {{report.name}}</v-list-tile-title>
                     <!-- <v-list-tile-sub-title v-html="report.class"></v-list-tile-sub-title>-->
                   </v-list-tile-content>
                 </v-list-tile>
@@ -138,6 +141,7 @@
                        <div>
                          <div height="100%" block class="display-3 text-xs-left">{{ currentreport.name }}</div>
                          <div block class="display-2 text-xs-left">{{currentstudent.student.firstname + ' ' + currentstudent.student.lastname}}</div>
+                         <div block class="display-1 text-xs-left">{{dateFormatted1}} - {{dateFormatted2}}</div>
                        </div>
                      </v-flex>
                    </v-layout>
@@ -162,7 +166,7 @@
                 </v-card>
               </v-flex>
             </v-layout>
-            <v-layout row-wrap v-for="categorie in module.doelstellingscategories">
+            <v-layout row-wrap v-for="categorie in module.doelstellingscategories" :key="categorie.id">
               <v-flex xs2>
               <v-card color="blue-grey darken-2" class="white--text text-xs-center" height="100%">
                  <v-container fluid grid-list-lg fill-height>
@@ -171,7 +175,7 @@
                </v-card>
               </v-flex>
               <v-flex xs10>
-                <v-layout row-wrap v-for="doelstelling in categorie.doelstellingen">
+                <v-layout row-wrap v-for="doelstelling in categorie.doelstellingen" :key="doelstelling.id">
                   <v-flex xs10>
                     <v-card color="blue-grey" class="white--text text-xs-left" height="100%">
                       <v-container fluid grid-list-lg fill-height>
@@ -206,13 +210,14 @@
               <v-flex xs12>
                 <v-card color="blue-grey darken-4" class="white--text text-xs-left">
                   <v-container fluid grid-list-lg>
-                    <v-chip label color="yellow" text-color="black" width="100%">
+                    <v-chip label color="yellow" text-color="black" width="500px">
                       <v-icon left>label</v-icon>
                       <div style="display: block" class="mr-4">Algemene commentaar</div>
                       <div v-if="!edit">{{currentreport.commentaarAlgemeen}}</div>
                         <v-flex v-if="edit">
                             <v-text-field
                                 name="Algemene commentaar"
+                                v-model="currentreport.commentaarAlgemeen"
                                 label="commentaar"
                                 id="algemeneCommentaar"
                                 type="text"
@@ -227,6 +232,7 @@
                         <v-flex v-if="edit">
                             <v-text-field
                                     name="Klassenraad commentaar"
+                                    v-model="currentreport.commentaarKlassenraad"
                                     label="commentaar"
                                     id="klassenraadCommentaar"
                                     type="text"
@@ -265,7 +271,7 @@ export default {
       headers: {
         'Content-Type': 'text/plain'
       },
-      possibleScores: ['G', 'V', 'OV', 'RO', 'geen score'],
+      possibleScores: ['G', 'V', 'OV', 'RO', 'NVT'],
       reportGen: false,
       date1: null,
       dateFormatted1: null,
@@ -287,19 +293,24 @@ export default {
       var self = this
       this.$http.getStudent(payload, function (data) {
         self.currentstudent = data
+        self.currentreport = null
         self.getCurrentStudentReports()
       })
     },
     getCurrentStudentReports () {
       var self = this
       this.$http.getStudentReports(self.currentstudent.student.id, function (data) {
+        console.log(data)
         self.current_student_reports = data
       })
     },
     getReport (rapportid) {
       var self = this
       this.$http.getStudentReport(rapportid, function (data) {
+        console.log(data)
         self.currentreport = data
+        self.dateFormatted1 = data.startdate
+        self.dateFormatted2 = data.enddate
         for (var i = 0; i < data.modules.length; i++) {
           for (var j = 0; j < data.modules[i].doelstellingscategories.length; j++) {
             for (var k = 0; k < data.modules[i].doelstellingscategories[j].doelstellingen.length; k++) {
@@ -341,6 +352,9 @@ export default {
           self.currentreport['commentaarKlassenraad'] = ''
           self.currentreport['klas'] = ''
           self.currentreport['name'] = self.reportName
+          self.currentreport['startdate'] = self.dateFormatted1
+          self.currentreport['enddate'] = self.dateFormatted2
+          self.currentreport['studentId'] = self.currentstudent.student.id
           var modules = []
           for (var i = 0; i < self.opleiding.modules.length; i++) {
             var module = self.opleiding.modules[i]
@@ -355,7 +369,7 @@ export default {
             }
           }
           self.calculateScores(start, end)
-          self.currentreport['modules'] = modules.slice().reverse()
+          self.currentreport['modules'] = modules
         })
       } else if (self.dateFormatted1 === null || self.dateFormatted2 === null) {
         self.reportError = 'Beide Datums moeten worden ingevuld'
@@ -400,6 +414,9 @@ export default {
           }
         }
         self.$forceUpdate()
+        self.$http.saveReport(self.currentreport, function (data) {
+          console.log(data)
+        })
       })
     },
     getAvgScore: function (scores) {
