@@ -1,7 +1,7 @@
 import axios from 'axios'
 
 var myStorage = window.localStorage
-// myStorage.setItem('token', 'eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJpZCI6IjIiLCJjbGVhcmFuY2UiOiJBRE1JTiJ9.a1lD/can5gzGUL4yki6CAZmdm4ucsInRXYatqzi4Pzk=')
+myStorage.setItem('token', 'eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJpZCI6IjIiLCJjbGVhcmFuY2UiOiJBRE1JTiJ9.a1lD/can5gzGUL4yki6CAZmdm4ucsInRXYatqzi4Pzk=')
 
 var Api = (function () {
   var my = {}
