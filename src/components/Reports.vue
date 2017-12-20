@@ -398,7 +398,7 @@ export default {
         sum += parseInt(scores[i])
       }
       if (sum / scores.length === null) {
-          return 'geen score'
+        return 'geen score'
       }
     }
   },
