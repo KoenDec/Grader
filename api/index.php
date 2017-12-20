@@ -1,10 +1,10 @@
 <?php
-require_once('../php/graderdb.php');
-require_once('../php/Login.php');
+require_once('graderdb.php');
+require_once('Login.php');
 require_once('token.php');
 
 header("Access-Control-Allow-Origin: *");
-header("Access-Control-Allow-Methods: DELETE, PATCH");
+header("Access-Control-Allow-Methods: DELETE, PATCH, GET, POST, OPTIONS");
 header("Access-Control-Allow-Headers: Origin,Content-Type");
 header('Content-Type: application/json');
 
@@ -773,7 +773,7 @@ if ($_SERVER['REQUEST_METHOD'] == 'GET') {
                     }
                 }
             }
-
+            var_dump($modules);
             //echo json_encode($punten);
 
             //echo json_encode($postBody);
