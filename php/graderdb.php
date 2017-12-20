@@ -1204,15 +1204,17 @@ class UserDAO
         }
     }
 
-    public static function insertNewReport($name, $studentId, $commentaarKlassenraad, $commentaarAlgemeen)
+    public static function insertNewReport($name, $studentId, $startdate, $enddate, $commentaarKlassenraad, $commentaarAlgemeen)
     {
         try {
             $conn = graderdb::getConnection();
 
-            $sql = 'INSERT INTO rapporten (name, studentId, commentaarKlassenraad, commentaarAlgemeen) VALUES (:name, :studentId, :commentaarKlassenraad, :commentaarAlgemeen)';
+            $sql = 'INSERT INTO rapporten (name, studentId, startdate, enddate, commentaarKlassenraad, commentaarAlgemeen) VALUES (:name, :studentId, :startdate, :enddate, :commentaarKlassenraad, :commentaarAlgemeen)';
             $stmt = $conn->prepare($sql);
             $stmt->bindParam(':name', $name);
             $stmt->bindParam(':studentId', $studentId);
+            $stmt->bindParam(':startdate', $startdate);
+            $stmt->bindParam(':enddate', $enddate);
             $stmt->bindParam(':commentaarKlassenraad', $commentaarKlassenraad);
             $stmt->bindParam(':commentaarAlgemeen', $commentaarAlgemeen);
 

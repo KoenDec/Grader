@@ -776,7 +776,7 @@ if ($_SERVER['REQUEST_METHOD'] == 'GET') {
 
             //echo json_encode($postBody);
 
-            $userDAO->insertNewReport($postBody->name, $postBody->studentId,$postBody->commentaarKlassenraad, $postBody->commentaarAlgemeen);
+            $userDAO->insertNewReport($postBody->name, $postBody->studentId, preg_replace('#(\d{2})/(\d{2})/(\d{4})#', '$3-$2-$1', $postBody->startdate), preg_replace('#(\d{2})/(\d{2})/(\d{4})#', '$3-$2-$1', $postBody->enddate), $postBody->commentaarKlassenraad, $postBody->commentaarAlgemeen);
             $rapportId = $userDAO->getRapportId($postBody->name);
             $userDAO->insertRapportscores($rapportId, $punten);
 
