@@ -47,10 +47,15 @@ if ($_SERVER['REQUEST_METHOD'] == 'GET') {
   } else if ($_GET['url'] == 'currentUser') {
     //if (Token::hasClearance($_GET['token'], $teacherRole) || Token::hasClearance($_GET['token'], $adminRole) || Token::hasClearance($_GET['token'], $studentRole)) {
       if (isset($_GET['token'])) {
-        $token = $_GET['token'];
-        $userid = $userDAO->getLoggedInUserId(sha1($token));
+        $userid = Token::getLoggedInUserId($_GET['token']);
         $currentUser = $userDAO->getUserById($userid);
-        echo json_encode($currentUser);
+        $userObj = (object)[
+          'id' => $userid,
+          'name' => $currentUser->firstname . " " . $currentUser->lastname,
+          'role' => $userDAO->getUserRole($userid)
+        ];
+        echo json_encode($userObj);
+        http_response_code(200);
       } else {
         echo $notFoundErr;
         http_response_code(405);
@@ -772,7 +777,6 @@ if ($_SERVER['REQUEST_METHOD'] == 'GET') {
                     }
                 }
             }
-            var_dump($modules);
             //echo json_encode($punten);
 
             //echo json_encode($postBody);

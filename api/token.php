@@ -48,15 +48,31 @@ class Token
     $jwt_values = explode(".", $receivedToken);
     $receivedSignature = $jwt_values[2];
     $receivedHeaderAndPayload = $jwt_values[0] . "." . $jwt_values[1];
+    $receivedPayload = base64_decode($jwt_values[1]);
+    $receivedPayload = json_decode($receivedPayload);
     $resultedSignature = base64_encode(hash_hmac('sha256', $receivedHeaderAndPayload, $secret, true));
 
     if ($resultedSignature == $receivedSignature) {
-      $receivedPayload = $jwt_values[1];
-      if ($receivedPayload[1] === $clearanceLevel) {
+      if ($receivedPayload->clearance === $clearanceLevel) {
         return true;// clearanceLevel is gelijk
       } else return false;
     } else {
       return false;
+    }
+  }
+
+  public static function getLoggedInUserId($receivedToken) {
+    $jwt_values = explode(".", $receivedToken);
+    $receivedSignature = $jwt_values[2];
+    $receivedHeaderAndPayload = $jwt_values[0] . "." . $jwt_values[1];
+    $receivedPayload = base64_decode($jwt_values[1]);
+    $receivedPayload = json_decode($receivedPayload);
+    $resultedSignature = base64_encode(hash_hmac('sha256', $receivedHeaderAndPayload, $secret, true));
+
+    if ($resultedSignature == $receivedSignature) {
+      return $receivedPayload->id;
+    } else {
+      return null;
     }
   }
 }
