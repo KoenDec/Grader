@@ -26,48 +26,109 @@ export default new Router({
       path: '/',
       name: 'index',
       component: Index,
+      beforeEnter: (to, from, next) => {
+        if (to.path !== '/login' && window.localStorage.getItem('token')) {
+          next()
+        } else {
+          next({path: '/login'})
+        }
+      },
       children: [
         {
           path: '/rapporten',
           name: 'rapporten',
+          beforeEnter: (to, from, next) => {
+            if (to.path !== '/login' && window.localStorage.getItem('token')) {
+              next()
+            } else {
+              next({path: '/login'})
+            }
+          },
           component: Reports
         },
         {
           path: '/studenten',
           name: 'studenten',
+          beforeEnter: (to, from, next) => {
+            if (to.path !== '/login' && window.localStorage.getItem('token')) {
+              next()
+            } else {
+              next({path: '/login'})
+            }
+          },
           component: Students
         },
         {
           path: '/afdrukken',
           name: 'afdrukken',
+          beforeEnter: (to, from, next) => {
+            if (to.path !== '/login' && window.localStorage.getItem('token')) {
+              next()
+            } else {
+              next({path: '/login'})
+            }
+          },
           component: Print
         },
         {
           path: '/opleidingen',
           name: 'opleidingen',
+          beforeEnter: (to, from, next) => {
+            if (to.path !== '/login' && window.localStorage.getItem('token')) {
+              next()
+            } else {
+              next({path: '/login'})
+            }
+          },
           component: Subjects
         },
         {
           path: '/addstudent',
           name: 'addstudent',
+          beforeEnter: (to, from, next) => {
+            if (to.path !== '/login' && window.localStorage.getItem('token')) {
+              next()
+            } else {
+              next({path: '/login'})
+            }
+          },
           component: AddStudent
         },
         {
           path: '/evaluate',
           name: 'evaluate',
+          beforeEnter: (to, from, next) => {
+            if (to.path !== '/login' && window.localStorage.getItem('token')) {
+              next()
+            } else {
+              next({path: '/login'})
+            }
+          },
           component: Evaluate
         },
         {
           path: '/home',
           name: 'home',
+          beforeEnter: (to, from, next) => {
+            if (to.path !== '/login' && window.localStorage.getItem('token')) {
+              next()
+            } else {
+              next({path: '/login'})
+            }
+          },
           component: Home
-        },
+        }/*,
         {
-          path: '/',
+          path: '/login',
           name: 'login',
           component: Login
-        }
+        } */
       ]
+    },
+    {
+      path: '/login',
+      name: 'login',
+      component: Login
     }
   ]
 })

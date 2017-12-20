@@ -27,7 +27,8 @@
                       required></v-text-field>
             </v-flex>
             <v-flex class="text-xs-center" mt-5>
-              <v-btn primary type="submit" v-on:submit.prevent @click="login">Sign In</v-btn>
+              <v-btn primary type="submit" v-on:click.prevent="onLogin">Sign In</v-btn>
+              <p v-if="loginError" class="red--text">{{loginError}}</p>
             </v-flex>
           </v-layout>
         </form>
@@ -49,12 +50,15 @@ export default {
     emailRules: [
       (v) => !!v || 'E-mail moet ingevuld worden',
       (v) => /^\w+([.-]?\w+)*@\w+([.-]?\w+)*(\.\w{2,3})+$/.test(v) || 'E-mail moet geldig zijn'
-    ]
+    ],
+    loginError: null
   }),
   methods: {
-    login () {
+    onLogin () {
+      var self = this
       this.$http.login(this.email, this.password, function (data) {
-        console.log(data)
+        console.log(data.Error)
+        self.loginError = data.Error
       })
     }
   }
