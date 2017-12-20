@@ -183,6 +183,7 @@
                     <v-card color="teal" class="white--text" fill-height height="100%">
                       <v-container fluid grid-list-lg pb-0>
                           <v-select
+                                  v-if="edit"
                                   v-model="selectedScore[doelstelling.id]"
                                   :items="possibleScores"
                                   :item-text="doelstelling.score"
@@ -192,6 +193,7 @@
                                   dark
                                   required
                           ></v-select>
+                          <p v-if="!edit">{{selectedScore[doelstelling.id]}}</p>
                       </v-container>
                     </v-card>
                   </v-flex>
@@ -206,13 +208,31 @@
                   <v-container fluid grid-list-lg>
                     <v-chip label color="yellow" text-color="black" width="100%">
                       <v-icon left>label</v-icon>
-                      <div class="mr-4">Algemene commentaar</div>
-                      <div>{{currentreport.commentaarAlgemeen}}</div>
+                      <div style="display: block" class="mr-4">Algemene commentaar</div>
+                      <div v-if="!edit">{{currentreport.commentaarAlgemeen}}</div>
+                        <v-flex v-if="edit">
+                            <v-text-field
+                                name="Algemene commentaar"
+                                label="commentaar"
+                                id="algemeneCommentaar"
+                                type="text"
+                            >
+                            </v-text-field>
+                        </v-flex>
                     </v-chip>
                     <v-chip label color="yellow" text-color="black">
                       <v-icon left>label</v-icon>
                       <div class="mr-4">Klassenraad commentaar</div>
-                      <div>{{currentreport.commentaarKlassenraad}}</div>
+                      <div v-if="!edit">{{currentreport.commentaarKlassenraad}}</div>
+                        <v-flex v-if="edit">
+                            <v-text-field
+                                    name="Klassenraad commentaar"
+                                    label="commentaar"
+                                    id="klassenraadCommentaar"
+                                    type="text"
+                            >
+                            </v-text-field>
+                        </v-flex>
                     </v-chip>
                   </v-container>
                 </v-card>
@@ -245,7 +265,7 @@ export default {
       headers: {
         'Content-Type': 'text/plain'
       },
-      possibleScores: ['G', 'V', 'OV', 'ROV', 'geen score'],
+      possibleScores: ['G', 'V', 'OV', 'RO', 'geen score'],
       reportGen: false,
       date1: null,
       dateFormatted1: null,
@@ -267,12 +287,10 @@ export default {
       var self = this
       this.$http.getStudent(payload, function (data) {
         self.currentstudent = data
-        console.log(self)
         self.getCurrentStudentReports()
       })
     },
     getCurrentStudentReports () {
-      console.log(this.currentstudent)
       var self = this
       this.$http.getStudentReports(self.currentstudent.student.id, function (data) {
         self.current_student_reports = data
@@ -282,7 +300,6 @@ export default {
       var self = this
       this.$http.getStudentReport(rapportid, function (data) {
         self.currentreport = data
-        console.log(data)
         for (var i = 0; i < data.modules.length; i++) {
           for (var j = 0; j < data.modules[i].doelstellingscategories.length; j++) {
             for (var k = 0; k < data.modules[i].doelstellingscategories[j].doelstellingen.length; k++) {
@@ -292,7 +309,6 @@ export default {
             }
           }
         }
-        console.log(self.selectedScore)
       })
     },
     formatDate (date) {
@@ -316,11 +332,9 @@ export default {
       var d2 = self.dateFormatted2.split('/')
       var start = new Date(d1[2], parseInt(d1[1]) - 1, d1[0])
       var end = new Date(d2[2], parseInt(d2[1]) - 1, d2[0])
-      console.log(self.reportName)
       if (self.dateFormatted1 !== null && self.dateFormatted2 !== null && self.reportName !== null && start < end) {
         self.reportError = null
         self.$http.getEvalForStudent(self.currentstudent.student.id, function (data) {
-          console.log(data)
           self.opleiding = data
           self.currentreport = {}
           self.currentreport['commentaarAlgemeen'] = ''
@@ -355,10 +369,6 @@ export default {
       var self = this
       var scores = {}
       self.$http.getAllEvalsByStudent(self.currentstudent.student.id, function (data) {
-        console.log('allEvals:')
-        console.log(data)
-        console.log('currentreport:')
-        console.log(self.currentreport)
         for (var i = 0; i < self.currentreport.modules.length; i++) {
           for (var j = 0; j < self.currentreport.modules[i].doelstellingscategories.length; j++) {
             for (var k = 0; k < self.currentreport.modules[i].doelstellingscategories[j].doelstellingen.length; k++) {
@@ -385,20 +395,33 @@ export default {
                 }
               }
               doelstelling.score = self.getAvgScore(scores[doelstellingId])
-              console.log(doelstelling.score)
+              self.selectedScore[doelstellingId] = doelstelling.score
             }
           }
         }
-        console.log(scores)
+        self.$forceUpdate()
       })
     },
     getAvgScore: function (scores) {
-      var sum = null
-      for (var i = 0; i < scores.length; i++) {
-        sum += parseInt(scores[i])
-      }
-      if (sum / scores.length === null) {
-        return 'geen score'
+      if (scores) {
+        var l = scores.length
+        var sum = 0
+        for (var i = 0; i < l; i++) {
+          sum += parseInt(scores[i])
+        }
+        if (sum / l >= 0.75) {
+          return this.possibleScores[0]
+        } else if (sum / l >= 0.50 && sum / l < 0.75) {
+          return this.possibleScores[1]
+        } else if (sum / l >= 0.25 && sum / l < 0.50) {
+          return this.possibleScores[2]
+        } else if (sum / l < 0.25) {
+          return this.possibleScores[3]
+        } else if (isNaN(sum / l)) {
+          return this.possibleScores[4]
+        }
+      } else {
+        return this.possibleScores[4]
       }
     }
   },

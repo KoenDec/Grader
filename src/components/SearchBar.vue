@@ -43,7 +43,7 @@ export default {
         object[self.item_concat_key] = 'vuile slet'
         var string = ''
         self.concat_keys.forEach(function (key, i) {
-          console.log('int' + i)
+//          console.log('int' + i)
           string += item[key]
           if (i !== self.concat_keys.length - 1) {
             string += ' '
