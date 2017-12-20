@@ -789,6 +789,31 @@ class UserDAO
         return $evaluatieId;
     }
 
+    public static function getRapportId($rapportName)
+    {
+        try {
+            $conn = graderdb::getConnection();
+
+            $sql = 'SELECT id FROM rapporten WHERE name = :rapportName';
+            $stmt = $conn->prepare($sql);
+            $stmt->bindParam(':rapportName', $rapportName);
+
+            $stmt->execute();
+
+            $rapportenTable = $stmt->fetchAll(PDO::FETCH_CLASS);
+        } catch (PDOException $e) {
+            die($e->getMessage());
+        }
+
+        if (isset($rapportenTable[0])) {
+            $rapportId = $rapportenTable[0]->id;
+        } else {
+            //die('No rapport found');
+            $rapportId = null;
+        }
+        return $rapportId;
+    }
+
     public static function getEvaluatie($evaluatieId)
     {
         try {
@@ -1179,17 +1204,17 @@ class UserDAO
         }
     }
 
-    public static function insertNewReport($name, $studentId, $moduleId, $date)
+    public static function insertNewReport($name, $studentId, $commentaarKlassenraad, $commentaarAlgemeen)
     {
         try {
             $conn = graderdb::getConnection();
 
-            $sql = 'INSERT INTO evaluaties(name, studentId, moduleId, datum) VALUES (:name, :studentId, :moduleId, :datum)';
+            $sql = 'INSERT INTO rapporten (name, studentId, commentaarKlassenraad, commentaarAlgemeen) VALUES (:name, :studentId, :commentaarKlassenraad, :commentaarAlgemeen)';
             $stmt = $conn->prepare($sql);
             $stmt->bindParam(':name', $name);
             $stmt->bindParam(':studentId', $studentId);
-            $stmt->bindParam(':moduleId', $moduleId);
-            $stmt->bindParam(':datum', $date);
+            $stmt->bindParam(':commentaarKlassenraad', $commentaarKlassenraad);
+            $stmt->bindParam(':commentaarAlgemeen', $commentaarAlgemeen);
 
             $stmt->execute();
         } catch (PDOException $e) {
@@ -1197,12 +1222,44 @@ class UserDAO
         }
     }
 
-    public static function saveRating($rapportId, $doelstellingId)
+    public static function insertRapportscores($rapportId, $puntenEnCommentaarThreeDimensionalArray)
     {
-        // TODO berekenen
-        // avg(rating 'aspecten' (OK/NOK)) = rating evaluatiecriterium (RO/OV/V/G/Afwezig/Voldaan)
+        // berekenen
+        // avg(rating 'aspecten' (OK/NOK)) = rating evaluatiecriterium (RO/OV/V/G/Afwezig/Voldaan(NVT))
         // avg(rating evaluatiecriteria) = rating doelstelling
         // leerkracht kan dit met 1 stap aanpassen (bv als het gemiddelde OV is maar de leerkracht vindt het ok kan deze hier V van maken, of omgekeerd)
+
+        try {
+            $conn = graderdb::getConnection();
+
+            $sql = 'INSERT INTO rapporten_scores (rapportId, doelstellingId, score, opmerking) VALUES ';
+
+            //var_dump($puntenEnCommentaarThreeDimensionalArray);
+            //var_dump(array_keys($puntenEnCommentaarThreeDimensionalArray)); // doelstellingIds
+            //var_dump(array_column($puntenEnCommentaarThreeDimensionalArray,0)); // punten
+            //var_dump(array_column($puntenEnCommentaarThreeDimensionalArray,1)); // commentaar
+
+            $first = true;
+            foreach($puntenEnCommentaarThreeDimensionalArray as $doelstellingsId => $scoreEnOpmerking){
+                if($scoreEnOpmerking[0] !== null) {
+                    if($first == true){
+                        $sql .= '(:rapportId, '.$doelstellingsId.', \''.$scoreEnOpmerking[0].'\', "'.$scoreEnOpmerking[1]. '")';
+                    } else {
+                        $sql .= ', (:rapportId, '.$doelstellingsId.', \''.$scoreEnOpmerking[0].'\', "'.$scoreEnOpmerking[1]. '")';
+                    }
+                    $first = false;
+                }
+            }
+
+            $sql .= ";";
+
+            $stmt = $conn->prepare($sql);
+            $stmt->bindParam(':rapportId', $rapportId);
+
+            $stmt->execute();
+        } catch (PDOException $e) {
+            die($e->getMessage());
+        }
     }
 
     //////////////////////////////////////////////
