@@ -333,7 +333,6 @@ if ($_SERVER['REQUEST_METHOD'] == 'GET') {
 
               array_push($report->modules, $moduleObjToPush);
           }
-
           echo json_encode($report);
 
           http_response_code(200);
@@ -859,13 +858,21 @@ if ($_SERVER['REQUEST_METHOD'] == 'GET') {
 
         if (!empty($postBody)) {
             $reportId = $postBody->reportId;
+            $reportName = $postBody->name;
             $startdate = $postBody->startdate;
+            $enddate = $postBody->enddate;
+            $commentaarAlgemeen = $postBody->commentaarAlgemeen;
+            $commentaarKlassenraad = $postBody->commentaarKlassenraad;
             $enddate = $postBody->enddate;
             $startdate = preg_replace('#(\d{2})/(\d{2})/(\d{4})#', '$3-$2-$1', $startdate);
             $enddate = preg_replace('#(\d{2})/(\d{2})/(\d{4})#', '$3-$2-$1', $enddate);
 
+            $punten = [];
+            $modules = [];
+
             foreach($postBody->modules as $module){
                 $doelstellingscategories = $module->doelstellingscategories;
+                $modules[$module->id] = $module->commentaar;
                 foreach($doelstellingscategories as $doelstellingscat){
                     $doelstellingen = $doelstellingscat->doelstellingen;
                     foreach($doelstellingen as $doelstelling){
@@ -874,7 +881,8 @@ if ($_SERVER['REQUEST_METHOD'] == 'GET') {
                 }
             }
 
-            $userDAO->updateReport($reportId, $postBody->name,$date, $beoordeeldeAspecten);
+            $userDAO->updateRapport($reportId, $reportName, $startdate, $enddate, $modules, $punten, $commentaarAlgemeen, $commentaarKlassenraad);
+            // TODO werkt nog niet
         }
         /*} else {
           echo $notAuthorizedErr;
