@@ -1,7 +1,23 @@
 import axios from 'axios'
 
+var myStorage = window.localStorage
+
 var Api = (function () {
   var my = {}
+
+  my.login = function (username, password, cb) {
+    axios.post('http://146.185.183.217/api/auth', {
+      username: username,
+      password: password
+    })
+      .then(function (response) {
+        myStorage.setItem('token', response.data)
+        return cb(response.data)
+      })
+      .catch(function (error) {
+        console.log(error)
+      })
+  }
 
   my.getStudentsWithEdu = function (callback) {
     axios.get('http://146.185.183.217/api/studentenMetOpleiding')
