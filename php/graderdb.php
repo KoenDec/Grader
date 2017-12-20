@@ -1333,6 +1333,5 @@ class UserDAO
         } catch (PDOException $e) {
             die($e->getMessage());
         }
-
     }
 }

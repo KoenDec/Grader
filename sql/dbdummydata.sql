@@ -1775,7 +1775,7 @@ INSERT INTO aspecten(evaluatiecriteriumId, name, creatorId) VALUES
     (410, 'Blijf niet op één en dezelfde plaats staan, wissel van plaats, zorg dat je de klanten steeds in de gaten kan houden', 3),
     (411, 'Kan een klant die zich verdacht gedraagt herkennen', 3),
     (412, 'Spreekt de verdachte aan in het bijzijn van een collega', 3),
-    (412, 'Probeert de klant virjwillig te laten meewerken', 3),
+    (412, 'Probeert de klant vrijwillig te laten meewerken', 3),
     (413, 'Gaat de confrontatie niet aan bij agressie', 3),
     (413, 'Sluit de klant zeker niet op', 3),
     (413, 'Belt de politie en doet aangifte', 3),
@@ -1794,11 +1794,11 @@ INSERT INTO studenten_modules(studentId, moduleId, opleidingId) VALUES
 	(9, 1, null),
     (10, 7, null),
     (9, 3, 1),
-    (10, 3, 3),
+    (10, 11, null),
     (8, 3, 2),
-    (14, 11, 6),
-    (14, 12, 6),
-    (14, 13, 6);
+    (14, 11, null),
+    (14, 12, null),
+    (14, 13, null);
 
 
 INSERT INTO evaluaties(name, studentId, moduleId, datum) VALUES
