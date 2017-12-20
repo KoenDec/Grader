@@ -882,6 +882,7 @@ if ($_SERVER['REQUEST_METHOD'] == 'GET') {
             }
 
             $userDAO->updateRapport($reportId, $reportName, $startdate, $enddate, $modules, $punten, $commentaarAlgemeen, $commentaarKlassenraad);
+            // TODO werkt nog niet
         }
         /*} else {
           echo $notAuthorizedErr;

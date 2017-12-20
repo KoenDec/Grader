@@ -1379,7 +1379,7 @@ class UserDAO
             $sql = 'UPDATE rapporten SET name = :name, startdate = :startdate, enddate = :enddate, commentaarKlassenraad = :commentaarKlassenraad, commentaarAlgemeen = :commentaarAlgemeen WHERE id = :rapportId';
             $stmt = $conn->prepare($sql);
             $stmt->bindParam(':rapportId', $rapportId);
-            $stmt->bindParam(':rapportName', $rapportName);
+            $stmt->bindParam(':name', $rapportName);
             $stmt->bindParam(':startdate', $startdatum);
             $stmt->bindParam(':enddate', $einddatum);
             $stmt->bindParam(':commentaarKlassenraad', $commentaarKlassenraad);
