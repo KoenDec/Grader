@@ -705,70 +705,15 @@ if ($_SERVER['REQUEST_METHOD'] == 'GET') {
                 }
             }
 
-            $report = (object)[
-                'name' => $postBody->name,
-                'klas' => $postBody->klas,
-                'modules' => $postBody->modules,
-                'commentaarAlgemeen' => $postBody->commentaarAlgemeen,
-                'commentaarKlassenraad' => $postBody->commentaarKlassenraad
-            ];
+            //echo json_encode($punten);
 
-            var_dump($report);
+            //echo json_encode($postBody);
 
-            /*
-             * $rapport = $userDAO->getRapport($rapportid);
-            $modules = $userDAO->getRapportmodules($rapport->id);
+            $userDAO->insertNewReport($postBody->name, $postBody->studentId,$postBody->commentaarKlassenraad, $postBody->commentaarAlgemeen);
+            $rapportId = $userDAO->getRapportId($postBody->name);
+            $userDAO->insertRapportscores($rapportId, $punten);
 
-             * foreach($modules as $rapportmodule){
-                $module = $userDAO->getModule($rapportmodule->moduleId);
-
-                $moduleObjToPush = (object)[
-                    'id' => $module->id,
-                    'naam' => $module->name,
-                    'doelstellingscategories' => array(),
-                    'commentaar' => $rapportmodule->commentaar
-                ];
-
-                $doelstellingscategories = $userDAO->getDoelstellingscategoriesInModule($module->id);
-
-                foreach($doelstellingscategories as $doelstellingscategorie){
-
-                    $doelstellingscategorieObjToPush = (object)[
-                        'id' => $doelstellingscategorie->id,
-                        'name' => $doelstellingscategorie->name,
-                        'doelstellingen' => array()
-                    ];
-
-                    $doelstellingen = $userDAO->getDoelstellingenInDoelstellingscategorie($doelstellingscategorie->id);
-
-                    foreach($doelstellingen as $doelstelling) {
-                        $ratingObj = $userDAO->getRating($rapport->id, $doelstelling->id);
-                        $score = null;
-                        $opmerking = null;
-                        if($ratingObj != null) {
-                            $score = $ratingObj->score;
-                            $opmerking = $ratingObj->opmerking;
-                        }
-
-                        $doelstellingObjToPush = (object)[
-                            'id' => $doelstelling->id,
-                            'name' => $doelstelling->name,
-                            'score' => $score,
-                            'opmerking' => $opmerking
-                        ];
-
-                        array_push($doelstellingscategorieObjToPush->doelstellingen, $doelstellingObjToPush);
-                    }
-
-                    array_push($moduleObjToPush->doelstellingscategories, $doelstellingscategorieObjToPush);
-                }
-
-                array_push($report->modules, $moduleObjToPush);
-            }
-
-            echo json_encode($report);
-
-            http_response_code(200);*/
+            http_response_code(200);
         } else {
             echo $notFoundErr;
             http_response_code(405);
