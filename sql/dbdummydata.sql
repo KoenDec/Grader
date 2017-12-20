@@ -24,7 +24,7 @@ INSERT INTO users(email, firstname, lastname, password, gender, language, status
     ('student13@hotmail.com', 'Student', 'Hulpkelner', 'Student', 'M', 'NL', 'ACTIVE'), -- 18
     ('student14@hotmail.com', 'Student', 'Kelner', 'Student', 'M', 'NL', 'ACTIVE'), -- 18
     ('student15@hotmail.com', 'Student', 'Snackbar tearoom', 'Student', 'M', 'NL', 'ACTIVE'); -- 19
-    
+
 INSERT INTO admins(adminId) VALUES (1),(2),(3), (11);
 
 INSERT INTO teachers(teacherId) VALUES(4), (5), (12), (13);
@@ -120,7 +120,7 @@ INSERT INTO doelstellingscategories(name, moduleId, creatorId) VALUES
     ('Eigen werkzaamheden organiseren', 13, 3),
     ('Voegwerken voorbereiden', 13, 3), -- 55
     ('Elastische voegwerken uitvoeren', 13, 3);
-    
+
 INSERT INTO doelstellingen(doelstellingscategorieId,name,creatorId) VALUES
 	(1,'Ergonomisch werken',3), -- 1
 	(1,'Economisch werken',3),
@@ -164,7 +164,7 @@ INSERT INTO doelstellingen(doelstellingscategorieId,name,creatorId) VALUES
 	(56, 'Kleuren combineren', 3), -- 40
     (56, 'Voegwerken uitvoeren', 3),
     (56, 'Constructie-elementen opspuiten', 3),
-	(56, 'Gevelelementen aansluiten', 3), 
+	(56, 'Gevelelementen aansluiten', 3),
     (56, 'Voegwerken herstellen en afwerken', 3),
     (8, 'Kijk- en luistervaardigheid', 3), -- 45
     (8, 'Leesvaardigheid', 3),
@@ -213,7 +213,7 @@ INSERT INTO doelstellingen(doelstellingscategorieId,name,creatorId) VALUES
     (26, 'Oppervlakte voorbehandelen', 3),
     (26, 'Tegels selecteren', 3), -- 90
     (26, 'Species aanmaken', 3),
-    (26, 'Tegels plaatsen', 3), 
+    (26, 'Tegels plaatsen', 3),
     (27, 'Ergonomisch werken', 3),
     (27, 'Economisch werken', 3),
     (27, 'Persoonlijke beschermingsmiddelen gebruiken', 3), -- 95
@@ -322,7 +322,7 @@ INSERT INTO doelstellingen(doelstellingscategorieId,name,creatorId) VALUES
     (45, 'Afval- en restproducten sorteren', 3),
     (45, 'Gereedschap en machines gebruiken', 3),
     (45, 'Gereedschap en machines reinigen', 3), -- 200
-    (46, 'Met zin voor precisie werken', 3), 
+    (46, 'Met zin voor precisie werken', 3),
     (46, 'Zin voor samenwerking tonen', 3),
     (46, 'Doorzettingsvermogen tonen', 3),
     (46, 'Opgelegde taken uitvoeren', 3),
@@ -352,7 +352,7 @@ INSERT INTO doelstellingen(doelstellingscategorieId,name,creatorId) VALUES
     (51, 'Afval- en restproducten sorteren', 3),
     (51, 'Gereedschap en machines gebruiken', 3),
     (51, 'Gereedschap en machines reinigen', 3), -- 230
-    (52, 'Met zin voor precisie werken', 3), 
+    (52, 'Met zin voor precisie werken', 3),
     (52, 'Zin voor samenwerking tonen', 3),
     (52, 'Doorzettingsvermogen tonen', 3),
     (53, 'Dimensies (lengte, breedte, dikte, oppervlakte, inhoud, ...) meten en berekenen', 3),
@@ -360,7 +360,7 @@ INSERT INTO doelstellingen(doelstellingscategorieId,name,creatorId) VALUES
     (53, 'Technische tekeningen gebruiken', 3),
     (54, 'Eigen werkzaamheden voorbereiden', 3),
     (54, 'Muren metselen in gevelstenen en snelbouwstenen', 3),
-    (54, 'Eigen werkzaamheden evalueren', 3), 
+    (54, 'Eigen werkzaamheden evalueren', 3),
     (54, 'Eigen werkzaamheden bijsturen', 3), -- 240
     (55, 'Werkzone afschermen', 3),
     (55, 'Oude voegvulling verwijderen', 3),
@@ -369,7 +369,7 @@ INSERT INTO doelstellingen(doelstellingscategorieId,name,creatorId) VALUES
     (55, 'Muuruitslag evalueren', 3), -- 245
     (55, 'Herstellen in metselwerk uitvoeren', 3),
     (56, 'Diepe voegen voorvullen', 3);
-    
+
 INSERT INTO evaluatiecriteria(doelstellingId, name, creatorId) VALUES
 	(1, 'correcte werkhouding toepassen bij het bij het reinigen van groenten en fruit', 3), -- 1
     (1, 'de juiste hef-en tiltechnieken toepassen bij het verplaatsen van (kratten met) groenten en fruit', 3),
@@ -406,7 +406,7 @@ INSERT INTO evaluatiecriteria(doelstellingId, name, creatorId) VALUES
     (8, 'de vaatwasmachine reinigen volgens de voorschriften op de de veiligheidsinstructiekaart', 3),
     (9, 'afval zoals PMD, papier, karton, glas, GFT, restafval, gebroken servies,  … correct sorteren', 3),
     (10, 'storingen of afwijkingen aan toestellen in de vaatwasruimte melden', 3), -- 35
-    (86, 'vlakheid van de muur', 3), 
+    (86, 'vlakheid van de muur', 3),
     (86, 'vlakheid van de vloer', 3),
     (87, 'vloer beschermen', 3),
     (87, 'aansluiting met plafond of andere muur beschermen', 3),
@@ -636,7 +636,7 @@ INSERT INTO evaluatiecriteria(doelstellingId, name, creatorId) VALUES
     (237, 'Noodzakelijke machines bepalen', 3),
     (237, 'Eenvoudig stappenplan', 3),
     (239, 'Tussentijdse controle:', 3), -- 265
-    (239, 'Eindcontroles:', 3), 
+    (239, 'Eindcontroles:', 3),
     (240, 'Bijsturingen in functie van de tussentijdse controles', 3),
     (240, 'Bijsturingen in functie van de eindcontrole', 3),
     (241, '', 3),
@@ -784,12 +784,12 @@ INSERT INTO evaluatiecriteria(doelstellingId, name, creatorId) VALUES
     (152, 'Verdacht gedrag herkennen', 3),
 	(153, 'Kan de huisregels bij verdacht gedrag omschrijven', 3),
     (153, 'Kan de huisregels bij verdacht gedrag toepassen', 3);
-    
+
 INSERT INTO aspecten(evaluatiecriteriumId, name, creatorId) VALUES
     (36, 'controleert en beoordeelt de vlakheid van de muur', 3), -- 1
-    (36, 'controleert en beoordeelt de loodrechtheid van de muur', 3), 
-    (36, 'controleert en beoordeelt de staat van de muur (gebreken, beschadigingen, vochtplekken, ...)', 3), 
-    (37, 'controleert en beoordeelt de vlakheid va nde vloer', 3), 
+    (36, 'controleert en beoordeelt de loodrechtheid van de muur', 3),
+    (36, 'controleert en beoordeelt de staat van de muur (gebreken, beschadigingen, vochtplekken, ...)', 3),
+    (37, 'controleert en beoordeelt de vlakheid va nde vloer', 3),
     (37, 'controleert en beoordeelt de loodrechtheid van de vloer', 3), -- 5
     (37, 'controleert en beoordeelt de staat van de vloer (gebreken, beschadigingen, vochtplekken, ...)', 3),
     (38, 'beschermt de vloer waar nodig met karton of papier', 3),
@@ -1270,7 +1270,7 @@ INSERT INTO aspecten(evaluatiecriteriumId, name, creatorId) VALUES
     (245, 'Volgt de afgesproken procedures', 3),
     (245, 'Past de voorschriften met betrekking tot netheid en hygiëne op de werkplek toe', 3),
     (246, 'Gebruikt de veiligheidsinstructiekaarten vor aanvang van de werkzaamheden', 3),
-    (246, 'Volgt de op te nemen acties van de VIK correct op', 3), 
+    (246, 'Volgt de op te nemen acties van de VIK correct op', 3),
     (246, 'Anticipeert op mogelijk gevaarlijke situaties (preventief)', 3), -- 485
     (247, 'Sorteert afval zoals pmd, papier, karton, restafval, ... correct', 3),
     (247, 'Sorteert restproducten zoals cement, kleurstof, detergent, reinigingsproducten, ... correct', 3),
@@ -1381,7 +1381,7 @@ INSERT INTO aspecten(evaluatiecriteriumId, name, creatorId) VALUES
     (282, 'Kan de nieuwe voeg aanbrengen', 3),
     (282, 'Kan de nieuwe voeg op de juiste manier afwerken', 3),
     (282, 'Kan de juiste producten gebruiken om de voeg af te werken', 3),
-    
+
     (283, 'Tijdens een verkoop stevig op twee benen staan', 3),
     (283, 'Tijdens een verkoop een rechte houding aannemen', 3),
     (283, 'Tijdens een verkoop schouders laten ontspannen', 3),
@@ -1780,7 +1780,7 @@ INSERT INTO aspecten(evaluatiecriteriumId, name, creatorId) VALUES
     (413, 'Sluit de klant zeker niet op', 3),
     (413, 'Belt de politie en doet aangifte', 3),
     (413, 'Bedreigt en beschuldigt de klant nooit', 3);
-    
+
 INSERT INTO studenten_modules(studentId, moduleId, opleidingId) VALUES
 	-- REAL DATA
     (6,1,null),
@@ -1789,7 +1789,7 @@ INSERT INTO studenten_modules(studentId, moduleId, opleidingId) VALUES
     (7,4,2),
     (7,5,2),
     (7,6,null),
-    
+
     -- RANDOM DATA: student 3 (id 8) volgt kapper, 4 (id 9) volgt kok en 5 (id 10) tegelzetter. 6 (id 13) is voeger
 	(9, 1, null),
     (10, 7, null),
@@ -1804,10 +1804,10 @@ INSERT INTO studenten_modules(studentId, moduleId, opleidingId) VALUES
 INSERT INTO evaluaties(name, studentId, moduleId, datum) VALUES
 	('opdracht les 1', 10, 7, "2017-09-22"),
 	('opdracht les 2', 10, 7, "2017-09-29");
-    
+
 /*INSERT INTO evaluaties_criteria(evaluatieId, criteriumId, criteriumBeoordeling) VALUES
 	();*/
-    
+
 INSERT INTO evaluaties_aspecten(evaluatieId, aspectId, aspectBeoordeling) VALUES
 	(1, 1, TRUE),
     (1, 2, TRUE),
@@ -1914,10 +1914,10 @@ INSERT INTO evaluaties_aspecten(evaluatieId, aspectId, aspectBeoordeling) VALUES
     (2, 51, TRUE),
     (2, 52, TRUE);
 
-INSERT INTO rapporten(studentId, name, class, commentaarAlgemeen, commentaarKlassenraad) VALUES
-	(6, '2016-2017 TRIMESTER 3', 'Klas 2', 'Faisal voldoet aan de voorwaarden van het voltijds engagement door bijkomende lessen Nederlands te volgen.',
+INSERT INTO rapporten(studentId, name, class, startdate, enddate, commentaarAlgemeen, commentaarKlassenraad) VALUES
+	(6, '2016-2017 TRIMESTER 3', 'Klas 2', '2017-02-02', '2017-08-02', 'Faisal voldoet aan de voorwaarden van het voltijds engagement door bijkomende lessen Nederlands te volgen.',
 		'Je bent een aangename leerling met een grote inzet. \n\n Proficiat! Prettige vakantie!'),
-    (7, '2016-2017 TRIMESTER 3', 'Klas 2', null, 'Geen evaluatie mogelijk wegens afwezigheden.');
+    (7, '2016-2017 TRIMESTER 3', 'Klas 2', '2017-02-02', '2017-08-02', null, 'Geen evaluatie mogelijk wegens afwezigheden.');
 
 INSERT INTO rapporten_modules(rapportId, moduleId, commentaar) VALUES -- ? TODO ? merge table with studenten_modules ?
 	(1, 3, null),
@@ -1962,7 +1962,7 @@ INSERT INTO rapporten_scores(rapportId, doelstellingId, score, opmerking) VALUES
 	(1, 83, 'G', null),
 	(1, 84, 'ZG', null),
 	(1, 85, 'G', null);
-    
+
 INSERT INTO meldingen(teacherId, titel, tekst) VALUES
 	(4, "welkom", "het CLW heet iedereen welkom"),
     (4, "Nulla labortis", "Nulla lobortis aliquam placerat. Quisque at justo maximus, commodo diam sit amet, feugiat arcu. Mauris non suscipit ex, vitae tincidunt magna.
@@ -1972,7 +1972,7 @@ INSERT INTO meldingen(teacherId, titel, tekst) VALUES
             Nullam elementum venenatis commodo. Etiam vel tristique massa. Etiam libero mauris, posuere sed massa nec, tristique vehicula lacus.
             Donec lacinia, lorem et mattis tincidunt, lectus metus imperdiet mi, in tempor turpis lectus id lacus.."),
 	(5, "pan meebrengen", "morgen iedereen een pan meebrengen naar de les aub");
-    
+
 INSERT INTO meldingen_opleidingen(meldingId,opleidingId) VALUES
 	(1, 1),
     (1, 2),
