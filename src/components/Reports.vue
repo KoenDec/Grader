@@ -14,7 +14,7 @@
                       >
                       </v-text-field>
                       <br/>
-                      Start datum:
+                      Startdatum:
                       <v-layout row wrap>
                           <v-flex>
                               <v-menu
@@ -33,6 +33,7 @@
                                           label="Datum"
                                           v-model="dateFormatted1"
                                           prepend-icon="event"
+                                          hint="inclusief"
                                           @blur="date1 = parseDate(dateFormatted1)"
                                   ></v-text-field>
                                   <v-date-picker v-model="date1" @input="dateFormatted1 = formatDate($event)" no-title scrollable actions>
@@ -48,7 +49,7 @@
                           </v-flex>
                       </v-layout>
                       <br/>
-                      Eind datum:
+                      Einddatum:
                       <v-layout row wrap>
                           <v-flex>
                               <v-menu
@@ -67,6 +68,7 @@
                                           label="Datum"
                                           v-model="dateFormatted2"
                                           prepend-icon="event"
+                                          hint="inclusief"
                                           @blur="date2 = parseDate(dateFormatted2)"
                                   ></v-text-field>
                                   <v-date-picker v-model="date2" @input="dateFormatted2 = formatDate($event)" no-title scrollable actions>
@@ -143,6 +145,8 @@
                  <v-flex>
                    <v-btn @click="" large color="primary"><v-icon>get_app</v-icon></v-btn>
                    <v-btn @click="print" large color="primary"><v-icon>print</v-icon></v-btn>
+                   <v-btn v-if="!edit" @click="edit = true" large class="right" color="primary"><v-icon>edit</v-icon></v-btn>
+                   <v-btn v-if="edit" @click="edit = false" large class="right" color="primary"><v-icon>save</v-icon></v-btn>
                  </v-flex>
                </v-card>
              </v-flex>
@@ -179,6 +183,7 @@
                     <v-card color="teal" class="white--text" fill-height height="100%">
                       <v-container fluid grid-list-lg pb-0>
                           <v-select
+                                  v-if="edit"
                                   v-model="selectedScore[doelstelling.id]"
                                   :items="possibleScores"
                                   :item-text="doelstelling.score"
@@ -188,6 +193,7 @@
                                   dark
                                   required
                           ></v-select>
+                          <p v-if="!edit">{{selectedScore[doelstelling.id]}}</p>
                       </v-container>
                     </v-card>
                   </v-flex>
@@ -202,13 +208,31 @@
                   <v-container fluid grid-list-lg>
                     <v-chip label color="yellow" text-color="black" width="100%">
                       <v-icon left>label</v-icon>
-                      <div class="mr-4">Algemene commentaar</div>
-                      <div>{{currentreport.commentaarAlgemeen}}</div>
+                      <div style="display: block" class="mr-4">Algemene commentaar</div>
+                      <div v-if="!edit">{{currentreport.commentaarAlgemeen}}</div>
+                        <v-flex v-if="edit">
+                            <v-text-field
+                                name="Algemene commentaar"
+                                label="commentaar"
+                                id="algemeneCommentaar"
+                                type="text"
+                            >
+                            </v-text-field>
+                        </v-flex>
                     </v-chip>
                     <v-chip label color="yellow" text-color="black">
                       <v-icon left>label</v-icon>
                       <div class="mr-4">Klassenraad commentaar</div>
-                      <div>{{currentreport.commentaarKlassenraad}}</div>
+                      <div v-if="!edit">{{currentreport.commentaarKlassenraad}}</div>
+                        <v-flex v-if="edit">
+                            <v-text-field
+                                    name="Klassenraad commentaar"
+                                    label="commentaar"
+                                    id="klassenraadCommentaar"
+                                    type="text"
+                            >
+                            </v-text-field>
+                        </v-flex>
                     </v-chip>
                   </v-container>
                 </v-card>
@@ -217,7 +241,6 @@
           </template>
         </v-flex>
     </v-layout>
-    {{Opleidingen}}
   </main>
 </template>
 
@@ -242,7 +265,7 @@ export default {
       headers: {
         'Content-Type': 'text/plain'
       },
-      possibleScores: ['ZG', 'G', 'V', 'OV'],
+      possibleScores: ['G', 'V', 'OV', 'RO', 'geen score'],
       reportGen: false,
       date1: null,
       dateFormatted1: null,
@@ -252,7 +275,8 @@ export default {
       menu1: false,
       menu2: false,
       opleiding: null,
-      reportName: null
+      reportName: null,
+      edit: false
     }
   },
   methods: {
@@ -263,12 +287,10 @@ export default {
       var self = this
       this.$http.getStudent(payload, function (data) {
         self.currentstudent = data
-        console.log(self)
         self.getCurrentStudentReports()
       })
     },
     getCurrentStudentReports () {
-      console.log(this.currentstudent)
       var self = this
       this.$http.getStudentReports(self.currentstudent.student.id, function (data) {
         self.current_student_reports = data
@@ -278,7 +300,6 @@ export default {
       var self = this
       this.$http.getStudentReport(rapportid, function (data) {
         self.currentreport = data
-        console.log(data)
         for (var i = 0; i < data.modules.length; i++) {
           for (var j = 0; j < data.modules[i].doelstellingscategories.length; j++) {
             for (var k = 0; k < data.modules[i].doelstellingscategories[j].doelstellingen.length; k++) {
@@ -288,7 +309,6 @@ export default {
             }
           }
         }
-        console.log(self.selectedScore)
       })
     },
     formatDate (date) {
@@ -308,11 +328,13 @@ export default {
     generateReport: function () {
       var self = this
       self.reportGen = false
-      console.log(self.reportName)
-      if (self.dateFormatted1 !== null && self.dateFormatted2 !== null && self.reportName !== null) {
+      var d1 = self.dateFormatted1.split('/')
+      var d2 = self.dateFormatted2.split('/')
+      var start = new Date(d1[2], parseInt(d1[1]) - 1, d1[0])
+      var end = new Date(d2[2], parseInt(d2[1]) - 1, d2[0])
+      if (self.dateFormatted1 !== null && self.dateFormatted2 !== null && self.reportName !== null && start < end) {
         self.reportError = null
         self.$http.getEvalForStudent(self.currentstudent.student.id, function (data) {
-          console.log(data)
           self.opleiding = data
           self.currentreport = {}
           self.currentreport['commentaarAlgemeen'] = ''
@@ -332,18 +354,75 @@ export default {
               }
             }
           }
+          self.calculateScores(start, end)
           self.currentreport['modules'] = modules.slice().reverse()
         })
       } else if (self.dateFormatted1 === null || self.dateFormatted2 === null) {
         self.reportError = 'Beide Datums moeten worden ingevuld'
+      } else if (start >= end) {
+        self.reportError = 'De startdatum kan niet na de einddatum komen'
       } else {
         self.reportError = 'Je moet een rapportnaam opgeven'
       }
-    }
-  },
-  computed: {
-    Opleidingen () {
-
+    },
+    calculateScores: function (start, end) {
+      var self = this
+      var scores = {}
+      self.$http.getAllEvalsByStudent(self.currentstudent.student.id, function (data) {
+        for (var i = 0; i < self.currentreport.modules.length; i++) {
+          for (var j = 0; j < self.currentreport.modules[i].doelstellingscategories.length; j++) {
+            for (var k = 0; k < self.currentreport.modules[i].doelstellingscategories[j].doelstellingen.length; k++) {
+              var doelstelling = self.currentreport.modules[i].doelstellingscategories[j].doelstellingen[k]
+              var doelstellingId = doelstelling.id
+              for (var l = 0; l < data.length; l++) {
+                var c = data[l].date.split('/')
+                var check = new Date(c[2], parseInt(c[1]) - 1, c[0])
+                if (check >= start && check <= end) {
+                  for (var m = 0; m < data[l].doelstellingscategories.length; m++) {
+                    for (var n = 0; n < data[l].doelstellingscategories[m].doelstellingen.length; n++) {
+                      var doel = data[l].doelstellingscategories[m].doelstellingen[n]
+                      var doelId = doel.id
+                      if (doelId === doelstellingId) {
+                        scores[doelId] = []
+                        for (var o = 0; o < doel.evaluatiecriteria.length; o++) {
+                          for (var p = 0; p < doel.evaluatiecriteria[o].beoordelingsaspecten.length; p++) {
+                            scores[doelId].push(doel.evaluatiecriteria[o].beoordelingsaspecten[p].score)
+                          }
+                        }
+                      }
+                    }
+                  }
+                }
+              }
+              doelstelling.score = self.getAvgScore(scores[doelstellingId])
+              self.selectedScore[doelstellingId] = doelstelling.score
+            }
+          }
+        }
+        self.$forceUpdate()
+      })
+    },
+    getAvgScore: function (scores) {
+      if (scores) {
+        var l = scores.length
+        var sum = 0
+        for (var i = 0; i < l; i++) {
+          sum += parseInt(scores[i])
+        }
+        if (sum / l >= 0.75) {
+          return this.possibleScores[0]
+        } else if (sum / l >= 0.50 && sum / l < 0.75) {
+          return this.possibleScores[1]
+        } else if (sum / l >= 0.25 && sum / l < 0.50) {
+          return this.possibleScores[2]
+        } else if (sum / l < 0.25) {
+          return this.possibleScores[3]
+        } else if (isNaN(sum / l)) {
+          return this.possibleScores[4]
+        }
+      } else {
+        return this.possibleScores[4]
+      }
     }
   },
   created () {

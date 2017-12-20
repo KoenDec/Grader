@@ -226,6 +226,20 @@ var Api = (function () {
       })
   }
 
+  my.getAllEvalsByStudent = function (studId, cb) {
+    axios.get('http://146.185.183.217/api/studentAllEvaluationsFull', {
+      params: {
+        student: studId
+      }
+    })
+      .then(function (response) {
+        return cb(response.data)
+      })
+      .catch(function (error) {
+        console.log(error)
+      })
+  }
+
   my.deleteEval = function (id, cb) {
     axios.delete('http://146.185.183.217/api/deleteEvaluatie', {
       params: {
