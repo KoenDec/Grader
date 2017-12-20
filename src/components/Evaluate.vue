@@ -37,10 +37,9 @@
         <v-layout row-wrap>
             <v-flex xs12 sm4 offset-xs1>
                 <v-select
-                        label="Select"
+                        label="Selecteer een module"
                         v-bind:items="modulesDropdown"
                         v-model="selectedModuleName"
-                        hint="Selecteer een module"
                         persistent-hint
                         @input="selectItem()"
                 ></v-select>
