@@ -1224,7 +1224,7 @@ class UserDAO
         }
     }
 
-    public static function insertRapportModules($rapportId, $moduleIdEnCommentaarArray)
+    public static function insertRapportModules($rapportId, $moduleIdEnCommentaarKeyValueArray)
     {
         try {
             $conn = graderdb::getConnection();
@@ -1232,7 +1232,7 @@ class UserDAO
             $sql = 'INSERT INTO rapporten_modules (rapportId, moduleId, commentaar) VALUES ';
 
             $first = true;
-            foreach($moduleIdEnCommentaarArray as $moduleId => $commentaar){
+            foreach($moduleIdEnCommentaarKeyValueArray as $moduleId => $commentaar){
                 if($first == true){
                     $sql .= '(:rapportId, '.$moduleId.', "'.$commentaar. '")'; // TODO parameter binding
                 } else {
@@ -1365,6 +1365,55 @@ class UserDAO
             }
 
             if(sizeof($newAspects) > 0) self::insertAspectbeoordelingen($evaluatieId, $newAspects);
+
+        } catch (PDOException $e) {
+            die($e->getMessage());
+        }
+    }
+
+    public static function updateRapport($rapportId, $rapportName, $startdatum, $einddatum, $moduleIdsEnCommentaarKeyValueArray, $scoresEnOpmerkingenThreeDimensionalArray, $commentaarAlgemeen, $commentaarKlassenraad)
+    {
+        try {
+            $conn = graderdb::getConnection();
+
+            $sql = 'UPDATE rapporten SET name = :name, startdate = :startdate, enddate = :enddate, commentaarKlassenraad = :commentaarKlassenraad, commentaarAlgemeen = :commentaarAlgemeen WHERE id = :rapportId';
+            $stmt = $conn->prepare($sql);
+            $stmt->bindParam(':rapportId', $rapportId);
+            $stmt->bindParam(':rapportName', $rapportName);
+            $stmt->bindParam(':startdate', $startdatum);
+            $stmt->bindParam(':enddate', $einddatum);
+            $stmt->bindParam(':commentaarKlassenraad', $commentaarKlassenraad);
+            $stmt->bindParam(':commentaarAlgemeen', $commentaarAlgemeen);
+
+            $stmt->execute();
+
+            $moduleIds = array_keys($moduleIdsEnCommentaarKeyValueArray);
+            $moduleCommentaren = array_values($moduleIdsEnCommentaarKeyValueArray);
+
+            foreach($moduleIdsEnCommentaarKeyValueArray as $moduleId => $moduleCommentaar)
+            {
+                $sql2 = 'UPDATE rapporten_modules SET commentaar = :moduleCommentaar WHERE moduleId = :moduleId';
+                $stmt2 = $conn->prepare($sql2);
+                $stmt2->bindParam(':moduleCommentaar', $moduleCommentaar);
+                $stmt2->bindParam(':moduleId', $moduleId);
+
+                $stmt2->execute();
+            }
+
+            foreach($scoresEnOpmerkingenThreeDimensionalArray as $doelstellingId => $scoreEnOpmerking)
+            {
+                $score = $scoreEnOpmerking[0];
+                $opmerking = $scoreEnOpmerking[1];
+
+                $sql3 = 'UPDATE rapporten_scores SET score = :score, opmerking = :opmerking WHERE doelstellingId = :doelstellingId';
+                $stmt3 = $conn->prepare($sql3);
+                $stmt3->bindParam(':score', $score);
+                $stmt3->bindParam(':opmerking', $opmerking);
+                $stmt3->bindParam(':doelstellingId', $doelstellingId);
+
+                $stmt3->execute();
+            }
+
 
         } catch (PDOException $e) {
             die($e->getMessage());
