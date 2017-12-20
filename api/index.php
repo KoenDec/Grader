@@ -1,6 +1,6 @@
 <?php
-require_once('graderdb.php');
-require_once('Login.php');
+require_once('../php/graderdb.php');
+require_once('../php/Login.php');
 require_once('token.php');
 
 header("Access-Control-Allow-Origin: *");
@@ -66,22 +66,98 @@ if ($_SERVER['REQUEST_METHOD'] == 'GET') {
         http_response_code(401);
       }*/
   } else if ($_GET['url'] == 'studentEvaluations'){
-      if (isset($_GET['student']) && isset($_GET['module'])) {
-          $studentId = $_GET['student'];
-          $moduleId = $_GET['module'];
-          $evaluaties = $userDAO->getEvaluaties($studentId, $moduleId);
+        if (isset($_GET['student']) && isset($_GET['module'])) {
+            $studentId = $_GET['student'];
+            $moduleId = $_GET['module'];
+            $evaluaties = $userDAO->getEvaluaties($studentId, $moduleId);
 
-          $evaluations = [];
+            $evaluations = [];
 
-          foreach($evaluaties as $evaluatie){
-              array_push($evaluations, $evaluatie);
-          }
-          echo json_encode($evaluations);
-      } else {
-          echo $notFoundErr;
-          http_response_code(405);
-      }
-  } else if ($_GET['url'] == 'studentEvaluation') {
+            foreach($evaluaties as $evaluatie){
+                array_push($evaluations, $evaluatie);
+            }
+            echo json_encode($evaluations);
+        } else {
+            echo $notFoundErr;
+            http_response_code(405);
+        }
+    } else if ($_GET['url'] == 'studentAllEvaluationsFull'){
+        if (isset($_GET['student'])) {
+            $studentId = $_GET['student'];
+            $evaluaties = $userDAO->getAllEvaluaties($studentId);
+
+            $evaluations = [];
+
+            foreach($evaluaties as $evaluatie){
+                $evaluation = (object)[
+                    'id' => $evaluatie->id,
+                    'naam' => $evaluatie->name,
+                    'module' => $userDAO->getModule($evaluatie->moduleId)->name,
+                    'doelstellingscategories' => array()
+                ];
+
+                $doelstellingscategories = $userDAO->getDoelstellingscategoriesInModule($evaluatie->moduleId);
+
+                foreach($doelstellingscategories as $doelstellingscategorie){
+                    $doelstellingscategorieObjToPush = (object)[
+                        'id' => $doelstellingscategorie->id,
+                        'name' => $doelstellingscategorie->name,
+                        'doelstellingen' => array()
+                    ];
+
+                    $doelstellingen = $userDAO->getDoelstellingenInDoelstellingscategorie($doelstellingscategorie->id);
+
+                    foreach($doelstellingen as $doelstelling) {
+
+                        $doelstellingObjToPush = (object)[
+                            'id' => $doelstelling->id,
+                            'name' => $doelstelling->name,
+                            'evaluatiecriteria' => array()
+                        ];
+
+                        $evaluatiecriteria = $userDAO->getCriteriaInDoelstelling($doelstelling->id);
+
+                        foreach($evaluatiecriteria as $criterium) {
+
+                            $evaluatiecriteriumObjToPush = (object)[
+                                'id' => $criterium->id,
+                                'name' => $criterium->name,
+                                'beoordelingsaspecten' => array()
+                            ];
+
+                            $beoordelingsaspecten = $userDAO->getBeoordelingsaspectenInEvaluatiecriterium($criterium->id);
+
+                            foreach($beoordelingsaspecten as $aspect){
+
+                                $ratingObj = $userDAO->getAspectbeoordeling($evaluatie->id, $aspect->id);
+
+                                $beoordelingsAspectObjToPush = (object)[
+                                    'id' => $aspect->id,
+                                    'name' => $aspect->name,
+                                    'score' => $ratingObj->aspectBeoordeling
+                                ];
+
+                                array_push($evaluatiecriteriumObjToPush->beoordelingsaspecten, $beoordelingsAspectObjToPush);
+                            }
+
+                            array_push($doelstellingObjToPush->evaluatiecriteria, $evaluatiecriteriumObjToPush);
+                        }
+
+                        array_push($doelstellingscategorieObjToPush->doelstellingen, $doelstellingObjToPush);
+                    }
+
+                    array_push($evaluation->doelstellingscategories, $doelstellingscategorieObjToPush);
+                }
+                array_push($evaluations, $evaluation);
+            }
+            echo json_encode($evaluations);
+
+            $http_response_code(200);
+        } else {
+            echo $notFoundErr;
+            http_response_code(405);
+        }
+    } else if ($_GET['url'] == 'studentEvaluation') {
       //if (Login::isLoggedIn()) {
       if (isset($_GET['id'])) {
           $evaluatieId = $_GET['id'];
@@ -514,7 +590,7 @@ if ($_SERVER['REQUEST_METHOD'] == 'GET') {
             http_response_code(401);
         }
     } else if ($_GET['url'] == 'createModule') {
-
+        // TODO
     } else if ($_GET['url'] == 'createOpleiding') {
       $postBody = file_get_contents('php://input');
       $postBody = json_decode($postBody);
@@ -609,7 +685,99 @@ if ($_SERVER['REQUEST_METHOD'] == 'GET') {
           $quotering = $aspect->eval;
           $userDAO->saveAspecten($aspectid,$quotering);
         }*/
-    } else if ($_GET['url'] == 'createStudent') {
+    } else if ($_GET['url'] == 'saveReport') {
+        //if (Login::isLoggedIn()) {
+
+        $postBody = file_get_contents('php://input');
+        $postBody = json_decode($postBody);
+
+        if (!empty($postBody)) {
+
+            $punten = [];
+
+            foreach($postBody->modules as $module){
+                $doelstellingscategories = $module->doelstellingscategories;
+                foreach($doelstellingscategories as $doelstellingscat){
+                    $doelstellingen = $doelstellingscat->doelstellingen;
+                    foreach($doelstellingen as $doelstelling){
+                        $punten[$doelstelling->id] = array($doelstelling->score,$doelstelling->opmerking);
+                    }
+                }
+            }
+
+            $report = (object)[
+                'name' => $postBody->name,
+                'klas' => $postBody->klas,
+                'modules' => $postBody->modules,
+                'commentaarAlgemeen' => $postBody->commentaarAlgemeen,
+                'commentaarKlassenraad' => $postBody->commentaarKlassenraad
+            ];
+
+            var_dump($report);
+
+            /*
+             * $rapport = $userDAO->getRapport($rapportid);
+            $modules = $userDAO->getRapportmodules($rapport->id);
+
+             * foreach($modules as $rapportmodule){
+                $module = $userDAO->getModule($rapportmodule->moduleId);
+
+                $moduleObjToPush = (object)[
+                    'id' => $module->id,
+                    'naam' => $module->name,
+                    'doelstellingscategories' => array(),
+                    'commentaar' => $rapportmodule->commentaar
+                ];
+
+                $doelstellingscategories = $userDAO->getDoelstellingscategoriesInModule($module->id);
+
+                foreach($doelstellingscategories as $doelstellingscategorie){
+
+                    $doelstellingscategorieObjToPush = (object)[
+                        'id' => $doelstellingscategorie->id,
+                        'name' => $doelstellingscategorie->name,
+                        'doelstellingen' => array()
+                    ];
+
+                    $doelstellingen = $userDAO->getDoelstellingenInDoelstellingscategorie($doelstellingscategorie->id);
+
+                    foreach($doelstellingen as $doelstelling) {
+                        $ratingObj = $userDAO->getRating($rapport->id, $doelstelling->id);
+                        $score = null;
+                        $opmerking = null;
+                        if($ratingObj != null) {
+                            $score = $ratingObj->score;
+                            $opmerking = $ratingObj->opmerking;
+                        }
+
+                        $doelstellingObjToPush = (object)[
+                            'id' => $doelstelling->id,
+                            'name' => $doelstelling->name,
+                            'score' => $score,
+                            'opmerking' => $opmerking
+                        ];
+
+                        array_push($doelstellingscategorieObjToPush->doelstellingen, $doelstellingObjToPush);
+                    }
+
+                    array_push($moduleObjToPush->doelstellingscategories, $doelstellingscategorieObjToPush);
+                }
+
+                array_push($report->modules, $moduleObjToPush);
+            }
+
+            echo json_encode($report);
+
+            http_response_code(200);*/
+        } else {
+            echo $notFoundErr;
+            http_response_code(405);
+        }
+        /*} else {
+          echo $notLoggedInErr;
+          http_response_code(401);
+        }*/
+    } if ($_GET['url'] == 'createStudent') {
       /*$postBody = file_get_contents('php://input');
       $postBody = json_decode($postBody);
 

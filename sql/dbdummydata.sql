@@ -1,8 +1,8 @@
 use graderDB;
 
 INSERT INTO users(email, firstname, lastname, password, gender, language, status) VALUES
-	('kenny.depecker@student.howest.be', 'Kenny', 'Depecker', 'Student', 'M', 'NL', 'ACTIVE'), -- 1
-	('koen.declerck@student.howest.be', 'Koen', 'Declerck', 'Student', 'M', 'NL', 'ACTIVE'), -- 2
+	('kenny.depecker@student.howest.be', 'Kenny', 'Depecker', '$2y$10$TOVnkl/zFUzGeKIJccvdquNWiT2tFFf1Dd/HayZj8ouyUOZJtIqx.', 'M', 'NL', 'ACTIVE'), -- 1
+	('koen.declerck@student.howest.be', 'Koen', 'Declerck', '$2y$10$TOVnkl/zFUzGeKIJccvdquNWiT2tFFf1Dd/HayZj8ouyUOZJtIqx.', 'M', 'NL', 'ACTIVE'), -- 2
 	('riwan.carpentier@student.howest.be', 'Riwan', 'Carpentier', '$2y$10$TOVnkl/zFUzGeKIJccvdquNWiT2tFFf1Dd/HayZj8ouyUOZJtIqx.', 'M', 'NL', 'ACTIVE'), -- 3
 	('teacher1@hotmail.com', 'Joline', 'Soete', 'Teacher', 'F', 'NL', 'ACTIVE'), -- 4
 	('teacher2@hotmail.com', 'Teacher', 'Dummy', 'Teacher', 'M', 'NL', 'ACTIVE'), -- 5
@@ -11,7 +11,7 @@ INSERT INTO users(email, firstname, lastname, password, gender, language, status
 	('student3@hotmail.com', 'Student', 'Kapper', 'Student', 'M', 'NL', 'ACTIVE'), -- 8
 	('student4@hotmail.com', 'Student', 'Kok', 'Student', 'M', 'NL', 'ACTIVE'), -- 9
 	('student5@hotmail.com', 'Student', 'Tegelzetter', 'Student', 'M', 'NL', 'ACTIVE'), -- 10
-	('thomas.de.nil@student.howest.be', 'Thomas', 'De Nil', 'Student', 'M', 'NL', 'ACTIVE'), -- 11
+	('thomas.de.nil@student.howest.be', 'Thomas', 'De Nil', '$2y$10$TOVnkl/zFUzGeKIJccvdquNWiT2tFFf1Dd/HayZj8ouyUOZJtIqx.', 'M', 'NL', 'ACTIVE'), -- 11
 	('teacher3@hotmail.com', 'Koen', 'Feys', 'Teacher', 'M', 'NL', 'ACTIVE'), -- 12
   	('teacher4@hotmail.com', 'Ann', 'Bert', 'Teacher', 'F', 'NL', 'ACTIVE'), -- 13
     ('student6@hotmail.com', 'Student', 'Voeger', 'Student', 'M', 'NL', 'ACTIVE'), -- 14
