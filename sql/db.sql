@@ -159,7 +159,7 @@ CREATE TABLE `rapporten` (
   `id` int NOT NULL AUTO_INCREMENT PRIMARY KEY,
   `studentId` int NOT NULL,
   `name` varchar(150) NOT NULL,
-  `class` varchar(50) NOT NULL,
+  `class` varchar(50),
   `startdate` date NOT NULL,
   `enddate` date NOT NULL,
   `commentaarKlassenraad` text,

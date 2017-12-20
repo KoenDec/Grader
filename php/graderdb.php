@@ -1224,6 +1224,34 @@ class UserDAO
         }
     }
 
+    public static function insertRapportModules($rapportId, $moduleIdEnCommentaarArray)
+    {
+        try {
+            $conn = graderdb::getConnection();
+
+            $sql = 'INSERT INTO rapporten_modules (rapportId, moduleId, commentaar) VALUES ';
+
+            $first = true;
+            foreach($moduleIdEnCommentaarArray as $moduleId => $commentaar){
+                if($first == true){
+                    $sql .= '(:rapportId, '.$moduleId.', "'.$commentaar. '")'; // TODO parameter binding
+                } else {
+                    $sql .= ', (:rapportId, '.$moduleId.', "'.$commentaar. '")'; // TODO parameter binding
+                }
+                $first = false;
+            }
+
+            $sql .= ";";
+
+            $stmt = $conn->prepare($sql);
+            $stmt->bindParam(':rapportId', $rapportId);
+
+            $stmt->execute();
+        } catch (PDOException $e) {
+            die($e->getMessage());
+        }
+    }
+
     public static function insertRapportscores($rapportId, $puntenEnCommentaarThreeDimensionalArray)
     {
         // berekenen

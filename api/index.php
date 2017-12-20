@@ -1,6 +1,6 @@
 <?php
-require_once('graderdb.php');
-require_once('Login.php');
+require_once('../php/graderdb.php');
+require_once('../php/Login.php');
 require_once('token.php');
 
 header("Access-Control-Allow-Origin: *");
@@ -761,9 +761,11 @@ if ($_SERVER['REQUEST_METHOD'] == 'GET') {
         if (!empty($postBody)) {
 
             $punten = [];
+            $modules = [];
 
             foreach($postBody->modules as $module){
                 $doelstellingscategories = $module->doelstellingscategories;
+                $modules[$module->id] = $module->commentaar;
                 foreach($doelstellingscategories as $doelstellingscat){
                     $doelstellingen = $doelstellingscat->doelstellingen;
                     foreach($doelstellingen as $doelstelling){
@@ -778,6 +780,7 @@ if ($_SERVER['REQUEST_METHOD'] == 'GET') {
 
             $userDAO->insertNewReport($postBody->name, $postBody->studentId, preg_replace('#(\d{2})/(\d{2})/(\d{4})#', '$3-$2-$1', $postBody->startdate), preg_replace('#(\d{2})/(\d{2})/(\d{4})#', '$3-$2-$1', $postBody->enddate), $postBody->commentaarKlassenraad, $postBody->commentaarAlgemeen);
             $rapportId = $userDAO->getRapportId($postBody->name);
+            $userDAO->insertRapportModules($rapportId,$modules);
             $userDAO->insertRapportscores($rapportId, $punten);
 
             http_response_code(200);
@@ -828,7 +831,7 @@ if ($_SERVER['REQUEST_METHOD'] == 'GET') {
   }
 } else if ($_SERVER['REQUEST_METHOD'] == 'PATCH') {
     if ($_GET['url'] == 'updateEvaluatie') {
-      //if (Token::hasClearance($$postBody->token, $teacherRole) || Token::hasClearance($postBody->token, $adminRole)) {
+        //if (Token::hasClearance($$postBody->token, $teacherRole) || Token::hasClearance($postBody->token, $adminRole)) {
         $postBody = file_get_contents('php://input');
         $postBody = json_decode($postBody);
 
@@ -845,10 +848,38 @@ if ($_SERVER['REQUEST_METHOD'] == 'GET') {
             }
             $userDAO->updateEvaluatie($evalId, $postBody->name,$date, $beoordeeldeAspecten);
         }
-      /*} else {
-        echo $notAuthorizedErr;
-        http_response_code(401);
-      }*/
+        /*} else {
+          echo $notAuthorizedErr;
+          http_response_code(401);
+        }*/
+    } else if ($_GET['url'] == 'updateReport') {
+        //if (Token::hasClearance($$postBody->token, $teacherRole) || Token::hasClearance($postBody->token, $adminRole)) {
+        $postBody = file_get_contents('php://input');
+        $postBody = json_decode($postBody);
+
+        if (!empty($postBody)) {
+            $reportId = $postBody->reportId;
+            $startdate = $postBody->startdate;
+            $enddate = $postBody->enddate;
+            $startdate = preg_replace('#(\d{2})/(\d{2})/(\d{4})#', '$3-$2-$1', $startdate);
+            $enddate = preg_replace('#(\d{2})/(\d{2})/(\d{4})#', '$3-$2-$1', $enddate);
+
+            foreach($postBody->modules as $module){
+                $doelstellingscategories = $module->doelstellingscategories;
+                foreach($doelstellingscategories as $doelstellingscat){
+                    $doelstellingen = $doelstellingscat->doelstellingen;
+                    foreach($doelstellingen as $doelstelling){
+                        $punten[$doelstelling->id] = array($doelstelling->score,$doelstelling->opmerking);
+                    }
+                }
+            }
+
+            $userDAO->updateReport($reportId, $postBody->name,$date, $beoordeeldeAspecten);
+        }
+        /*} else {
+          echo $notAuthorizedErr;
+          http_response_code(401);
+        }*/
     } else if ($_GET['url'] == 'updateUser') {
         $postBody = file_get_contents('php://input');
         $postBody = json_decode($postBody);
