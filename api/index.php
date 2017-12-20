@@ -273,14 +273,14 @@ if ($_SERVER['REQUEST_METHOD'] == 'GET') {
           http_response_code(401);
         }*/
     } else if ($_GET['url'] == 'opleidingen') {
-        //if (Login::isLoggedIn()) {
+      if (Token::hasClearance($_GET['token'], $teacherRole) || Token::hasClearance($_GET['token'], $adminRole)) {
         $edus = $userDAO->getAllEducations();
         echo json_encode($edus);
         http_response_code(200);
-        /*} else {
-          echo $notLoggedInErr;
+      } else {
+          echo $notAuthorizedErr;
           http_response_code(401);
-        }*/
+      }
     } else if ($_GET['url'] == 'fullOpleiding') {
         if (isset($_GET['opleiding'])) {
             $opleidingid = $_GET['opleiding'];
@@ -503,15 +503,15 @@ if ($_SERVER['REQUEST_METHOD'] == 'GET') {
             $clearance = $userDAO->getUserRole($user_id);
             $token = Token::createToken($user_id,$clearance);
             // $userDAO->insertNewLoginToken($user_id, $token);
-            echo json_encode($token);
+            echo $token;
             http_response_code(200);
           } else {
-              echo '{"Error":"Wrong pw"}';
-              http_response_code(401);
+            echo '{"Error":"Onjuist paswoord"}';
+            http_response_code(401);
           }
         } else {
-            echo '{"Error":"Wrong username"}';
-            http_response_code(401);
+          echo '{"Error":"Onjuiste email"}';
+          http_response_code(401);
         }
     } else if ($_GET['url'] == 'createModule') {
 
