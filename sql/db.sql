@@ -116,7 +116,7 @@ create table `studenten_modules` (
   FOREIGN KEY(moduleId) REFERENCES modules(id),
   FOREIGN KEY(opleidingId) REFERENCES opleidingen(id),
   FOREIGN KEY(studentId) REFERENCES studenten(studentId)
-  
+
   -- TODO DODO
   --
   -- opleidingId in modules CAN BE NULL because some modules are general and are used in alle opleidingen.
@@ -160,6 +160,8 @@ CREATE TABLE `rapporten` (
   `studentId` int NOT NULL,
   `name` varchar(150) NOT NULL,
   `class` varchar(50) NOT NULL,
+  `startdate` date NOT NULL,
+  `enddate` date NOT NULL,
   `commentaarKlassenraad` text,
   `commentaarAlgemeen` text,
   CONSTRAINT rapportUniqueNamePerStudent UNIQUE(studentId, name),
