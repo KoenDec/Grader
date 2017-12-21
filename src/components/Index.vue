@@ -24,10 +24,10 @@
       <v-btn color="white" flat slot="activator">Account</v-btn><v-card>
         <v-list>
           <v-list-tile avatar>
-            <v-list-tile-content>
-              <v-list-tile-title class="amber--text">Moderator</v-list-tile-title>
-              <div>Elon Musk</div>
-              <v-list-tile-sub-title>Lector fysica & Chemie</v-list-tile-sub-title>
+            <v-list-tile-content v-if="isLoaded">
+              <v-list-tile-title class="amber--text">{{ currentUser.role }}</v-list-tile-title>
+              <div>{{ currentUser.name }}</div>
+              <!--<v-list-tile-sub-title>Lector fysica & Chemie</v-list-tile-sub-title>-->
             </v-list-tile-content>
           </v-list-tile>
         </v-list>
@@ -35,7 +35,7 @@
         <v-card-actions>
           <v-spacer></v-spacer>
           <v-btn flat @click="menu = false">Cancel</v-btn>
-          <v-btn color="primary" flat :to="{name: 'login'}" @click="menu = false">Afmelden</v-btn>
+          <v-btn color="primary" flat @click="logout">Afmelden</v-btn>
         </v-card-actions>
       </v-card>
 
@@ -65,12 +65,34 @@ export default {
     fav: true,
     menu: false,
     message: false,
-    hints: true
+    hints: true,
+    currentUser: {
+      id: '',
+      name: '',
+      role: ''
+    },
+    isLoaded: false
   }),
   methods: {
     route (path) {
       this.$router.push(path)
+    },
+    logout: function () {
+      var self = this
+      self.menu = false
+      self.$http.logout(function (data) {
+        self.$router.push('/login')
+      })
     }
+  },
+  created: function () {
+    var self = this
+    self.$http.getCurrentUser(function (data) {
+      self.currentUser.id = data.id
+      self.currentUser.name = data.name
+      self.currentUser.role = data.role
+      self.isLoaded = true
+    })
   }
 }
 </script>
