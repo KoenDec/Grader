@@ -1299,11 +1299,8 @@ class UserDAO
             $first = true;
             foreach($puntenEnCommentaarThreeDimensionalArray as $doelstellingsId => $scoreEnOpmerking){
                 if($scoreEnOpmerking[0] !== null) {
-                    if($first == true){
-                        $sql .= '(:rapportId, '.$doelstellingsId.', \''.$scoreEnOpmerking[0].'\', "'.$scoreEnOpmerking[1]. '")';
-                    } else {
-                        $sql .= ', (:rapportId, '.$doelstellingsId.', \''.$scoreEnOpmerking[0].'\', "'.$scoreEnOpmerking[1]. '")';
-                    }
+                    if(!$first) $sql .= ', ';
+                    $sql .= '(:rapportId, '.$doelstellingsId.', \''.$scoreEnOpmerking[0].'\', "'.$scoreEnOpmerking[1]. '")'; // TODO parameter binding
                     $first = false;
                 }
             }
@@ -1371,27 +1368,34 @@ class UserDAO
 
             $stmt->execute();
 
-            $aspectIds = array_keys($aspectscoresKeyValueArray);
-            $aspectScores = array_values($aspectscoresKeyValueArray);
+            //$aspectIds = array_keys($aspectscoresKeyValueArray);
+            //$aspectScores = array_values($aspectscoresKeyValueArray);
 
             $newAspects = [];
+            $nietBeoordeeldeAspectIds = [];
 
-            for ($i = 0; $i < sizeof($aspectscoresKeyValueArray); $i++) {
-                $bestaandeQuotering = self::getAspectbeoordeling($evaluatieId, $aspectIds[$i]);
-                if(isset($bestaandeQuotering)){
-                    $sql2 = 'UPDATE evaluaties_aspecten SET aspectBeoordeling = :aspectBeoordeling WHERE evaluatieId = :evaluatieId AND aspectId = :aspectId'; // TODO mogelijke manier om aantal calls te verminderen?
-                    $stmt = $conn->prepare($sql2);
-                    $stmt->bindParam(':evaluatieId', $evaluatieId);
-                    $stmt->bindParam(':aspectId', $aspectIds[$i]);
-                    $stmt->bindParam(':aspectBeoordeling', $aspectScores[$i]);
+            foreach($aspectscoresKeyValueArray as $aspectId => $aspectScore)
+            {
+                if(isset($aspectScore)) {
+                    $bestaandeQuotering = self::getAspectbeoordeling($evaluatieId, $aspectId);
+                    if(isset($bestaandeQuotering)){
+                        $sql2 = 'UPDATE evaluaties_aspecten SET aspectBeoordeling = :aspectBeoordeling WHERE evaluatieId = :evaluatieId AND aspectId = :aspectId'; // TODO mogelijke manier om aantal calls te verminderen?
+                        $stmt = $conn->prepare($sql2);
+                        $stmt->bindParam(':evaluatieId', $evaluatieId);
+                        $stmt->bindParam(':aspectId', $aspectId);
+                        $stmt->bindParam(':aspectBeoordeling', $aspectScore);
 
-                    $stmt->execute();
+                        $stmt->execute();
+                    } else {
+                        $newAspects[$aspectId] = $aspectScore;
+                    }
                 } else {
-                    $newAspects[$aspectIds[$i]] = $aspectScores[$i];
+                    array_push($nietBeoordeeldeAspectIds, $aspectId);
                 }
             }
 
             if(sizeof($newAspects) > 0) self::insertAspectbeoordelingen($evaluatieId, $newAspects);
+            if(sizeof($nietBeoordeeldeAspectIds) > 0) self::deleteAspectscores($evaluatieId, $nietBeoordeeldeAspectIds);
 
         } catch (PDOException $e) {
             die($e->getMessage());
@@ -1429,6 +1433,7 @@ class UserDAO
             }
 
             $newScores = [];
+            $nietBeoordeeldeDoelstellingIds = [];
 
             foreach($scoresEnOpmerkingenThreeDimensionalArray as $doelstellingId => $scoreEnOpmerking)
             {
@@ -1449,12 +1454,13 @@ class UserDAO
                     } else {
                         $newScores[$doelstellingId] = array($score, $opmerking);
                     }
+                } else {
+                    array_push($nietBeoordeeldeDoelstellingIds, $doelstellingId);
                 }
             }
 
-            if(sizeof($newScores) > 0) {
-                self::insertRapportscores($rapportId, $newScores);
-            }
+            if(sizeof($newScores) > 0) self::insertRapportscores($rapportId, $newScores);
+            if(sizeof($nietBeoordeeldeDoelstellingIds) > 0) self::deleteRapportScores($rapportId, $nietBeoordeeldeDoelstellingIds);
 
         } catch (PDOException $e) {
             die($e->getMessage());
@@ -1514,6 +1520,50 @@ class UserDAO
             $sql = 'DELETE FROM evaluaties WHERE id = :evaluatieId';
             $stmt = $conn->prepare($sql);
             $stmt->bindParam(':evaluatieId', $evaluatieId);
+
+            $stmt->execute();
+
+        } catch (PDOException $e) {
+            die($e->getMessage());
+        }
+    }
+
+    public static function deleteAspectscores($evaluatieId, $aspectIds){
+        try {
+            $conn = graderdb::getConnection();
+
+            $sql = 'DELETE FROM evaluaties_aspecten WHERE evaluatieId = :evaluatieId AND aspectId IN (';
+            $first = true;
+            foreach($aspectIds as $aspectId){
+                if(!$first) $sql .= ', ';
+                $sql .= $aspectId; // TODO parameter binding?
+                $first = false;
+            }
+            $sql .= ');';
+            $stmt = $conn->prepare($sql);
+            $stmt->bindParam(':evaluatieId', $evaluatieId);
+
+            $stmt->execute();
+
+        } catch (PDOException $e) {
+            die($e->getMessage());
+        }
+    }
+
+    public static function deleteRapportScores($rapportId, $doelstellingIds){
+        try {
+            $conn = graderdb::getConnection();
+
+            $sql = 'DELETE FROM rapporten_scores WHERE rapportId = :rapportId AND doelstellingId IN (';
+            $first = true;
+            foreach($doelstellingIds as $doelstellingId){
+                if(!$first) $sql .= ', ';
+                $sql .= $doelstellingId; // TODO parameter binding?
+                $first = false;
+            }
+            $sql .= ');';
+            $stmt = $conn->prepare($sql);
+            $stmt->bindParam(':rapportId', $rapportId);
 
             $stmt->execute();
 
