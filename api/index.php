@@ -1,6 +1,6 @@
 <?php
-require_once('graderdb.php');
-require_once('Login.php');
+require_once('../php/graderdb.php');
+require_once('../php/Login.php');
 require_once('token.php');
 
 header("Access-Control-Allow-Origin: *");
@@ -862,8 +862,8 @@ if ($_SERVER['REQUEST_METHOD'] == 'GET') {
         //if (Token::hasClearance($$postBody->token, $teacherRole) || Token::hasClearance($postBody->token, $adminRole)) {
         $postBody = file_get_contents('php://input');
         $postBody = json_decode($postBody);
-
         if (!empty($postBody)) {
+
             $reportId = $postBody->reportId;
             $reportName = $postBody->name;
             $startdate = $postBody->startdate;
