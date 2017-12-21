@@ -13,11 +13,13 @@ import SearchBar from '@/components/SearchBar'
 import Evaluate from '@/components/Evaluate'
 import Login from '@/components/Login'
 import SubjectEditor from '@/components/SubjectEditor'
+import DataTableSelects from '@/components/DataTableSelects'
 
 Vue.component('fileInput', fileInput)
 Vue.component('checkboxes', checkboxes)
 Vue.component('searchbar', SearchBar)
 Vue.component('subjecteditor', SubjectEditor)
+Vue.component('datatableselects', DataTableSelects)
 Vue.use(Router)
 
 export default new Router({
