@@ -52,11 +52,18 @@ export default {
         object[self.item_value] = item.id
         array.push(object)
       })
+
       return array
     }
   },
   created () {
-    console.log(this.list)
+    if (this.$route.query.name && this.$route.query.id) {
+      var object = {}
+      object[this.item_concat_key] = this.$route.query.name
+      object[this.item_value] = this.$route.query.id
+      this.selecteditem = object
+      this.checkSelected(object[this.item_concat_key])
+    }
   }
 }
 </script>
