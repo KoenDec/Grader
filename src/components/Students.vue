@@ -64,7 +64,7 @@
                 <td>
                   <v-btn color="error" class="ma-1 right" dark><v-icon dark>delete</v-icon></v-btn>
                   <router-link :to="{ path: 'Addstudent', query: { id: props.item.id }}"><v-btn color="primary" class="ma-1 right" dark><v-icon dark>edit</v-icon></v-btn></router-link>
-                  <v-btn color="primary" class="ma-1 right" dark>rapport<v-icon dark right>import_contacts</v-icon></v-btn>
+                    <router-link :to="{ path: 'rapporten', query: { id: props.item.id, name: props.item.firstname + ' ' + props.item.lastname }}"><v-btn color="primary" class="ma-1 right" dark>rapport<v-icon dark right>import_contacts</v-icon></v-btn></router-link>
                     <a :href="'#/Evaluate?id=' + props.item.id" target="_blank"><v-btn color="primary" class="ma-1 right" dark>Evaluatie<v-icon dark right>assignment</v-icon></v-btn></a>
                 </td>
               </tr>

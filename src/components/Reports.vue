@@ -300,14 +300,12 @@ export default {
     getCurrentStudentReports () {
       var self = this
       this.$http.getStudentReports(self.currentstudent.student.id, function (data) {
-        console.log(data)
         self.current_student_reports = data
       })
     },
     getReport (rapportid) {
       var self = this
       this.$http.getStudentReport(rapportid, function (data) {
-        console.log(data)
         self.currentreport = data
         self.dateFormatted1 = data.startdate
         self.dateFormatted2 = data.enddate
@@ -444,6 +442,7 @@ export default {
   },
   created () {
     var self = this
+    self.applySelection(self.$route.query.id)
     var d = new Date()
     var month = d.getMonth() + 1
     self.dateFormatted2 = d.getDate() + '/' + month + '/' + d.getFullYear()
