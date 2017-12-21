@@ -1,10 +1,45 @@
 import axios from 'axios'
 
+var myStorage = window.localStorage
+myStorage.setItem('token', 'eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJpZCI6IjIiLCJjbGVhcmFuY2UiOiJBRE1JTiJ9.a1lD/can5gzGUL4yki6CAZmdm4ucsInRXYatqzi4Pzk=')
+
 var Api = (function () {
   var my = {}
 
+  my.login = function (username, password, cb) {
+    axios.post('http://146.185.183.217/api/auth', {
+      username: username,
+      password: password
+    })
+      .then(function (response) {
+        myStorage.setItem('token', response.data)
+        window.location.href = '/#/home'
+        return cb(response.data)
+      })
+      .catch(function (error) {
+        console.log(error.response.data)
+        return cb(error.response.data)
+      })
+  }
+
+  my.validateToken = function (cb) {
+    axios.post('http://146.185.183.217/api/auth', {
+      token: myStorage.getItem('token')
+    })
+      .then(function (response) {
+        return cb(response.data)
+      })
+      .catch(function (error) {
+        return cb(error.response.data)
+      })
+  }
+
   my.getStudentsWithEdu = function (callback) {
-    axios.get('http://146.185.183.217/api/studentenMetOpleiding')
+    axios.get('http://146.185.183.217/api/studentenMetOpleiding', {
+      params: {
+        token: myStorage.getItem('token')
+      }
+    })
       .then(function (response) {
         return callback(response.data)
       })
@@ -14,7 +49,11 @@ var Api = (function () {
   }
 
   my.getOpleidingen = function (callback) {
-    axios.get('http://146.185.183.217/api/opleidingen')
+    axios.get('http://146.185.183.217/api/opleidingen', {
+      params: {
+        token: myStorage.getItem('token')
+      }
+    })
       .then(function (response) {
         return callback(response.data)
       })
@@ -26,7 +65,8 @@ var Api = (function () {
   my.getStudent = function (id, cb) {
     axios.get('http://146.185.183.217/api/student', {
       params: {
-        id: id
+        id: id,
+        token: myStorage.getItem('token')
       }
     })
       .then(function (response) {
@@ -40,7 +80,8 @@ var Api = (function () {
   my.getStudentReports = function (id, cb) {
     axios.get('http://146.185.183.217/api/studentReports', {
       params: {
-        id: id
+        id: id,
+        token: myStorage.getItem('token')
       }
     })
       .then(function (response) {
@@ -54,7 +95,8 @@ var Api = (function () {
   my.getStudentReport = function (rapportid, cb) {
     axios.get('http://146.185.183.217/api/studentReport', {
       params: {
-        id: rapportid
+        id: rapportid,
+        token: myStorage.getItem('token')
       }
     })
       .then(function (response) {
@@ -68,7 +110,8 @@ var Api = (function () {
   my.getFullOpleiding = function (id, cb) {
     axios.get('http://146.185.183.217/api/fullOpleiding', {
       params: {
-        opleiding: id
+        opleiding: id,
+        token: myStorage.getItem('token')
       }
     })
       .then(function (response) {
@@ -82,7 +125,8 @@ var Api = (function () {
   my.getEvalForStudent = function (id, cb) {
     axios.get('http://146.185.183.217/api/evaluatieVoorStudent', {
       params: {
-        id: id
+        id: id,
+        token: myStorage.getItem('token')
       }
     })
       .then(function (response) {
@@ -101,7 +145,8 @@ var Api = (function () {
         email: email,
         pw: pw,
         moduleIds: moduleIds,
-        id: id
+        id: id,
+        token: myStorage.getItem('token')
       }
     })
       .then(function (response) {
@@ -114,13 +159,30 @@ var Api = (function () {
       })
   }
 
+  my.updateUser = function (firstname, lastname, email, id, cb) {
+    axios.patch('http://146.185.183.217/api/updateUser', {
+      firstname: firstname,
+      lastname: lastname,
+      email: email,
+      id: id,
+      token: myStorage.getItem('token')
+    })
+      .then(function (response) {
+        if (response.statusText === 'OK') return cb(response.data)
+      })
+      .catch(function (error) {
+        console.log(error)
+      })
+  }
+
   my.createEval = function (evalJSON, cb) {
     axios.post('http://146.185.183.217/api/saveEvaluatie', {
       aspecten: evalJSON.aspecten,
       name: evalJSON.name,
       studentId: evalJSON.studentId,
       moduleId: evalJSON.moduleId,
-      date: evalJSON.date
+      date: evalJSON.date,
+      token: myStorage.getItem('token')
     })
       .then(function (response) {
         if (response.statusText === 'OK') return cb(response.data)
@@ -136,7 +198,8 @@ var Api = (function () {
       evalId: evalJSON.evalId,
       aspecten: evalJSON.aspecten,
       name: evalJSON.name,
-      date: evalJSON.date
+      date: evalJSON.date,
+      token: myStorage.getItem('token')
     })
       .then(function (response) {
         if (response.statusText === 'OK') return cb(response.data)
@@ -151,7 +214,22 @@ var Api = (function () {
     axios.get('http://146.185.183.217/api/getEvaluatiesPerStudent', {
       params: {
         modId: modId,
-        studId: studId
+        studId: studId,
+        token: myStorage.getItem('token')
+      }
+    })
+      .then(function (response) {
+        return cb(response.data)
+      })
+      .catch(function (error) {
+        console.log(error)
+      })
+  }
+
+  my.getAllEvalsByStudent = function (studId, cb) {
+    axios.get('http://146.185.183.217/api/studentAllEvaluationsFull', {
+      params: {
+        student: studId
       }
     })
       .then(function (response) {
@@ -165,7 +243,8 @@ var Api = (function () {
   my.deleteEval = function (id, cb) {
     axios.delete('http://146.185.183.217/api/deleteEvaluatie', {
       params: {
-        id: id
+        id: id,
+        token: myStorage.getItem('token')
       }
     })
       .then(function (response) {
