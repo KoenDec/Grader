@@ -1,7 +1,7 @@
 import axios from 'axios'
 
 var myStorage = window.localStorage
-myStorage.setItem('token', 'eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJpZCI6IjIiLCJjbGVhcmFuY2UiOiJBRE1JTiJ9.a1lD/can5gzGUL4yki6CAZmdm4ucsInRXYatqzi4Pzk=')
+// myStorage.setItem('token', 'eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJpZCI6IjIiLCJjbGVhcmFuY2UiOiJBRE1JTiJ9.a1lD/can5gzGUL4yki6CAZmdm4ucsInRXYatqzi4Pzk=')
 
 var Api = (function () {
   var my = {}
@@ -32,6 +32,25 @@ var Api = (function () {
       .catch(function (error) {
         return cb(error.response.data)
       })
+  }
+
+  my.getCurrentUser = function (cb) {
+    axios.get('http://146.185.183.217/api/currentUser', {
+      params: {
+        token: myStorage.getItem('token')
+      }
+    })
+      .then(function (response) {
+        return cb(response.data)
+      })
+      .catch(function (error) {
+        console.log(error)
+      })
+  }
+
+  my.logout = function (cb) {
+    myStorage.removeItem('token')
+    return cb(myStorage.getItem('token'))
   }
 
   my.getStudentsWithEdu = function (callback) {
