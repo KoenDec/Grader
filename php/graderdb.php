@@ -789,13 +789,14 @@ class UserDAO
         return $evaluatieId;
     }
 
-    public static function getRapportId($rapportName)
+    public static function getRapportId($rapportName, $studentId)
     {
         try {
             $conn = graderdb::getConnection();
 
-            $sql = 'SELECT id FROM rapporten WHERE name = :rapportName';
+            $sql = 'SELECT id FROM rapporten WHERE name = :rapportName AND studentId = :studentId';
             $stmt = $conn->prepare($sql);
+            $stmt->bindParam(':studentId', $studentId);
             $stmt->bindParam(':rapportName', $rapportName);
 
             $stmt->execute();
