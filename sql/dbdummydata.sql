@@ -785,6 +785,8 @@ INSERT INTO evaluatiecriteria(doelstellingId, name, creatorId) VALUES
 	(153, 'Kan de huisregels bij verdacht gedrag omschrijven', 3),
     (153, 'Kan de huisregels bij verdacht gedrag toepassen', 3);
 
+-- TODO gewicht van aspecten
+
 INSERT INTO aspecten(evaluatiecriteriumId, name, creatorId) VALUES
     (36, 'controleert en beoordeelt de vlakheid van de muur', 3), -- 1
     (36, 'controleert en beoordeelt de loodrechtheid van de muur', 3),

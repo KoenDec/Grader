@@ -56,7 +56,7 @@ class UserDAO
         try {
             $conn = graderdb::getConnection();
 
-            $sql = 'SELECT id,email,firstname,lastname,accountCreatedTimestamp FROM users WHERE email = :username';
+            $sql = 'SELECT id, email, firstname, lastname, accountCreatedTimestamp FROM users WHERE email = :username';
             $stmt = $conn->prepare($sql);
             $stmt->bindParam(':username', $username);
             $stmt->execute();
@@ -1236,7 +1236,8 @@ class UserDAO
         try {
             $conn = graderdb::getConnection();
 
-            $sql = 'INSERT INTO rapporten (name, studentId, startdate, enddate, commentaarKlassenraad, commentaarAlgemeen) VALUES (:name, :studentId, :startdate, :enddate, :commentaarKlassenraad, :commentaarAlgemeen)';
+            $sql = 'INSERT INTO rapporten (name, studentId, startdate, enddate, commentaarKlassenraad, commentaarAlgemeen)
+                        VALUES (:name, :studentId, :startdate, :enddate, :commentaarKlassenraad, :commentaarAlgemeen)';
             $stmt = $conn->prepare($sql);
             $stmt->bindParam(':name', $name);
             $stmt->bindParam(':studentId', $studentId);
@@ -1291,10 +1292,9 @@ class UserDAO
 
             $sql = 'INSERT INTO rapporten_scores (rapportId, doelstellingId, score, opmerking) VALUES ';
 
-            //var_dump($puntenEnCommentaarThreeDimensionalArray);
-            //var_dump(array_keys($puntenEnCommentaarThreeDimensionalArray)); // doelstellingIds
-            //var_dump(array_column($puntenEnCommentaarThreeDimensionalArray,0)); // punten
-            //var_dump(array_column($puntenEnCommentaarThreeDimensionalArray,1)); // commentaar
+            //(array_keys($puntenEnCommentaarThreeDimensionalArray)); // doelstellingIds
+            //(array_column($puntenEnCommentaarThreeDimensionalArray,0)); // punten
+            //(array_column($puntenEnCommentaarThreeDimensionalArray,1)); // commentaar
 
             $first = true;
             foreach($puntenEnCommentaarThreeDimensionalArray as $doelstellingsId => $scoreEnOpmerking){

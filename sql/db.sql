@@ -129,10 +129,11 @@ create table `studenten_modules` (
 
 CREATE TABLE `evaluaties` (
   `id` int NOT NULL AUTO_INCREMENT PRIMARY KEY,
-  `name` varchar(150) NOT NULL UNIQUE,
+  `name` varchar(150) NOT NULL,
   `studentId` int NOT NULL,
   `moduleId` int NOT NULL,
   `datum` date NOT NULL,
+  CONSTRAINT evaluatieUniqueNamePerStudent UNIQUE(studentId, name),
   FOREIGN KEY(studentId) REFERENCES studenten(studentId),
   FOREIGN KEY(moduleId) REFERENCES modules(id)
 );
