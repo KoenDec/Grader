@@ -56,7 +56,7 @@ class UserDAO
         try {
             $conn = graderdb::getConnection();
 
-            $sql = 'SELECT id,email,firstname,lastname,accountCreatedTimestamp FROM users WHERE email = :username';
+            $sql = 'SELECT id, email, firstname, lastname, accountCreatedTimestamp FROM users WHERE email = :username';
             $stmt = $conn->prepare($sql);
             $stmt->bindParam(':username', $username);
             $stmt->execute();
@@ -789,13 +789,14 @@ class UserDAO
         return $evaluatieId;
     }
 
-    public static function getRapportId($rapportName)
+    public static function getRapportId($rapportName, $studentId)
     {
         try {
             $conn = graderdb::getConnection();
 
-            $sql = 'SELECT id FROM rapporten WHERE name = :rapportName';
+            $sql = 'SELECT id FROM rapporten WHERE name = :rapportName AND studentId = :studentId';
             $stmt = $conn->prepare($sql);
+            $stmt->bindParam(':studentId', $studentId);
             $stmt->bindParam(':rapportName', $rapportName);
 
             $stmt->execute();
@@ -969,6 +970,33 @@ class UserDAO
             $modules = null;
         }
         return $modules;
+    }
+
+    public static function getRapportScore($rapportId, $doelstellingId)
+    {
+        try {
+            $conn = graderdb::getConnection();
+
+            $sql = 'SELECT * FROM rapporten_scores WHERE rapportId = :rapportId AND doelstellingId = :doelstellingId';
+            $stmt = $conn->prepare($sql);
+            $stmt->bindParam(':rapportId', $rapportId);
+            $stmt->bindParam(':doelstellingId',$doelstellingId);
+
+            $stmt->execute();
+
+            $doelstellingenTable = $stmt->fetchAll(PDO::FETCH_CLASS);
+        } catch (PDOException $e) {
+            die($e->getMessage());
+        }
+
+        if (isset($doelstellingenTable[0])) {
+            $score = $doelstellingenTable[0];
+        } else {
+            //die('No score found for doelstelling with id '.$doelstellingId.' in rapport with id '.$rapportId.'!');
+            $score = null;
+        }
+
+        return $score;
     }
 
     public static function getRapportscores($rapportId)
@@ -1209,7 +1237,8 @@ class UserDAO
         try {
             $conn = graderdb::getConnection();
 
-            $sql = 'INSERT INTO rapporten (name, studentId, startdate, enddate, commentaarKlassenraad, commentaarAlgemeen) VALUES (:name, :studentId, :startdate, :enddate, :commentaarKlassenraad, :commentaarAlgemeen)';
+            $sql = 'INSERT INTO rapporten (name, studentId, startdate, enddate, commentaarKlassenraad, commentaarAlgemeen)
+                        VALUES (:name, :studentId, :startdate, :enddate, :commentaarKlassenraad, :commentaarAlgemeen)';
             $stmt = $conn->prepare($sql);
             $stmt->bindParam(':name', $name);
             $stmt->bindParam(':studentId', $studentId);
@@ -1264,19 +1293,15 @@ class UserDAO
 
             $sql = 'INSERT INTO rapporten_scores (rapportId, doelstellingId, score, opmerking) VALUES ';
 
-            //var_dump($puntenEnCommentaarThreeDimensionalArray);
-            //var_dump(array_keys($puntenEnCommentaarThreeDimensionalArray)); // doelstellingIds
-            //var_dump(array_column($puntenEnCommentaarThreeDimensionalArray,0)); // punten
-            //var_dump(array_column($puntenEnCommentaarThreeDimensionalArray,1)); // commentaar
+            //(array_keys($puntenEnCommentaarThreeDimensionalArray)); // doelstellingIds
+            //(array_column($puntenEnCommentaarThreeDimensionalArray,0)); // punten
+            //(array_column($puntenEnCommentaarThreeDimensionalArray,1)); // commentaar
 
             $first = true;
             foreach($puntenEnCommentaarThreeDimensionalArray as $doelstellingsId => $scoreEnOpmerking){
                 if($scoreEnOpmerking[0] !== null) {
-                    if($first == true){
-                        $sql .= '(:rapportId, '.$doelstellingsId.', \''.$scoreEnOpmerking[0].'\', "'.$scoreEnOpmerking[1]. '")';
-                    } else {
-                        $sql .= ', (:rapportId, '.$doelstellingsId.', \''.$scoreEnOpmerking[0].'\', "'.$scoreEnOpmerking[1]. '")';
-                    }
+                    if(!$first) $sql .= ', ';
+                    $sql .= '(:rapportId, '.$doelstellingsId.', \''.$scoreEnOpmerking[0].'\', "'.$scoreEnOpmerking[1]. '")'; // TODO parameter binding
                     $first = false;
                 }
             }
@@ -1344,27 +1369,34 @@ class UserDAO
 
             $stmt->execute();
 
-            $aspectIds = array_keys($aspectscoresKeyValueArray);
-            $aspectScores = array_values($aspectscoresKeyValueArray);
+            //$aspectIds = array_keys($aspectscoresKeyValueArray);
+            //$aspectScores = array_values($aspectscoresKeyValueArray);
 
             $newAspects = [];
+            $nietBeoordeeldeAspectIds = [];
 
-            for ($i = 0; $i < sizeof($aspectscoresKeyValueArray); $i++) {
-                $bestaandeQuotering = self::getAspectbeoordeling($evaluatieId, $aspectIds[$i]);
-                if(isset($bestaandeQuotering)){
-                    $sql2 = 'UPDATE evaluaties_aspecten SET aspectBeoordeling = :aspectBeoordeling WHERE evaluatieId = :evaluatieId AND aspectId = :aspectId'; // TODO mogelijke manier om aantal calls te verminderen?
-                    $stmt = $conn->prepare($sql2);
-                    $stmt->bindParam(':evaluatieId', $evaluatieId);
-                    $stmt->bindParam(':aspectId', $aspectIds[$i]);
-                    $stmt->bindParam(':aspectBeoordeling', $aspectScores[$i]);
+            foreach($aspectscoresKeyValueArray as $aspectId => $aspectScore)
+            {
+                if(isset($aspectScore)) {
+                    $bestaandeQuotering = self::getAspectbeoordeling($evaluatieId, $aspectId);
+                    if(isset($bestaandeQuotering)){
+                        $sql2 = 'UPDATE evaluaties_aspecten SET aspectBeoordeling = :aspectBeoordeling WHERE evaluatieId = :evaluatieId AND aspectId = :aspectId'; // TODO mogelijke manier om aantal calls te verminderen?
+                        $stmt = $conn->prepare($sql2);
+                        $stmt->bindParam(':evaluatieId', $evaluatieId);
+                        $stmt->bindParam(':aspectId', $aspectId);
+                        $stmt->bindParam(':aspectBeoordeling', $aspectScore);
 
-                    $stmt->execute();
+                        $stmt->execute();
+                    } else {
+                        $newAspects[$aspectId] = $aspectScore;
+                    }
                 } else {
-                    $newAspects[$aspectIds[$i]] = $aspectScores[$i];
+                    array_push($nietBeoordeeldeAspectIds, $aspectId);
                 }
             }
 
             if(sizeof($newAspects) > 0) self::insertAspectbeoordelingen($evaluatieId, $newAspects);
+            if(sizeof($nietBeoordeeldeAspectIds) > 0) self::deleteAspectscores($evaluatieId, $nietBeoordeeldeAspectIds);
 
         } catch (PDOException $e) {
             die($e->getMessage());
@@ -1387,33 +1419,49 @@ class UserDAO
 
             $stmt->execute();
 
-            $moduleIds = array_keys($moduleIdsEnCommentaarKeyValueArray);
-            $moduleCommentaren = array_values($moduleIdsEnCommentaarKeyValueArray);
+            //$moduleIds = array_keys($moduleIdsEnCommentaarKeyValueArray);
+            //$moduleCommentaren = array_values($moduleIdsEnCommentaarKeyValueArray);
 
             foreach($moduleIdsEnCommentaarKeyValueArray as $moduleId => $moduleCommentaar)
             {
-                $sql2 = 'UPDATE rapporten_modules SET commentaar = :moduleCommentaar WHERE moduleId = :moduleId';
+                $sql2 = 'UPDATE rapporten_modules SET commentaar = :moduleCommentaar WHERE moduleId = :moduleId AND rapportId = :rapportId';
                 $stmt2 = $conn->prepare($sql2);
                 $stmt2->bindParam(':moduleCommentaar', $moduleCommentaar);
                 $stmt2->bindParam(':moduleId', $moduleId);
+                $stmt2->bindParam(':rapportId', $rapportId);
 
                 $stmt2->execute();
             }
+
+            $newScores = [];
+            $nietBeoordeeldeDoelstellingIds = [];
 
             foreach($scoresEnOpmerkingenThreeDimensionalArray as $doelstellingId => $scoreEnOpmerking)
             {
                 $score = $scoreEnOpmerking[0];
                 $opmerking = $scoreEnOpmerking[1];
+                if(isset($score)) {
+                    $bestaandResultaat = self::getRapportscore($rapportId, $doelstellingId);
+                    if (isset($bestaandResultaat)) {
 
-                $sql3 = 'UPDATE rapporten_scores SET score = :score, opmerking = :opmerking WHERE doelstellingId = :doelstellingId';
-                $stmt3 = $conn->prepare($sql3);
-                $stmt3->bindParam(':score', $score);
-                $stmt3->bindParam(':opmerking', $opmerking);
-                $stmt3->bindParam(':doelstellingId', $doelstellingId);
+                        $sql3 = 'UPDATE rapporten_scores SET score = :score, opmerking = :opmerking WHERE doelstellingId = :doelstellingId AND rapportId = :rapportId';
+                        $stmt3 = $conn->prepare($sql3);
+                        $stmt3->bindParam(':score', $score);
+                        $stmt3->bindParam(':opmerking', $opmerking);
+                        $stmt3->bindParam(':doelstellingId', $doelstellingId);
+                        $stmt3->bindParam(':rapportId', $rapportId);
 
-                $stmt3->execute();
+                        $stmt3->execute();
+                    } else {
+                        $newScores[$doelstellingId] = array($score, $opmerking);
+                    }
+                } else {
+                    array_push($nietBeoordeeldeDoelstellingIds, $doelstellingId);
+                }
             }
 
+            if(sizeof($newScores) > 0) self::insertRapportscores($rapportId, $newScores);
+            if(sizeof($nietBeoordeeldeDoelstellingIds) > 0) self::deleteRapportScores($rapportId, $nietBeoordeeldeDoelstellingIds);
 
         } catch (PDOException $e) {
             die($e->getMessage());
@@ -1473,6 +1521,50 @@ class UserDAO
             $sql = 'DELETE FROM evaluaties WHERE id = :evaluatieId';
             $stmt = $conn->prepare($sql);
             $stmt->bindParam(':evaluatieId', $evaluatieId);
+
+            $stmt->execute();
+
+        } catch (PDOException $e) {
+            die($e->getMessage());
+        }
+    }
+
+    public static function deleteAspectscores($evaluatieId, $aspectIds){
+        try {
+            $conn = graderdb::getConnection();
+
+            $sql = 'DELETE FROM evaluaties_aspecten WHERE evaluatieId = :evaluatieId AND aspectId IN (';
+            $first = true;
+            foreach($aspectIds as $aspectId){
+                if(!$first) $sql .= ', ';
+                $sql .= $aspectId; // TODO parameter binding?
+                $first = false;
+            }
+            $sql .= ');';
+            $stmt = $conn->prepare($sql);
+            $stmt->bindParam(':evaluatieId', $evaluatieId);
+
+            $stmt->execute();
+
+        } catch (PDOException $e) {
+            die($e->getMessage());
+        }
+    }
+
+    public static function deleteRapportScores($rapportId, $doelstellingIds){
+        try {
+            $conn = graderdb::getConnection();
+
+            $sql = 'DELETE FROM rapporten_scores WHERE rapportId = :rapportId AND doelstellingId IN (';
+            $first = true;
+            foreach($doelstellingIds as $doelstellingId){
+                if(!$first) $sql .= ', ';
+                $sql .= $doelstellingId; // TODO parameter binding?
+                $first = false;
+            }
+            $sql .= ');';
+            $stmt = $conn->prepare($sql);
+            $stmt->bindParam(':rapportId', $rapportId);
 
             $stmt->execute();
 

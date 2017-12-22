@@ -1,6 +1,6 @@
 <?php
-require_once('graderdb.php');
-require_once('Login.php');
+require_once('../php/graderdb.php');
+require_once('../php/Login.php');
 require_once('token.php');
 //require_once('mailer.php');
 
@@ -790,7 +790,7 @@ if ($_SERVER['REQUEST_METHOD'] == 'GET') {
             //echo json_encode($postBody);
 
             $userDAO->insertNewReport($postBody->name, $postBody->studentId, preg_replace('#(\d{2})/(\d{2})/(\d{4})#', '$3-$2-$1', $postBody->startdate), preg_replace('#(\d{2})/(\d{2})/(\d{4})#', '$3-$2-$1', $postBody->enddate), $postBody->commentaarKlassenraad, $postBody->commentaarAlgemeen);
-            $rapportId = $userDAO->getRapportId($postBody->name);
+            $rapportId = $userDAO->getRapportId($postBody->name, $postBody->studentId);
             $userDAO->insertRapportModules($rapportId,$modules);
             $userDAO->insertRapportscores($rapportId, $punten);
 
@@ -868,8 +868,8 @@ if ($_SERVER['REQUEST_METHOD'] == 'GET') {
         //if (Token::hasClearance($$postBody->token, $teacherRole) || Token::hasClearance($postBody->token, $adminRole)) {
         $postBody = file_get_contents('php://input');
         $postBody = json_decode($postBody);
-
         if (!empty($postBody)) {
+
             $reportId = $postBody->reportId;
             $reportName = $postBody->name;
             $startdate = $postBody->startdate;
