@@ -763,13 +763,14 @@ class UserDAO
         return $evaluaties;
     }
 
-    public static function getEvaluatieId($evaluatieName)
+    public static function getEvaluatieId($evaluatieName, $studentId)
     {
         try {
             $conn = graderdb::getConnection();
 
-            $sql = 'SELECT id FROM evaluaties WHERE name = :evaluatieName';
+            $sql = 'SELECT id FROM evaluaties WHERE name = :evaluatieName AND studentId = :studentId';
             $stmt = $conn->prepare($sql);
+            $stmt->bindParam(':studentId', $studentId);
             $stmt->bindParam(':evaluatieName', $evaluatieName);
 
             $stmt->execute();
