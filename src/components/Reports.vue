@@ -256,7 +256,7 @@
                    <v-btn @click="" large color="primary"><v-icon>get_app</v-icon></v-btn>
                    <v-btn @click="print" large color="primary"><v-icon>print</v-icon></v-btn>
                    <v-btn v-if="!edit" @click="edit = true" large class="right" color="primary"><v-icon>edit</v-icon></v-btn>
-                   <v-btn v-if="edit" @click="updateReport(currentreport.id)" large class="right" color="primary"><v-icon>save</v-icon></v-btn>
+                   <v-btn v-if="edit" @click="updateReport()" large class="right" color="primary"><v-icon>save</v-icon></v-btn>
                  </v-flex>
                </v-card>
              </v-flex>
@@ -397,7 +397,9 @@ export default {
       loopStudentIds: 0,
       loadbarValue: 0,
       loadbarShow: false,
-      loadbarStep: 0
+      loadbarStep: 0,
+      uniqueNameNr: 0,
+      updatedReportName: null
     }
   },
   methods: {
@@ -415,7 +417,6 @@ export default {
     getCurrentStudentReports () {
       var self = this
       this.$http.getStudentReports(self.currentstudent.student.id, function (data) {
-        console.log(data)
         self.current_student_reports = data.slice().reverse()
       })
     },
@@ -454,6 +455,7 @@ export default {
       var self = this
       self.currentreport = null
       self.studentIds = []
+      self.updatedReportName = self.reportName
       if (singleReport) {
         self.studentIds.push(self.currentstudent.student.id)
       } else {
@@ -464,13 +466,14 @@ export default {
         self.loadbarShow = true
       }
       var id = self.studentIds[self.loopStudentIds]
-      console.log('next id=')
-      console.log(id)
       if (id !== undefined) {
         self.loopStudentIds++
         self.generateReport(id, singleReport)
       } else {
         self.loopStudentIds = 0
+        if (singleReport) {
+          self.getCurrentStudentReports()
+        }
       }
     },
     generateReport: function (id, singleReport) {
@@ -480,58 +483,66 @@ export default {
       var d2 = self.dateFormatted2.split('/')
       var start = new Date(d1[2], parseInt(d1[1]) - 1, d1[0])
       var end = new Date(d2[2], parseInt(d2[1]) - 1, d2[0])
-      self.$http.getStudentReports(id, function (data) {
-        var uniqueName = true
-        for (var x = 0; x < data.length; x++) {
-          if (data[x].name === self.reportName) {
-            uniqueName = false
+      if (self.dateFormatted1 !== null && self.dateFormatted2 !== null && self.reportName !== null && start < end) {
+        var isUnique = true
+        this.$http.getStudentReports(id, function (data) {
+          for (var x = 0; x < data.length; x++) {
+            if (data[x].name === self.updatedReportName) {
+              self.updatedReportName = self.reportName
+              isUnique = false
+              self.uniqueNameNr++
+              self.updatedReportName += ' (' + self.uniqueNameNr + ')'
+            }
           }
-        }
-        if (self.dateFormatted1 !== null && self.dateFormatted2 !== null && self.reportName !== null && uniqueName && start < end) {
-          self.reportError = null
-          self.$http.getEvalForStudent(id, function (data) {
-            self.opleiding = data
-            self.currentreport = {}
-            self.currentreport['commentaarAlgemeen'] = ''
-            self.currentreport['commentaarKlassenraad'] = ''
-            self.currentreport['klas'] = ''
-            self.currentreport['name'] = self.reportName
-            self.currentreport['startdate'] = self.dateFormatted1
-            self.currentreport['enddate'] = self.dateFormatted2
-            self.currentreport['studentId'] = id
-            var modules = []
-            for (var i = 0; i < self.opleiding.modules.length; i++) {
-              var module = self.opleiding.modules[i]
-              modules[i] = {naam: module.name, id: module.id, doelstellingscategories: [], commentaar: null}
-              for (var j = 0; j < self.opleiding.modules[i].categorieen.length; j++) {
-                var doelstellingscategorie = self.opleiding.modules[i].categorieen[j]
-                modules[i]['doelstellingscategories'][j] = {name: doelstellingscategorie.name, id: doelstellingscategorie.id, doelstellingen: []}
-                for (var k = 0; k < self.opleiding.modules[i].categorieen[j].doelstellingen.length; k++) {
-                  var doelstelling = self.opleiding.modules[i].categorieen[j].doelstellingen[k]
-                  modules[i]['doelstellingscategories'][j]['doelstellingen'][k] = {name: doelstelling.name, id: doelstelling.id, opmerking: null, score: null}
+          if (isUnique) {
+            self.uniqueNameNr = 0
+            self.reportError = null
+            self.$http.getEvalForStudent(id, function (data) {
+              self.opleiding = data
+              self.currentreport = {}
+              self.currentreport['commentaarAlgemeen'] = ''
+              self.currentreport['commentaarKlassenraad'] = ''
+              self.currentreport['klas'] = ''
+              self.currentreport['name'] = self.updatedReportName
+              self.currentreport['startdate'] = self.dateFormatted1
+              self.currentreport['enddate'] = self.dateFormatted2
+              self.currentreport['studentId'] = id
+              var modules = []
+              for (var i = 0; i < self.opleiding.modules.length; i++) {
+                var module = self.opleiding.modules[i]
+                modules[i] = {naam: module.name, id: module.id, doelstellingscategories: [], commentaar: null}
+                for (var j = 0; j < self.opleiding.modules[i].categorieen.length; j++) {
+                  var doelstellingscategorie = self.opleiding.modules[i].categorieen[j]
+                  modules[i]['doelstellingscategories'][j] = {name: doelstellingscategorie.name, id: doelstellingscategorie.id, doelstellingen: []}
+                  for (var k = 0; k < self.opleiding.modules[i].categorieen[j].doelstellingen.length; k++) {
+                    var doelstelling = self.opleiding.modules[i].categorieen[j].doelstellingen[k]
+                    modules[i]['doelstellingscategories'][j]['doelstellingen'][k] = {name: doelstelling.name, id: doelstelling.id, opmerking: null, score: null}
+                  }
                 }
               }
-            }
-            self.calculateScores(start, end, singleReport, id)
-            self.currentreport['modules'] = modules
-          })
-        } else if (self.dateFormatted1 === null || self.dateFormatted2 === null) {
-          self.reportError = 'Beide Datums moeten worden ingevuld'
-          self.loadbarShow = false
-          self.loadbarValue = 0
-          self.loadbarStep = 0
-        } else if (start >= end) {
-          self.reportError = 'De startdatum kan niet na de einddatum komen'
-          self.loadbarShow = false
-          self.loadbarValue = 0
-          self.loadbarStep = 0
-        } else {
-          self.reportError = 'Je moet een rapportnaam opgeven en deze naam moet uniek zijn'
-          self.loadbarShow = false
-          self.loadbarValue = 0
-          self.loadbarStep = 0
-        }
-      })
+              self.calculateScores(start, end, singleReport, id)
+              self.currentreport['modules'] = modules
+            })
+          } else {
+            self.generateReport(id, singleReport)
+          }
+        })
+      } else if (self.dateFormatted1 === null || self.dateFormatted2 === null) {
+        self.reportError = 'Beide Datums moeten worden ingevuld'
+        self.loadbarShow = false
+        self.loadbarValue = 0
+        self.loadbarStep = 0
+      } else if (start >= end) {
+        self.reportError = 'De startdatum kan niet na de einddatum komen'
+        self.loadbarShow = false
+        self.loadbarValue = 0
+        self.loadbarStep = 0
+      } else {
+        self.reportError = 'Je moet een rapportnaam opgeven'
+        self.loadbarShow = false
+        self.loadbarValue = 0
+        self.loadbarStep = 0
+      }
     },
     calculateScores: function (start, end, singleReport, id) {
       var self = this
@@ -567,22 +578,23 @@ export default {
             }
           }
         }
-        self.$http.getStudent(id, function (data) {
-          self.currentreport['name'] = self.reportName + ' - ' + data.student.firstname + ' ' + data.student.lastname
-          self.$http.saveReport(self.currentreport, function (data) {
-            self.makeReports(singleReport)
-            self.loadbarValue += self.loadbarStep
-            if (self.loadbarValue === 100) {
-              self.loadbarShow = false
-              self.loadbarValue = 0
-              self.loadbarStep = 0
-            }
-          })
+        self.$http.saveReport(self.currentreport, function (data) {
+          self.makeReports(singleReport)
+          self.loadbarValue += self.loadbarStep
+          if (self.loadbarValue === 100) {
+            self.loadbarShow = false
+            self.loadbarValue = 0
+            self.loadbarStep = 0
+          }
         })
       })
     },
-    updateReport: function (id) {
-      console.log(id)
+    updateReport: function () {
+      var self = this
+      self.edit = false
+      self.$http.updateReport(self.currentreport, function (data) {
+        console.log('report updated')
+      })
     },
     getAvgScore: function (scores) {
       if (scores) {
