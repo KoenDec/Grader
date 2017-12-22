@@ -8,9 +8,6 @@
               v-bind:active="loadbarShow"
       ></v-progress-linear>
     </v-flex>
-    <v-flex>
-        <v-btn v-if="loadbarValue === 100" flat @click.native="loadbarShow = false; loadbarValue = 0; loadbarStep = 0">TERUG</v-btn>
-    </v-flex>
   </v-dialog>
   <v-layout row justify-center>
       <v-dialog v-model="reportGen" persistent max-width="290">
@@ -395,7 +392,7 @@ export default {
       reportName: null,
       edit: false,
       reportsGenerator: false,
-      studentIdsFromSelect: [], // 7,8,9,10
+      studentIdsFromSelect: [], // 7, 8, 9, 10
       studentIds: [],
       loopStudentIds: 0,
       loadbarValue: 0,
@@ -552,9 +549,17 @@ export default {
             }
           }
         }
-        self.$http.saveReport(self.currentreport, function (data) {
-          self.makeReports(singleReport)
-          self.loadbarValue += self.loadbarStep
+        self.$http.getStudent(id, function (data) {
+          self.currentreport['name'] = self.reportName + ' - ' + data.student.firstname + ' ' + data.student.lastname
+          self.$http.saveReport(self.currentreport, function (data) {
+            self.makeReports(singleReport)
+            self.loadbarValue += self.loadbarStep
+            if (self.loadbarValue === 100) {
+              self.loadbarShow = false
+              self.loadbarValue = 0
+              self.loadbarStep = 0
+            }
+          })
         })
       })
     },
