@@ -2,6 +2,7 @@
 require_once('graderdb.php');
 require_once('Login.php');
 require_once('token.php');
+//require_once('mailer.php');
 
 header("Access-Control-Allow-Origin: *");
 header("Access-Control-Allow-Methods: DELETE, PATCH, GET, POST, OPTIONS");
@@ -90,7 +91,7 @@ if ($_SERVER['REQUEST_METHOD'] == 'GET') {
         if (isset($_GET['student'])) {
             $studentId = $_GET['student'];
             $evaluaties = $userDAO->getAllEvaluaties($studentId);
-
+          if(!empty($evaluaties)){
             $evaluations = [];
 
             foreach($evaluaties as $evaluatie){
@@ -159,6 +160,10 @@ if ($_SERVER['REQUEST_METHOD'] == 'GET') {
             echo json_encode($evaluations);
 
             $http_response_code(200);
+          } else {
+            echo '{"Error":"Geen evaluaties beschikbaar"}';
+            http_response_code(200);
+          }
         } else {
             echo $notFoundErr;
             http_response_code(405);
@@ -260,7 +265,7 @@ if ($_SERVER['REQUEST_METHOD'] == 'GET') {
           $reports = [];
 
           usort($rapporten, function($a,$b){
-            return strtotime($a->startdate) - strtotime($b->startdate);
+            return strtotime($a->enddate) - strtotime($b->enddate);
           });
           foreach($rapporten as $rapport){
             $rapport->startdate = preg_replace('/(\d{4})-(\d{2})-(\d{2})/', '$3/$2/$1', $rapport->startdate);
@@ -799,6 +804,7 @@ if ($_SERVER['REQUEST_METHOD'] == 'GET') {
           http_response_code(401);
         }*/
     } if ($_GET['url'] == 'createStudent') {
+      Mailer::mail();
       /*$postBody = file_get_contents('php://input');
       $postBody = json_decode($postBody);
 
