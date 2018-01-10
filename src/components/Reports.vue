@@ -1,5 +1,14 @@
 <template>
   <main>
+  <v-dialog v-model="loadbarShow" persistent max-width="600">
+    <v-flex xs12 pl-3 pr-3>
+      <v-progress-linear
+              height="20"
+              v-model="loadbarValue"
+              v-bind:active="loadbarShow"
+      ></v-progress-linear>
+    </v-flex>
+  </v-dialog>
   <v-layout row justify-center>
       <v-dialog v-model="reportGen" persistent max-width="290">
           <v-card>
@@ -15,7 +24,7 @@
                       </v-text-field>
                       <br/>
                       Startdatum:
-                      <v-layout row wrap>
+                      <v-layout row-wrap>
                           <v-flex>
                               <v-menu
                                       lazy
@@ -50,7 +59,7 @@
                       </v-layout>
                       <br/>
                       Einddatum:
-                      <v-layout row wrap>
+                      <v-layout row-wrap>
                           <v-flex>
                               <v-menu
                                       lazy
@@ -87,18 +96,115 @@
               <v-card-actions>
                   <v-spacer></v-spacer>
                   <v-btn color="green darken-1" flat @click.native="reportGen = false">TERUG</v-btn>
-                  <v-btn color="green darken-1" flat @click.native="generateReport()">AANMAKEN</v-btn>
+                  <v-btn color="green darken-1" flat @click.native="makeReports(true)">AANMAKEN</v-btn>
               </v-card-actions>
           </v-card>
       </v-dialog>
   </v-layout>
     <v-layout row-wrap>
         <v-flex xs12 offset-xs1 class="text-xs-left">
-          <h1 class="display-3">Rapporten</h1>
+          <h1 class="display-3">Rapporten<span v-if="reportsGenerator"> aanmaken</span></h1>
         </v-flex>
     </v-layout>
-    <v-layout row-wrap>
-      <v-flex xs4 offset-xs1 ref="results" @>
+
+    <v-layout row-wrap v-if="reportsGenerator">
+        <v-flex xs1 offset-xs1>
+            <v-btn @click="reportsGenerator = false" class="left" color="primary"><v-icon class="mr-2">undo</v-icon>Back</v-btn>
+        </v-flex>
+        <v-flex xs9>
+            <v-btn class="right" color="warning" @click="makeReports(false)"><v-icon class="mr-2">save</v-icon>Alle Rapporten genereren</v-btn>
+            <p>{{studentIdsFromSelect}}</p>
+        </v-flex>
+    </v-layout>
+    <v-layout row-wrap v-if="reportsGenerator">
+      <v-flex xs4 offset-xs1>
+          <v-text-field
+                  name="reportName"
+                  v-model="reportName"
+                  label="naam rapport"
+                  id="reportName2"
+                  type="text"
+          >
+          </v-text-field>
+      </v-flex>
+    </v-layout>
+    <v-layout v-if="reportsGenerator">
+        <v-flex xs6 offset-xs1>
+            <v-layout row-wrap>
+                <v-flex xs3>
+                    <v-menu
+                            lazy
+                            :close-on-content-click="false"
+                            v-model="menu3"
+                            transition="scale-transition"
+                            offset-y
+                            full-width
+                            :nudge-right="40"
+                            max-width="290px"
+                            min-width="290px"
+                    >
+                        <v-text-field
+                                slot="activator"
+                                label="Startdatum"
+                                v-model="dateFormatted1"
+                                prepend-icon="event"
+                                hint="inclusief"
+                                @blur="date1 = parseDate(dateFormatted1)"
+                        ></v-text-field>
+                        <v-date-picker v-model="date1" @input="dateFormatted1 = formatDate($event)" no-title scrollable actions>
+                            <template slot-scope="{ save, cancel }">
+                                <v-card-actions>
+                                    <v-spacer></v-spacer>
+                                    <v-btn flat color="primary" @click="cancel">Cancel</v-btn>
+                                    <v-btn flat color="primary" @click="save">OK</v-btn>
+                                </v-card-actions>
+                            </template>
+                        </v-date-picker>
+                    </v-menu>
+                </v-flex>
+                <v-flex xs3>
+                    <v-menu
+                            lazy
+                            :close-on-content-click="false"
+                            v-model="menu4"
+                            transition="scale-transition"
+                            offset-y
+                            full-width
+                            :nudge-right="40"
+                            max-width="290px"
+                            min-width="290px"
+                    >
+                        <v-text-field
+                                slot="activator"
+                                label="Einddatum"
+                                v-model="dateFormatted2"
+                                prepend-icon="event"
+                                hint="inclusief"
+                                @blur="date2 = parseDate(dateFormatted2)"
+                        ></v-text-field>
+                        <v-date-picker v-model="date2" @input="dateFormatted2 = formatDate($event)" no-title scrollable actions>
+                            <template slot-scope="{ save, cancel }">
+                                <v-card-actions>
+                                    <v-spacer></v-spacer>
+                                    <v-btn flat color="primary" @click="cancel">Cancel</v-btn>
+                                    <v-btn flat color="primary" @click="save">OK</v-btn>
+                                </v-card-actions>
+                            </template>
+                        </v-date-picker>
+                    </v-menu>
+                </v-flex>
+            </v-layout>
+        </v-flex>
+    </v-layout>
+
+    <v-layout row-wrap v-if="!reportsGenerator">
+      <v-flex v-if="currentreport === null" xs1 offset-xs1 mt-3 mr-5>
+        <v-btn v-if="currentreport === null" @click="reportsGenerator = true; currentstudent = null" class="left" color="primary">Rapporten aanmaken</v-btn>
+      </v-flex>
+        <v-flex v-if="currentreport === null" xs1 mt-4>
+            <p>OF</p>
+        </v-flex>
+      <v-flex xs2 offset-xs1 :class="{'ml-0': currentreport === null}" ref="results" @>
         <searchbar @select-item="applySelection" :list="items" :concat_keys="keys" :labeltext="zoeklabel" :item_concat_key="item_name" :item_value="item_value"></searchbar>
       </v-flex>
     </v-layout>
@@ -110,7 +216,7 @@
           <h2 class="headline" v-if="currentstudent != null && !currentreport">{{ 'Overzicht rapporten' }}</h2>
           <v-flex>
             <div>
-              <v-btn v-if="currentstudent != null && currentreport === null" @click="reportGen = true" class="left" color="primary">Rapport aanmaken</v-btn>
+              <v-btn v-if="currentstudent != null && currentreport === null" @click="reportGen = true" class="left" color="primary">Rapport aanmaken voor {{currentstudent.student.firstname + ' ' + currentstudent.student.lastname}}</v-btn>
               <p v-if="reportError" style="display: inline-block" class="red--text pt-3">{{reportError}}</p>
             </div>
           </v-flex>
@@ -120,7 +226,7 @@
         <v-flex xs10 offset-xs1>
             <v-list two-line v-if="currentstudent != null && currentreport === null">
               <v-subheader>{{'Rapporten van ' + currentstudent.student.firstname + ' ' + currentstudent.student.lastname}}</v-subheader>
-              <template v-for="report in current_student_reports.slice().reverse()">
+              <template v-for="report in current_student_reports">
                 <v-divider></v-divider>
                 <v-list-tile v-bind:key="report.id" @click="getReport(report.id)">
                   <v-list-tile-content>
@@ -131,7 +237,7 @@
               </template>
             </v-list>
             <!-- REPORT TEMPLATE -->
-            <template v-if="currentreport != null">
+          <template v-if="currentreport != null && !reportsGenerator">
             <v-layout row-wrap>
               <v-flex xs12>
               <v-card color="blue-grey darken-4" class="white--text">
@@ -150,7 +256,7 @@
                    <v-btn @click="" large color="primary"><v-icon>get_app</v-icon></v-btn>
                    <v-btn @click="print" large color="primary"><v-icon>print</v-icon></v-btn>
                    <v-btn v-if="!edit" @click="edit = true" large class="right" color="primary"><v-icon>edit</v-icon></v-btn>
-                   <v-btn v-if="edit" @click="edit = false" large class="right" color="primary"><v-icon>save</v-icon></v-btn>
+                   <v-btn v-if="edit" @click="updateReport()" large class="right" color="primary"><v-icon>save</v-icon></v-btn>
                  </v-flex>
                </v-card>
              </v-flex>
@@ -274,15 +380,26 @@ export default {
       possibleScores: ['G', 'V', 'OV', 'RO', 'NVT'],
       reportGen: false,
       date1: null,
-      dateFormatted1: null,
+      dateFormatted1: '01/09/2017',
       date2: null,
       dateFormatted2: null,
       reportError: null,
       menu1: false,
       menu2: false,
+      menu3: false,
+      menu4: false,
       opleiding: null,
       reportName: null,
-      edit: false
+      edit: false,
+      reportsGenerator: false,
+      studentIdsFromSelect: [], // 7, 8, 9, 10
+      studentIds: [],
+      loopStudentIds: 0,
+      loadbarValue: 0,
+      loadbarShow: false,
+      loadbarStep: 0,
+      uniqueNameNr: 0,
+      updatedReportName: null
     }
   },
   methods: {
@@ -300,7 +417,7 @@ export default {
     getCurrentStudentReports () {
       var self = this
       this.$http.getStudentReports(self.currentstudent.student.id, function (data) {
-        self.current_student_reports = data
+        self.current_student_reports = data.slice().reverse()
       })
     },
     getReport (rapportid) {
@@ -334,7 +451,32 @@ export default {
       const [month, day, year] = date.split('/')
       return `${year}-${month.padStart(2, '0')}-${day.padStart(2, '0')}`
     },
-    generateReport: function () {
+    makeReports: function (singleReport) {
+      var self = this
+      self.currentreport = null
+      self.studentIds = []
+      self.updatedReportName = self.reportName
+      if (singleReport) {
+        self.studentIds.push(self.currentstudent.student.id)
+      } else {
+        self.studentIds = self.studentIdsFromSelect
+      }
+      if (self.loopStudentIds === 0) {
+        self.loadbarStep = 100 / self.studentIds.length
+        self.loadbarShow = true
+      }
+      var id = self.studentIds[self.loopStudentIds]
+      if (id !== undefined) {
+        self.loopStudentIds++
+        self.generateReport(id, singleReport)
+      } else {
+        self.loopStudentIds = 0
+        if (singleReport) {
+          self.getCurrentStudentReports()
+        }
+      }
+    },
+    generateReport: function (id, singleReport) {
       var self = this
       self.reportGen = false
       var d1 = self.dateFormatted1.split('/')
@@ -342,45 +484,70 @@ export default {
       var start = new Date(d1[2], parseInt(d1[1]) - 1, d1[0])
       var end = new Date(d2[2], parseInt(d2[1]) - 1, d2[0])
       if (self.dateFormatted1 !== null && self.dateFormatted2 !== null && self.reportName !== null && start < end) {
-        self.reportError = null
-        self.$http.getEvalForStudent(self.currentstudent.student.id, function (data) {
-          self.opleiding = data
-          self.currentreport = {}
-          self.currentreport['commentaarAlgemeen'] = ''
-          self.currentreport['commentaarKlassenraad'] = ''
-          self.currentreport['klas'] = ''
-          self.currentreport['name'] = self.reportName
-          self.currentreport['startdate'] = self.dateFormatted1
-          self.currentreport['enddate'] = self.dateFormatted2
-          self.currentreport['studentId'] = self.currentstudent.student.id
-          var modules = []
-          for (var i = 0; i < self.opleiding.modules.length; i++) {
-            var module = self.opleiding.modules[i]
-            modules[i] = {naam: module.name, id: module.id, doelstellingscategories: [], commentaar: null}
-            for (var j = 0; j < self.opleiding.modules[i].categorieen.length; j++) {
-              var doelstellingscategorie = self.opleiding.modules[i].categorieen[j]
-              modules[i]['doelstellingscategories'][j] = {name: doelstellingscategorie.name, id: doelstellingscategorie.id, doelstellingen: []}
-              for (var k = 0; k < self.opleiding.modules[i].categorieen[j].doelstellingen.length; k++) {
-                var doelstelling = self.opleiding.modules[i].categorieen[j].doelstellingen[k]
-                modules[i]['doelstellingscategories'][j]['doelstellingen'][k] = {name: doelstelling.name, id: doelstelling.id, opmerking: null, score: null}
-              }
+        var isUnique = true
+        this.$http.getStudentReports(id, function (data) {
+          for (var x = 0; x < data.length; x++) {
+            if (data[x].name === self.updatedReportName) {
+              self.updatedReportName = self.reportName
+              isUnique = false
+              self.uniqueNameNr++
+              self.updatedReportName += ' (' + self.uniqueNameNr + ')'
             }
           }
-          self.calculateScores(start, end)
-          self.currentreport['modules'] = modules
+          if (isUnique) {
+            self.uniqueNameNr = 0
+            self.reportError = null
+            self.$http.getEvalForStudent(id, function (data) {
+              self.opleiding = data
+              self.currentreport = {}
+              self.currentreport['commentaarAlgemeen'] = ''
+              self.currentreport['commentaarKlassenraad'] = ''
+              self.currentreport['klas'] = ''
+              self.currentreport['name'] = self.updatedReportName
+              self.currentreport['startdate'] = self.dateFormatted1
+              self.currentreport['enddate'] = self.dateFormatted2
+              self.currentreport['studentId'] = id
+              var modules = []
+              for (var i = 0; i < self.opleiding.modules.length; i++) {
+                var module = self.opleiding.modules[i]
+                modules[i] = {naam: module.name, id: module.id, doelstellingscategories: [], commentaar: null}
+                for (var j = 0; j < self.opleiding.modules[i].categorieen.length; j++) {
+                  var doelstellingscategorie = self.opleiding.modules[i].categorieen[j]
+                  modules[i]['doelstellingscategories'][j] = {name: doelstellingscategorie.name, id: doelstellingscategorie.id, doelstellingen: []}
+                  for (var k = 0; k < self.opleiding.modules[i].categorieen[j].doelstellingen.length; k++) {
+                    var doelstelling = self.opleiding.modules[i].categorieen[j].doelstellingen[k]
+                    modules[i]['doelstellingscategories'][j]['doelstellingen'][k] = {name: doelstelling.name, id: doelstelling.id, opmerking: null, score: null}
+                  }
+                }
+              }
+              self.calculateScores(start, end, singleReport, id)
+              self.currentreport['modules'] = modules
+            })
+          } else {
+            self.generateReport(id, singleReport)
+          }
         })
       } else if (self.dateFormatted1 === null || self.dateFormatted2 === null) {
         self.reportError = 'Beide Datums moeten worden ingevuld'
+        self.loadbarShow = false
+        self.loadbarValue = 0
+        self.loadbarStep = 0
       } else if (start >= end) {
         self.reportError = 'De startdatum kan niet na de einddatum komen'
+        self.loadbarShow = false
+        self.loadbarValue = 0
+        self.loadbarStep = 0
       } else {
         self.reportError = 'Je moet een rapportnaam opgeven'
+        self.loadbarShow = false
+        self.loadbarValue = 0
+        self.loadbarStep = 0
       }
     },
-    calculateScores: function (start, end) {
+    calculateScores: function (start, end, singleReport, id) {
       var self = this
       var scores = {}
-      self.$http.getAllEvalsByStudent(self.currentstudent.student.id, function (data) {
+      self.$http.getAllEvalsByStudent(id, function (data) {
         for (var i = 0; i < self.currentreport.modules.length; i++) {
           for (var j = 0; j < self.currentreport.modules[i].doelstellingscategories.length; j++) {
             for (var k = 0; k < self.currentreport.modules[i].doelstellingscategories[j].doelstellingen.length; k++) {
@@ -411,10 +578,22 @@ export default {
             }
           }
         }
-        self.$forceUpdate()
         self.$http.saveReport(self.currentreport, function (data) {
-          console.log(data)
+          self.makeReports(singleReport)
+          self.loadbarValue += self.loadbarStep
+          if (self.loadbarValue === 100) {
+            self.loadbarShow = false
+            self.loadbarValue = 0
+            self.loadbarStep = 0
+          }
         })
+      })
+    },
+    updateReport: function () {
+      var self = this
+      self.edit = false
+      self.$http.updateReport(self.currentreport, function (data) {
+        console.log('report updated')
       })
     },
     getAvgScore: function (scores) {
@@ -442,7 +621,9 @@ export default {
   },
   created () {
     var self = this
-    self.applySelection(self.$route.query.id)
+    if (self.$route.query.id) {
+      self.applySelection(self.$route.query.id)
+    }
     var d = new Date()
     var month = d.getMonth() + 1
     self.dateFormatted2 = d.getDate() + '/' + month + '/' + d.getFullYear()

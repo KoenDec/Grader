@@ -145,6 +145,26 @@ var Api = (function () {
       })
   }
 
+  my.updateReport = function (report, cb) {
+    axios.post('http://146.185.183.217/api/updateReport', {
+      commentaarAlgemeen: report.commentaarAlgemeen,
+      commentaarKlassenraad: report.commentaarKlassenraad,
+      enddate: report.enddate,
+      modules: report.modules,
+      name: report.name,
+      startdate: report.startdate,
+      reportId: report.id,
+      studentId: report.studentId
+    })
+      .then(function (response) {
+        if (response.statusText === 'OK') return cb(response.data)
+        else return cb(response.data)
+      })
+      .catch(function (error) {
+        console.log(error)
+      })
+  }
+
   my.getFullOpleiding = function (id, cb) {
     axios.get('http://146.185.183.217/api/fullOpleiding', {
       params: {
