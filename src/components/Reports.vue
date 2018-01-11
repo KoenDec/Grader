@@ -194,6 +194,9 @@
                     </v-menu>
                 </v-flex>
             </v-layout>
+            <v-layout>
+              <datatableselects @selected-students="updateIds" :filters="filters"></datatableselects>
+            </v-layout>
         </v-flex>
     </v-layout>
 
@@ -362,6 +365,7 @@ export default {
   data () {
     return {
       items: [],
+      filters: [],
       keys: ['firstname', 'lastname'],
       selectedScore: {},
       item_name: 'fullname',
@@ -413,6 +417,9 @@ export default {
         self.currentreport = null
         self.getCurrentStudentReports()
       })
+    },
+    updateIds (payload) {
+      this.studentIdsFromSelect = payload
     },
     getCurrentStudentReports () {
       var self = this

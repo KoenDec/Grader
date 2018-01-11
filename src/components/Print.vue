@@ -8,10 +8,10 @@
   </v-layout>
   <v-layout row-wrap class="mt-5">
   <v-flex xs2 offset-xs1>
-    <checkboxes :listobject="opleidingen" v-if="receivedData"></checkboxes>
+    <checkboxes @update-filters="updateFilters" :listobject="opleidingen" v-if="receivedData"></checkboxes>
   </v-flex>
   <v-flex xs6>
-    <datatableselects></datatableselects>
+    <datatableselects :filters="filters"></datatableselects>
   </v-flex>
   <v-flex xs2>
     <v-btn color="primary" class="ma-1 left" dark><v-icon dark>print</v-icon></v-btn>
@@ -28,6 +28,7 @@ export default {
     return {
       search: '',
       selected: [],
+      filters: [],
       headers: [
         { text: 'Student', align: 'left', value: 'student' },
         { text: 'Opleiding', align: 'left', value: 'opleiding' },
@@ -36,6 +37,11 @@ export default {
       receivedData: false,
       items: [],
       opleidingen: []
+    }
+  },
+  methods: {
+    updateFilters (payload) {
+      this.filters = payload
     }
   },
   created () {
