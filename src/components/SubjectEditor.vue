@@ -5,6 +5,7 @@
           <v-text-field
             name="opleidingsnaam"
             label="Naam van de opleiding"
+            v-model="opleidingsnaam"
             single-line
           ></v-text-field>
         </v-flex>
@@ -161,6 +162,7 @@ export default {
   data () {
     return {
       snackbar: false,
+      opleidingsnaam: '',
       addModuleActive: false,
       addCategorieActive: false,
       addDoelstellingActive: false,
@@ -258,9 +260,8 @@ export default {
   created () {
     var self = this
     if (this.givenmajor != null) {
+      this.opleidingsnaam = self.givenmajor.name
       this.$http.getFullOpleiding(this.givenmajor.id, function (data) {
-        console.log(data)
-
         data.modules.forEach(function (module, moduleindex) {
           module['indexes'] = [moduleindex + 1]
           module.categorieen.forEach(function (categorie, categorieIndex) {
