@@ -257,10 +257,28 @@ export default {
   },
   created () {
     var self = this
-    this.$http.getFullOpleiding(this.givenmajor.id, function (data) {
-      console.log(data)
-      self.opleiding = data.modules
-    })
+    if (this.givenmajor != null) {
+      this.$http.getFullOpleiding(this.givenmajor.id, function (data) {
+        console.log(data)
+
+        data.modules.forEach(function (module, moduleindex) {
+          module['indexes'] = [moduleindex + 1]
+          module.categorieen.forEach(function (categorie, categorieIndex) {
+            categorie['indexes'] = [moduleindex + 1, categorieIndex + 1]
+            categorie.doelstellingen.forEach(function (doelstelling, doelstellingIndex) {
+              doelstelling['indexes'] = [moduleindex + 1, categorieIndex + 1, doelstellingIndex + 1]
+              doelstelling.criteria.forEach(function (criterium, criteriumIndex) {
+                criterium['indexes'] = [moduleindex + 1, categorieIndex + 1, doelstellingIndex + 1, criteriumIndex + 1]
+                criterium.aspecten.forEach(function (aspect, aspectIndex) {
+                  aspect['indexes'] = [moduleindex + 1, categorieIndex + 1, doelstellingIndex + 1, criteriumIndex + 1, aspectIndex + 1]
+                })
+              })
+            })
+          })
+        })
+        self.opleiding = data.modules
+      })
+    }
   }
 }
 </script>
