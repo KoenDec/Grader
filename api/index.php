@@ -1,8 +1,8 @@
 <?php
-require_once('../php/graderdb.php');
-require_once('../php/Login.php');
+require_once('graderdb.php');
+require_once('Login.php');
 require_once('token.php');
-//require_once('mailer.php');
+require_once('mailer.php');
 
 header("Access-Control-Allow-Origin: *");
 header("Access-Control-Allow-Methods: DELETE, PATCH, GET, POST, OPTIONS");
@@ -414,9 +414,31 @@ if ($_SERVER['REQUEST_METHOD'] == 'GET') {
                     foreach($doelstellingen as $doelstelling) {
                         $doelObj = (object)[
                             'id' => $doelstelling->id,
-                            'name' => $doelstelling->name
+                            'name' => $doelstelling->name,
+                            'criteria' => array()
                         ];
 
+                        $evaluatiecriteria = $userDAO->getCriteriaInDoelstelling($doelstelling->id);
+
+                        foreach($evaluatiecriteria as $criteria) {
+                            $critObj = (object)[
+                                'id' => $criteria->id,
+                                'name' => $criteria->name,
+                                'aspecten' => array()
+                            ];
+
+                            $aspecten = $userDAO->getBeoordelingsaspectenInEvaluatiecriterium($criteria->id);
+
+                            foreach($aspecten as $aspect) {
+                                $aspectObj = (object)[
+                                    'id' => $aspect->id,
+                                    'name' => $aspect->name
+                                ];
+
+                                array_push($critObj->aspecten, $aspectObj);
+                            }
+                            array_push($doelObj->criteria, $critObj);
+                        }
                         array_push($catObj->doelstellingen, $doelObj);
                     }
                     array_push($modObj->categorieen, $catObj);
@@ -655,7 +677,38 @@ if ($_SERVER['REQUEST_METHOD'] == 'GET') {
       }
 
     } else if ($_GET['url'] == 'createModule') {
-        // TODO
+      $postBody = file_get_contents('php://input');
+      $postBody = json_decode($postBody);
+
+      $name =   $postBody->name;
+      $opleidingId =   $postBody->opleidingId;
+      $teacherId =   $postBody->teacherId;
+      $creatorId =   $postBody->creatorId;
+
+      if (empty($name) || empty($opleidingId)) {
+        echo '{"Error":"Module not created"}';
+        http_response_code(403);
+      } else {
+        $userDAO->createModule($name, $opleidingId, $teacherId, $creatorId);
+        echo 'Module created';
+        http_response_code(200);
+      }
+    } else if ($_GET['url'] == 'createDoelstellingscategorie') {
+      $postBody = file_get_contents('php://input');
+      $postBody = json_decode($postBody);
+
+      $name =   $postBody->name;
+      $moduleId =   $postBody->moduleId;
+      $creatorId =   $postBody->creatorId;
+
+      if (empty($name) || empty($moduleId)) {
+        echo '{"Error":"doelstellingscategorie not created"}';
+        http_response_code(403);
+      } else {
+        $userDAO->createDoelstellingscategorie($name, $moduleId, $creatorId);
+        echo 'Module created';
+        http_response_code(200);
+      }
     } else if ($_GET['url'] == 'createOpleiding') {
       $postBody = file_get_contents('php://input');
       $postBody = json_decode($postBody);
@@ -804,20 +857,21 @@ if ($_SERVER['REQUEST_METHOD'] == 'GET') {
           http_response_code(401);
         }*/
     } if ($_GET['url'] == 'createStudent') {
-      Mailer::mail();
-      /*$postBody = file_get_contents('php://input');
+      //Mailer::mailPasswordTo("iamkodec@gmail.com");
+      $postBody = file_get_contents('php://input');
       $postBody = json_decode($postBody);
 
       $firstname = $postBody->firstname;
       $lastname = $postBody->lastname;
       $email = $postBody->email;
-      // TODO $pw = generate a password + email it;
       $moduleIds = $postBody->moduleIds;
-      $creatorId = $postBody->id;
+      $creatorId = $postBody->creatorId;
 
+      $pw = Mailer::generatePassword();
+      Mailer::mailPasswordTo($email,$pw);
       $password_hash = password_hash($pw, PASSWORD_BCRYPT);
 
-      if ($firstname != "" || $lastname != "" || $pw != "") {
+      if (empty($firstname) || empty($lastname) || empty($pw)) {
         echo '{"Error":"Student not created"}';
         http_response_code(403);
       } else {
@@ -827,7 +881,7 @@ if ($_SERVER['REQUEST_METHOD'] == 'GET') {
         $userDAO->addStudentToModules($studentid, $moduleIds);
         echo 'Student created';
         http_response_code(200);
-      }*/
+      }
   } else if ($_GET['url'] == 'updateStudent') {
     /*$postBody = file_get_contents('php://input');
     $postBody = json_decode($postBody);
@@ -943,6 +997,20 @@ if ($_SERVER['REQUEST_METHOD'] == 'GET') {
             http_response_code(200);
         } else {
             echo '{"Status": "No correct evaluation id given"}';
+            http_response_code(403);
+        }
+      /*} else {
+        echo $notAuthorizedErr;
+        http_response_code(401);
+      }*/
+    } else if ($_GET['url'] == 'deleteOpleiding') {
+      //if (Token::hasClearance($_GET['token'], $teacherRole) || Token::hasClearance($_GET['token'], $adminRole)) {
+        if (isset($_GET['id'])) {
+            echo '{"Status": "deleting opleiding '.$_GET['id'].'"}';
+            $userDAO->deleteOpleiding($_GET['id']);
+            http_response_code(200);
+        } else {
+            echo '{"Status": "No correct opleiding id given"}';
             http_response_code(403);
         }
       /*} else {
