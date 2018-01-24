@@ -579,7 +579,7 @@ if ($_SERVER['REQUEST_METHOD'] == 'GET') {
         echo $notAuthorizedErr;
         http_response_code(401);
       }*/
-  } else if ($_GET['url'] == 'getEvaluatieByName') {
+  /*} else if ($_GET['url'] == 'getEvaluatieByName') {
     //if (Token::hasClearance($_GET['token'], $teacherRole) || Token::hasClearance($_GET['token'], $adminRole)) {
       if (isset($_GET['name'])) {
         $id = $userDAO->getEvaluatieId($_GET['name']);
@@ -589,7 +589,7 @@ if ($_SERVER['REQUEST_METHOD'] == 'GET') {
       } else {
         echo '{"Status":"No correct evaluatie name given"}';
         http_response_code(403);
-      }
+      }*/
     /*} else {
       echo $notAuthorizedErr;
       http_response_code(401);
@@ -810,7 +810,7 @@ if ($_SERVER['REQUEST_METHOD'] == 'GET') {
         }
 
         $userDAO->insertNewEvaluation($postBody->name,$postBody->studentId,$postBody->moduleId,$date);
-        $evaluatieId = $userDAO->getEvaluatieId($postBody->name);
+        $evaluatieId = $userDAO->getEvaluatieId($postBody->name, $postBody->studentId);
         $userDAO->insertAspectbeoordelingen($evaluatieId, $beoordeeldeAspecten);
 
       /*} else {
@@ -949,7 +949,6 @@ if ($_SERVER['REQUEST_METHOD'] == 'GET') {
             }
 
             $userDAO->updateRapport($reportId, $reportName, $startdate, $enddate, $modules, $punten, $commentaarAlgemeen, $commentaarKlassenraad);
-            // TODO werkt nog niet
         }
         /*} else {
           echo $notAuthorizedErr;
