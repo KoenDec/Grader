@@ -5,13 +5,13 @@ pdfMake.vfs = pdfFonts.pdfMake.vfs
 var Printer = (function () {
   var printer = {}
   var docDefinition
-
+/*
   function getAcademicYear (string) {
     var years = string.match(/[0-9]{4}/g)
     years.sort()
     return years
   }
-
+*/
   function writeRotatedText (text) {
     var canvas = document.createElement('canvas')
     var ctx = document.createElement('canvas')
@@ -91,6 +91,7 @@ var Printer = (function () {
   }
 
   printer.print = function (student, rapport) {
+    console.log('gettoprinting')
     docDefinition = {
       content: [
         {
@@ -104,8 +105,8 @@ var Printer = (function () {
                     {
                       text: 'Leerling(e): ' + student.student.firstname + ' ' + student.student.lastname, style: 'headerLeft'
                     },
-                    {text: 'Studierichting: ' + student.opleiding.name, style: 'headerLeft'}// ,
-                    // {text: 'Academiejaar: ' + getAcademicYear(rapport.name)[0] + '-' + getAcademicYear(rapport.name)[1], style: 'headerLeft'}
+                    {text: 'Studierichting: ' + student.opleiding.name, style: 'headerLeft'},
+                    {text: 'Academiejaar: ' + rapport.startdate + '-' + rapport.enddate, style: 'headerLeft'}
                   ]
                 }
               ]

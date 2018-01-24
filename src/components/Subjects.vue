@@ -2,7 +2,7 @@
   <main>
     <v-layout row-wrap>
         <v-flex xs12 offset-xs1 class="text-xs-left">
-          <h1 class="display-3">Opleidingen</h1>
+          <h1 class="display-3">{{ 'Opleidingen' }}</h1>
         </v-flex>
     </v-layout>
     <template v-if="!editMode">
@@ -27,7 +27,7 @@
             <td class="text-xs-left">{{ props.item.name }}</td>
             <td class="text-xs-right">
               <v-btn color="error" class="ma-1 right" dark><v-icon dark>delete</v-icon></v-btn>
-              <v-btn color="primary" class="ma-1 right" slot="activator" dark><v-icon dark>edit</v-icon></v-btn>
+              <v-btn color="primary" class="ma-1 right" @click.native="setGivenMajor(props.item)" dark><v-icon dark>edit</v-icon></v-btn>
             </td>
             </tr>
           </template>
@@ -36,7 +36,7 @@
     </v-layout>
   </template>
   <v-container>
-    <subjecteditor v-if="editMode"></subjecteditor>
+    <subjecteditor v-if="editMode" :givenmajor="givenmajor" ></subjecteditor>
   </v-container>
   </main>
 </template>
@@ -49,6 +49,7 @@ export default {
       filename: '',
       formData: [],
       editMode: false,
+      givenmajor: null,
       addSubjectFile: false,
       headers: [
         { text: 'Opleiding', align: 'left', value: 'opleiding' },
@@ -70,6 +71,10 @@ export default {
     uploadFiles () {
       const form = this.formData
       console.log(form)
+    },
+    setGivenMajor (major) {
+      this.givenmajor = major
+      this.editMode = true
     },
     checkSelected (id) {
       if (this.selectedid === null) {

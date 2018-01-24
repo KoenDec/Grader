@@ -1,5 +1,5 @@
 <template>
- <v-flex xs12 sm6 class="ma-0">
+ <v-flex xs12 sm12 class="ma-0">
     <v-select
                   :items="searchable_data"
                   :item-text="`${item_concat_key}`"
