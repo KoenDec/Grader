@@ -104,8 +104,8 @@ var Printer = (function () {
                     {
                       text: 'Leerling(e): ' + student.student.firstname + ' ' + student.student.lastname, style: 'headerLeft'
                     },
-                    {text: 'Studierichting: ' + student.opleiding.name, style: 'headerLeft'},
-                    {text: 'Academiejaar: ' + getAcademicYear(rapport.name)[0] + '-' + getAcademicYear(rapport.name)[1], style: 'headerLeft'}
+                    {text: 'Studierichting: ' + student.opleiding.name, style: 'headerLeft'}// ,
+                    // {text: 'Academiejaar: ' + getAcademicYear(rapport.name)[0] + '-' + getAcademicYear(rapport.name)[1], style: 'headerLeft'}
                   ]
                 }
               ]
