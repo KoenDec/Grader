@@ -27,19 +27,34 @@
       <!-- MODULES & CATEGORIEEN DISPLAY-->
       <v-flex xs3 class="mr-0 pa-0">
           <v-list dark class="blue darken-3 pa-0">
-              <v-list-group class="blue darken-3" dark v-for="(item, moduleIndex) in opleiding" :value="item.active" v-bind:key="item.name">
-                <v-list-tile slot="item" @click="hideCategorie">
+              <v-list-group v-for="(item, moduleIndex) in opleiding" :value="item.active" v-bind:key="item.name" v-if="editingModule">
+                <v-list-tile slot="item">
+                  <v-list-tile-content>
+                    <v-list-tile-title v-if="moduleIndex !== payload">{{ moduleIndex + 1 + ' ' + item.name }}</v-list-tile-title>
+                    <v-text-field @keyup.enter="editModule(null)" dark autofocus v-if="moduleIndex === payload" name="module" label="Module naam" v-model="item.name" single-line></v-text-field>
+                  </v-list-tile-content>
+                </v-list-tile>
+              </v-list-group>
+              <v-list-group uid="0" class="blue darken-3" dark v-for="(item, moduleIndex) in opleiding" :value="item.active" v-bind:key="item.name" v-if="!editingModule">
+                <v-list-tile slot="item">
                   <v-list-tile-content>
                     <v-list-tile-title>{{ moduleIndex +1 + ' ' + item.name }}</v-list-tile-title>
                   </v-list-tile-content>
-                  <v-list-tile-action>
+                  <v-btn flat icon color="blue lighten-2" @click="editModule(moduleIndex)">
+                    <v-icon>edit</v-icon>
+                  </v-btn>
+                  <v-list-tile-action @click="hideCategorie()">
                     <v-icon>keyboard_arrow_down</v-icon>
                   </v-list-tile-action>
                 </v-list-tile>
-                <v-list-tile class="blue-grey darken-2" v-for="(categorie,categorieIndex) in item.categorieen" v-bind:key="categorieIndex" @click="setCategorie(categorie)">
-                  <v-list-tile-content>
+                <v-list-tile class="blue-grey darken-2" v-for="(categorie,categorieIndex) in item.categorieen" v-bind:key="categorieIndex" @click="payload=categorieIndex">
+                  <v-list-tile-content @click="setCategorie(categorie)" v-if="!editingCategorie || categorieIndex != payload">
                     <v-list-tile-title>{{ categorie.indexes.toString().replace(/,/g, ".") + ' ' + categorie.name}}</v-list-tile-title>
                   </v-list-tile-content>
+                  <v-btn flat icon color="blue lighten-2 text-xs-right" v-if="!editingCategorie" @click="editCategorie(categorieIndex)">
+                    <v-icon>edit</v-icon>
+                  </v-btn>
+                  <v-text-field v-if="editingCategorie && payload === categorieIndex" @keyup.enter="editCategorie(null)" dark autofocus name="module" label="Categorie naam" v-model="categorie.name" single-line></v-text-field>
                 </v-list-tile>
                 <v-list-tile class="blue-grey darken-2">
                   <v-text-field
@@ -77,19 +92,34 @@
       <!-- DOELSTELLINGEN & EVALUATIECRITERIA DISPLAY-->
       <v-flex xs4 class="mr-0 pa-0" v-if="selectedcategorie != null">
         <v-list dark class="blue darken-3 pa-0">
-            <v-list-group class="blue darken-3" dark v-for="(item, doelstellingIndex) in selectedcategorie.doelstellingen" :value="item.active" v-bind:key="item.name">
+            <v-list-group v-for="(item, doelstellingIndex) in selectedcategorie.doelstellingen" :value="item.active" v-bind:key="item.name" v-if="editingDoelstelling">
+              <v-list-tile slot="item">
+                <v-list-tile-content>
+                  <v-list-tile-title v-if="doelstellingIndex !== payload">{{ item.indexes.toString().replace(/,/g, ".") + ' ' + item.name }}</v-list-tile-title>
+                  <v-text-field @keyup.enter="editDoelstelling(null)" dark autofocus v-if="doelstellingIndex === payload" name="module" label="Doelstelling naam" v-model="item.name" single-line></v-text-field>
+                </v-list-tile-content>
+              </v-list-tile>
+            </v-list-group>
+            <v-list-group v-if="!editingDoelstelling" class="blue darken-3" dark v-for="(item, doelstellingIndex) in selectedcategorie.doelstellingen" :value="item.active" v-bind:key="item.name">
               <v-list-tile slot="item" @click="hideAspects">
                 <v-list-tile-content>
                   <v-list-tile-title>{{ item.indexes.toString().replace(/,/g, ".") + ' ' + item.name }}</v-list-tile-title>
                 </v-list-tile-content>
+                <v-btn flat icon color="blue lighten-2" @click="editDoelstelling(doelstellingIndex)">
+                  <v-icon>edit</v-icon>
+                </v-btn>
                 <v-list-tile-action>
                   <v-icon>keyboard_arrow_down</v-icon>
                 </v-list-tile-action>
               </v-list-tile>
-              <v-list-tile class="blue-grey darken-2" v-for="(criteria,categorieIndex) in item.criteria" v-bind:key="categorieIndex" @click="setCriteria(criteria)">
-                <v-list-tile-content>
+              <v-list-tile class="blue-grey darken-2" v-for="(criteria, criteriaIndex) in item.criteria" v-bind:key="criteriaIndex" @click="setCriteria(criteria)">
+                <v-list-tile-content @click="setCriteria(criteriaIndex)" v-if="!editingCriteria || criteriaIndex != payload">
                   <v-list-tile-title>{{ criteria.indexes.toString().replace(/,/g, ".") + ' ' + criteria.name}}</v-list-tile-title>
                 </v-list-tile-content>
+                <v-btn flat icon color="blue lighten-2 text-xs-right" v-if="!editingCriteria" @click="editCriteria(criteriaIndex)">
+                  <v-icon>edit</v-icon>
+                </v-btn>
+                <v-text-field v-if="editingCriteria && payload === criteriaIndex" @keyup.enter="editCriteria(null)" dark autofocus name="module" label="Criteria naam" v-model="criteria.name" single-line></v-text-field>
               </v-list-tile>
               <v-list-tile class="blue-grey darken-2">
                 <v-text-field
@@ -127,11 +157,22 @@
       <!-- DOELSTELLINGEN & EVALUATIECRITERIA DISPLAY-->
       <v-flex xs4 class="mr-0 pa-0" v-if="selectedcriteria != null">
         <v-list dark class="blue darken-3 pa-0">
-            <v-list-group class="blue darken-3" dark v-for="(aspect, aspectIndex) in selectedcriteria.aspecten" :value="aspect.active" v-bind:key="aspect.name">
+            <v-list-group v-for="(aspect, aspectIndex) in selectedcriteria.aspecten" :value="aspect.active" v-bind:key="aspect.name" v-if="editingAspect">
+              <v-list-tile slot="item">
+                <v-list-tile-content>
+                  <v-list-tile-title v-if="aspectIndex !== payload">{{ aspect.indexes.toString().replace(/,/g, ".") + ' ' + aspect.name }}</v-list-tile-title>
+                  <v-text-field @keyup.enter="editAspect(null)" dark autofocus v-if="aspectIndex === payload" name="module" label="Aspect naam" v-model="aspect.name" single-line></v-text-field>
+                </v-list-tile-content>
+              </v-list-tile>
+            </v-list-group>
+            <v-list-group v-if="!editingAspect" class="blue darken-3" dark v-for="(aspect, aspectIndex) in selectedcriteria.aspecten" :value="aspect.active" v-bind:key="aspect.name">
               <v-list-tile slot="item" @click="enterAddition('', opleiding)">
                 <v-list-tile-content>
                   <v-list-tile-title>{{ aspect.indexes.toString().replace(/,/g, ".") + ' ' + aspect.name }}</v-list-tile-title>
                 </v-list-tile-content>
+                <v-btn flat icon color="blue lighten-2" @click="editAspect(aspectIndex)">
+                  <v-icon>edit</v-icon>
+                </v-btn>
               </v-list-tile>
             </v-list-group>
             <v-list-tile class="white--text">
@@ -163,6 +204,12 @@ export default {
     return {
       snackbar: false,
       opleidingsnaam: '',
+      editingModule: false,
+      editingCategorie: false,
+      editingDoelstelling: false,
+      editingCriteria: false,
+      editingAspect: false,
+      payload: null,
       addModuleActive: false,
       addCategorieActive: false,
       addDoelstellingActive: false,
@@ -243,6 +290,28 @@ export default {
       this.selectedcriteria = null
       this.enterAddition('', this.opleiding)
     },
+    editModule (payload) {
+      this.payload = payload
+      this.editingModule = !this.editingModule
+      this.hideCategorie()
+    },
+    editCategorie (payload) {
+      this.payload = payload
+      this.editingCategorie = !this.editingCategorie
+      this.hideCategorie()
+    },
+    editDoelstelling (payload) {
+      this.payload = payload
+      this.editingDoelstelling = !this.editingDoelstelling
+    },
+    editCriteria (payload) {
+      this.payload = payload
+      this.editingCriteria = !this.editingCriteria
+    },
+    editAspect (payload) {
+      this.payload = payload
+      this.editingAspect = !this.editingAspect
+    },
     saveOpleiding () {
 
     }
@@ -255,6 +324,13 @@ export default {
       setTimeout(() => (this[l] = false), 3000)
 
       this.loader = null
+    }
+  },
+  computed: {
+    deactivateModuleHeaders: function () {
+      if (this.editingModule === true) {
+        this.$children[2].$children[this.payload + 1].isActive = false
+      }
     }
   },
   created () {
