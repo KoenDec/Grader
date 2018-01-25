@@ -5,7 +5,8 @@ var myStorage = window.localStorage
 
 var Api = (function () {
   var my = {}
-
+  my.all = axios.all
+  my.spread = axios.spread
   my.login = function (username, password, cb) {
     axios.post('http://146.185.183.217/api/auth', {
       username: username,
@@ -315,18 +316,58 @@ var Api = (function () {
 
   my.createOpleiding = function (creatorId, name, cb) {
     axios.post('http://146.185.183.217/api/createOpleiding', {
-      params: {
-        creatorId: creatorId,
-        name: name
-      }
+      name: name,
+      creatorId: creatorId
     })
       .then(function (response) {
-        return cb(response.data)
+        return cb(response)
       })
       .catch(function (error) {
         console.log(error)
       })
-  }  
+  }
+
+  my.updateOpleiding = function (opleidingId, name, cb) {
+    axios.patch('http://146.185.183.217/api/updateOpleiding', {
+      name: name,
+      opleidingId: opleidingId
+    })
+      .then(function (response) {
+        return cb(response)
+      })
+      .catch(function (error) {
+        console.log(error)
+      })
+  }
+
+  my.createModule = function (name, opleidingId, teacherId, creatorId, cb) {
+    axios.post('http://146.185.183.217/api/createModule', {
+      name: name,
+      opleidingId: opleidingId,
+      teacherId: teacherId,
+      creatorId: creatorId
+    })
+      .then(function (response) {
+        console.log('REACHED CALLBACK')
+        return cb(response)
+      })
+      .catch(function (error) {
+        console.log(error)
+      })
+  }
+
+  my.updateModule = function (moduleId, name, cb) {
+    axios.patch('http://146.185.183.217/api/updateModule', {
+      name: name,
+      moduleId: moduleId
+    })
+      .then(function (response) {
+        return cb(response)
+      })
+      .catch(function (error) {
+        console.log(error)
+      })
+  }
   return my
 }())
 

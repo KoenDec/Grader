@@ -13,7 +13,7 @@
           <v-btn
                 color="success"
                 :loading="loading"
-                @click.native="loader = 'loading'"
+                @click.native="saveOpleiding"
                 :disabled="loading"
               >
                 Opslaan
@@ -312,19 +312,48 @@ export default {
       this.payload = payload
       this.editingAspect = !this.editingAspect
     },
+    createOpleiding () {
+      var self = this
+      this.$http.createOpleiding(3, this.opleidingsnaam, function (response) {
+        console.log(response.data)
+        console.log(!isNaN(response.data))
+        if (!isNaN(response.data)) {
+          self.givenmajor.id = response.data
+          self.givenmajor.name = self.opleidingsnaam
+        }
+        console.log('opleiding gemaakt met id: ' + response.data)
+        self.saveModules()
+      })
+    },
+    saveModules () {
+      var self = this
+      this.opleiding.forEach(function (module) {
+        if (module.id) {
+          self.$http.updateModule(module.id, module.name, function (response) {
+            console.log(response)
+          })
+        } else {
+          self.$http.createModule(module.name, self.givenmajor.id, 13, 3, function (response) {
+            console.log(response)
+          })
+        }
+      })
+      this.loading = null
+    },
     saveOpleiding () {
-
+      this.loading = true
+      var self = this
+      if (this.givenmajor.id === null) {
+        this.createOpleiding()
+      } else {
+        this.$http.updateOpleiding(this.givenmajor.id, this.opleidingsnaam, function (response) {
+          console.log(response)
+          self.saveModules()
+        })
+      }
     }
   },
   watch: {
-    loader () {
-      const l = this.loader
-      this[l] = !this[l]
-
-      setTimeout(() => (this[l] = false), 3000)
-
-      this.loader = null
-    }
   },
   computed: {
     deactivateModuleHeaders: function () {
