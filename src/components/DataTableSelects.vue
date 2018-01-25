@@ -94,7 +94,7 @@ export default {
       var self = this
       newSelected.forEach(function (student) {
         if (!self.filteredMajors.includes(student.opleidingName)) {
-          array.push(student.id)
+          array.push(parseInt(student.id))
         }
       })
       this.$emit('selected-students', array)
