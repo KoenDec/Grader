@@ -189,7 +189,7 @@
                       <v-container fluid grid-list-lg pb-0>
                           <v-select
                                   v-if="edit"
-                                  v-model="selectedScore[doelstelling.id]"
+                                  v-model="doelstelling.score"
                                   :items="possibleScores"
                                   :item-text="doelstelling.score"
                                   :item-value="doelstelling.score"
@@ -198,7 +198,7 @@
                                   dark
                                   required
                           ></v-select>
-                          <p v-if="!edit">{{selectedScore[doelstelling.id]}}</p>
+                          <p v-if="!edit">{{doelstelling.score}}</p>
                       </v-container>
                     </v-card>
                   </v-flex>
@@ -283,7 +283,6 @@ export default {
       items: [],
       filters: [],
       keys: ['firstname', 'lastname'],
-      selectedScore: {},
       item_name: 'fullname',
       item_value: 'id',
       zoeklabel: 'student',
@@ -350,15 +349,6 @@ export default {
         self.currentreport = data
         self.dateFormatted1 = data.startdate
         self.dateFormatted2 = data.enddate
-        for (var i = 0; i < data.modules.length; i++) {
-          for (var j = 0; j < data.modules[i].doelstellingscategories.length; j++) {
-            for (var k = 0; k < data.modules[i].doelstellingscategories[j].doelstellingen.length; k++) {
-              var objId = data.modules[i].doelstellingscategories[j].doelstellingen[k].id
-              var objScore = data.modules[i].doelstellingscategories[j].doelstellingen[k].score
-              self.selectedScore[objId] = objScore
-            }
-          }
-        }
       })
     },
     makeReports: function (singleReport) {
@@ -487,7 +477,6 @@ export default {
                 }
               }
               doelstelling.score = self.getAvgScore(scores[doelstellingId])
-              self.selectedScore[doelstellingId] = doelstelling.score
             }
           }
         }
