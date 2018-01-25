@@ -23,22 +23,20 @@ function showEducationsCheckboxes($onlyGuiFunction)
         <label for="all-checkboxes">Alles selecteren</label>
     </p>
 
-    <?php
-    foreach ($educations as $opleiding) {
-        if ($onlyGuiFunction) array_push($educationIds, $opleiding->id);
-        ?>
+    <?php foreach ($educations as $opleiding) : ?>
+        <?php if ($onlyGuiFunction) array_push($educationIds, $opleiding->id); ?>
         <p class="opleiding-checkbox">
             <input type="checkbox" id="opleiding<?= $opleiding->id ?>" checked="checked"/>
             <label for="opleiding<?= $opleiding->id ?>"><?= $opleiding->name ?></label>
         </p>
-        <?php
-    }
-    if ($onlyGuiFunction) {
-        echo '</form>';
-        return $educationIds;
-    } else {
-        echo '</span>';
-    }
+        <?php endforeach ?>
+
+    <?php if ($onlyGuiFunction) : ?>
+        </form>
+        <?php return $educationIds ?>
+    <?php else : ?>
+        </span>
+    <?php endif ?>
 }
 
 function showStudentLiveSearchForm()
@@ -126,22 +124,15 @@ $userRole = $userDAO->getUserRole($loggedInUserId);
     </li>
     <li><a class="waves-effect" href="index.php?page=rapporten">Rapporten</a></li>
     <li><a class="waves-effect" href="index.php?page=werkfiches">Werkfiches</a></li>
-    <?php
-    if (!($userRole == "STUDENT")) {
-        ?>
+    <?php if (!($userRole == "STUDENT")) : ?>
         <li><a class="waves-effect" href="index.php?page=studenten">Studenten</a></li>
         <li><a class="waves-effect" href="index.php?page=opleidingen">Opleidingen</a></li>
-        <?php
-    }
-    ?>
+    <?php endif ?>
+
     <li><a class="waves-effect" href="index.php?page=meldingen">Meldingen<span class="new badge">1</span></div></a></li>
-    <?php
-    if (!($userRole == "STUDENT")) {
-        ?>
+    <?php if (!($userRole == "STUDENT")) : ?>
         <li><a class="waves-effect" href="index.php?page=afdrukken">Afdrukken</a></li>
-        <?php
-    }
-    ?>
+    <?php endif ?>
 </ul>
 
 <main class="container"> <!-- don't mind this error, I do close the 'main' tag in the footer -->
