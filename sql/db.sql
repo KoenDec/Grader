@@ -60,7 +60,7 @@ CREATE TABLE `modules` (
   `opleidingId` int,
   `teacherId` int NOT NULL,
   `creatorId` int,
-  FOREIGN KEY(opleidingId)ON DELETE CASCADE REFERENCES opleidingen(id),
+  FOREIGN KEY(opleidingId) REFERENCES opleidingen(id) ON DELETE CASCADE,
   FOREIGN KEY(teacherId) REFERENCES teachers(teacherId),
   FOREIGN KEY(creatorId) REFERENCES admins(adminId)
 );
@@ -71,7 +71,7 @@ CREATE TABLE `doelstellingscategories` (
   `moduleId` int NOT NULL,
   `inGebruik` tinyint(1) NOT NULL DEFAULT 1,
   `creatorId` int,
-  FOREIGN KEY(moduleId) ON DELETE CASCADE REFERENCES modules(id),
+  FOREIGN KEY(moduleId) REFERENCES modules(id) ON DELETE CASCADE,
   FOREIGN KEY(creatorId) REFERENCES admins(adminId)
 );
 
@@ -81,7 +81,7 @@ CREATE TABLE `doelstellingen` (
   `name` varchar(200) NOT NULL,
   `inGebruik` tinyint(1) NOT NULL DEFAULT 1,
   `creatorId` int,
-  FOREIGN KEY(doelstellingscategorieId) ON DELETE CASCADE REFERENCES doelstellingscategories(id),
+  FOREIGN KEY(doelstellingscategorieId) REFERENCES doelstellingscategories(id) ON DELETE CASCADE,
   FOREIGN KEY(creatorId) REFERENCES admins(adminId)
 );
 
@@ -92,7 +92,7 @@ CREATE TABLE `evaluatiecriteria` (
   `gewicht` int NOT NULL DEFAULT 1,
   `inGebruik` tinyint(1) NOT NULL DEFAULT 1,
   `creatorId` int,
-  FOREIGN KEY(doelstellingId) ON DELETE CASCADE REFERENCES doelstellingen(id),
+  FOREIGN KEY(doelstellingId) REFERENCES doelstellingen(id) ON DELETE CASCADE,
   FOREIGN KEY(creatorId) REFERENCES admins(adminId)
 );
 
@@ -103,7 +103,7 @@ CREATE TABLE `aspecten` (
   `inGebruik` tinyint(1) NOT NULL DEFAULT 1,
   `gewicht` int NOT NULL DEFAULT 1,
   `creatorId` int,
-  FOREIGN KEY(evaluatiecriteriumId) ON DELETE CASCADE REFERENCES evaluatiecriteria(id),
+  FOREIGN KEY(evaluatiecriteriumId) REFERENCES evaluatiecriteria(id) ON DELETE CASCADE,
   FOREIGN KEY(creatorId) REFERENCES admins(adminId)
 );
 
