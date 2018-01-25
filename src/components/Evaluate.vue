@@ -94,35 +94,9 @@
                                     <v-card color="gray darken-3" class="black--text text-xs-left" height="100%">
                                         <v-container fluid grid-list-lg>
                                             <v-layout row wrap>
-                                                <v-flex>
-                                                    <v-menu
-                                                            lazy
-                                                            :close-on-content-click="false"
-                                                            v-model="menu"
-                                                            transition="scale-transition"
-                                                            offset-y
-                                                            full-width
-                                                            :nudge-right="40"
-                                                            max-width="290px"
-                                                            min-width="290px"
-                                                    >
-                                                        <v-text-field
-                                                                slot="activator"
-                                                                label="Datum"
-                                                                v-model="dateFormatted"
-                                                                prepend-icon="event"
-                                                                @blur="date = parseDate(dateFormatted)"
-                                                        ></v-text-field>
-                                                        <v-date-picker v-model="date" @input="dateFormatted = formatDate($event)" no-title scrollable actions>
-                                                            <template slot-scope="{ save, cancel }">
-                                                                <v-card-actions>
-                                                                    <v-spacer></v-spacer>
-                                                                    <v-btn flat color="primary" @click="cancel">Cancel</v-btn>
-                                                                    <v-btn flat color="primary" @click="save">OK</v-btn>
-                                                                </v-card-actions>
-                                                            </template>
-                                                        </v-date-picker>
-                                                    </v-menu>
+                                                <v-flex xs3>
+                                                    <p class="left">Datum:</p>
+                                                    <datepicker class="datepicker1" :value=date :format="format"></datepicker>
                                                 </v-flex>
                                             </v-layout>
                                         </v-container>
@@ -257,8 +231,8 @@
           evalName: '',
           currentEvalId: null,
           evalError: null,
+          format: 'dd/MM/yyyy',
           date: null,
-          dateFormatted: null,
           menu: false,
           popup: false,
           popupId: null,
@@ -293,7 +267,7 @@
           self.newEvalTable = true
           var d = new Date()
           var month = d.getMonth() + 1
-          self.dateFormatted = d.getDate() + '/' + month + '/' + d.getFullYear()
+          self.date = month + '/' + d.getDate() + '/' + d.getFullYear()
           self.evalName = null
           self.createActiveBoxes(this.selectedModule)
           self.updateEval = false
@@ -343,7 +317,7 @@
             this.saveEval['studentId'] = this.student.id
             this.saveEval['moduleId'] = this.selectedModule[0].id
             this.saveEval['aspecten'] = []
-            this.saveEval['date'] = this.dateFormatted
+            this.saveEval['date'] = document.querySelector('.datepicker1 input').value
             for (var i = 0; i < objLength; i = i + 2) {
               var obj = {aspectId: objKeys[i].substr(3), beoordeling: this.activeBoxes[objKeys[i]]}
               this.saveEval['aspecten'].push(obj)
@@ -371,7 +345,9 @@
             if (elem.id === id) return elem
           })
           self.evalName = obj[0].name
-          self.dateFormatted = obj[0].date
+          var d = obj[0].date.split('/')
+          var d1 = d[2] + '/' + d[1] + '/' + d[0]
+          self.date = d1
           self.currentEvalId = obj[0].id
           self.createActiveBoxes(this.selectedModule)
           obj[0].aspecten.forEach(function (item) {
@@ -399,20 +375,6 @@
             console.log(data)
             self.getPrevEvals()
           })
-        },
-        formatDate (date) {
-          if (!date) {
-            return null
-          }
-          const [year, month, day] = date.split('-')
-          return `${day}/${month}/${year}`
-        },
-        parseDate (date) {
-          if (!date) {
-            return null
-          }
-          const [month, day, year] = date.split('/')
-          return `${year}-${month.padStart(2, '0')}-${day.padStart(2, '0')}`
         }
       },
       created () {

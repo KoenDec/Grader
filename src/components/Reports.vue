@@ -10,94 +10,40 @@
     </v-flex>
   </v-dialog>
   <v-layout row justify-center>
-      <v-dialog v-model="reportGen" persistent max-width="290">
+      <v-dialog v-model="reportGen" persistent fullscreen >
           <v-card>
-              <v-card-title class="headline">Rapport aanmaken</v-card-title>
-                  <v-card-text>
-                      <v-text-field
-                              name="reportName"
-                              v-model="reportName"
-                              label="naam rapport"
-                              id="reportName"
-                              type="text"
-                      >
-                      </v-text-field>
-                      <br/>
-                      Startdatum:
-                      <v-layout row-wrap>
-                          <v-flex>
-                              <v-menu
-                                      lazy
-                                      :close-on-content-click="false"
-                                      v-model="menu1"
-                                      transition="scale-transition"
-                                      offset-y
-                                      full-width
-                                      :nudge-right="40"
-                                      max-width="290px"
-                                      min-width="290px"
-                              >
-                                  <v-text-field
-                                          slot="activator"
-                                          label="Datum"
-                                          v-model="dateFormatted1"
-                                          prepend-icon="event"
-                                          hint="inclusief"
-                                          @blur="date1 = parseDate(dateFormatted1)"
-                                  ></v-text-field>
-                                  <v-date-picker v-model="date1" @input="dateFormatted1 = formatDate($event)" no-title scrollable actions>
-                                      <template slot-scope="{ save, cancel }">
-                                          <v-card-actions>
-                                              <v-spacer></v-spacer>
-                                              <v-btn flat color="primary" @click="cancel">Cancel</v-btn>
-                                              <v-btn flat color="primary" @click="save">OK</v-btn>
-                                          </v-card-actions>
-                                      </template>
-                                  </v-date-picker>
-                              </v-menu>
-                          </v-flex>
-                      </v-layout>
-                      <br/>
-                      Einddatum:
-                      <v-layout row-wrap>
-                          <v-flex>
-                              <v-menu
-                                      lazy
-                                      :close-on-content-click="false"
-                                      v-model="menu2"
-                                      transition="scale-transition"
-                                      offset-y
-                                      full-width
-                                      :nudge-right="40"
-                                      max-width="290px"
-                                      min-width="290px"
-                              >
-                                  <v-text-field
-                                          slot="activator"
-                                          label="Datum"
-                                          v-model="dateFormatted2"
-                                          prepend-icon="event"
-                                          hint="inclusief"
-                                          @blur="date2 = parseDate(dateFormatted2)"
-                                  ></v-text-field>
-                                  <v-date-picker v-model="date2" @input="dateFormatted2 = formatDate($event)" no-title scrollable actions>
-                                      <template slot-scope="{ save, cancel }">
-                                          <v-card-actions>
-                                              <v-spacer></v-spacer>
-                                              <v-btn flat color="primary" @click="cancel">Cancel</v-btn>
-                                              <v-btn flat color="primary" @click="save">OK</v-btn>
-                                          </v-card-actions>
-                                      </template>
-                                  </v-date-picker>
-                              </v-menu>
-                          </v-flex>
-                      </v-layout>
-                  </v-card-text>
-              <v-card-actions>
-                  <v-spacer></v-spacer>
-                  <v-btn color="green darken-1" flat @click.native="reportGen = false">TERUG</v-btn>
-                  <v-btn color="green darken-1" flat @click.native="makeReports(true)">AANMAKEN</v-btn>
-              </v-card-actions>
+              <v-flex pt-4 xs4 offset-xs4>
+                  <v-card-title class="headline">Rapport aanmaken</v-card-title>
+                      <v-card-text>
+                          <v-text-field
+                                  name="reportName"
+                                  v-model="reportName"
+                                  label="naam rapport"
+                                  id="reportName"
+                                  type="text"
+                          >
+                          </v-text-field>
+                          <br/>
+                          <v-layout row-wrap>
+                              <v-flex xs1>
+                                  <p class="left">Begindatum:</p>
+                                  <datepicker class="datepicker1" :value=date1 :format="format"></datepicker>
+                              </v-flex>
+                          </v-layout>
+                          <br/>
+                          <v-layout row-wrap>
+                              <v-flex xs1>
+                                  <p class="left">Einddatum:</p>
+                                  <datepicker class="datepicker2" :value=date2 :format="format"></datepicker>
+                              </v-flex>
+                          </v-layout>
+                      </v-card-text>
+                  <v-card-actions>
+                      <v-spacer></v-spacer>
+                      <v-btn color="green darken-1" flat @click.native="reportGen = false">TERUG</v-btn>
+                      <v-btn color="green darken-1" flat @click.native="makeReports(true)">AANMAKEN</v-btn>
+                  </v-card-actions>
+              </v-flex>
           </v-card>
       </v-dialog>
   </v-layout>
@@ -113,7 +59,6 @@
         </v-flex>
         <v-flex xs9>
             <v-btn class="right" color="warning" @click="makeReports(false)"><v-icon class="mr-2">save</v-icon>Alle Rapporten genereren</v-btn>
-            <p>{{studentIdsFromSelect}}</p>
         </v-flex>
     </v-layout>
     <v-layout row-wrap v-if="reportsGenerator">
@@ -132,68 +77,15 @@
         <v-flex xs6 offset-xs1>
             <v-layout row-wrap>
                 <v-flex xs3>
-                    <v-menu
-                            lazy
-                            :close-on-content-click="false"
-                            v-model="menu3"
-                            transition="scale-transition"
-                            offset-y
-                            full-width
-                            :nudge-right="40"
-                            max-width="290px"
-                            min-width="290px"
-                    >
-                        <v-text-field
-                                slot="activator"
-                                label="Startdatum"
-                                v-model="dateFormatted1"
-                                prepend-icon="event"
-                                hint="inclusief"
-                                @blur="date1 = parseDate(dateFormatted1)"
-                        ></v-text-field>
-                        <v-date-picker v-model="date1" @input="dateFormatted1 = formatDate($event)" no-title scrollable actions>
-                            <template slot-scope="{ save, cancel }">
-                                <v-card-actions>
-                                    <v-spacer></v-spacer>
-                                    <v-btn flat color="primary" @click="cancel">Cancel</v-btn>
-                                    <v-btn flat color="primary" @click="save">OK</v-btn>
-                                </v-card-actions>
-                            </template>
-                        </v-date-picker>
-                    </v-menu>
+                    <p class="left">Begindatum:</p>
+                    <datepicker class="datepicker1" :value=date1 :format="format"></datepicker>
                 </v-flex>
                 <v-flex xs3>
-                    <v-menu
-                            lazy
-                            :close-on-content-click="false"
-                            v-model="menu4"
-                            transition="scale-transition"
-                            offset-y
-                            full-width
-                            :nudge-right="40"
-                            max-width="290px"
-                            min-width="290px"
-                    >
-                        <v-text-field
-                                slot="activator"
-                                label="Einddatum"
-                                v-model="dateFormatted2"
-                                prepend-icon="event"
-                                hint="inclusief"
-                                @blur="date2 = parseDate(dateFormatted2)"
-                        ></v-text-field>
-                        <v-date-picker v-model="date2" @input="dateFormatted2 = formatDate($event)" no-title scrollable actions>
-                            <template slot-scope="{ save, cancel }">
-                                <v-card-actions>
-                                    <v-spacer></v-spacer>
-                                    <v-btn flat color="primary" @click="cancel">Cancel</v-btn>
-                                    <v-btn flat color="primary" @click="save">OK</v-btn>
-                                </v-card-actions>
-                            </template>
-                        </v-date-picker>
-                    </v-menu>
+                    <p class="left">Einddatum:</p>
+                    <datepicker class="datepicker2" :value=date2 :format="format"></datepicker>
                 </v-flex>
             </v-layout>
+            <br/>
             <v-layout>
               <datatableselects @selected-students="updateIds" :filters="filters"></datatableselects>
             </v-layout>
@@ -319,36 +211,60 @@
               <v-flex xs12>
                 <v-card color="blue-grey darken-4" class="white--text text-xs-left">
                   <v-container fluid grid-list-lg>
-                    <v-chip label color="yellow" text-color="black" width="500px">
-                      <v-icon left>label</v-icon>
-                      <div style="display: block" class="mr-4">Algemene commentaar</div>
-                      <div v-if="!edit">{{currentreport.commentaarAlgemeen}}</div>
-                        <v-flex v-if="edit">
-                            <v-text-field
-                                name="Algemene commentaar"
-                                v-model="currentreport.commentaarAlgemeen"
-                                label="commentaar"
-                                id="algemeneCommentaar"
-                                type="text"
-                            >
-                            </v-text-field>
-                        </v-flex>
-                    </v-chip>
-                    <v-chip label color="yellow" text-color="black">
-                      <v-icon left>label</v-icon>
-                      <div class="mr-4">Klassenraad commentaar</div>
-                      <div v-if="!edit">{{currentreport.commentaarKlassenraad}}</div>
-                        <v-flex v-if="edit">
-                            <v-text-field
-                                    name="Klassenraad commentaar"
-                                    v-model="currentreport.commentaarKlassenraad"
+                      <v-flex xs12>
+                        <v-chip label color="yellow" text-color="black">
+                          <v-icon left>label</v-icon>
+                          <div style="display: block; width: 150px;" class="mr-4">Algemene commentaar</div>
+                          <div v-if="!edit">{{currentreport.commentaarAlgemeen}}</div>
+                            <v-flex v-if="edit">
+                                <v-text-field
+                                    name="Algemene commentaar"
+                                    v-model="currentreport.commentaarAlgemeen"
                                     label="commentaar"
-                                    id="klassenraadCommentaar"
+                                    id="algemeneCommentaar"
                                     type="text"
-                            >
-                            </v-text-field>
-                        </v-flex>
-                    </v-chip>
+                                    style="min-width: 600px;"
+                                >
+                                </v-text-field>
+                            </v-flex>
+                        </v-chip>
+                      </v-flex>
+                    <v-flex xs12>
+                        <v-chip label color="yellow" text-color="black">
+                            <v-icon left>label</v-icon>
+                            <div style="width: 150px;" class="mr-4 xs4">Klassenraad commentaar</div>
+                            <div v-if="!edit">{{currentreport.commentaarKlassenraad}}</div>
+                            <v-flex v-if="edit">
+                                <v-text-field
+                                        name="Klassenraad commentaar"
+                                        v-model="currentreport.commentaarKlassenraad"
+                                        label="commentaar"
+                                        id="klassenraadCommentaar"
+                                        type="text"
+                                        style="min-width:600px;"
+                                >
+                                </v-text-field>
+                            </v-flex>
+                        </v-chip>
+                    </v-flex>
+                      <v-flex xs12>
+                          <v-chip label color="yellow" text-color="black">
+                              <v-icon left>label</v-icon>
+                              <div style="width: 150px;" class="mr-4 xs4">Werkplaats commentaar</div>
+                              <div v-if="!edit">{{currentreport.commentaarWerkplaats}}</div>
+                              <v-flex v-if="edit">
+                                  <v-text-field
+                                          name="Werkplaats commentaar"
+                                          v-model="currentreport.commentaarWerkplaats"
+                                          label="commentaar"
+                                          id="werkplaatsCommentaar"
+                                          type="text"
+                                          style="min-width:600px;"
+                                  >
+                                  </v-text-field>
+                              </v-flex>
+                          </v-chip>
+                      </v-flex>
                   </v-container>
                 </v-card>
               </v-flex>
@@ -383,8 +299,9 @@ export default {
       },
       possibleScores: ['G', 'V', 'OV', 'RO', 'NVT'],
       reportGen: false,
-      date1: null,
-      dateFormatted1: '01/09/2017',
+      format: 'dd/MM/yyyy',
+      date1: '09/01/2017',
+      dateFormatted1: '09/01/2017',
       date2: null,
       dateFormatted2: null,
       reportError: null,
@@ -444,20 +361,6 @@ export default {
         }
       })
     },
-    formatDate (date) {
-      if (!date) {
-        return null
-      }
-      const [year, month, day] = date.split('-')
-      return `${day}/${month}/${year}`
-    },
-    parseDate (date) {
-      if (!date) {
-        return null
-      }
-      const [month, day, year] = date.split('/')
-      return `${year}-${month.padStart(2, '0')}-${day.padStart(2, '0')}`
-    },
     makeReports: function (singleReport) {
       var self = this
       self.currentreport = null
@@ -486,11 +389,13 @@ export default {
     generateReport: function (id, singleReport) {
       var self = this
       self.reportGen = false
-      var d1 = self.dateFormatted1.split('/')
-      var d2 = self.dateFormatted2.split('/')
+      var dateformat1 = document.querySelector('.datepicker1 input').value
+      var dateformat2 = document.querySelector('.datepicker2 input').value
+      var d1 = document.querySelector('.datepicker1 input').value.split('/')
+      var d2 = document.querySelector('.datepicker2 input').value.split('/')
       var start = new Date(d1[2], parseInt(d1[1]) - 1, d1[0])
       var end = new Date(d2[2], parseInt(d2[1]) - 1, d2[0])
-      if (self.dateFormatted1 !== null && self.dateFormatted2 !== null && self.reportName !== null && start < end) {
+      if (dateformat1 !== null && dateformat2 !== null && self.reportName !== null && start < end) {
         var isUnique = true
         this.$http.getStudentReports(id, function (data) {
           for (var x = 0; x < data.length; x++) {
@@ -509,10 +414,11 @@ export default {
               self.currentreport = {}
               self.currentreport['commentaarAlgemeen'] = ''
               self.currentreport['commentaarKlassenraad'] = ''
+              self.currentreport['commentaarWerkplaats'] = ''
               self.currentreport['klas'] = ''
               self.currentreport['name'] = self.updatedReportName
-              self.currentreport['startdate'] = self.dateFormatted1
-              self.currentreport['enddate'] = self.dateFormatted2
+              self.currentreport['startdate'] = dateformat1
+              self.currentreport['enddate'] = dateformat2
               self.currentreport['studentId'] = id
               var modules = []
               for (var i = 0; i < self.opleiding.modules.length; i++) {
@@ -534,7 +440,7 @@ export default {
             self.generateReport(id, singleReport)
           }
         })
-      } else if (self.dateFormatted1 === null || self.dateFormatted2 === null) {
+      } else if (dateformat1 === null || dateformat2 === null) {
         self.reportError = 'Beide Datums moeten worden ingevuld'
         self.loadbarShow = false
         self.loadbarValue = 0
@@ -633,7 +539,11 @@ export default {
     }
     var d = new Date()
     var month = d.getMonth() + 1
-    self.dateFormatted2 = d.getDate() + '/' + month + '/' + d.getFullYear()
+    if (month < 10) {
+      month = '0' + month
+    }
+    self.date2 = month + '/' + d.getDate() + '/' + d.getFullYear()
+    self.$forceUpdate()
     this.$http.getStudentsWithEdu(function (data) {
       self.items = data
     })
