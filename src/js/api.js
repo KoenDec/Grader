@@ -368,6 +368,62 @@ var Api = (function () {
         console.log(error)
       })
   }
+
+  my.createDoelstellingscategorie = function (name, moduleId, creatorId, cb) {
+    axios.post('http://146.185.183.217/api/createDoelstellingscategorie', {
+      name: name,
+      moduleId: moduleId,
+      creatorId: creatorId
+    })
+      .then(function (response) {
+        console.log('REACHED CALLBACK')
+        return cb(response)
+      })
+      .catch(function (error) {
+        console.log(error)
+      })
+  }
+
+  my.updateDoelstellingscategorie = function (doelstellingscategorieId, name, cb) {
+    axios.patch('http://146.185.183.217/api/updateDoelstellingscategorie', {
+      name: name,
+      doelstellingscategorieId: doelstellingscategorieId
+    })
+      .then(function (response) {
+        return cb(response)
+      })
+      .catch(function (error) {
+        console.log(error)
+      })
+  }
+
+  my.createDoelstelling = function (name, doelstellingscategorieId, creatorId, cb) {
+    axios.post('http://146.185.183.217/api/createDoelstelling', {
+      name: name,
+      doelstellingscategorieId: doelstellingscategorieId,
+      creatorId: creatorId
+    })
+      .then(function (response) {
+        return cb(response)
+      })
+      .catch(function (error) {
+        console.log(error)
+      })
+  }
+
+  my.updateDoelstelling = function (doelstellingId, name, cb) {
+    axios.patch('http://146.185.183.217/api/updateDoelstelling', {
+      name: name,
+      doelstellingId: doelstellingId
+    })
+      .then(function (response) {
+        return cb(response)
+      })
+      .catch(function (error) {
+        console.log(error)
+      })
+  }
+
   return my
 }())
 

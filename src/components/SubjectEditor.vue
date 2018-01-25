@@ -232,35 +232,35 @@ export default {
     enterAddition (title, object, level, parentIndexes) {
       if (title !== '') {
         if (level === 'module') {
-          object.push({name: title, indexes: [], categorieen: []})
+          object.push({name: title, new: true, indexes: [], categorieen: []})
           object[object.length - 1].indexes.push(object.length)
         } else if (level === 'categorie') {
           var array = []
           parentIndexes.forEach(function (item) {
             array.push(item)
           })
-          object.push({name: title, indexes: array, doelstellingen: []})
+          object.push({name: title, new: true, indexes: array, doelstellingen: []})
           object[object.length - 1].indexes.push(object.length)
         } else if (level === 'doelstelling') {
           array = []
           parentIndexes.forEach(function (item) {
             array.push(item)
           })
-          object.push({name: title, indexes: array, criteria: []})
+          object.push({name: title, new: true, indexes: array, criteria: []})
           object[object.length - 1].indexes.push(object.length)
         } else if (level === 'criteria') {
           array = []
           parentIndexes.forEach(function (item) {
             array.push(item)
           })
-          object.push({name: title, indexes: array, aspecten: []})
+          object.push({name: title, new: true, indexes: array, aspecten: []})
           object[object.length - 1].indexes.push(object.length)
         } else if (level === 'aspect') {
           array = []
           parentIndexes.forEach(function (item) {
             array.push(item)
           })
-          object.push({name: title, indexes: array})
+          object.push({name: title, new: true, indexes: array})
           object[object.length - 1].indexes.push(object.length)
         }
       }
@@ -325,16 +325,52 @@ export default {
         self.saveModules()
       })
     },
+    saveDoelstellingen (doelstellingscategorie) {
+      var self = this
+      doelstellingscategorie.doelstellingen.forEach(function (doelstelling) {
+        if (doelstelling.id && !doelstelling.new) {
+          self.$http.updateDoelstelling(doelstelling.id, doelstelling.name, function (response) {
+            console.log(response)
+            console.log(response.data)
+          })
+        } else {
+          self.$http.createDoelstelling(doelstelling.name, doelstellingscategorie.id, 3, function (response) {
+            console.log(response)
+            console.log(response.data)
+            doelstelling['id'] = response.data
+            doelstelling.new = false
+          })
+        }
+      })
+    },
+    saveDoelstellingscategorieen (module) {
+      var self = this
+      module.categorieen.forEach(function (categorie) {
+        if (categorie.id && !categorie.new) {
+          self.$http.updateDoelstellingscategorie(categorie.id, categorie.name, function (response) {
+            self.saveDoelstellingen(categorie)
+          })
+        } else {
+          self.$http.createDoelstellingscategorie(categorie.name, module.id, 3, function (response) {
+            categorie['id'] = response.data
+            categorie.new = false
+            self.saveDoelstellingen(categorie)
+          })
+        }
+      })
+    },
     saveModules () {
       var self = this
       this.opleiding.forEach(function (module) {
-        if (module.id) {
+        if (module.id && !module.new) {
           self.$http.updateModule(module.id, module.name, function (response) {
-            console.log(response)
+            self.saveDoelstellingscategorieen(module)
           })
         } else {
           self.$http.createModule(module.name, self.givenmajor.id, 13, 3, function (response) {
-            console.log(response)
+            module['id'] = response.data
+            module.new = false
+            self.saveDoelstellingscategorieen(module)
           })
         }
       })
@@ -347,7 +383,6 @@ export default {
         this.createOpleiding()
       } else {
         this.$http.updateOpleiding(this.givenmajor.id, this.opleidingsnaam, function (response) {
-          console.log(response)
           self.saveModules()
         })
       }
