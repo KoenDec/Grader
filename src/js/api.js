@@ -131,6 +131,7 @@ var Api = (function () {
     axios.post('http://146.185.183.217/api/saveReport', {
       commentaarAlgemeen: report.commentaarAlgemeen,
       commentaarKlassenraad: report.commentaarKlassenraad,
+      commentaarWerkplaats: report.commentaarWerkplaats,
       enddate: report.enddate,
       modules: report.modules,
       name: report.name,
@@ -150,6 +151,7 @@ var Api = (function () {
     axios.post('http://146.185.183.217/api/updateReport', {
       commentaarAlgemeen: report.commentaarAlgemeen,
       commentaarKlassenraad: report.commentaarKlassenraad,
+      commentaarWerkplaats: report.commentaarWerkplaats,
       enddate: report.enddate,
       modules: report.modules,
       name: report.name,
