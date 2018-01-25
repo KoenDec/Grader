@@ -49,7 +49,10 @@ export default {
       filename: '',
       formData: [],
       editMode: false,
-      givenmajor: null,
+      givenmajor: {
+        id: null,
+        name: null
+      },
       addSubjectFile: false,
       headers: [
         { text: 'Opleiding', align: 'left', value: 'opleiding' },

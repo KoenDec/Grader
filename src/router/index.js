@@ -14,12 +14,14 @@ import Evaluate from '@/components/Evaluate'
 import Login from '@/components/Login'
 import SubjectEditor from '@/components/SubjectEditor'
 import DataTableSelects from '@/components/DataTableSelects'
+import Datepicker from 'vuejs-datepicker'
 
 Vue.component('fileInput', fileInput)
 Vue.component('checkboxes', checkboxes)
 Vue.component('searchbar', SearchBar)
 Vue.component('subjecteditor', SubjectEditor)
 Vue.component('datatableselects', DataTableSelects)
+Vue.component('datepicker', Datepicker)
 Vue.use(Router)
 
 export default new Router({

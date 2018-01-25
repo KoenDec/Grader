@@ -1,0 +1,135 @@
+body{
+
+}
+
+.blur-overlay{
+    z-index: 8;
+    width: 100%;
+    height: 100%;
+    position: fixed;
+    background-color: rgba(0,0,0,0.5);
+    filter: blur(5px);
+}
+
+.side-nav{
+    z-index: 7;
+}
+
+h4, .button-collapse{
+    display: inline-block;
+    line-height: 64px;
+    margin: 0;
+}
+
+#sidenav-overlay, .drag-target{
+    display: none;
+}
+
+.side-nav-header{
+    margin:auto;
+}
+
+.nav-color{
+    background-color: #124277;
+}
+
+.pointer{
+    cursor: pointer;
+}
+
+.school-logo{
+    display: block;
+    margin:auto;
+    width: 100px;
+    height:auto;
+}
+
+.centered {
+    position: fixed;
+    top: 50%;
+    left: 50%;
+    /* bring your own prefixes */
+    transform: translate(-50%, -50%);
+}
+
+.login, .popup {
+    text-align: center;
+    border: solid #4db6ac 3px;
+    width: 500px;
+    border-radius: 20px;
+    padding: 30px;
+}
+
+.popup{
+    width: 800px;
+    background-color: white;
+    z-index: 10;
+}
+
+.addstudent, .addSubject{
+    z-index: 5;
+}
+
+.student-search{
+    z-index: 6;
+}
+
+.popup-exit{
+    cursor: pointer;
+}
+
+#captcha{
+    width: 80%;
+    margin: auto;
+    display: block;
+}
+
+#captcha div{
+    margin:auto;
+}
+
+.doelstellingwidth{
+    max-width: 400px;
+}
+
+.opmerkingenwidth{
+    min-width:500px;
+}
+
+.eerder-resultaat:hover{
+    font-weight: bold;
+    color: #4db6ac;
+    cursor: pointer;
+}
+
+.pickDate, .avg{
+    text-align: center;
+}
+
+.row .reports-btns, .row .student-btn, .row .subject-btn{
+    margin-top: 1rem;
+    padding-right: 0;
+}
+
+.row .modules-progress{
+    text-align: center;
+    padding-left: 0;
+}
+
+.row .student-search, .row .subject-search{
+    padding-left: 0;
+}
+
+.opleiding-checkbox{
+    margin-left: 30px;
+}
+
+.doelstelling-table{
+    display:inline-block;
+    width:90%;
+    margin-left:10%;
+}
+
+.hidden{
+    display: none;
+}

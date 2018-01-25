@@ -5,7 +5,8 @@ var myStorage = window.localStorage
 
 var Api = (function () {
   var my = {}
-
+  my.all = axios.all
+  my.spread = axios.spread
   my.login = function (username, password, cb) {
     axios.post('http://146.185.183.217/api/auth', {
       username: username,
@@ -130,6 +131,7 @@ var Api = (function () {
     axios.post('http://146.185.183.217/api/saveReport', {
       commentaarAlgemeen: report.commentaarAlgemeen,
       commentaarKlassenraad: report.commentaarKlassenraad,
+      commentaarWerkplaats: report.commentaarWerkplaats,
       enddate: report.enddate,
       modules: report.modules,
       name: report.name,
@@ -149,6 +151,7 @@ var Api = (function () {
     axios.post('http://146.185.183.217/api/updateReport', {
       commentaarAlgemeen: report.commentaarAlgemeen,
       commentaarKlassenraad: report.commentaarKlassenraad,
+      commentaarWerkplaats: report.commentaarWerkplaats,
       enddate: report.enddate,
       modules: report.modules,
       name: report.name,
@@ -312,6 +315,117 @@ var Api = (function () {
         console.log(error)
       })
   }
+
+  my.createOpleiding = function (creatorId, name, cb) {
+    axios.post('http://146.185.183.217/api/createOpleiding', {
+      name: name,
+      creatorId: creatorId
+    })
+      .then(function (response) {
+        return cb(response)
+      })
+      .catch(function (error) {
+        console.log(error)
+      })
+  }
+
+  my.updateOpleiding = function (opleidingId, name, cb) {
+    axios.patch('http://146.185.183.217/api/updateOpleiding', {
+      name: name,
+      opleidingId: opleidingId
+    })
+      .then(function (response) {
+        return cb(response)
+      })
+      .catch(function (error) {
+        console.log(error)
+      })
+  }
+
+  my.createModule = function (name, opleidingId, teacherId, creatorId, cb) {
+    axios.post('http://146.185.183.217/api/createModule', {
+      name: name,
+      opleidingId: opleidingId,
+      teacherId: teacherId,
+      creatorId: creatorId
+    })
+      .then(function (response) {
+        console.log('REACHED CALLBACK')
+        return cb(response)
+      })
+      .catch(function (error) {
+        console.log(error)
+      })
+  }
+
+  my.updateModule = function (moduleId, name, cb) {
+    axios.patch('http://146.185.183.217/api/updateModule', {
+      name: name,
+      moduleId: moduleId
+    })
+      .then(function (response) {
+        return cb(response)
+      })
+      .catch(function (error) {
+        console.log(error)
+      })
+  }
+
+  my.createDoelstellingscategorie = function (name, moduleId, creatorId, cb) {
+    axios.post('http://146.185.183.217/api/createDoelstellingscategorie', {
+      name: name,
+      moduleId: moduleId,
+      creatorId: creatorId
+    })
+      .then(function (response) {
+        console.log('REACHED CALLBACK')
+        return cb(response)
+      })
+      .catch(function (error) {
+        console.log(error)
+      })
+  }
+
+  my.updateDoelstellingscategorie = function (doelstellingscategorieId, name, cb) {
+    axios.patch('http://146.185.183.217/api/updateDoelstellingscategorie', {
+      name: name,
+      doelstellingscategorieId: doelstellingscategorieId
+    })
+      .then(function (response) {
+        return cb(response)
+      })
+      .catch(function (error) {
+        console.log(error)
+      })
+  }
+
+  my.createDoelstelling = function (name, doelstellingscategorieId, creatorId, cb) {
+    axios.post('http://146.185.183.217/api/createDoelstelling', {
+      name: name,
+      doelstellingscategorieId: doelstellingscategorieId,
+      creatorId: creatorId
+    })
+      .then(function (response) {
+        return cb(response)
+      })
+      .catch(function (error) {
+        console.log(error)
+      })
+  }
+
+  my.updateDoelstelling = function (doelstellingId, name, cb) {
+    axios.patch('http://146.185.183.217/api/updateDoelstelling', {
+      name: name,
+      doelstellingId: doelstellingId
+    })
+      .then(function (response) {
+        return cb(response)
+      })
+      .catch(function (error) {
+        console.log(error)
+      })
+  }
+
   return my
 }())
 
