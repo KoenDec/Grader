@@ -148,7 +148,7 @@ var Api = (function () {
   }
 
   my.updateReport = function (report, cb) {
-    axios.post('http://146.185.183.217/api/updateReport', {
+    axios.patch('http://146.185.183.217/api/updateReport', {
       commentaarAlgemeen: report.commentaarAlgemeen,
       commentaarKlassenraad: report.commentaarKlassenraad,
       commentaarWerkplaats: report.commentaarWerkplaats,
