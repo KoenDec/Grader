@@ -312,6 +312,21 @@ var Api = (function () {
         console.log(error)
       })
   }
+
+  my.createOpleiding = function (creatorId, name, cb) {
+    axios.post('http://146.185.183.217/api/createOpleiding', {
+      params: {
+        creatorId: creatorId,
+        name: name
+      }
+    })
+      .then(function (response) {
+        return cb(response.data)
+      })
+      .catch(function (error) {
+        console.log(error)
+      })
+  }  
   return my
 }())
 
