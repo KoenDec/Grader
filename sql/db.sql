@@ -165,6 +165,7 @@ CREATE TABLE `rapporten` (
   `enddate` date NOT NULL,
   `commentaarKlassenraad` text,
   `commentaarAlgemeen` text,
+  `commentaarWerkplaats` text,
   CONSTRAINT rapportUniqueNamePerStudent UNIQUE(studentId, name),
   FOREIGN KEY(studentId) REFERENCES studenten(studentId)
 );

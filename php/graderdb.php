@@ -763,14 +763,13 @@ class UserDAO
         return $evaluaties;
     }
 
-    public static function getEvaluatieId($evaluatieName, $studentId)
+    public static function getEvaluatieId($evaluatieName)
     {
         try {
             $conn = graderdb::getConnection();
 
-            $sql = 'SELECT id FROM evaluaties WHERE name = :evaluatieName AND studentId = :studentId';
+            $sql = 'SELECT id FROM evaluaties WHERE name = :evaluatieName';
             $stmt = $conn->prepare($sql);
-            $stmt->bindParam(':studentId', $studentId);
             $stmt->bindParam(':evaluatieName', $evaluatieName);
 
             $stmt->execute();
@@ -1126,25 +1125,124 @@ class UserDAO
             $stmt->bindParam(':creatorId', $creatorId);
             $stmt->execute();
 
+            $id = $conn->lastInsertId();
+
+            return $id;
+
         } catch (PDOException $e) {
             die($e->getMessage());
+            return null;
         }
     }
 
-    public static function createModule($name, $opleidingId, $creatorId)
+    public static function createModule($name, $opleidingId, $teacherId, $creatorId)
     {
         try {
             $conn = graderdb::getConnection();
 
-            $sql = 'INSERT INTO modules(name, opleidingId, creatorId) VALUES(:name, :opleidingId, :creatorId)';
+            $sql = 'INSERT INTO modules(name, opleidingId, teacherId, creatorId) VALUES(:name, :opleidingId, :teacherId, :creatorId)';
             $stmt = $conn->prepare($sql);
             $stmt->bindParam(':name', $name);
             $stmt->bindParam(':opleidingId', $opleidingId);
+            $stmt->bindParam(':teacherId', $teacherId);
             $stmt->bindParam(':creatorId', $creatorId);
             $stmt->execute();
 
+            $id = $conn->lastInsertId();
+
+            return $id;
+
         } catch (PDOException $e) {
             die($e->getMessage());
+            return null;
+        }
+    }
+
+    public static function createDoelstellingscategorie($name, $moduleId, $creatorId)
+    {
+        try {
+            $conn = graderdb::getConnection();
+
+            $sql = 'INSERT INTO doelstellingscategories(name, moduleId, creatorId) VALUES(:name, :moduleId, :creatorId)';
+            $stmt = $conn->prepare($sql);
+            $stmt->bindParam(':name', $name);
+            $stmt->bindParam(':moduleId', $moduleId);
+            $stmt->bindParam(':creatorId', $creatorId);
+            $stmt->execute();
+
+            $id = $conn->lastInsertId();
+
+            return $id;
+
+        } catch (PDOException $e) {
+            die($e->getMessage());
+            return null;
+        }
+    }
+
+    public static function createDoelstelling($name, $doelstellingscategorieId, $creatorId)
+    {
+        try {
+            $conn = graderdb::getConnection();
+
+            $sql = 'INSERT INTO doelstellingen(doelstellingscategorieId,name,creatorId) VALUES(:doelstellingscategorieId, :name, :creatorId)';
+            $stmt = $conn->prepare($sql);
+            $stmt->bindParam(':doelstellingscategorieId', $doelstellingscategorieId);
+            $stmt->bindParam(':name', $name);
+            $stmt->bindParam(':creatorId', $creatorId);
+            $stmt->execute();
+
+            $id = $conn->lastInsertId();
+
+            return $id;
+
+        } catch (PDOException $e) {
+            die($e->getMessage());
+            return null;
+        }
+    }
+
+    public static function createEvaluatiecriteria($name, $doelstellingId, $creatorId)
+    {
+        try {
+            $conn = graderdb::getConnection();
+
+            $sql = 'INSERT INTO evaluatiecriteria(doelstellingId, name, creatorId) VALUES(:doelstellingId, :name, :creatorId)';
+            $stmt = $conn->prepare($sql);
+            $stmt->bindParam(':doelstellingId', $doelstellingId);
+            $stmt->bindParam(':name', $name);
+            $stmt->bindParam(':creatorId', $creatorId);
+            $stmt->execute();
+
+            $id = $conn->lastInsertId();
+
+            return $id;
+
+        } catch (PDOException $e) {
+            die($e->getMessage());
+            return null;
+        }
+    }
+
+    public static function createAspect($name, $evaluatiecriteriumId, $creatorId)
+    {
+        try {
+            $conn = graderdb::getConnection();
+
+            $sql = 'INSERT INTO aspecten(evaluatiecriteriumId, name, creatorId) VALUES(:evaluatiecriteriumId, :name, :creatorId)';
+            $stmt = $conn->prepare($sql);
+            $stmt->bindParam(':evaluatiecriteriumId', $evaluatiecriteriumId);
+            $stmt->bindParam(':name', $name);
+            $stmt->bindParam(':creatorId', $creatorId);
+            $stmt->execute();
+
+            $id = $conn->lastInsertId();
+
+            return $id;
+
+        } catch (PDOException $e) {
+            die($e->getMessage());
+            return null;
         }
     }
 
@@ -1357,6 +1455,108 @@ class UserDAO
 
     }
 
+    public static function updateOpleiding($opleidingId, $name)
+    {
+        try {
+            $conn = graderdb::getConnection();
+
+            $sql = 'UPDATE opleidingen SET name=:name WHERE id = :opleidingId';
+            $stmt = $conn->prepare($sql);
+            $stmt->bindParam(':name', $name);
+            $stmt->bindParam(':opleidingId', $opleidingId);
+
+            $stmt->execute();
+        } catch (PDOException $e) {
+            die($e->getMessage());
+        }
+
+    }
+
+    public static function updateModule($moduleId, $name)
+    {
+        try {
+            $conn = graderdb::getConnection();
+
+            $sql = 'UPDATE modules SET name=:name WHERE id = :moduleId';
+            $stmt = $conn->prepare($sql);
+            $stmt->bindParam(':name', $name);
+            $stmt->bindParam(':moduleId', $moduleId);
+
+            $stmt->execute();
+        } catch (PDOException $e) {
+            die($e->getMessage());
+        }
+
+    }
+
+    public static function updateDoelstellingscategorie($doelstellingscategorieId, $name)
+    {
+        try {
+            $conn = graderdb::getConnection();
+
+            $sql = 'UPDATE doelstellingscategories SET name=:name WHERE id = :doelstellingscategorieId';
+            $stmt = $conn->prepare($sql);
+            $stmt->bindParam(':name', $name);
+            $stmt->bindParam(':doelstellingscategorieId', $doelstellingscategorieId);
+
+            $stmt->execute();
+        } catch (PDOException $e) {
+            die($e->getMessage());
+        }
+
+    }
+
+    public static function updateDoelstelling($doelstellingId, $name)
+    {
+        try {
+            $conn = graderdb::getConnection();
+
+            $sql = 'UPDATE doelstellingen SET name=:name WHERE id = :doelstellingId';
+            $stmt = $conn->prepare($sql);
+            $stmt->bindParam(':name', $name);
+            $stmt->bindParam(':doelstellingId', $doelstellingId);
+
+            $stmt->execute();
+        } catch (PDOException $e) {
+            die($e->getMessage());
+        }
+
+    }
+
+    public static function updateEvaluatiecriteria($evaluatiecriteriaId, $name)
+    {
+        try {
+            $conn = graderdb::getConnection();
+
+            $sql = 'UPDATE evaluatiecriteria SET name=:name WHERE id = :evaluatiecriteriaId';
+            $stmt = $conn->prepare($sql);
+            $stmt->bindParam(':name', $name);
+            $stmt->bindParam(':evaluatiecriteriaId', $evaluatiecriteriaId);
+
+            $stmt->execute();
+        } catch (PDOException $e) {
+            die($e->getMessage());
+        }
+
+    }
+
+    public static function updateAspect($aspectId, $name)
+    {
+        try {
+            $conn = graderdb::getConnection();
+
+            $sql = 'UPDATE aspecten SET name=:name WHERE id = :aspectId';
+            $stmt = $conn->prepare($sql);
+            $stmt->bindParam(':name', $name);
+            $stmt->bindParam(':aspectId', $aspectId);
+
+            $stmt->execute();
+        } catch (PDOException $e) {
+            die($e->getMessage());
+        }
+
+    }
+
     public static function updateEvaluatie($evaluatieId, $evaluatieName, $datum, $aspectscoresKeyValueArray)
     {
         try {
@@ -1404,12 +1604,12 @@ class UserDAO
         }
     }
 
-    public static function updateRapport($rapportId, $rapportName, $startdatum, $einddatum, $moduleIdsEnCommentaarKeyValueArray, $scoresEnOpmerkingenThreeDimensionalArray, $commentaarAlgemeen, $commentaarKlassenraad)
+    public static function updateRapport($rapportId, $rapportName, $startdatum, $einddatum, $moduleIdsEnCommentaarKeyValueArray, $scoresEnOpmerkingenThreeDimensionalArray, $commentaarAlgemeen, $commentaarKlassenraad, $commentaarWerkplaats)
     {
         try {
             $conn = graderdb::getConnection();
 
-            $sql = 'UPDATE rapporten SET name = :name, startdate = :startdate, enddate = :enddate, commentaarKlassenraad = :commentaarKlassenraad, commentaarAlgemeen = :commentaarAlgemeen WHERE id = :rapportId';
+            $sql = 'UPDATE rapporten SET name = :name, startdate = :startdate, enddate = :enddate, commentaarKlassenraad = :commentaarKlassenraad, commentaarAlgemeen = :commentaarAlgemeen, commentaarWerkplaats = :commentaarWerkplaats WHERE id = :rapportId';
             $stmt = $conn->prepare($sql);
             $stmt->bindParam(':rapportId', $rapportId);
             $stmt->bindParam(':name', $rapportName);
@@ -1417,6 +1617,7 @@ class UserDAO
             $stmt->bindParam(':enddate', $einddatum);
             $stmt->bindParam(':commentaarKlassenraad', $commentaarKlassenraad);
             $stmt->bindParam(':commentaarAlgemeen', $commentaarAlgemeen);
+            $stmt->bindParam(':commentaarWerkplaats', $commentaarWerkplaats);
 
             $stmt->execute();
 
@@ -1474,6 +1675,23 @@ class UserDAO
     //////////////////////////////////////////////
     //              DELETE-QUERIES              //
     //////////////////////////////////////////////
+
+    public static function deleteOpleiding($opleidingId)
+    {
+        try {
+            $conn = graderdb::getConnection();
+
+            $sql = 'DELETE FROM opleidingen WHERE id=:opleidingId';
+            $stmt = $conn->prepare($sql);
+            $stmt->bindParam(':opleidingId', $opleidingId);
+
+            $stmt->execute();
+
+        } catch (PDOException $e) {
+            die($e->getMessage());
+        }
+
+    }
 
     public static function removeLoginToken($token)
     {

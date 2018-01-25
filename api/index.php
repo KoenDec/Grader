@@ -297,7 +297,8 @@ if ($_SERVER['REQUEST_METHOD'] == 'GET') {
               'enddate' => preg_replace('/(\d{4})-(\d{2})-(\d{2})/', '$3/$2/$1', $rapport->enddate),
               'modules' => array(),
               'commentaarAlgemeen' => $rapport->commentaarAlgemeen,
-              'commentaarKlassenraad' => $rapport->commentaarKlassenraad
+              'commentaarKlassenraad' => $rapport->commentaarKlassenraad,
+              'commentaarWerkplaats' => $rapport->commentaarWerkplaats
           ];
 
           foreach($modules as $rapportmodule){
@@ -978,6 +979,7 @@ if ($_SERVER['REQUEST_METHOD'] == 'GET') {
             $enddate = $postBody->enddate;
             $commentaarAlgemeen = $postBody->commentaarAlgemeen;
             $commentaarKlassenraad = $postBody->commentaarKlassenraad;
+            $commentaarWerkplaats = $postBody->commentaarWerkplaats;
             $enddate = $postBody->enddate;
             $startdate = preg_replace('#(\d{2})/(\d{2})/(\d{4})#', '$3-$2-$1', $startdate);
             $enddate = preg_replace('#(\d{2})/(\d{2})/(\d{4})#', '$3-$2-$1', $enddate);
@@ -996,7 +998,7 @@ if ($_SERVER['REQUEST_METHOD'] == 'GET') {
                 }
             }
 
-            $userDAO->updateRapport($reportId, $reportName, $startdate, $enddate, $modules, $punten, $commentaarAlgemeen, $commentaarKlassenraad);
+            $userDAO->updateRapport($reportId, $reportName, $startdate, $enddate, $modules, $punten, $commentaarAlgemeen, $commentaarKlassenraad, $commentaarWerkplaats);
             // TODO werkt nog niet
         }
         /*} else {
